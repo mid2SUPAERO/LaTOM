@@ -1,3 +1,12 @@
-# MAE_RP_Fossa_Miceli
 
-Files and reports for research project on "Optimal Control of Trajectory of reusable launcher in OpenMDAO/dymos"
+
+# MAE Research Project
+
+## Title:
+
+Optimal Control of trajectory of reusable launcher in OpenMDAO/dymos
+
+## Students:
+
+* Alberto Fossà
+* Giuliana Elena Miceli
