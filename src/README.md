@@ -77,3 +77,14 @@ from pyipopt import pyipoptcore
 ```
 5. OpenMDAO shold now be able to wrap you IPOPT installation
 
+## References
+
+Gray, Justin S., et al. ‘OpenMDAO: An Open-Source Framework for Multidisciplinary Design, Analysis, and Optimization’. Structural and Multidisciplinary Optimization, vol. 59, no. 4, Apr. 2019, pp. 1075–104. doi:10.1007/s00158-019-02211-z.
+
+Hendricks, Eric S., et al. ‘Simultaneous Propulsion System and Trajectory Optimization’. 18th AIAA/ISSMO Multidisciplinary Analysis and Optimization Conference, American Institute of Aeronautics and Astronautics, 2017. doi:10.2514/6.2017-4435.
+
+HSL, A Collection of Fortran Codes for Large Scale Scientific Computation. http://www.hsl.rl.ac.uk/.
+
+Perez, Ruben E., et al. ‘PyOpt: A Python-Based Object-Oriented Framework for Nonlinear Constrained Optimization’. Structural and Multidisciplinary Optimization, vol. 45, no. 1, Jan. 2012, pp. 101–18. DOI.org (Crossref), doi:10.1007/s00158-011-0666-3.
+
+Wächter, Andreas, and Lorenz T. Biegler. ‘On the Implementation of an Interior-Point Filter Line-Search Algorithm for Large-Scale Nonlinear Programming’. Mathematical Programming, vol. 106, no. 1, Mar. 2006, pp. 25–57. doi:10.1007/s10107-004-0559-y.
