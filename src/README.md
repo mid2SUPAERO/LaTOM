@@ -1,7 +1,5 @@
 ## Optimal control of trajectory of a reusable launcher in OpenMDAO/dymos
 
-# Source code
-
 This directory contains the source code to find the most fuel efficient transfer trajectory from the Moon surface to a specified Low Lunar Orbit (LLO) and back.
 
 The optimization can be performed in the following cases:
@@ -35,6 +33,10 @@ In either case do the following:
 2. read the list that describes the different possibilities and choose the appropriate value for the variable *ch*
 3. optionally define your own parameters to perform a new optimization
 4. run the script and wait for the results to be displayed
+
+## Installation
+
+Refer to [install.md](install.md) for the installation instructions
 
 ## References
 
