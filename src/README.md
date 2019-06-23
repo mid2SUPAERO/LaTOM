@@ -2,7 +2,24 @@
 
 # Source code
 
-This directory contains the source code written for our research project
+This directory contains the source code to find the most fuel efficient transfer trajectory from the Moon surface to a specified Low Lunar Orbit (LLO) and back.
+
+The optimization can be performed in the following cases:
+
+1. two-dimensional ascent trajectories:
+  - constant thrust
+  - constant thrust and constrained vertical take-off
+  - variable thrust
+  - variable thrust and constrained minimum safe altitude
+  
+2. two-dimensional descent trajectories:
+  - constant thrust
+  - constant thrust and constrained vertical landing
+  - variable thrust
+
+3. three-dimensional ascent trajectories:
+  - constant thrust
+  - variable thrust
 
 ## Installation
 
@@ -12,11 +29,11 @@ This directory contains the source code written for our research project
 
 ## Run a simulation
 
-There are to ways for running a simulation and dispaly the results:
+There are two ways for running a simulation and display the results:
 
-* perform a new optimiation to obtain your own solution starting from custom values for the different parameters for which multiple examples are already included in the scripts
+* perform a new optimiation to obtain your own solution starting from custom values for the different trajectory parameters (multiple examples are already included)
 
-* load a structure stored in one of the three *data* directories that contains the results already obtained for an optimal transfer trajectory
+* load a structure stored in one of the three *data* directories that contains the results already obtained for an optimal transfer trajectory and simply display those results
 
 In either case do the following:
 
