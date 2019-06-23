@@ -5,7 +5,7 @@ All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the pa
 
 ## Dependencies
 
-### Required packages:
+#### Required packages:
 
 * Python 3.7.3 +
 * numpy 1.16.4 +
@@ -14,13 +14,13 @@ All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the pa
 * openmdao 2.7.1 +
 * dymos 0.13.0 +
 
-### Additional packages to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases):
+#### Additional packages to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases):
 
 * pyoptsparse
 * pyipopt
 * IPOPT 3.12.13
 
-## Installaton
+## Installation
 
 1. verify the required dependencies
 2. download the src folder
