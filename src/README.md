@@ -23,9 +23,9 @@ The optimization can be performed in the following cases:
 
 ## Installation
 
-* download the src folder
-* do not modify the directory structure to maintain consistency with the defined relative paths
-* run one of the scripts in the *Mains* subdirectory as described under **Run a simulation**
+1. download the src folder
+2. do not modify the directory structure to maintain consistency with the defined relative paths
+3. run one of the scripts in the *Mains* subdirectory as described under **Run a simulation**
 
 ## Run a simulation
 
@@ -37,7 +37,7 @@ There are two ways for running a simulation and display the results:
 
 In either case do the following:
 
-* open one of the scripts in the *Mains* subdirectory
-* read the list that describes the different possibilities and choose the appropriate value for the variable *ch*
-* optionally define your own parameters to perform a new optimization
-* run the script and wait for the results to be displayed
+1. open one of the scripts in the *Mains* subdirectory
+2. read the list that describes the different possibilities and choose the appropriate value for the variable *ch*
+3. optionally define your own parameters to perform a new optimization
+4. run the script and wait for the results to be displayed
