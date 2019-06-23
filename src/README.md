@@ -45,6 +45,8 @@ In either case do the following:
 
 ## Dependencies
 
+All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the packages listed below.
+
 The scripts have the following dependencies:
 
 * Python 3.7.3 +
