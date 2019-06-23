@@ -54,7 +54,7 @@ The scripts have the following dependencies:
 * openmdao 2.7.1 +
 * dymos 0.13.0 +
 
-Additional dependencies to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases)
+Additional dependencies to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases):
 
 * pyoptsparse
 * pyipopt
@@ -62,11 +62,18 @@ Additional dependencies to use the NLP solver IPOPT instead of SLSQP (recommende
 
 ## Notes
 
-To correctly link the NLP solver IPOPT with your OpenMDAO installation the following steps have to be performed:
+To correctly link the NLP solver IPOPT with your OpenMDAO installation do the followings:
 
 1. [compile IPOPT from source](https://coin-or.github.io/Ipopt/INSTALL.html) enabling the *--disable-linear-solver-loader* option in the configuration step
 2. [complile pyipopt](https://github.com/xuy/pyipopt) modifying the *setup.py* script to detect your IPOPT installation
 3. [compile pyoptsparse](https://github.com/mdolab/pyoptsparse)
-4. enter your pyoptsparse installation folder and edit the file *pyoptsparse/pyIPOPT/pyIPOPT.py* replacing the line *from . import pyipoptcore* with *from pyipopt import pyipoptcore*
+4. enter your pyoptsparse installation folder and edit the file *pyoptsparse/pyIPOPT/pyIPOPT.py* replacing the line
+```python
+from . import pyipoptcore
+```
+with
+```python
+from pyipopt import pyipoptcore
+```
 5. OpenMDAO shold now be able to wrap you IPOPT installation
 
