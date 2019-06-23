@@ -1,7 +1,7 @@
 
 # Installation
 
-All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the packages listed in this file.
+All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the packages listed below.
 
 ## Dependencies
 
