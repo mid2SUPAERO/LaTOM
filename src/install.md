@@ -1,17 +1,11 @@
 
-## Installation
+# Installation
 
-1. verify the required dependencies listed under **Dependencies**
-2. download the src folder
-3. do not modify the directory structure to maintain consistency with the defined relative paths
-4. run one of the scripts in the *Mains* subdirectory as described under **Run a simulation**
-
+All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the packages listed in this file.
 
 ## Dependencies
 
-All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the packages listed below.
-
-The scripts have the following dependencies:
+### Required packages:
 
 * Python 3.7.3 +
 * numpy 1.16.4 +
@@ -20,11 +14,18 @@ The scripts have the following dependencies:
 * openmdao 2.7.1 +
 * dymos 0.13.0 +
 
-Additional dependencies to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases):
+### Additional packages to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases):
 
 * pyoptsparse
 * pyipopt
 * IPOPT 3.12.13
+
+## Installaton
+
+1. verify the required dependencies
+2. download the src folder
+3. do not modify the directory structure to maintain consistency with the defined relative paths
+4. run a simulation as described in [README.md](README.md)
 
 ## Notes
 
