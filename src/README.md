@@ -75,7 +75,7 @@ with
 ```python
 from pyipopt import pyipoptcore
 ```
-5. OpenMDAO shold now be able to wrap you IPOPT installation
+5. OpenMDAO shold now be able to wrap your IPOPT installation
 
 ## References
 
