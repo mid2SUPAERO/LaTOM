@@ -36,7 +36,7 @@ choose one of the following:
     (7) saved data for multiple Isp, twr with constant thrust
 """
 
-ch = 7
+ch = 1
 
 #constants' dictionary
 const = {}
