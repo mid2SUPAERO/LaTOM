@@ -44,6 +44,7 @@ acc_guess = True #use an accurate initial guess provided by sstoGuess (varying t
 alpha_rate2_cont = False #enforce rate2_continuity for control alpha
 duration_bounds = True #impose bounds on the phase duration (minimum and maximum values)
 debug = True #check the partial derivatives defined in the ODEs and explicitly simulate the obtained trajectory
+exp_sim = True #explicit simulation to verify the results
 
 #SLSQP specific settings
 tol = 1e-6 #stopping tolerance
@@ -62,7 +63,7 @@ settings = {'solver':solver.upper(), 'solver_unconstrained':solver_unconstrained
             'transcription':transcription, 'num_seg':num_seg, 'transcription_order':transcription_order, 'scalers':scalers,
             'defect_scalers':defect_scalers, 'top_level_jacobian':'csc', 'dynamic_simul_derivs':True, 'compressed':True,
             'debug':debug, 'acc_guess':acc_guess, 'alpha_rate2_cont':alpha_rate2_cont, 'duration_bounds':duration_bounds,
-            'run_unconstrained':run_unconstrained}
+            'run_unconstrained':run_unconstrained, 'exp_sim':exp_sim}
 
 #parameters
 Isp = 450. #Isp (s)
