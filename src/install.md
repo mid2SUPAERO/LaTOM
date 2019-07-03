@@ -31,7 +31,7 @@ All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the pa
 
 To correctly link the NLP solver IPOPT with your OpenMDAO installation do the followings:
 
-1. If you are an academic or a student, you should obtain the HSL subroutines for better performances [here](http://hsl.rl.ac.uk/ipopt)
+1. If you are an academic or a student, you should obtain the [HSL subroutines](http://hsl.rl.ac.uk/ipopt) for better performances
 2. [compile IPOPT from source](https://coin-or.github.io/Ipopt/INSTALL.html) enabling the *--disable-linear-solver-loader* option in the configuration step
 3. [complile pyipopt](https://github.com/xuy/pyipopt) modifying the *setup.py* script to detect your IPOPT installation
 4. [compile pyoptsparse](https://github.com/mdolab/pyoptsparse)
