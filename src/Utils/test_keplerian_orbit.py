@@ -11,9 +11,10 @@ import numpy as np
 
 from keplerian_orbit import KeplerianOrbit
 
-mu = 3.986e14 #Earth standard gravitational parameter (m^3/s^2)
+mu = 4.902801e12 #Moon standard gravitational parameter (m^3/s^2)
+R = 1737.4e3 #Moon radius (m)
 
-a = 8000e3 #semimajor axis (m)
+a = R + 100e3 #semimajor axis (m)
 e = 0.0 #eccentricity
 i = 90. #inclination (deg)
 raan = 10. #right ascension of the ascending node (deg)
@@ -26,7 +27,7 @@ H = kepOrb.get_angular_momentum()
 E = kepOrb.get_eccentricity_vector()
 R, V = kepOrb.get_sv()
 
-print("R:", R*1e-3, "km")
-print("V:", V*1e-3, "km/s")
-print("H:", H*1e-6, "km^2/s")
-print("E:", E)
+print("R (m) =", R)
+print("V (m/s) =", V)
+print("H (m^2/s) =", H)
+print("E =", E)

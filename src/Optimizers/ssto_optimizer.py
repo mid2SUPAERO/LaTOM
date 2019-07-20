@@ -107,6 +107,13 @@ class sstoOptimizer: #single phase with constant thrust
             if self.settings['solver'] == 'PSQP':
                 p.driver.opt_settings['IPRINT'] = 0
                 
+            #SNOPT specific settings
+            if self.settings['solver'] == 'SNOPT':
+                p.driver.opt_settings['Iterations limit'] = 20000
+                p.driver.opt_settings['Major iterations limit'] = 5000
+                p.driver.opt_settings['Minor iterations limit'] = 2000
+                p.driver.opt_settings['Scale option'] = 1 
+                
             print('\nSolver ' + self.settings['solver'] + ' included in pyOptSparse\n')
 
         except:
@@ -118,8 +125,8 @@ class sstoOptimizer: #single phase with constant thrust
             print('\nThere was an error while importing ' + self.settings['solver'] + ' from pyOptSparse')
             print('Using SLSQP from Scipy instead\n')
             
-        p.driver.options['dynamic_simul_derivs'] = self.settings['dynamic_simul_derivs'] #deprecated but better than driver.declare_coloring
-        #p.driver.declare_coloring(show_summary=True, show_sparsity=False)
+        #p.driver.options['dynamic_simul_derivs'] = self.settings['dynamic_simul_derivs'] #deprecated but better than driver.declare_coloring
+        p.driver.declare_coloring(show_summary=True, show_sparsity=False)
         
         return p
     
