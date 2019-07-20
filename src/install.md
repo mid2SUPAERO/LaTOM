@@ -11,14 +11,14 @@ All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the pa
 * numpy 1.16.4 +
 * scipy 1.2.1 +
 * matplotlib 3.1.0 +
-* openmdao 2.7.1 +
+* openmdao 2.8.0 +
 * dymos 0.13.0 +
 
 #### Additional packages to use the NLP solver IPOPT instead of SLSQP (recommended, required in most of the cases):
 
 * pyoptsparse
 * pyipopt
-* IPOPT 3.12.13
+* IPOPT 3.12
 
 ## Installation
 
@@ -32,10 +32,10 @@ All the scripts were successfully run and tested on Ubuntu 18.04 LTS with the pa
 To correctly link the NLP solver IPOPT with your OpenMDAO installation do the followings:
 
 1. If you are an academic or a student, you should obtain the [HSL subroutines](http://hsl.rl.ac.uk/ipopt) for better performances
-2. [compile IPOPT from source](https://coin-or.github.io/Ipopt/INSTALL.html) enabling the *--disable-linear-solver-loader* option in the configuration step
-3. [complile pyipopt](https://github.com/xuy/pyipopt) modifying the *setup.py* script to detect your IPOPT installation
+2. [compile IPOPT from source](https://coin-or.github.io/Ipopt/INSTALL.html) enabling the ```--disable-linear-solver-loader``` option in the configuration step
+3. [complile pyipopt](https://github.com/xuy/pyipopt) modifying the ```setup.py``` script to detect your IPOPT installation
 4. [compile pyoptsparse](https://github.com/mdolab/pyoptsparse)
-5. enter your pyoptsparse installation folder and edit the file *pyoptsparse/pyIPOPT/pyIPOPT.py* replacing the line
+5. enter your pyoptsparse installation folder and edit the file ```pyoptsparse/pyIPOPT/pyIPOPT.py``` replacing the line
 ```python
 from . import pyipoptcore
 ```
