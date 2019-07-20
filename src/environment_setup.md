@@ -22,7 +22,7 @@ This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environ
 
 #### Optional licensed packages
 
-* [HSL 2001][hsl_ipopt] subroutines, free for academic purposes upon request (one working day delay)
+* [HSL 2001 subroutines][hsl_ipopt], free for academic purposes upon request (one working day delay)
 * [SNOPT][snopt] sparse nonlinear optimizer
 
 ## Requirements
@@ -75,7 +75,7 @@ $ sudo apt-get install libblas-dev libblas3 liblapack-dev liblapack3 libopenblas
 ## 2. Compilation from source of IPOPT
 
 
-#### HSL 2011 subroutines
+#### 2.1 HSL 2011 subroutines
 
 As pointed out in the requirements, if you use IPOPT for academic purposes you are strongly recommended to obtain the HSL 2011 subroutines since they perform much more better than the other options. The full suite has to be requested as follows:
 
@@ -84,7 +84,7 @@ As pointed out in the requirements, if you use IPOPT for academic purposes you a
 - In the request page select **Personal Academic License**, then fill and submit the form
 - Within one working day you should receive an email with a link to download the source code as a compressed archive
 
-#### Download of the required source code
+#### 2.2 Download the required source code
 
 Once you have obtained the HSL subroutines or you decide to use a different linear solver you can proceed downloading the IPOPT source code and perform the installation. Open a new terminal window and type the following command:
 
@@ -93,6 +93,7 @@ $ git clone --recursive -b stable/3.12 https://github.com/coin-or/Ipopt.git Coin
 ```
 
 This will directly download the latest stable release in the directory ```~/CoinIpopt```.
+
 When the download is complete, enter the new directory to download the different dependencies as follows:
 
 ```
@@ -101,7 +102,9 @@ $ cd ThirdParty/ASL
 $ ./get.ASL
 ```
 
-This will download the ASL libraries to directly interface IPOPT with the AMPL modelling language. Then proceed with:
+To obtain the source code of the ASL libraries and interface IPOPT with the AMPL modelling language.
+
+Then proceed with:
 
 ```
 $ cd ../Metis
@@ -117,9 +120,9 @@ If you have obtained the HSL source code unpack the archive, move and rename the
 
 At this point you have obtained all the required source code and you can proceed with the configuration and installation steps.
 
-#### Configuration and installation
+#### 2.3 Configuration and installation
 
-First, move back to the directory ```~/CoinIpopt``` and create a separate folder where the compiled code will be placed. Then move in the newely created directory:
+Move back to the directory ```~/CoinIpopt``` and create a separate folder where the compiled code will be placed. Then enter the newely created directory:
 
 ```
 $ mkdir build
@@ -132,20 +135,20 @@ After that run the ```configure``` script adding the proper compilers flags to e
 $ ../configure ADD_CFLAGS=-fopenmp ADD_FFLAGS=-fopenmp ADD_CXXFLAGS=-fopenmp --disable-linear-solver-loader
 ```
 
-If the last output is ```Main configuration of Ipopt successful``` you can proceed building the code. In your terminal window type the following:
+If the last output is ```Main configuration of Ipopt successful``` you can proceed building the code. In your terminal window type the followings:
 
 ```
 $ make
 $ make test
 ```
 
-This will build the code and perform a series of test on different examples. If all the test are successful you can complete the installation procedure issuing the command below:
+This will build the code and perform a series of test on different examples. If all of them are successful you can complete the installation procedure with:
 
 ```
 $ make install
 ```
 
-#### Verify your IPOPT installation
+#### 2.4 Verify your IPOPT installation
 
 At this stage you can verify if the IPOPT binaries were correctly built entering the ```bin``` directory and checking the presence of the executable ```ipopt```. From your ```~/CoinIpopt/build``` directory type the following:
 
@@ -187,7 +190,7 @@ Ipopt 3.12.13: Optimal Solution Found
 
 Once you have successfully installed IPOPT you can jump to the next chapter to setup your ```conda``` environment.
 
-#### Common troubleshooting
+#### 2.5 Common troubleshooting
 
 > If the configuration step fails to locate your BLAS and Lapack libraries, you can download their source code inside your ```~/CoinIpopt``` directory and let IPOPT to compile them at the same time. For that purpose, after obtaining the Metis source code with the ```./get.Metis``` command type the following:
 
@@ -298,9 +301,9 @@ You can now launch Spyder and start your own projects, but you wan't be able to 
 
 ## 6. Compilation from source of pyipopt
 
-#### Download of the required source code
-
 The [pyipopt][pyipopt] package provides a Python wrapper for your IPOPT installation allowing OpenMDAO to call the NLP solver while performing the user-defined MDO. This package can be installed followig the instructions provided in this section.
+
+#### 6.1 Download the required source code
 
 With your environment active, move to a convenient directory and clone the source code from its GitHub repository:
 
@@ -308,7 +311,7 @@ With your environment active, move to a convenient directory and clone the sourc
 (myenv) $ git clone https://github.com/xuy/pyipopt.git
 ```
 
-#### Adjust IPOPT installation path
+#### 6.2 IPOPT installation path
 
 Once the download is completed enter the corresponding folder and edit the ```setup.py``` script to reflect the configuration of your system:
 
@@ -350,7 +353,7 @@ IPOPT_INC = '/home/username/CoinIpopt/build/include/coin/'
 
 Where the strings between ```''``` have to reflect the output of ```pwd``` copied before.
 
-#### Adjust IPOPT libraries included in your installation
+#### 6.3 IPOPT libraries included in your installation
 
 To specify which libraries you included during the IPOPT installation modify the corresponding arguments passed to the ```Extension``` class:
 
@@ -428,7 +431,7 @@ pyipopt_extension = Extension(
 
 Notice that in each case the line ```extra_link_args=['-Wl,--rpath','-Wl,'+ IPOPT_LIB]``` has to be uncommented. Then save your changes and close Spyder.
 
-#### Installation
+#### 6.4 Installation
 
 From the terminal window with ```myenv``` activated and inside the pyipopt directory issue the following command to install the package:
 
@@ -442,9 +445,9 @@ This will install the package under ```~/.local/lib/python3.7/site-packages/pyip
 
 [pyOptSparse][pyoptsparse] provides a convinient interface between OpenMDAO and a wide suite of optimizers with enhanced MPI capabilities. It is required to wrap both IPOPT and SNOPT using the ```pyOptSparseDriver``` class.
 
-#### Download of the required source code
+#### 7.1 Download the required source code
 
-To install the package, open a terminal window and activate your environment, than clone the source code from its [official GitHub repository][pyoptsparse_repo]:
+To obtain the source code, open a terminal window and activate your environment, than clone the source code from its [official GitHub repository][pyoptsparse_repo]:
 
 ```
 (myenv) $ git clone https://github.com/mdolab/pyoptsparse.git
@@ -452,7 +455,7 @@ To install the package, open a terminal window and activate your environment, th
 
 If you have purchased a license for SNOPT and obtained the source code copy all the ```.f``` files except ```snopth.f``` into the folder ```pyoptsparse/pySNOPT/source```. If not, simply move to the next installation instructions.
 
-#### Installation
+#### 7.2 Installation
 
 To install the package come back to the terminal window, enter the root directory ```pyoptsparse``` cloned before and run the ```setup.py``` script:
 
@@ -463,7 +466,7 @@ To install the package come back to the terminal window, enter the root director
 
 This will install pyOptSparse under ```~/.local/lib/python3.7/site-packages/pyoptsparse```.
 
-#### IPOPT wrapping
+#### 7.3 IPOPT wrapping
 
 At this point the package is unable to wrap the nonlinear solver IPOPT and you have to modify the ```pyIPOPT.py``` script to tell where the library ```pyipoptcore.cpython-37m-x86_64-linux-gnu.so``` is located and which linear solvers are available in your IPOPT installation.
 
@@ -504,7 +507,7 @@ You can then modify all the other default settings included in the ```def_opts``
 
 At this point the environment setup is complete and you should be able to perform your MDO analysis and trajectory optimization using the OpenMDAO and dymos libraries.
 
-#### Common troubleshooting
+#### 7.4 Common troubleshooting
 
 > If you are compiling pyOptSparse with SNOPT, the installation could fail if the ```gfortran``` compiler is not able to locate the BLAS and Lapack libraries installed system-wide. In this case you can explicitly tell where these libraries are located as follows:
 
@@ -538,17 +541,29 @@ python setup.py config_fc --fcompiler=gnu95 --f77flags='-L/usr/lib/x86_64-linux-
 ## Useful Links
 
 Anaconda homepage: https://www.anaconda.com/
+
 dymos documentation: https://openmdao.github.io/dymos/
+
 dymos GitHub repository: https://github.com/OpenMDAO/dymos
+
 HSL for IPOPT: http://www.hsl.rl.ac.uk/ipopt/
+
 IPOPT homepage: https://coin-or.github.io/Ipopt/index.html
+
 IPOPT installation instructions: https://coin-or.github.io/Ipopt/INSTALL.html
+
 IPOPT options: https://www.coin-or.org/Ipopt/documentation/node40.html
+
 OpenMDAO homepage: https://openmdao.org/
+
 OpenMDAO GitHub repository: https://github.com/OpenMDAO/OpenMDAO
+
 pyipopt GitHub repository: https://github.com/xuy/pyipopt
+
 pyOptSparse documentation: http://mdolab.engin.umich.edu/docs/packages/pyoptsparse/doc/index.html
+
 pyOptSparse GitHub repository: https://github.com/mdolab/pyoptsparse
+
 SNOPT license: http://www.sbsi-sol-optimize.com/asp/sol_snopt.htm
 
 
