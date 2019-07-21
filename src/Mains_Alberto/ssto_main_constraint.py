@@ -37,7 +37,7 @@ const['hmin'] = 5e3 #minimum safe altitude
 const['mc'] = 100. #path constraint shape
 
 #optimizer settings
-solver = 'snopt' #NLP solver
+solver = 'ipopt' #NLP solver
 solver_unconstrained = solver #NLP solver for the unconstrained optimal control problem
 run_unconstrained = False #solve the unconstrained optimal control problem first and use it as initial guess
 acc_guess = True #use an accurate initial guess provided by sstoGuess (varying thrust only)

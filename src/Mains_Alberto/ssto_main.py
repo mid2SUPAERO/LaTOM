@@ -36,7 +36,7 @@ choose one of the following:
     (7) saved data for multiple Isp, twr with constant thrust
 """
 
-ch = 1
+ch = 2
 
 #constants' dictionary
 const = {}
@@ -49,7 +49,7 @@ const['m0'] = 1.0 #initial spacecraft mass (kg)
 const['lunar_radii'] = True #LLO altitude defined in lunar radii
 
 #optimizer settings
-solver = 'snopt' #NLP solver
+solver = 'ipopt' #NLP solver
 acc_guess = True #use an accurate initial guess provided by sstoGuess (varying thrust only)
 alpha_rate2_cont = False #enforce rate2_continuity for control alpha
 duration_bounds = False
