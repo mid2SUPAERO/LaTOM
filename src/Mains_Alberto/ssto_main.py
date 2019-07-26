@@ -85,6 +85,8 @@ if ch==1: #Isp and twr single values, constant thrust (no throttle)
     
     p, ph = a.run_optimizer()
     
+    print(MPI.COMM_WORLD.size)
+    
     a.run_exp_sim()
     
     d = a.get_results()

@@ -18,6 +18,7 @@ if '..' not in sys.path:
 
 #import required modules
 import numpy as np
+from time import time
 
 from openmdao.api import Problem, Group, ScipyOptimizeDriver, DirectSolver
 from dymos import Phase, Trajectory, GaussLobatto, Radau
@@ -238,7 +239,12 @@ class sstoOptimizer: #single phase with constant thrust
                 
         #check the partial derivatives defined in the ODEs
         if self.settings['debug']:
+            t0 = time()
             p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
+            t1 = time()
+            dt = t1 - t0
+            print("\nTime for derivative checking: ", dt)
+            print("")
                     
         #run the driver (returns True if the optimization fails)
         failed = p.run_driver()
