@@ -45,4 +45,4 @@ from pyipopt import pyipoptcore
 ```
 6. OpenMDAO shold now be able to wrap your IPOPT installation
 
-Detailed instructions to properly setup your environment can be found in [environment_setup.md](environment_setup.md)
+Detailed instructions to properly setup your environment can be found in [env_setup.md](env_setup.md)
