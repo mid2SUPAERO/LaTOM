@@ -1,2 +1,7 @@
+build
+dist
+rpfossamiceli.egg-info
 *.pyc
 *.out
+*/coloring_files/*
+.idea
