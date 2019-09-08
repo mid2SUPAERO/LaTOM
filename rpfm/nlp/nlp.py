@@ -3,6 +3,8 @@
 
 """
 
+import numpy as np
+
 from openmdao.api import Problem, Group, SqliteRecorder, DirectSolver, pyOptSparseDriver
 from dymos import Phase, Trajectory, GaussLobatto, Radau
 
@@ -15,12 +17,10 @@ class NLP:
     def __init__(self, method, nb_seg, order, solver, snopt_opts=None, rec_file=None):
         """Initializes NLP class. """
 
-        self.p = Problem(model=Group())
+        self.moon = Moon()
+
+        # input parameters
         self.method = method
-
-        if isinstance(order, int) and isinstance(nb_seg, tuple):
-            order = tuple(order for _ in range(len(nb_seg)))
-
         self.nb_seg = nb_seg
         self.order = order
         self.solver = solver
@@ -30,34 +30,10 @@ class NLP:
         else:
             self.snopt_opts = None
 
-        if rec_file is not None:
-            self.set_recorder(rec_file)
-        self.rec_file = rec_file
+        # Problem object
+        self.p = Problem(model=Group())
 
-        # initialization
-        self.transcription = []
-        self.trajectory = None
-        self.phase = []
-        self.phase_name = []
-        self.p_exp = None
-
-        self.set_driver()
-        self.set_transcription()
-
-    def set_recorder(self, rec_file):
-
-        recorder = SqliteRecorder(rec_file)
-
-        self.p.add_recorder(recorder)
-        opts = ['record_objectives', 'record_constraints', 'record_desvars']
-
-        for opt in opts:
-            self.p.recording_options[opt] = False
-
-        self.p.recording_options['excludes'] = rec_excludes
-
-    def set_driver(self):
-
+        # Problem Driver
         self.p.driver = pyOptSparseDriver()
         self.p.driver.options['optimizer'] = self.solver
         self.p.driver.options['print_results'] = False
@@ -69,46 +45,26 @@ class NLP:
 
         self.p.driver.declare_coloring(show_summary=True, show_sparsity=False)
 
-    def set_transcription(self):
+        # Problem Recorder
+        if rec_file is not None:
 
-        if self.method == 'gauss-lobatto':
+            recorder = SqliteRecorder(rec_file)
+            opts = ['record_objectives', 'record_constraints', 'record_desvars']
 
-            if isinstance(self.nb_seg, int):
-                self.transcription = GaussLobatto(num_segments=self.nb_seg, order=self.order, compressed=True)
-            else:
-                for i in range(len(self.nb_seg)):
-                    t = GaussLobatto(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
-                    self.transcription.append(t)
+            self.p.add_recorder(recorder)
 
-        elif self.method == 'radau-ps':
+            for opt in opts:
+                self.p.recording_options[opt] = False
 
-            if isinstance(self.nb_seg, int):
-                self.transcription = Radau(num_segments=self.nb_seg, order=self.order, compressed=True)
-            else:
-                for i in range(len(self.nb_seg)):
-                    t = Radau(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
-                    self.transcription.append(t)
+            self.p.recording_options['excludes'] = rec_excludes
 
-        else:
-            raise ValueError("Transcription method must be either 'gauss-lobatto' or 'radau-ps'")
+        self.rec_file = rec_file
 
-    def set_trajectory(self, ode_class, ode_kwargs, phase_name):
-
+        # Trajectory object
         self.trajectory = self.p.model.add_subsystem('traj', Trajectory())
 
-        if isinstance(self.nb_seg, int):
-            self.phase = self.trajectory.add_phase(phase_name, Phase(ode_class=ode_class, ode_init_kwargs=ode_kwargs,
-                                                                     transcription=self.transcription))
-            self.phase_name = ''.join(['traj.', phase_name])
-
-        else:
-            for i in range(len(self.nb_seg)):
-                ph = self.trajectory.add_phase(phase_name[i], Phase(ode_class=ode_class[i],
-                                                                    ode_init_kwargs=ode_kwargs[i],
-                                                                    transcription=self.transcription[i]))
-                ph_name = ''.join(['traj.', phase_name[i]])
-                self.phase.append(ph)
-                self.phase_name.append(ph_name)
+        # Problem object for explicit simulation
+        self.p_exp = None
 
     def setup(self):
 
@@ -131,20 +87,104 @@ class NLP:
         self.p.driver.cleanup()
         self.p.cleanup()
 
-    def __str__(self):
 
-        lines = ['\n{:^40s}'.format('NLP characteristics:'),
-                 '\n{:<25s}{:<15s}'.format('Solver:', self.solver),
-                 '{:<25s}{:<15s}'.format('Transcription method:', self.method),
-                 '{:<25s}{:<15s}'.format('Number of segments:', str(self.nb_seg)),
-                 '{:<25s}{:<15s}'.format('Transcription order:', str(self.order))]
+class SinglePhaseNLP(NLP):
 
-        s = '\n'.join(lines)
+    def __init__(self, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None, rec_file=None):
 
-        return s
+        NLP.__init__(self, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
+
+        # Transcription object
+        if self.method == 'gauss-lobatto':
+            self.transcription = GaussLobatto(num_segments=self.nb_seg, order=self.order, compressed=True)
+        elif self.method == 'radau-ps':
+            self.transcription = Radau(num_segments=self.nb_seg, order=self.order, compressed=True)
+        else:
+            raise ValueError('method must be either gauss-lobatto or radau-ps')
+
+        # Phase object
+        self.phase = self.trajectory.add_phase(ph_name, Phase(ode_class=ode_class, ode_init_kwargs=ode_kwargs,
+                                                           transcription=self.transcription))
+        self.phase_name = ''.join(['traj.', ph_name])
+
+        # discretization nodes
+        self.state_nodes = None
+        self.control_nodes = None
+        self.t_state = None
+        self.t_control = None
+        self.idx_state_control = None
+
+    def set_objective(self, sc):
+
+        m_ref0 = (sc.m0 + sc.m_dry)*0.5
+        self.phase.add_objective('m', loc='final', ref0=m_ref0, ref=sc.m_dry)
+
+    def set_time_options(self, t_bounds):
+
+        t_bounds_adim = t_bounds/self.moon.tc
+        self.phase.set_time_options(fix_initial=True, duration_ref0=np.mean(t_bounds_adim),
+                                    duration_ref=t_bounds_adim[1], duration_bounds=t_bounds_adim)
+
+    def set_time_guess(self, tof):
+
+        # set initial and transfer time
+        self.p[self.phase_name + '.t_initial'] = 0.0
+        self.p[self.phase_name + '.t_duration'] = tof/self.moon.tc
+
+        self.p.run_model()  # compute time grid
+
+        # states and controls nodes
+        self.state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
+        self.control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
+
+        # time on the discretization nodes
+        t_all = self.p[self.phase_name + '.time']
+        self.t_control = np.take(t_all, self.control_nodes)
+        self.t_state = np.take(t_all, self.state_nodes)
+
+        # indices of the states time vector elements in the controls time vector
+        self.idx_state_control = np.nonzero(np.isin(self.t_control, self.t_state))[0]
+
+
+class MultiPhaseNLP(NLP):
+
+    def __init__(self, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None, rec_file=None):
+
+        if isinstance(order, int):
+            order = tuple(order for _ in range(len(nb_seg)))
+
+        NLP.__init__(self, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
+
+        # Transcription objects list
+        self.transcription = []
+
+        for i in range(len(self.nb_seg)):
+            if self.method == 'gauss-lobatto':
+                t = GaussLobatto(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
+            elif self.method == 'radau-ps':
+                t = Radau(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
+            else:
+                raise ValueError('method must be either gauss-lobatto or radau-ps')
+            self.transcription.append(t)
+
+        # Phase objects list
+        self.phase = []
+        self.phase_name = []
+
+        for i in range(len(self.nb_seg)):
+            ph = self.trajectory.add_phase(ph_name[i], Phase(ode_class=ode_class[i], ode_init_kwargs=ode_kwargs[i],
+                                                             transcription=self.transcription[i]))
+            self.phase.append(ph)
+            self.phase_name.append(''.join(['traj.', ph_name[i]]))
 
 
 if __name__ == '__main__':
 
-    nlp = NLP('gauss-lobatto', 100, 3, 'IPOPT')
-    print(nlp)
+    from rpfm.odes.odes_2d import ODE2dVarThrust
+    from rpfm.utils.const import g0
+
+    k = {'Isp': 450.0, 'g0': g0}
+
+    sp = SinglePhaseNLP('gauss-lobatto', 100, 3, 'IPOPT', ODE2dVarThrust, k, 'powered')
+    mp = MultiPhaseNLP('radau-ps', (100, 100), 3, 'IPOPT', (ODE2dVarThrust, ODE2dVarThrust), (k, k),
+                       ('phase1', 'phase2'))
