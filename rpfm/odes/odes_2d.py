@@ -21,7 +21,6 @@ class ODE2dVarThrust(ExplicitComponent):
     def initialize(self):
 
         self.options.declare('num_nodes', types=int)
-        self.options.declare('mu', types=float)
         self.options.declare('Isp', types=float)
         self.options.declare('g0', types=float)
 
@@ -70,7 +69,6 @@ class ODE2dVarThrust(ExplicitComponent):
 
     def compute(self, inputs, outputs):
 
-        mu = self.options['mu']
         g0 = self.options['g0']
 
         r = inputs['r']
@@ -86,13 +84,12 @@ class ODE2dVarThrust(ExplicitComponent):
 
         outputs['rdot'] = u
         outputs['thetadot'] = v/r
-        outputs['udot'] = -mu/r**2 + v**2/r + (thrust/m)*sin_alpha
+        outputs['udot'] = -1.0/r**2 + v**2/r + (thrust/m)*sin_alpha
         outputs['vdot'] = -u*v/r + (thrust/m)*cos_alpha
         outputs['mdot'] = -thrust/isp/g0
 
     def compute_partials(self, inputs, jacobian):
 
-        mu = self.options['mu']
         g0 = self.options['g0']
 
         r = inputs['r']
@@ -109,7 +106,7 @@ class ODE2dVarThrust(ExplicitComponent):
         jacobian['thetadot', 'r'] = -v/r**2
         jacobian['thetadot', 'v'] = 1/r
 
-        jacobian['udot', 'r'] = 2*mu/r**3 - v**2/r**2
+        jacobian['udot', 'r'] = 2.0/r**3 - v**2/r**2
         jacobian['udot', 'v'] = 2*v/r
         jacobian['udot', 'm'] = -thrust*sin_alpha/m**2
         jacobian['udot', 'alpha'] = thrust*cos_alpha/m

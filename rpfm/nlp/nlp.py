@@ -7,6 +7,7 @@ from openmdao.api import Problem, Group, SqliteRecorder, DirectSolver, pyOptSpar
 from dymos import Phase, Trajectory, GaussLobatto, Radau
 
 from rpfm.utils.const import rec_excludes
+from rpfm.utils.primary import Moon
 
 
 class NLP:
