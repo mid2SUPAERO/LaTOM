@@ -3,8 +3,6 @@
 
 """
 
-from __future__ import print_function, division, absolute_import
-
 import numpy as np
 
 from openmdao.api import ExplicitComponent
@@ -15,33 +13,34 @@ class ODE2dConstThrust(ExplicitComponent):
     def initialize(self):
 
         self.options.declare('num_nodes', types=int)
-        self.options.declare('thrust', types=float)
-        self.options.declare('Isp', types=float)
-        self.options.declare('mu', types=float)
-        self.options.declare('g0', types=float)
+        self.options.declare('GM', types=float)
+        self.options.declare('T', types=float)
+        self.options.declare('w', types=float)
 
     def setup(self):
 
         nn = self.options['num_nodes']
-        thrust = self.options['thrust']
-        isp = self.options['Isp']
-        g0 = self.options['g0']
+        thrust = self.options['T']
+        w = self.options['w']
 
-        self.add_input('r', val=np.zeros(nn), desc='orbit radius')
-        self.add_input('u', val=np.zeros(nn), desc='radial velocity')
-        self.add_input('v', val=np.zeros(nn), desc='tangential velocity')
-        self.add_input('m', val=np.zeros(nn), desc='mass')
+        # inputs (ODE right-hand side)
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+        self.add_input('m', val=np.zeros(nn), desc='mass', units='kg')
 
-        self.add_input('alpha', val=np.zeros(nn), desc='thrust direction')
-        self.add_input('thrust', val=thrust*np.ones(nn), desc='thrust magnitude')
-        self.add_input('Isp', val=isp*np.ones(nn), desc='specific impulse')
+        self.add_input('alpha', val=np.zeros(nn), desc='thrust direction', units='rad')
+        self.add_input('thrust', val=thrust*np.ones(nn), desc='thrust', units='N')
+        self.add_input('w', val=w*np.ones(nn), desc='exhaust velocity', units='m/s')
 
-        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity')
-        self.add_output('thetadot', val=np.zeros(nn), desc='angular rate')
-        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration')
-        self.add_output('vdot', val=np.zeros(nn), desc='tangential acceleration')
-        self.add_output('mdot', val=np.zeros(nn), desc='mass rate')
+        # outputs (ODE left-hand side)
+        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_output('thetadot', val=np.zeros(nn), desc='angular rate', units='rad/s')
+        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
+        self.add_output('vdot', val=np.zeros(nn), desc='tangential acceleration', units='m/s**2')
+        self.add_output('mdot', val=np.zeros(nn), desc='mass rate', units='kg/s')
 
+        # partial derivatives of the ODE outputs respect to the ODE inputs
         ar = np.arange(self.options['num_nodes'])
 
         self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1.0)
@@ -63,13 +62,11 @@ class ODE2dConstThrust(ExplicitComponent):
         self.declare_partials(of='vdot', wrt='thrust', rows=ar, cols=ar)
 
         self.declare_partials(of='mdot', wrt='thrust', rows=ar, cols=ar)
-        self.declare_partials(of='mdot', wrt='Isp', rows=ar, cols=ar)
+        self.declare_partials(of='mdot', wrt='w', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
 
-        mu = self.options['mu']
-        g0 = self.options['g0']
-        isp = self.options['Isp']
+        GM = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -77,21 +74,20 @@ class ODE2dConstThrust(ExplicitComponent):
         m = inputs['m']
         alpha = inputs['alpha']
         thrust = inputs['thrust']
+        w = inputs['w']
 
         cos_alpha = np.cos(alpha)
         sin_alpha = np.sin(alpha)
 
         outputs['rdot'] = u
-        outputs['thetadot'] = v/r
-        outputs['udot'] = -mu/r**2 + v**2/r + thrust*sin_alpha/m
-        outputs['vdot'] = -u*v/r + thrust*cos_alpha/m
-        outputs['mdot'] = -thrust/isp/g0
+        outputs['thetadot'] = v / r
+        outputs['udot'] = -GM / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
+        outputs['vdot'] = -u * v / r + (thrust / m) * cos_alpha
+        outputs['mdot'] = -thrust / w
 
     def compute_partials(self, inputs, jacobian):
 
-        mu = self.options['mu']
-        g0 = self.options['g0']
-        isp = self.options['Isp']
+        GM = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -99,28 +95,29 @@ class ODE2dConstThrust(ExplicitComponent):
         m = inputs['m']
         alpha = inputs['alpha']
         thrust = inputs['thrust']
+        w = inputs['w']
 
         cos_alpha = np.cos(alpha)
         sin_alpha = np.sin(alpha)
 
-        jacobian['thetadot', 'r'] = -v/r**2
-        jacobian['thetadot', 'v'] = 1/r
+        jacobian['thetadot', 'r'] = -v / r ** 2
+        jacobian['thetadot', 'v'] = 1 / r
 
-        jacobian['udot', 'r'] = 2*mu/r**3 - v**2/r**2
-        jacobian['udot', 'v'] = 2*v/r
-        jacobian['udot', 'm'] = -thrust*sin_alpha/m**2
-        jacobian['udot', 'alpha'] = thrust*cos_alpha/m
-        jacobian['udot', 'thrust'] = sin_alpha/m
+        jacobian['udot', 'r'] = 2 * GM / r ** 3 - (v / r) ** 2
+        jacobian['udot', 'v'] = 2 * v / r
+        jacobian['udot', 'm'] = -(thrust / m ** 2) * sin_alpha
+        jacobian['udot', 'alpha'] = (thrust / m) * cos_alpha
+        jacobian['udot', 'thrust'] = sin_alpha / m
 
-        jacobian['vdot', 'r'] = u*v/r**2
-        jacobian['vdot', 'u'] = -v/r
-        jacobian['vdot', 'v'] = -u/r
-        jacobian['vdot', 'm'] = -thrust*cos_alpha/m**2
-        jacobian['vdot', 'alpha'] = -thrust*sin_alpha/m
-        jacobian['vdot', 'thrust'] = cos_alpha/m
+        jacobian['vdot', 'r'] = u * v / r ** 2
+        jacobian['vdot', 'u'] = -v / r
+        jacobian['vdot', 'v'] = -u / r
+        jacobian['vdot', 'm'] = -(thrust / m ** 2) * cos_alpha
+        jacobian['vdot', 'alpha'] = -(thrust / m) * sin_alpha
+        jacobian['vdot', 'thrust'] = cos_alpha / m
 
-        jacobian['mdot', 'thrust'] = -1/isp/g0
-        jacobian['mdot', 'Isp'] = thrust/isp**2/g0
+        jacobian['mdot', 'thrust'] = -1 / w
+        jacobian['mdot', 'w'] = thrust / w ** 2
 
 
 class ODE2dVarThrust(ExplicitComponent):
@@ -128,29 +125,32 @@ class ODE2dVarThrust(ExplicitComponent):
     def initialize(self):
 
         self.options.declare('num_nodes', types=int)
-        self.options.declare('Isp', types=float)
-        self.options.declare('g0', types=float)
+        self.options.declare('GM', types=float)
+        self.options.declare('w', types=float)
 
     def setup(self):
 
         nn = self.options['num_nodes']
-        isp = self.options['Isp']
+        w = self.options['w']
 
-        self.add_input('r', val=np.zeros(nn), desc='orbit radius')
-        self.add_input('u', val=np.zeros(nn), desc='radial velocity')
-        self.add_input('v', val=np.zeros(nn), desc='tangential velocity')
-        self.add_input('m', val=np.zeros(nn), desc='mass')
+        # inputs (ODE right-hand side)
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+        self.add_input('m', val=np.zeros(nn), desc='mass', units='kg')
 
-        self.add_input('alpha', val=np.zeros(nn), desc='thrust direction')
-        self.add_input('thrust', val=np.zeros(nn), desc='thrust magnitude')
-        self.add_input('Isp', val=isp*np.ones(nn), desc='specific impulse')
+        self.add_input('alpha', val=np.zeros(nn), desc='thrust direction', units='rad')
+        self.add_input('thrust', val=np.zeros(nn), desc='thrust', units='N')
+        self.add_input('w', val=w * np.ones(nn), desc='exhaust velocity', units='m/s')
 
-        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity')
-        self.add_output('thetadot', val=np.zeros(nn), desc='angular rate')
-        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration')
-        self.add_output('vdot', val=np.zeros(nn), desc='tangential acceleration')
-        self.add_output('mdot', val=np.zeros(nn), desc='mass rate')
+        # outputs (ODE left-hand side)
+        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_output('thetadot', val=np.zeros(nn), desc='angular rate', units='rad/s')
+        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
+        self.add_output('vdot', val=np.zeros(nn), desc='tangential acceleration', units='m/s**2')
+        self.add_output('mdot', val=np.zeros(nn), desc='mass rate', units='kg/s')
 
+        # partial derivatives of the ODE outputs respect to the ODE inputs
         ar = np.arange(self.options['num_nodes'])
 
         self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1.0)
@@ -172,12 +172,11 @@ class ODE2dVarThrust(ExplicitComponent):
         self.declare_partials(of='vdot', wrt='thrust', rows=ar, cols=ar)
 
         self.declare_partials(of='mdot', wrt='thrust', rows=ar, cols=ar)
-        self.declare_partials(of='mdot', wrt='Isp', rows=ar, cols=ar)
+        self.declare_partials(of='mdot', wrt='w', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
 
-        g0 = self.options['g0']
-        isp = self.options['Isp']
+        GM = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -185,20 +184,20 @@ class ODE2dVarThrust(ExplicitComponent):
         m = inputs['m']
         alpha = inputs['alpha']
         thrust = inputs['thrust']
+        w = inputs['w']
 
         cos_alpha = np.cos(alpha)
         sin_alpha = np.sin(alpha)
 
         outputs['rdot'] = u
-        outputs['thetadot'] = v/r
-        outputs['udot'] = -1/r**2 + v**2/r + thrust*sin_alpha/m
-        outputs['vdot'] = -u*v/r + thrust*cos_alpha/m
-        outputs['mdot'] = -thrust/isp/g0
+        outputs['thetadot'] = v / r
+        outputs['udot'] = -GM / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
+        outputs['vdot'] = -u * v / r + (thrust / m) * cos_alpha
+        outputs['mdot'] = -thrust / w
 
     def compute_partials(self, inputs, jacobian):
 
-        g0 = self.options['g0']
-        isp = self.options['Isp']
+        GM = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -206,25 +205,26 @@ class ODE2dVarThrust(ExplicitComponent):
         m = inputs['m']
         alpha = inputs['alpha']
         thrust = inputs['thrust']
+        w = inputs['w']
 
         cos_alpha = np.cos(alpha)
         sin_alpha = np.sin(alpha)
 
-        jacobian['thetadot', 'r'] = -v/r**2
-        jacobian['thetadot', 'v'] = 1/r
+        jacobian['thetadot', 'r'] = -v / r ** 2
+        jacobian['thetadot', 'v'] = 1 / r
 
-        jacobian['udot', 'r'] = 2/r**3 - v**2/r**2
-        jacobian['udot', 'v'] = 2*v/r
-        jacobian['udot', 'm'] = -thrust*sin_alpha/m**2
-        jacobian['udot', 'alpha'] = thrust*cos_alpha/m
-        jacobian['udot', 'thrust'] = sin_alpha/m
+        jacobian['udot', 'r'] = 2 * GM / r ** 3 - (v / r) ** 2
+        jacobian['udot', 'v'] = 2 * v / r
+        jacobian['udot', 'm'] = -(thrust / m ** 2) * sin_alpha
+        jacobian['udot', 'alpha'] = (thrust / m) * cos_alpha
+        jacobian['udot', 'thrust'] = sin_alpha / m
 
-        jacobian['vdot', 'r'] = u*v/r**2
-        jacobian['vdot', 'u'] = -v/r
-        jacobian['vdot', 'v'] = -u/r
-        jacobian['vdot', 'm'] = -thrust*cos_alpha/m**2
-        jacobian['vdot', 'alpha'] = -thrust*sin_alpha/m
-        jacobian['vdot', 'thrust'] = cos_alpha/m
+        jacobian['vdot', 'r'] = u * v / r ** 2
+        jacobian['vdot', 'u'] = -v / r
+        jacobian['vdot', 'v'] = -u / r
+        jacobian['vdot', 'm'] = -(thrust / m ** 2) * cos_alpha
+        jacobian['vdot', 'alpha'] = -(thrust / m) * sin_alpha
+        jacobian['vdot', 'thrust'] = cos_alpha / m
 
-        jacobian['mdot', 'thrust'] = -1/isp/g0
-        jacobian['mdot', 'Isp'] = thrust/isp**2/g0
+        jacobian['mdot', 'thrust'] = -1 / w
+        jacobian['mdot', 'w'] = thrust / w ** 2

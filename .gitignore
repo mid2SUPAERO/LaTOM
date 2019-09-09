@@ -3,5 +3,5 @@ dist
 rpfossamiceli.egg-info
 *.pyc
 *.out
-*/coloring_files/*
+*coloring_files*
 .idea

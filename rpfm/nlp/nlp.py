@@ -14,12 +14,11 @@ from rpfm.utils.primary import Moon
 
 class NLP:
 
-    def __init__(self, sc, method, nb_seg, order, solver, snopt_opts=None, rec_file=None):
+    def __init__(self, body, sc, method, nb_seg, order, solver, snopt_opts=None, rec_file=None):
         """Initializes NLP class. """
 
-        self.moon = Moon()  # Moon object
-
         # input parameters
+        self.body = body
         self.sc = sc
         self.method = method
         self.nb_seg = nb_seg
@@ -91,15 +90,10 @@ class NLP:
 
 class SinglePhaseNLP(NLP):
 
-    def __init__(self, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
+    def __init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
                  rec_file=None):
 
-        NLP.__init__(self, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
-
-        # ODEs keyword arguments
-        # ode_kwargs['Isp'] = ode_kwargs['Isp']/self.moon.tc
-        ode_kwargs['mu'] = self.moon.GM
-        self.ode_kwargs = ode_kwargs
+        NLP.__init__(self, body, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
 
         # Transcription object
         if self.method == 'gauss-lobatto':
@@ -110,7 +104,7 @@ class SinglePhaseNLP(NLP):
             raise ValueError('method must be either gauss-lobatto or radau-ps')
 
         # Phase object
-        self.phase = self.trajectory.add_phase(ph_name, Phase(ode_class=ode_class, ode_init_kwargs=self.ode_kwargs,
+        self.phase = self.trajectory.add_phase(ph_name, Phase(ode_class=ode_class, ode_init_kwargs=ode_kwargs,
                                                               transcription=self.transcription))
         self.phase_name = ''.join(['traj.', ph_name])
 
@@ -122,25 +116,23 @@ class SinglePhaseNLP(NLP):
         self.idx_state_control = None
 
         # time of flight and time bounds
-        self.tof_adim = None
-        self.t_bounds_adim = None
+        self.tof = None
+        self.t_bounds = None
 
     def set_objective(self):
 
-        # m_ref0 = (self.sc.m0 + self.sc.m_dry)*0.5
-        # self.phase.add_objective('m', loc='final', ref0=m_ref0, ref=self.sc.m_dry)
-        self.phase.add_objective('m', loc='final', scaler=-self.sc.m0)
+        self.phase.add_objective('m', loc='final', scaler=-np.power(10, -np.floor(np.log10(self.sc.m0))))
 
     def set_time_options(self, tof, t_bounds):
 
-        # self.tof_adim = tof/self.moon.tc
-        self.tof_adim = tof
-        self.t_bounds_adim = np.asarray(t_bounds)*self.tof_adim
+        self.tof = tof
+        scaler = np.power(10, -np.floor(np.log10(tof)))
 
-        # self.phase.set_time_options(fix_initial=True, duration_ref0=np.mean(t_bounds),
-        #                             duration_ref=t_bounds[1], duration_bounds=t_bounds)
-
-        self.phase.set_time_options(fix_initial=True, duration_scaler=1e-2)
+        if t_bounds is not None:
+            self.t_bounds = np.asarray(t_bounds)*self.tof
+            self.phase.set_time_options(fix_initial=True, duration_scaler=scaler, duration_bounds=self.t_bounds)
+        else:
+            self.phase.set_time_options(fix_initial=True, duration_scaler=scaler)
 
     def set_time_guess(self, tof):
 
@@ -171,13 +163,13 @@ class SinglePhaseNLP(NLP):
 
 class MultiPhaseNLP(NLP):
 
-    def __init__(self, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
+    def __init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
                  rec_file=None):
 
         if isinstance(order, int):
             order = tuple(order for _ in range(len(nb_seg)))
 
-        NLP.__init__(self, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
+        NLP.__init__(self, body, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
 
         # Transcription objects list
         self.transcription = []

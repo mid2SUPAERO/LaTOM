@@ -3,7 +3,7 @@
 
 """
 
-from rpfm.utils.primary import Moon
+from rpfm.utils.const import g0
 
 
 class Spacecraft:
@@ -11,16 +11,18 @@ class Spacecraft:
 
     Parameters
     ----------
-    isp : int or float
+    isp : float
         Specific impulse [s]
-    twr : int or float
+    twr : float
         Thrust over initial weight ratio [-]
-    throttle_min : int or float, optional
+    throttle_min : float, optional
         Minimum throttle level [-]. Default is 0.0
-    m0 : int or float, optional
+    m0 : float, optional
         Initial mass [kg]. Default is 1.0
-    m_dry : int, float or None, optional
+    m_dry : float or None, optional
         Dry mass [kg]. Default is ``None`` for which `m_dry` is set equal to ``m0/100``
+    g : float, optional
+        Central body surface gravity [m/s^2]. Default is `g0`
 
     Attributes
     ----------
@@ -32,6 +34,8 @@ class Spacecraft:
         Initial mass [kg]
     m_dry : float
         Dry mass [kg]
+    w : float
+        Exhaust velocity [m/s]
     T_max : float
         Maximum thrust [N]
     T_min : float
@@ -39,23 +43,26 @@ class Spacecraft:
 
     """
 
-    def __init__(self, isp, twr, throttle_min=0.0, m0=1.0, m_dry=None):
+    def __init__(self, isp, twr, throttle_min=0.0, m0=1.0, m_dry=None, g=g0):
 
-        self.Isp = float(isp)
-        self.twr = float(twr)
-        self.m0 = float(m0)
+        self.Isp = isp
+        self.twr = twr
+        self.m0 = m0
 
         if m_dry is not None:
             self.m_dry = float(m_dry)
         else:
             self.m_dry = self.m0/100
 
-        moon = Moon()
-        self.T_max = self.twr*self.m0*moon.g
+        self.w = isp*g0
+        self.T_max = self.twr*self.m0*g
         self.T_min = self.T_max*throttle_min
 
 
 if __name__ == '__main__':
 
-    sc = Spacecraft(450, 2, throttle_min=0.5)
+    from rpfm.utils.primary import Moon
+
+    moon = Moon()
+    sc = Spacecraft(450., 2., throttle_min=0.5, g=moon.g)
     print(vars(sc))
