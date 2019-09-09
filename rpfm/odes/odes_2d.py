@@ -8,7 +8,6 @@ from __future__ import print_function, division, absolute_import
 import numpy as np
 
 from openmdao.api import ExplicitComponent
-from dymos import declare_time, declare_state, declare_parameter
 
 
 class ODE2dConstThrust(ExplicitComponent):
@@ -35,7 +34,7 @@ class ODE2dVarThrust(ExplicitComponent):
         self.add_input('m', val=np.zeros(nn), desc='mass')
 
         self.add_input('alpha', val=np.zeros(nn), desc='thrust direction')
-        self.add_input('thrust', val=np.zeros(nn), desc='thrust')
+        self.add_input('thrust', val=np.zeros(nn), desc='thrust magnitude')
         self.add_input('Isp', val=isp*np.ones(nn), desc='specific impulse')
 
         self.add_output('rdot', val=np.zeros(nn), desc='radial velocity')
@@ -46,7 +45,7 @@ class ODE2dVarThrust(ExplicitComponent):
 
         ar = np.arange(self.options['num_nodes'])
 
-        self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1)
+        self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1.0)
 
         self.declare_partials(of='thetadot', wrt='r', rows=ar, cols=ar)
         self.declare_partials(of='thetadot', wrt='v', rows=ar, cols=ar)
@@ -70,6 +69,7 @@ class ODE2dVarThrust(ExplicitComponent):
     def compute(self, inputs, outputs):
 
         g0 = self.options['g0']
+        isp = self.options['Isp']
 
         r = inputs['r']
         u = inputs['u']
@@ -77,20 +77,20 @@ class ODE2dVarThrust(ExplicitComponent):
         m = inputs['m']
         alpha = inputs['alpha']
         thrust = inputs['thrust']
-        isp = inputs['Isp']
 
         cos_alpha = np.cos(alpha)
         sin_alpha = np.sin(alpha)
 
         outputs['rdot'] = u
         outputs['thetadot'] = v/r
-        outputs['udot'] = -1.0/r**2 + v**2/r + (thrust/m)*sin_alpha
-        outputs['vdot'] = -u*v/r + (thrust/m)*cos_alpha
+        outputs['udot'] = -1/r**2 + v**2/r + thrust*sin_alpha/m
+        outputs['vdot'] = -u*v/r + thrust*cos_alpha/m
         outputs['mdot'] = -thrust/isp/g0
 
     def compute_partials(self, inputs, jacobian):
 
         g0 = self.options['g0']
+        isp = self.options['Isp']
 
         r = inputs['r']
         u = inputs['u']
@@ -98,7 +98,6 @@ class ODE2dVarThrust(ExplicitComponent):
         m = inputs['m']
         alpha = inputs['alpha']
         thrust = inputs['thrust']
-        isp = inputs['Isp']
 
         cos_alpha = np.cos(alpha)
         sin_alpha = np.sin(alpha)
@@ -106,7 +105,7 @@ class ODE2dVarThrust(ExplicitComponent):
         jacobian['thetadot', 'r'] = -v/r**2
         jacobian['thetadot', 'v'] = 1/r
 
-        jacobian['udot', 'r'] = 2.0/r**3 - v**2/r**2
+        jacobian['udot', 'r'] = 2/r**3 - v**2/r**2
         jacobian['udot', 'v'] = 2*v/r
         jacobian['udot', 'm'] = -thrust*sin_alpha/m**2
         jacobian['udot', 'alpha'] = thrust*cos_alpha/m
