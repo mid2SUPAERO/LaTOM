@@ -10,7 +10,6 @@ from dymos import Phase, Trajectory, GaussLobatto, Radau
 
 from rpfm.utils.const import rec_excludes
 from rpfm.utils.primary import Moon
-from rpfm.utils.const import g0
 
 
 class NLP:
@@ -31,10 +30,6 @@ class NLP:
             self.snopt_opts = snopt_opts
         else:
             self.snopt_opts = None
-
-        # non dimensional specific impulse for the Spacecraft object
-        self.Isp_adim = self.sc.Isp/self.moon.tc
-        self.ode_kwargs = {'Isp': self.Isp_adim, 'g0': g0}
 
         # Problem object
         self.p = Problem(model=Group())
@@ -96,10 +91,15 @@ class NLP:
 
 class SinglePhaseNLP(NLP):
 
-    def __init__(self, sc, method, nb_seg, order, solver, ode_class, ph_name, snopt_opts=None,
+    def __init__(self, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
                  rec_file=None):
 
         NLP.__init__(self, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
+
+        # ODEs keyword arguments
+        # ode_kwargs['Isp'] = ode_kwargs['Isp']/self.moon.tc
+        ode_kwargs['mu'] = self.moon.GM
+        self.ode_kwargs = ode_kwargs
 
         # Transcription object
         if self.method == 'gauss-lobatto':
@@ -121,15 +121,26 @@ class SinglePhaseNLP(NLP):
         self.t_control = None
         self.idx_state_control = None
 
+        # time of flight and time bounds
+        self.tof_adim = None
+        self.t_bounds_adim = None
+
     def set_objective(self):
 
-        m_ref0 = (self.sc.m0 + self.sc.m_dry)*0.5
-        self.phase.add_objective('m', loc='final', ref0=m_ref0, ref=self.sc.m_dry)
+        # m_ref0 = (self.sc.m0 + self.sc.m_dry)*0.5
+        # self.phase.add_objective('m', loc='final', ref0=m_ref0, ref=self.sc.m_dry)
+        self.phase.add_objective('m', loc='final', scaler=-self.sc.m0)
 
-    def set_time_options(self, t_bounds):
+    def set_time_options(self, tof, t_bounds):
 
-        self.phase.set_time_options(fix_initial=True, duration_ref0=np.mean(t_bounds),
-                                    duration_ref=t_bounds[1], duration_bounds=t_bounds)
+        # self.tof_adim = tof/self.moon.tc
+        self.tof_adim = tof
+        self.t_bounds_adim = np.asarray(t_bounds)*self.tof_adim
+
+        # self.phase.set_time_options(fix_initial=True, duration_ref0=np.mean(t_bounds),
+        #                             duration_ref=t_bounds[1], duration_bounds=t_bounds)
+
+        self.phase.set_time_options(fix_initial=True, duration_scaler=1e-2)
 
     def set_time_guess(self, tof):
 
@@ -140,21 +151,28 @@ class SinglePhaseNLP(NLP):
         self.p.run_model()  # compute time grid
 
         # states and controls nodes
-        self.state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
-        self.control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
+        state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
+        control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
+
+        self.state_nodes = np.reshape(state_nodes, (len(state_nodes), 1))
+        self.control_nodes = np.reshape(control_nodes, (len(control_nodes), 1))
 
         # time on the discretization nodes
         t_all = self.p[self.phase_name + '.time']
-        self.t_control = np.take(t_all, self.control_nodes)
+        t_all = np.reshape(t_all, (len(t_all), 1))
+
         self.t_state = np.take(t_all, self.state_nodes)
+        self.t_control = np.take(t_all, self.control_nodes)
 
         # indices of the states time vector elements in the controls time vector
-        self.idx_state_control = np.nonzero(np.isin(self.t_control, self.t_state))[0]
+        idx_state_control = np.nonzero(np.isin(self.t_control, self.t_state))[0]
+        self.idx_state_control = np.reshape(idx_state_control, (len(idx_state_control), 1))
 
 
 class MultiPhaseNLP(NLP):
 
-    def __init__(self, sc, method, nb_seg, order, solver, ode_class, ph_name, snopt_opts=None, rec_file=None):
+    def __init__(self, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
+                 rec_file=None):
 
         if isinstance(order, int):
             order = tuple(order for _ in range(len(nb_seg)))
@@ -178,7 +196,7 @@ class MultiPhaseNLP(NLP):
         self.phase_name = []
 
         for i in range(len(self.nb_seg)):
-            ph = self.trajectory.add_phase(ph_name[i], Phase(ode_class=ode_class[i], ode_init_kwargs=self.ode_kwargs,
+            ph = self.trajectory.add_phase(ph_name[i], Phase(ode_class=ode_class[i], ode_init_kwargs=ode_kwargs[i],
                                                              transcription=self.transcription[i]))
             self.phase.append(ph)
             self.phase_name.append(''.join(['traj.', ph_name[i]]))
