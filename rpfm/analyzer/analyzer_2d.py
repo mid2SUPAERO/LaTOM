@@ -19,6 +19,7 @@ class TwoDimAnalyzer(Analyzer):
 
         Analyzer.__init__(self, body, sc)
 
+        self.phase_name = 'powered'
         self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, self.sc.m0])
 
     def get_states_alpha_time_series(self, p):
@@ -59,16 +60,40 @@ class TwoDimAnalyzer(Analyzer):
             self.states_exp = states
             self.controls_exp = controls
 
+    def __str__(self):
+
+        lines = [self.nlp.__str__(), self.sc.__str__(),
+                 '\n{:^50s}'.format('Trajectory:'),
+                 '\n{:<25s}{:>20.12f}{:>5s}'.format('Time of flight:', self.tof, 's'),
+                 '{:<25s}{:>20.12f}{:>5s}'.format('Propellant fraction:', (1.0 - self.states[-1, -1] / self.sc.m0), '')]
+
+        if self.states_exp is not None:
+            err = self.states[-1, :] - self.states_exp[-1, :]
+
+            lines_err = ['\n{:^50s}'.format('Error:'),
+                         '\n{:<25s}{:>20.12f}{:>5s}'.format('Radius:', err[0] / 1e3, 'km'),
+                         '{:<25s}{:>20.12f}{:>5s}'.format('Angle:', err[1] * np.pi / 180, 'deg'),
+                         '{:<25s}{:>20.12f}{:>5s}'.format('Radial velocity:', err[2] / 1e3, 'km/s'),
+                         '{:<25s}{:>20.12f}{:>5s}'.format('Tangential velocity:', err[3] / 1e3, 'km/s'),
+                         '{:<25s}{:>20.12f}{:>5s}'.format('Mass:', err[4], 'kg')]
+
+            lines.extend(lines_err)
+
+        s = '\n'.join(lines)
+
+        return s
+
 
 class TwoDimAscConstAnalyzer(TwoDimAnalyzer):
 
     def __init__(self, body, sc, alt, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
-                 rec_file=None):
+                 rec_file=None, check_partials=False, u_bound=False):
 
         TwoDimAnalyzer.__init__(self, body, sc)
 
         self.nlp = TwoDimAscConstNLP(body, sc, alt, theta, (-np.pi, np.pi), tof, t_bounds, method, nb_seg, order,
-                                     solver, 'powered', snopt_opts, rec_file)
+                                     solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                     check_partials=check_partials, u_bound=u_bound)
 
     def get_time_series(self, p):
 
@@ -96,13 +121,14 @@ class TwoDimAscConstAnalyzer(TwoDimAnalyzer):
 
 class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
 
-    def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
-                 rec_file=None):
+    def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
+                 check_partials=False, u_bound=False):
 
         TwoDimAnalyzer.__init__(self, body, sc)
 
         self.nlp = TwoDimAscVarNLP(body, sc, alt, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order, solver,
-                                   'powered', snopt_opts=snopt_opts, rec_file=rec_file)
+                                   self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                   check_partials=check_partials, u_bound=u_bound)
 
     def get_time_series(self, p):
 
@@ -130,4 +156,35 @@ class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
 
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
-    pass
+    def __init__(self, body, sc, alt, alt_min, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
+                 rec_file=None, check_partials=False, u_bound=False):
+
+        TwoDimAnalyzer.__init__(self, body, sc)
+
+        self.nlp = TwoDimAscVToffNLP(body, sc, alt, alt_min, slope, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg,
+                                     order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                     check_partials=check_partials, u_bound=u_bound)
+
+        self.r_min = None
+
+    def get_solutions(self, explicit=True):
+        
+        TwoDimAnalyzer.get_solutions(self, explicit=explicit)
+
+        self.r_min = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')*self.body.R
+
+    def plot(self):
+
+        states_plot = TwoDimStatesTimeSeries(self.body.R, self.time, self.states, time_exp=self.time_exp,
+                                             states_exp=self.states_exp, thrust=self.controls[:, 0], r_min=self.r_min)
+        controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, 'variable')
+        alt_plot = TwoDimAltProfile(self.body.R, self.states, states_exp=self.states_exp, thrust=self.controls[:, 0],
+                                    r_min=self.r_min)
+        trajectory_plot = TwoDimTrajectory(self.body.R, self.states[-1, 0], self.states)
+
+        states_plot.plot()
+        controls_plot.plot()
+        alt_plot.plot()
+        trajectory_plot.plot()
+
+        plt.show()

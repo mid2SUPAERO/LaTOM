@@ -10,9 +10,12 @@ from copy import deepcopy
 
 class TwoDimAltProfile:
 
-    def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6):
+    def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6, r_min=None):
 
         self.R = deepcopy(r)
+
+        self.r = deepcopy(states[:, 0])
+        self.theta = deepcopy(states[:, 1])
 
         if thrust is not None:  # variable thrust
 
@@ -24,19 +27,22 @@ class TwoDimAltProfile:
             self.r_coast = deepcopy(states_coast[:, 0])
             self.theta_coast = deepcopy(states_coast[:, 1])
 
-        else:  # constant thrust
-
-            self.r = deepcopy(states[:, 0])
-            self.theta = deepcopy(states[:, 1])
-
         if states_exp is not None:
 
             self.r_exp = deepcopy(states_exp[:, 0])
             self.theta_exp = deepcopy(states_exp[:, 1])
 
+        if r_min is not None:
+
+            self.r_min = deepcopy(r_min)
+
     def plot(self):
 
         fig, ax = plt.subplots(1, 1, constrained_layout=True)
+
+        if hasattr(self, 'r_min'):
+
+            ax.plot(self.theta*180/np.pi, (self.r_min - self.R)/1e3, color='k', label='safe altitude')
 
         if hasattr(self, 'r_exp'):  # explicit simulation
 

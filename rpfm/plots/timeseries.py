@@ -10,7 +10,7 @@ from copy import deepcopy
 
 class TwoDimStatesTimeSeries:
 
-    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-5):
+    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-5, r_min=None):
 
         self.R = deepcopy(r)
 
@@ -28,9 +28,17 @@ class TwoDimStatesTimeSeries:
             self.time_coast = self.time[(thrust < threshold).flatten(), :]
             self.states_coast = self.states[(thrust < threshold).flatten(), :]
 
+        if r_min is not None:
+
+            self.r_min = deepcopy(r_min)
+
     def plot(self):
 
         fig, axs = plt.subplots(2, 2, constrained_layout=True)
+
+        if hasattr(self, 'r_min'):
+
+            axs[0, 0].plot(self.time, (self.r_min - self.R)/1e3, color='k', label='safe altitude')
 
         if self.states_exp is not None:  # explicit simulation
 

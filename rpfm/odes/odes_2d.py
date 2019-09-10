@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from openmdao.api import ExplicitComponent
+from openmdao.api import ExplicitComponent, Group
 
 
 class ODE2dConstThrust(ExplicitComponent):
@@ -66,7 +66,7 @@ class ODE2dConstThrust(ExplicitComponent):
 
     def compute(self, inputs, outputs):
 
-        GM = self.options['GM']
+        gm = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -81,13 +81,13 @@ class ODE2dConstThrust(ExplicitComponent):
 
         outputs['rdot'] = u
         outputs['thetadot'] = v / r
-        outputs['udot'] = -GM / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
+        outputs['udot'] = -gm / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
         outputs['vdot'] = -u * v / r + (thrust / m) * cos_alpha
         outputs['mdot'] = -thrust / w
 
     def compute_partials(self, inputs, jacobian):
 
-        GM = self.options['GM']
+        gm = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -103,7 +103,7 @@ class ODE2dConstThrust(ExplicitComponent):
         jacobian['thetadot', 'r'] = -v / r ** 2
         jacobian['thetadot', 'v'] = 1 / r
 
-        jacobian['udot', 'r'] = 2 * GM / r ** 3 - (v / r) ** 2
+        jacobian['udot', 'r'] = 2 * gm / r ** 3 - (v / r) ** 2
         jacobian['udot', 'v'] = 2 * v / r
         jacobian['udot', 'm'] = -(thrust / m ** 2) * sin_alpha
         jacobian['udot', 'alpha'] = (thrust / m) * cos_alpha
@@ -176,7 +176,7 @@ class ODE2dVarThrust(ExplicitComponent):
 
     def compute(self, inputs, outputs):
 
-        GM = self.options['GM']
+        gm = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -191,13 +191,13 @@ class ODE2dVarThrust(ExplicitComponent):
 
         outputs['rdot'] = u
         outputs['thetadot'] = v / r
-        outputs['udot'] = -GM / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
+        outputs['udot'] = -gm / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
         outputs['vdot'] = -u * v / r + (thrust / m) * cos_alpha
         outputs['mdot'] = -thrust / w
 
     def compute_partials(self, inputs, jacobian):
 
-        GM = self.options['GM']
+        gm = self.options['GM']
 
         r = inputs['r']
         u = inputs['u']
@@ -213,7 +213,7 @@ class ODE2dVarThrust(ExplicitComponent):
         jacobian['thetadot', 'r'] = -v / r ** 2
         jacobian['thetadot', 'v'] = 1 / r
 
-        jacobian['udot', 'r'] = 2 * GM / r ** 3 - (v / r) ** 2
+        jacobian['udot', 'r'] = 2 * gm / r ** 3 - (v / r) ** 2
         jacobian['udot', 'v'] = 2 * v / r
         jacobian['udot', 'm'] = -(thrust / m ** 2) * sin_alpha
         jacobian['udot', 'alpha'] = (thrust / m) * cos_alpha
@@ -228,3 +228,83 @@ class ODE2dVarThrust(ExplicitComponent):
 
         jacobian['mdot', 'thrust'] = -1 / w
         jacobian['mdot', 'w'] = thrust / w ** 2
+
+
+class SafeAlt(ExplicitComponent):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('R', types=float)
+        self.options.declare('alt_min', types=float)
+        self.options.declare('slope', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('theta', val=np.zeros(nn), desc='true anomaly', units='rad')
+
+        self.add_output('r_safe', val=np.zeros(nn), desc='minimum safe radius', units='m')
+        self.add_output('dist_safe', val=np.zeros(nn), desc='distance from minimum safe radius', units='m')
+
+        ar = np.arange(self.options['num_nodes'])
+
+        self.declare_partials(of='r_safe', wrt='theta', rows=ar, cols=ar)
+        self.declare_partials(of='dist_safe', wrt='r', rows=ar, cols=ar, val=1.0)
+        self.declare_partials(of='dist_safe', wrt='theta', rows=ar, cols=ar)
+
+    def compute(self, inputs, outputs):
+
+        r_moon = self.options['R']
+        alt_min = self.options['alt_min']
+        slope = self.options['slope']
+
+        r = inputs['r']
+        theta = inputs['theta']
+
+        r_safe = r_moon + alt_min*r_moon*theta/(r_moon*theta + alt_min/slope)
+
+        outputs['r_safe'] = r_safe
+        outputs['dist_safe'] = r - r_safe
+
+    def compute_partials(self, inputs, jacobian):
+
+        r_moon = self.options['R']
+        alt_min = self.options['alt_min']
+        slope = self.options['slope']
+
+        theta = inputs['theta']
+
+        drsafe_dtheta = alt_min**2*r_moon*slope/(alt_min + slope*r_moon*theta)**2
+
+        jacobian['r_safe', 'theta'] = drsafe_dtheta
+        jacobian['dist_safe', 'theta'] = -drsafe_dtheta
+
+
+class ODE2dVToff(Group):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+
+        self.options.declare('GM', types=float)
+        self.options.declare('w', types=float)
+        self.options.declare('R', types=float)
+        self.options.declare('alt_min', types=float)
+        self.options.declare('slope', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        self.add_subsystem(name='odes', subsys=ODE2dVarThrust(num_nodes=nn, GM=self.options['GM'], w=self.options['w']),
+                           promotes_inputs=['r', 'u', 'v', 'm', 'alpha', 'thrust', 'w'],
+                           promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
+
+        self.add_subsystem(name='safe_alt',
+                           subsys=SafeAlt(num_nodes=nn, R=self.options['R'], alt_min=self.options['alt_min'],
+                                          slope=self.options['slope']),
+                           promotes_inputs=['r', 'theta'],
+                           promotes_outputs=['r_safe', 'dist_safe'])
