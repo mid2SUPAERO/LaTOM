@@ -135,7 +135,7 @@ class SinglePhaseNLP(NLP):
 
     def set_objective(self):
 
-        self.phase.add_objective('m', loc='final', scaler=-1)
+        self.phase.add_objective('m', loc='final', scaler=-1.0)
 
     def set_time_options(self, tof, t_bounds):
 

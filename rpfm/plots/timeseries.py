@@ -5,20 +5,19 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from copy import deepcopy
 
 
 class TwoDimStatesTimeSeries:
 
-    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-5, r_min=None):
+    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-6, r_safe=None):
 
-        self.R = deepcopy(r)
+        self.R = r
 
-        self.time = deepcopy(time)
-        self.states = deepcopy(states)
+        self.time = time
+        self.states = states
 
-        self.time_exp = deepcopy(time_exp)
-        self.states_exp = deepcopy(states_exp)
+        self.time_exp = time_exp
+        self.states_exp = states_exp
 
         if thrust is not None:
 
@@ -28,17 +27,15 @@ class TwoDimStatesTimeSeries:
             self.time_coast = self.time[(thrust < threshold).flatten(), :]
             self.states_coast = self.states[(thrust < threshold).flatten(), :]
 
-        if r_min is not None:
-
-            self.r_min = deepcopy(r_min)
+        self.r_safe = r_safe
 
     def plot(self):
 
         fig, axs = plt.subplots(2, 2, constrained_layout=True)
 
-        if hasattr(self, 'r_min'):
+        if self.r_safe is not None:
 
-            axs[0, 0].plot(self.time, (self.r_min - self.R)/1e3, color='k', label='safe altitude')
+            axs[0, 0].plot(self.time, (self.r_safe - self.R)/1e3, color='k', label='safe altitude')
 
         if self.states_exp is not None:  # explicit simulation
 
@@ -87,24 +84,19 @@ class TwoDimStatesTimeSeries:
 
 class TwoDimControlsTimeSeries:
 
-    def __init__(self, time, controls, kind, threshold=1e-5):
+    def __init__(self, time, controls, threshold=1e-6):
 
-        self.time = deepcopy(time)
-        self.thrust = deepcopy(controls[:, 0])
-        self.alpha = deepcopy(controls[:, 1])
+        self.time = time
+        self.thrust = controls[:, 0]
+        self.alpha = controls[:, 1]
+        self.threshold = threshold
 
-        if kind in ['const', 'variable']:
-            self.kind = kind
-        else:
-            raise ValueError('kind must be either const or variable')
-
-        if kind == 'variable':
-
+        if threshold is not None:
             self.alpha[(self.thrust < threshold).flatten()] = None
 
     def plot(self):
 
-        if self.kind == 'const':
+        if self.threshold is None:
 
             fig, ax = plt.subplots(1, 1, constrained_layout=True)
 

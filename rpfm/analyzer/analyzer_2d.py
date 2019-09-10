@@ -4,12 +4,10 @@
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 from rpfm.analyzer.analyzer import Analyzer
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP
-from rpfm.plots.timeseries import TwoDimControlsTimeSeries, TwoDimStatesTimeSeries
-from rpfm.plots.trajectories import TwoDimAltProfile, TwoDimTrajectory
+from rpfm.plots.solutions import TwoDimSolPlot
 from rpfm.utils.const import states_2d
 
 
@@ -20,7 +18,7 @@ class TwoDimAnalyzer(Analyzer):
         Analyzer.__init__(self, body, sc)
 
         self.phase_name = 'powered'
-        self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, self.sc.m0])
+        self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, 1.0])
 
     def get_states_alpha_time_series(self, p):
 
@@ -105,18 +103,9 @@ class TwoDimAscConstAnalyzer(TwoDimAnalyzer):
 
     def plot(self):
 
-        states_plot = TwoDimStatesTimeSeries(self.body.R, self.time, self.states, time_exp=self.time_exp,
-                                             states_exp=self.states_exp)
-        controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, 'const')
-        alt_plot = TwoDimAltProfile(self.body.R, self.states, states_exp=self.states_exp)
-        trajectory_plot = TwoDimTrajectory(self.body.R, self.states[-1, 0], self.states)
-
-        states_plot.plot()
-        controls_plot.plot()
-        alt_plot.plot()
-        trajectory_plot.plot()
-
-        plt.show()
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 self.controls_exp, threshold=None)
+        sol_plot.plot()
 
 
 class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
@@ -140,18 +129,9 @@ class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
 
     def plot(self):
 
-        states_plot = TwoDimStatesTimeSeries(self.body.R, self.time, self.states, time_exp=self.time_exp,
-                                             states_exp=self.states_exp, thrust=self.controls[:, 0])
-        controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, 'variable')
-        alt_plot = TwoDimAltProfile(self.body.R, self.states, states_exp=self.states_exp, thrust=self.controls[:, 0])
-        trajectory_plot = TwoDimTrajectory(self.body.R, self.states[-1, 0], self.states)
-
-        states_plot.plot()
-        controls_plot.plot()
-        alt_plot.plot()
-        trajectory_plot.plot()
-
-        plt.show()
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 self.controls_exp)
+        sol_plot.plot()
 
 
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
@@ -165,26 +145,16 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
                                      order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                      check_partials=check_partials, u_bound=u_bound)
 
-        self.r_min = None
+        self.r_safe = None
 
     def get_solutions(self, explicit=True):
         
         TwoDimAnalyzer.get_solutions(self, explicit=explicit)
 
-        self.r_min = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')*self.body.R
+        self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')*self.body.R
 
     def plot(self):
 
-        states_plot = TwoDimStatesTimeSeries(self.body.R, self.time, self.states, time_exp=self.time_exp,
-                                             states_exp=self.states_exp, thrust=self.controls[:, 0], r_min=self.r_min)
-        controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, 'variable')
-        alt_plot = TwoDimAltProfile(self.body.R, self.states, states_exp=self.states_exp, thrust=self.controls[:, 0],
-                                    r_min=self.r_min)
-        trajectory_plot = TwoDimTrajectory(self.body.R, self.states[-1, 0], self.states)
-
-        states_plot.plot()
-        controls_plot.plot()
-        alt_plot.plot()
-        trajectory_plot.plot()
-
-        plt.show()
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 self.controls_exp, r_safe=self.r_safe)
+        sol_plot.plot()

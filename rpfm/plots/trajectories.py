@@ -5,44 +5,41 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from copy import deepcopy
 
 
 class TwoDimAltProfile:
 
-    def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6, r_min=None):
+    def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6, r_safe=None):
 
-        self.R = deepcopy(r)
+        self.R = r
 
-        self.r = deepcopy(states[:, 0])
-        self.theta = deepcopy(states[:, 1])
+        self.r = states[:, 0]
+        self.theta = states[:, 1]
 
         if thrust is not None:  # variable thrust
 
             states_pow = states[(thrust >= threshold).flatten(), :]
             states_coast = states[(thrust < threshold).flatten(), :]
 
-            self.r_pow = deepcopy(states_pow[:, 0])
-            self.theta_pow = deepcopy(states_pow[:, 1])
-            self.r_coast = deepcopy(states_coast[:, 0])
-            self.theta_coast = deepcopy(states_coast[:, 1])
+            self.r_pow = states_pow[:, 0]
+            self.theta_pow = states_pow[:, 1]
+            self.r_coast = states_coast[:, 0]
+            self.theta_coast = states_coast[:, 1]
 
         if states_exp is not None:
 
-            self.r_exp = deepcopy(states_exp[:, 0])
-            self.theta_exp = deepcopy(states_exp[:, 1])
+            self.r_exp = states_exp[:, 0]
+            self.theta_exp = states_exp[:, 1]
 
-        if r_min is not None:
-
-            self.r_min = deepcopy(r_min)
+        self.r_safe = r_safe
 
     def plot(self):
 
         fig, ax = plt.subplots(1, 1, constrained_layout=True)
 
-        if hasattr(self, 'r_min'):
+        if self.r_safe is not None:
 
-            ax.plot(self.theta*180/np.pi, (self.r_min - self.R)/1e3, color='k', label='safe altitude')
+            ax.plot(self.theta*180/np.pi, (self.r_safe - self.R)/1e3, color='k', label='safe altitude')
 
         if hasattr(self, 'r_exp'):  # explicit simulation
 
@@ -66,7 +63,17 @@ class TwoDimAltProfile:
 
 class TwoDimTrajectory:
 
-    def __init__(self, r_moon, r_orbit, states):
+    def __init__(self, r_moon, states, kind='ascent'):
+
+        # kind
+        if kind == 'ascent':
+            self.kind = kind
+            r_orbit = states[-1, 0]
+        elif kind == 'descent':
+            self.kind = kind
+            r_orbit = states[0, 0]
+        else:
+            raise ValueError('kind must be either ascent or descent')
 
         ang = np.linspace(0.0, 2 * np.pi, 500)
 
@@ -86,9 +93,12 @@ class TwoDimTrajectory:
 
         fig, ax = plt.subplots(constrained_layout=True)
 
+        label = ' '.join([self.kind, 'trajectory'])
+        title = ' '.join(['Optimal', label])
+
         ax.plot(self.x_moon, self.y_moon, label='Moon surface')
-        ax.plot(self.x_orbit, self.y_orbit, label='Target orbit')
-        ax.plot(self.x, self.y, label='Trajectory')
+        ax.plot(self.x_orbit, self.y_orbit, label='target orbit')
+        ax.plot(self.x, self.y, label=label)
 
         ax.set_aspect('equal')
         ax.grid()
@@ -102,5 +112,5 @@ class TwoDimTrajectory:
 
         ax.set_xlabel('x (km)')
         ax.set_ylabel('y (km)')
-        ax.set_title('Optimal trajectory')
+        ax.set_title(title)
         ax.legend(bbox_to_anchor=(1, 1), loc=2)

@@ -15,41 +15,22 @@ rec_file_exp = '/home/alberto/Downloads/rec_exp.sql'
 
 moon = Moon()
 sc = Spacecraft(450., 2.1, g=moon.g)
-kind = 'c'
+kind = 's'
 
 if kind == 'c':
-
-    tr_const = TwoDimAscConstAnalyzer(moon, sc, 86.87e3, np.pi/2, 500, None, 'gauss-lobatto', 10, 3, 'SNOPT',
-                                      rec_file=rec_file)
-
-    tr_const.run_driver()
-    tr_const.nlp.exp_sim(rec_file=rec_file_exp)
-    tr_const.get_solutions()
-
-    print(tr_const)
-
-    tr_const.plot()
-
+    tr = TwoDimAscConstAnalyzer(moon, sc, 86.87e3, np.pi/2, 500, None, 'gauss-lobatto', 10, 3, 'SNOPT')
 elif kind == 'v':
-
-    tr_var = TwoDimAscVarAnalyzer(moon, sc, 86.87e3, None, 'gauss-lobatto', 150, 3, 'SNOPT', u_bound=True)
-
-    tr_var.run_driver()
-    tr_var.nlp.exp_sim()
-    tr_var.get_solutions()
-
-    print(tr_var)
-
-    tr_var.plot()
-
+    tr = TwoDimAscVarAnalyzer(moon, sc, 86.87e3, None, 'gauss-lobatto', 80, 3, 'SNOPT', u_bound=True)
 elif kind == 's':
-
-    tr_safe = TwoDimAscVToffAnalyzer(moon, sc, 86.87e3, 5e3, 10., None, 'gauss-lobatto', 200, 3, 'SNOPT', check_partials=True)
-
-    tr_safe.run_driver()
-    # tr_safe.nlp.exp_sim()
-    tr_safe.get_solutions(explicit=False)
-    tr_safe.plot()
-
+    tr = TwoDimAscVToffAnalyzer(moon, sc, 86.87e3, 5e3, 1., None, 'gauss-lobatto', 100, 3, 'SNOPT', check_partials=True,
+                                rec_file=rec_file)
 else:
     raise ValueError('kind not recognized')
+
+tr.run_driver()
+tr.nlp.exp_sim(rec_file=rec_file_exp)
+tr.get_solutions()
+
+print(tr)
+
+tr.plot()

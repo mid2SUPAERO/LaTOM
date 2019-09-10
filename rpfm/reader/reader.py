@@ -11,8 +11,6 @@ class Reader:
     def __init__(self, db, case_id='final', db_exp=None):
         """Init Reader class. """
 
-        print(db)
-
         self.case_reader = CaseReader(db)
 
         if case_id in ['initial', 'final']:
