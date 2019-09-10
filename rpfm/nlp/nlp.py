@@ -30,6 +30,8 @@ class NLP:
         else:
             self.snopt_opts = None
 
+        self.rec_file = rec_file
+
         # Problem object
         self.p = Problem(model=Group())
 
@@ -121,28 +123,26 @@ class SinglePhaseNLP(NLP):
 
     def set_objective(self):
 
-        # self.phase.add_objective('m', loc='final', scaler=-np.power(10, -np.floor(np.log10(self.sc.m0))))
-        self.phase.add_objective('m', loc='final', scaler=-1)
+        self.phase.add_objective('m', loc='final', scaler=-np.power(10, -np.floor(np.log10(self.sc.m0))))
 
     def set_time_options(self, tof, t_bounds):
 
         self.tof = tof
+        tof = tof/self.body.tc
         scaler = np.power(10, -np.floor(np.log10(tof)))
 
-        """
+        print(tof, scaler)
+
         if t_bounds is not None:
-            self.t_bounds = np.asarray(t_bounds)*self.tof
-            self.phase.set_time_options(fix_initial=True, duration_scaler=scaler, duration_bounds=self.t_bounds)
+            self.phase.set_time_options(fix_initial=True, duration_scaler=scaler,
+                                        duration_bounds=tof*np.asarray(t_bounds))
         else:
             self.phase.set_time_options(fix_initial=True, duration_scaler=scaler)
-        """
-        self.phase.set_time_options(fix_initial=True)
 
     def set_time_guess(self, tof):
 
         # set initial and transfer time
         self.p[self.phase_name + '.t_initial'] = 0.0
-        # self.p[self.phase_name + '.t_duration'] = tof
         self.p[self.phase_name + '.t_duration'] = tof/self.body.tc
 
         self.p.run_model()  # compute time grid

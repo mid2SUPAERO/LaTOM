@@ -41,7 +41,7 @@ class TwoDimAltProfile:
 
             ax.plot(self.theta_exp*180/np.pi, (self.r_exp - self.R)/1e3, color='g', label='explicit')
 
-        if hasattr(self, 'time_pow'):  # implicit solution with variable thrust
+        if hasattr(self, 'r_pow'):  # implicit solution with variable thrust
 
             ax.plot(self.theta_pow*180/np.pi, (self.r_pow - self.R)/1e3, 'o', color='r', label='powered')
             ax.plot(self.theta_coast*180/np.pi, (self.r_coast - self.R) / 1e3, 'o', color='b', label='coast')

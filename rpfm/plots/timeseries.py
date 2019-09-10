@@ -86,7 +86,7 @@ class TwoDimControlsTimeSeries:
         self.kind = kind
 
         if kind == 'variable':
-            self.alpha[(self.thrust < threshold).flatten(), :] = None
+            self.alpha[(self.thrust < threshold).flatten()] = None
 
     def plot(self):
 
