@@ -3,35 +3,36 @@
 
 """
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from copy import deepcopy
 
 
 class TwoDimAltProfile:
 
     def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6):
 
-        self.R = r
+        self.R = deepcopy(r)
 
         if thrust is not None:  # variable thrust
 
             states_pow = states[(thrust >= threshold).flatten(), :]
             states_coast = states[(thrust < threshold).flatten(), :]
 
-            self.r_pow = states_pow[:, 0]
-            self.theta_pow = states_pow[:, 1]
-            self.r_coast = states_coast[:, 0]
-            self.theta_coast = states_coast[:, 1]
+            self.r_pow = deepcopy(states_pow[:, 0])
+            self.theta_pow = deepcopy(states_pow[:, 1])
+            self.r_coast = deepcopy(states_coast[:, 0])
+            self.theta_coast = deepcopy(states_coast[:, 1])
 
         else:  # constant thrust
 
-            self.r = states[:, 0]
-            self.theta = states[:, 1]
+            self.r = deepcopy(states[:, 0])
+            self.theta = deepcopy(states[:, 1])
 
         if states_exp is not None:
 
-            self.r_exp = states_exp[:, 0]
-            self.theta_exp = states_exp[:, 1]
+            self.r_exp = deepcopy(states_exp[:, 0])
+            self.theta_exp = deepcopy(states_exp[:, 1])
 
     def plot(self):
 
@@ -43,8 +44,8 @@ class TwoDimAltProfile:
 
         if hasattr(self, 'r_pow'):  # implicit solution with variable thrust
 
+            ax.plot(self.theta_coast * 180 / np.pi, (self.r_coast - self.R) / 1e3, 'o', color='b', label='coast')
             ax.plot(self.theta_pow*180/np.pi, (self.r_pow - self.R)/1e3, 'o', color='r', label='powered')
-            ax.plot(self.theta_coast*180/np.pi, (self.r_coast - self.R) / 1e3, 'o', color='b', label='coast')
 
         else:  # implicit solution with constant thrust
 

@@ -107,7 +107,7 @@ class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
     def get_time_series(self, p):
 
         tof, t, states, alpha = self.get_states_alpha_time_series(p)
-        thrust = p.get_val(self.nlp.phase_name + '.timeseries.controls:thrust')
+        thrust = p.get_val(self.nlp.phase_name + '.timeseries.controls:thrust')*self.body.g*self.sc.m0
         controls = np.hstack((thrust, alpha))
 
         return tof, t, states, controls

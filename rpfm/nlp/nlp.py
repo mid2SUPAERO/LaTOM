@@ -89,6 +89,19 @@ class NLP:
         self.p.driver.cleanup()
         self.p.cleanup()
 
+    def __str__(self):
+        """Prints info on the NLP solver and transcription. """
+
+        lines = ['\n{:^40s}'.format('NLP characteristics:'),
+                 '\n{:<25s}{:<15s}'.format('Solver:', self.solver),
+                 '{:<25s}{:<15s}'.format('Transcription method:', self.method),
+                 '{:<25s}{:<15s}'.format('Number of segments:', str(self.nb_seg)),
+                 '{:<25s}{:<15s}'.format('Transcription order:', str(self.order))]
+
+        s = '\n'.join(lines)
+
+        return s
+
 
 class SinglePhaseNLP(NLP):
 
@@ -117,27 +130,23 @@ class SinglePhaseNLP(NLP):
         self.t_control = None
         self.idx_state_control = None
 
-        # time of flight and time bounds
+        # time of flight
         self.tof = None
-        self.t_bounds = None
 
     def set_objective(self):
 
-        self.phase.add_objective('m', loc='final', scaler=-np.power(10, -np.floor(np.log10(self.sc.m0))))
+        self.phase.add_objective('m', loc='final', scaler=-1)
 
     def set_time_options(self, tof, t_bounds):
 
         self.tof = tof
-        tof = tof/self.body.tc
-        scaler = np.power(10, -np.floor(np.log10(tof)))
-
-        print(tof, scaler)
 
         if t_bounds is not None:
-            self.phase.set_time_options(fix_initial=True, duration_scaler=scaler,
-                                        duration_bounds=tof*np.asarray(t_bounds))
+            t_bounds = tof * np.asarray(t_bounds)
+            self.phase.set_time_options(fix_initial=True, duration_ref=tof/self.body.tc,
+                                        duration_bounds=t_bounds/self.body.tc)
         else:
-            self.phase.set_time_options(fix_initial=True, duration_scaler=scaler)
+            self.phase.set_time_options(fix_initial=True, duration_ref=tof/self.body.tc)
 
     def set_time_guess(self, tof):
 
@@ -197,3 +206,16 @@ class MultiPhaseNLP(NLP):
                                                              transcription=self.transcription[i]))
             self.phase.append(ph)
             self.phase_name.append(''.join(['traj.', ph_name[i]]))
+
+
+if __name__ == '__main__':
+
+    from rpfm.utils.primary import Moon
+    from rpfm.utils.spacecraft import Spacecraft
+
+    moon = Moon()
+    sc = Spacecraft(450., 2.1, g=moon.g)
+
+    nlp = NLP(moon, sc, 'gauss-lobatto', 100, 3, 'IPOPT')
+
+    print(nlp)

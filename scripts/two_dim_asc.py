@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyz
 
 
 moon = Moon()
-sc = Spacecraft(450., 2.1)
+sc = Spacecraft(450., 2.1, g=moon.g)
 kind = 'v'
 
 if kind == 'c':
@@ -25,7 +25,7 @@ if kind == 'c':
 
 elif kind == 'v':
 
-    tr_var = TwoDimAscVarAnalyzer(moon, sc, 86.87e3, (0.5, 1.5), 'gauss-lobatto', 150, 3, 'IPOPT')
+    tr_var = TwoDimAscVarAnalyzer(moon, sc, 86.87e3, None, 'gauss-lobatto', 80, 3, 'SNOPT')
 
     tr_var.run_driver()
     tr_var.nlp.exp_sim()

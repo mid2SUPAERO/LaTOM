@@ -3,21 +3,22 @@
 
 """
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from copy import deepcopy
 
 
 class TwoDimStatesTimeSeries:
 
-    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-6):
+    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-5):
 
-        self.R = r
+        self.R = deepcopy(r)
 
-        self.time = time
-        self.states = states
+        self.time = deepcopy(time)
+        self.states = deepcopy(states)
 
-        self.time_exp = time_exp
-        self.states_exp = states_exp
+        self.time_exp = deepcopy(time_exp)
+        self.states_exp = deepcopy(states_exp)
 
         if thrust is not None:
 
@@ -47,15 +48,15 @@ class TwoDimStatesTimeSeries:
 
         else:  # implicit solution with variable thrust
 
-            axs[0, 0].plot(self.time_pow, (self.states_pow[:, 0] - self.R)/1e3, 'o', color='r', label='powered')
-            axs[1, 0].plot(self.time_pow, self.states_pow[:, 1]*180/np.pi, 'o', color='r', label='powered')
-            axs[0, 1].plot(self.time_pow, self.states_pow[:, 2]/1e3, 'o', color='r', label='powered')
-            axs[1, 1].plot(self.time_pow, self.states_pow[:, 3]/1e3, 'o', color='r', label='powered')
-
             axs[0, 0].plot(self.time_coast, (self.states_coast[:, 0] - self.R)/1e3, 'o', color='b', label='coast')
             axs[1, 0].plot(self.time_coast, self.states_coast[:, 1]*180/np.pi, 'o', color='b', label='coast')
             axs[0, 1].plot(self.time_coast, self.states_coast[:, 2]/1e3, 'o', color='b', label='coast')
             axs[1, 1].plot(self.time_coast, self.states_coast[:, 3]/1e3, 'o', color='b', label='coast')
+
+            axs[0, 0].plot(self.time_pow, (self.states_pow[:, 0] - self.R)/1e3, 'o', color='r', label='powered')
+            axs[1, 0].plot(self.time_pow, self.states_pow[:, 1]*180/np.pi, 'o', color='r', label='powered')
+            axs[0, 1].plot(self.time_pow, self.states_pow[:, 2]/1e3, 'o', color='r', label='powered')
+            axs[1, 1].plot(self.time_pow, self.states_pow[:, 3]/1e3, 'o', color='r', label='powered')
 
         axs[0, 0].set_ylabel('h (km)')
         axs[0, 0].set_title('Altitude')
@@ -78,14 +79,19 @@ class TwoDimStatesTimeSeries:
 
 class TwoDimControlsTimeSeries:
 
-    def __init__(self, time, controls, kind, threshold=1e-6):
+    def __init__(self, time, controls, kind, threshold=1e-5):
 
-        self.time = time
-        self.thrust = controls[:, 0]
-        self.alpha = controls[:, 1]
-        self.kind = kind
+        self.time = deepcopy(time)
+        self.thrust = deepcopy(controls[:, 0])
+        self.alpha = deepcopy(controls[:, 1])
+
+        if kind in ['const', 'variable']:
+            self.kind = kind
+        else:
+            raise ValueError('kind must be either const or variable')
 
         if kind == 'variable':
+
             self.alpha[(self.thrust < threshold).flatten()] = None
 
     def plot(self):

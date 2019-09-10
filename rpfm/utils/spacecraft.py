@@ -44,6 +44,7 @@ class Spacecraft:
     """
 
     def __init__(self, isp, twr, throttle_min=0.0, m0=1.0, m_dry=None, g=g0):
+        """Init Spacecraft class. """
 
         self.Isp = isp
         self.twr = twr
@@ -58,6 +59,22 @@ class Spacecraft:
         self.T_max = self.twr*self.m0*g
         self.T_min = self.T_max*throttle_min
 
+    def __str__(self):
+        """Prints the Spacecraft object attributes. """
+
+        lines = ['\n{:^40s}'.format('Spacecraft characteristics:'),
+                 '\n{:<20s}{:>15.3f}{:>5s}'.format('Initial mass:', self.m0, 'kg'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Dry mass:', self.m_dry, 'kg'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Thrust/weight ratio:', self.twr, ''),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Max thrust:', self.T_max, 'N'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Min thrust:', self.T_min, 'N'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Specific impulse:', self.Isp, 's'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Exhaust velocity:', self.w, 'm/s')]
+
+        s = '\n'.join(lines)
+
+        return s
+
 
 if __name__ == '__main__':
 
@@ -65,4 +82,4 @@ if __name__ == '__main__':
 
     moon = Moon()
     sc = Spacecraft(450., 2., throttle_min=0.5, g=moon.g)
-    print(vars(sc))
+    print(sc)
