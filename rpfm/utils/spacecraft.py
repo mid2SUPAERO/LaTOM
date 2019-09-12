@@ -81,5 +81,5 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
 
     moon = Moon()
-    sc = Spacecraft(450., 2., throttle_min=0.5, g=moon.g)
+    sc = Spacecraft(450., 2., throttle_min=0.0, g=moon.g)
     print(sc)

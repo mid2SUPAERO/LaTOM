@@ -41,4 +41,6 @@ class Moon:
 if __name__ == '__main__':
 
     moon = Moon()
-    print(vars(moon))
+
+    for k, v in vars(moon).items():
+        print(k, v)

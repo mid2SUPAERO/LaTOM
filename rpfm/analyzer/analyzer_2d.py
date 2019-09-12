@@ -89,7 +89,7 @@ class TwoDimAscConstAnalyzer(TwoDimAnalyzer):
 
         TwoDimAnalyzer.__init__(self, body, sc)
 
-        self.nlp = TwoDimAscConstNLP(body, sc, alt, theta, (-np.pi, np.pi), tof, t_bounds, method, nb_seg, order,
+        self.nlp = TwoDimAscConstNLP(body, sc, alt, theta, (-np.pi/2, np.pi/2), tof, t_bounds, method, nb_seg, order,
                                      solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                      check_partials=check_partials, u_bound=u_bound)
 
@@ -136,12 +136,12 @@ class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
 
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
-    def __init__(self, body, sc, alt, alt_min, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
+    def __init__(self, body, sc, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound=False):
 
         TwoDimAnalyzer.__init__(self, body, sc)
 
-        self.nlp = TwoDimAscVToffNLP(body, sc, alt, alt_min, slope, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg,
+        self.nlp = TwoDimAscVToffNLP(body, sc, alt, alt_safe, slope, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg,
                                      order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                      check_partials=check_partials, u_bound=u_bound)
 

@@ -10,26 +10,60 @@ from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyzer, TwoDimAscVToffAnalyzer
 
 
+# trajectory
+kind = 's'
+moon = Moon()
+alt = 86.87e3  # final orbit altitude [m]
+theta = np.pi/2  # guessed spawn angle [rad]
+tof = 500  # guessed time of flight [s]
+t_bounds = (0.5, 1.5)  # time of flight bounds [-]
+alt_safe = 5e3  # minimum safe altitude [m]
+slope = 10.  # slope of the constraint on minimum safe altitude [-]
+
+# spacecraft
+isp = 450.  # specific impulse [s]
+twr = 2.1  # initial thrust/weight ratio [-]
+
+sc = Spacecraft(450., 2.1, g=moon.g)
+
+# NLP
+method = 'gauss-lobatto'
+segments = 200
+order = 3
+solver = 'IPOPT'
+
+# additional settings
+u_bound = True  # lower bound on radial velocity
+check_partials = False  # check partial derivatives
+run_driver = True  # solve the NLP
+exp_sim = False  # perform explicit simulation
+rec = False  # record the solution
+
+# record databases
 rec_file = '/home/alberto/Downloads/rec.sql'
 rec_file_exp = '/home/alberto/Downloads/rec_exp.sql'
 
-moon = Moon()
-sc = Spacecraft(450., 2.1, g=moon.g)
-kind = 's'
-
+# init analyzer
 if kind == 'c':
-    tr = TwoDimAscConstAnalyzer(moon, sc, 86.87e3, np.pi/2, 500, None, 'gauss-lobatto', 10, 3, 'SNOPT')
+    tr = TwoDimAscConstAnalyzer(moon, sc, alt, theta, tof, t_bounds, method, segments, order, solver, u_bound=u_bound,
+                                check_partials=check_partials)
 elif kind == 'v':
-    tr = TwoDimAscVarAnalyzer(moon, sc, 86.87e3, None, 'gauss-lobatto', 80, 3, 'SNOPT', u_bound=True)
+    tr = TwoDimAscVarAnalyzer(moon, sc, alt, t_bounds, method, segments, order, solver, u_bound=u_bound,
+                              check_partials=check_partials)
 elif kind == 's':
-    tr = TwoDimAscVToffAnalyzer(moon, sc, 86.87e3, 5e3, 1., None, 'gauss-lobatto', 100, 3, 'SNOPT', check_partials=True,
-                                rec_file=rec_file)
+    tr = TwoDimAscVToffAnalyzer(moon, sc, alt, alt_safe, slope, t_bounds, method, segments, order, solver,
+                                u_bound=u_bound, check_partials=check_partials)
 else:
     raise ValueError('kind not recognized')
 
-tr.run_driver()
-tr.nlp.exp_sim(rec_file=rec_file_exp)
-tr.get_solutions()
+if run_driver:
+
+    tr.run_driver()
+
+    if exp_sim:
+        tr.nlp.exp_sim()
+
+tr.get_solutions(explicit=exp_sim)
 
 print(tr)
 

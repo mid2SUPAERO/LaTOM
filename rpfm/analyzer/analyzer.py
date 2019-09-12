@@ -19,6 +19,7 @@ class Analyzer:
         self.time = None
         self.states = None
         self.controls = None
+
         self.tof_exp = None
         self.time_exp = None
         self.states_exp = None

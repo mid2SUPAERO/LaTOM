@@ -9,7 +9,6 @@ from openmdao.api import Problem, Group, SqliteRecorder, DirectSolver, pyOptSpar
 from dymos import Phase, Trajectory, GaussLobatto, Radau
 
 from rpfm.utils.const import rec_excludes
-from rpfm.utils.primary import Moon
 
 
 class NLP:
@@ -135,7 +134,7 @@ class SinglePhaseNLP(NLP):
 
     def set_objective(self):
 
-        self.phase.add_objective('m', loc='final', scaler=-1.0)
+        self.phase.add_objective('m', loc='final', scaler=-self.sc.m0)
 
     def set_time_options(self, tof, t_bounds):
 
@@ -214,8 +213,7 @@ if __name__ == '__main__':
     from rpfm.utils.spacecraft import Spacecraft
 
     moon = Moon()
-    sc = Spacecraft(450., 2.1, g=moon.g)
 
-    nlp = NLP(moon, sc, 'gauss-lobatto', 100, 3, 'IPOPT')
+    nlp = NLP(moon, Spacecraft(450., 2.1, g=moon.g), 'gauss-lobatto', 100, 3, 'IPOPT')
 
     print(nlp)

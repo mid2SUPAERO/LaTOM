@@ -48,7 +48,7 @@ class TwoDimNLP(SinglePhaseNLP):
                              lower=self.sc.m_dry, upper=self.sc.m0, ref0=self.sc.m_dry, ref=self.sc.m0)
 
         self.phase.add_control('alpha', units='rad', targets='alpha', fix_initial=False, fix_final=False,
-                               continuity=True, rate_continuity=True, rate2_continuity=False,
+                               continuity=True, rate_continuity=False, rate2_continuity=False,
                                lower=self.alpha_bounds[0], upper=self.alpha_bounds[1], ref=self.alpha_bounds[1])
 
         self.phase.add_design_parameter('w', units='m/s', opt=False, val=self.sc.w/self.body.vc)
@@ -114,9 +114,11 @@ class TwoDimAscVarNLP(TwoDimNLP):
 
         self.set_states_alpha_options(np.pi/2, u_bound=u_bound, targets_theta=targets_theta)
 
+        twr_min = self.sc.T_min/self.sc.m0/self.body.g
+
         self.phase.add_control('thrust', units='N', targets='thrust', fix_initial=False, fix_final=False,
-                               continuity=False, rate_continuity=False, rate2_continuity=False, lower=0.0,
-                               upper=self.sc.twr, ref=self.sc.twr)
+                               continuity=False, rate_continuity=False, rate2_continuity=False,
+                               lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
 
         self.set_time_options(self.guess.tof, t_bounds)
         self.set_objective()
@@ -137,21 +139,22 @@ class TwoDimAscVarNLP(TwoDimNLP):
         self.p[self.phase_name + '.controls:alpha'] = self.guess.alpha
 
         self.p.run_model()
+
         if check_partials:
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
 
 class TwoDimAscVToffNLP(TwoDimAscVarNLP):
 
-    def __init__(self, body, sc, alt, alt_min, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
+    def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound=False):
 
-        ode_kwargs = {'GM': 1.0, 'w': sc.w/body.vc, 'R': 1.0, 'alt_min': alt_min/body.R, 'slope': slope}
+        ode_kwargs = {'GM': 1.0, 'w': sc.w/body.vc, 'R': 1.0, 'alt_min': alt_safe/body.R, 'slope': slope}
 
         TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dVToff,
                            ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
 
-        self.alt_min = alt_min
+        self.alt_safe = alt_safe
         self.slope = slope
         self.guess = TwoDimAscGuess(self.body.GM, self.body.R, alt, sc)
         self.set_options(t_bounds, u_bound=u_bound)
@@ -159,7 +162,7 @@ class TwoDimAscVToffNLP(TwoDimAscVarNLP):
 
     def set_options(self, t_bounds, u_bound=False, targets_theta=True):
 
-        self.phase.add_path_constraint('dist_safe', lower=0.0, ref=self.alt_min/self.body.R)
+        self.phase.add_path_constraint('dist_safe', lower=0.0, ref=self.alt_safe/self.body.R)
         self.phase.add_timeseries_output('r_safe')
 
         TwoDimAscVarNLP.set_options(self, t_bounds, u_bound=u_bound, targets_theta=targets_theta)
