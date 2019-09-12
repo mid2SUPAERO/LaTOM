@@ -76,9 +76,9 @@ class NLP:
     def exp_sim(self, rec_file=None):
 
         if rec_file is not None:
-            self.p_exp = self.trajectory.simulate(atol=1e-30, rtol=1e-30, record_file=rec_file)
+            self.p_exp = self.trajectory.simulate(atol=1e-12, rtol=1e-12, record_file=rec_file)
         else:
-            self.p_exp = self.trajectory.simulate(atol=1e-30, rtol=1e-30)
+            self.p_exp = self.trajectory.simulate(atol=1e-12, rtol=1e-12)
 
         self.cleanup()
 
@@ -134,7 +134,7 @@ class SinglePhaseNLP(NLP):
 
     def set_objective(self):
 
-        self.phase.add_objective('m', loc='final', scaler=-self.sc.m0)
+        self.phase.add_objective('m', loc='final', scaler=-1.0)
 
     def set_time_options(self, tof, t_bounds):
 

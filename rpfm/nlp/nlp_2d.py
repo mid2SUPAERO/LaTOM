@@ -48,7 +48,7 @@ class TwoDimNLP(SinglePhaseNLP):
                              lower=self.sc.m_dry, upper=self.sc.m0, ref0=self.sc.m_dry, ref=self.sc.m0)
 
         self.phase.add_control('alpha', units='rad', targets='alpha', fix_initial=False, fix_final=False,
-                               continuity=True, rate_continuity=False, rate2_continuity=False,
+                               continuity=True, rate_continuity=True, rate2_continuity=False,
                                lower=self.alpha_bounds[0], upper=self.alpha_bounds[1], ref=self.alpha_bounds[1])
 
         self.phase.add_design_parameter('w', units='m/s', opt=False, val=self.sc.w/self.body.vc)

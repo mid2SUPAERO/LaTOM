@@ -16,7 +16,7 @@ moon = Moon()
 alt = 86.87e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
 tof = 500  # guessed time of flight [s]
-t_bounds = (0.5, 1.5)  # time of flight bounds [-]
+t_bounds = None  # time of flight bounds [-]
 alt_safe = 5e3  # minimum safe altitude [m]
 slope = 10.  # slope of the constraint on minimum safe altitude [-]
 
@@ -30,13 +30,13 @@ sc = Spacecraft(450., 2.1, g=moon.g)
 method = 'gauss-lobatto'
 segments = 200
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 
 # additional settings
 u_bound = True  # lower bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
-exp_sim = False  # perform explicit simulation
+exp_sim = True  # perform explicit simulation
 rec = False  # record the solution
 
 # record databases
