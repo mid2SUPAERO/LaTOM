@@ -1,8 +1,10 @@
-﻿# MAE Research Project - Optimal control of trajectory of a reusable launcher in OpenMDAO/dymos
+# MAE Research Project
+# Optimal control of trajectory of a reusable launcher in OpenMDAO/dymos
 
 ## Students
 
 Alberto FOSSA'
+
 Giuliana Elena MICELI
 
 ## Contents
