@@ -6,8 +6,17 @@
 import numpy as np
 
 from openmdao.api import ExplicitComponent, Group
+from dymos import declare_time, declare_state, declare_parameter
 
-
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dConstThrust(ExplicitComponent):
 
     def initialize(self):
@@ -120,6 +129,15 @@ class ODE2dConstThrust(ExplicitComponent):
         jacobian['mdot', 'w'] = thrust / w ** 2
 
 
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dVarThrust(ExplicitComponent):
 
     def initialize(self):
@@ -282,7 +300,15 @@ class SafeAlt(ExplicitComponent):
         jacobian['r_safe', 'theta'] = drsafe_dtheta
         jacobian['dist_safe', 'theta'] = -drsafe_dtheta
 
-
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', targets=['theta'], units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dVToff(Group):
 
     def initialize(self):

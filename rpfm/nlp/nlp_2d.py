@@ -23,35 +23,27 @@ class TwoDimNLP(SinglePhaseNLP):
         self.r_circ = body.R + self.alt
         self.v_circ = (body.GM/self.r_circ)**0.5
 
-    def set_states_alpha_options(self, theta, u_bound=False, targets_theta=False):
+    def set_states_alpha_options(self, theta, u_bound=False):
 
-        self.phase.add_state('r', units='m', rate_source='rdot', targets='r', fix_initial=True, fix_final=True,
-                             lower=1.0, ref0=1.0, ref=self.r_circ/self.body.R)
+        self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0, ref0=1.0,
+                                     ref=self.r_circ/self.body.R)
 
-        if targets_theta:
-            self.phase.add_state('theta', units='rad', rate_source='thetadot', targets='theta', fix_initial=True,
-                                 fix_final=False, lower=0.0, ref=theta)
-        else:
-            self.phase.add_state('theta', units='rad', rate_source='thetadot', fix_initial=True, fix_final=False,
-                                 lower=0.0, ref=theta)
+        self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=theta)
 
         if u_bound:
-            self.phase.add_state('u', units='m/s', rate_source='udot', targets='u', fix_initial=True, fix_final=True,
-                                 lower=0.0, ref=self.v_circ/self.body.vc)
+            self.phase.set_state_options('u', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
         else:
-            self.phase.add_state('u', units='m/s', rate_source='udot', targets='u', fix_initial=True, fix_final=True,
-                                 ref=self.v_circ/self.body.vc)
+            self.phase.set_state_options('u', fix_initial=True, fix_final=True, ref=self.v_circ/self.body.vc)
 
-        self.phase.add_state('v', units='m/s', rate_source='vdot', targets='v', fix_initial=True, fix_final=True,
-                             lower=0.0, ref=self.v_circ/self.body.vc)
-        self.phase.add_state('m', units='kg', rate_source='mdot', targets='m', fix_initial=True, fix_final=False,
-                             lower=self.sc.m_dry, upper=self.sc.m0, ref0=self.sc.m_dry, ref=self.sc.m0)
+        self.phase.set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
+        self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
+                                     ref0=self.sc.m_dry, ref=self.sc.m0)
 
-        self.phase.add_control('alpha', units='rad', targets='alpha', fix_initial=False, fix_final=False,
-                               continuity=True, rate_continuity=True, rate2_continuity=False,
-                               lower=self.alpha_bounds[0], upper=self.alpha_bounds[1], ref=self.alpha_bounds[1])
+        self.phase.add_control('alpha', fix_initial=False, fix_final=False, continuity=True, rate_continuity=True,
+                               rate2_continuity=False, lower=self.alpha_bounds[0], upper=self.alpha_bounds[1],
+                               ref=self.alpha_bounds[1])
 
-        self.phase.add_design_parameter('w', units='m/s', opt=False, val=self.sc.w/self.body.vc)
+        self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
 
 
 class TwoDimAscConstNLP(TwoDimNLP):
@@ -70,7 +62,7 @@ class TwoDimAscConstNLP(TwoDimNLP):
     def set_options(self, theta, tof, t_bounds, u_bound=False):
 
         self.set_states_alpha_options(theta, u_bound=u_bound)
-        self.phase.add_design_parameter('thrust', units='N', opt=False, val=self.sc.twr)
+        self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
         self.set_time_options(tof, t_bounds)
         self.set_objective()
         self.setup()
@@ -110,15 +102,14 @@ class TwoDimAscVarNLP(TwoDimNLP):
         self.set_options(t_bounds, u_bound=u_bound)
         self.set_initial_guess(check_partials=check_partials)
 
-    def set_options(self, t_bounds, u_bound=False, targets_theta=False):
+    def set_options(self, t_bounds, u_bound=False):
 
-        self.set_states_alpha_options(np.pi/2, u_bound=u_bound, targets_theta=targets_theta)
+        self.set_states_alpha_options(np.pi/2, u_bound=u_bound)
 
         twr_min = self.sc.T_min/self.sc.m0/self.body.g
 
-        self.phase.add_control('thrust', units='N', targets='thrust', fix_initial=False, fix_final=False,
-                               continuity=False, rate_continuity=False, rate2_continuity=False,
-                               lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
+        self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False, rate_continuity=False,
+                               rate2_continuity=False, lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
 
         self.set_time_options(self.guess.tof, t_bounds)
         self.set_objective()
@@ -160,12 +151,12 @@ class TwoDimAscVToffNLP(TwoDimAscVarNLP):
         self.set_options(t_bounds, u_bound=u_bound)
         self.set_initial_guess(check_partials=check_partials)
 
-    def set_options(self, t_bounds, u_bound=False, targets_theta=True):
+    def set_options(self, t_bounds, u_bound=False):
 
         self.phase.add_path_constraint('dist_safe', lower=0.0, ref=self.alt_safe/self.body.R)
         self.phase.add_timeseries_output('r_safe')
 
-        TwoDimAscVarNLP.set_options(self, t_bounds, u_bound=u_bound, targets_theta=targets_theta)
+        TwoDimAscVarNLP.set_options(self, t_bounds, u_bound=u_bound)
 
 
 """

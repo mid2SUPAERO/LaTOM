@@ -8,8 +8,21 @@ from __future__ import print_function, division, absolute_import
 import numpy as np
 
 from openmdao.api import ExplicitComponent, Group
+from dymos import declare_time, declare_state, declare_parameter
 
-
+@declare_time(units='s')
+@declare_state('x', rate_source='xdot', targets=['x'], units='m')
+@declare_state('y', rate_source='ydot', targets=['y'], units='m')
+@declare_state('z', rate_source='zdot', targets=['z'], units='m')
+@declare_state('vx', rate_source='vxdot', targets=['vx'], units='m/s')
+@declare_state('vy', rate_source='vydot', targets=['vy'], units='m/s')
+@declare_state('vz', rate_source='vzdot', targets=['vz'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('ux', targets=['ux'])
+@declare_parameter('uy', targets=['uy'])
+@declare_parameter('uz', targets=['uz'])
+@declare_parameter('T', targets=['T'], units='N')
+@declare_parameter('Isp', targets=['Isp'], units='s')
 class ODE3d(ExplicitComponent):
 
     def initialize(self):
@@ -314,7 +327,19 @@ class HE3d(ExplicitComponent):
         jacobian['u2', 'uy'] = 2 * uy
         jacobian['u2', 'uz'] = 2 * uz
 
-
+@declare_time(units='s')
+@declare_state('x', rate_source='xdot', targets=['x'], units='m')
+@declare_state('y', rate_source='ydot', targets=['y'], units='m')
+@declare_state('z', rate_source='zdot', targets=['z'], units='m')
+@declare_state('vx', rate_source='vxdot', targets=['vx'], units='m/s')
+@declare_state('vy', rate_source='vydot', targets=['vy'], units='m/s')
+@declare_state('vz', rate_source='vzdot', targets=['vz'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('ux', targets=['ux'])
+@declare_parameter('uy', targets=['uy'])
+@declare_parameter('uz', targets=['uz'])
+@declare_parameter('T', targets=['T'], units='N')
+@declare_parameter('Isp', targets=['Isp'], units='s')
 class ODE3dGroup(Group):
 
     def initialize(self):
