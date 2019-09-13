@@ -30,7 +30,7 @@ sc = Spacecraft(450., 2.1, g=moon.g)
 method = 'gauss-lobatto'
 segments = 200
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 
 # additional settings
 u_bound = True  # lower bound on radial velocity
