@@ -6,9 +6,21 @@
 import numpy as np
 import scipy.integrate as spi
 from scipy.optimize import root
+from copy import deepcopy
 
 from rpfm.utils.keplerian_orbit import KepOrb
 from rpfm.utils.const import g0
+
+
+class DeorbitBurn:
+
+    def __init__(self, sc, dv):
+
+        self.sc = deepcopy(sc)
+        self.dv = dv
+
+        self.sc.m0 = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
+        self.dm = sc.m0 - self.sc.m0
 
 
 class HohmannTransfer:
@@ -225,7 +237,12 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
 
     moon = Moon()
-    s = Spacecraft(450, 2)
+    s = Spacecraft(450., 2.1, g=moon.g)
 
-    tr = TwoDimAscGuess(moon.GM, moon.R, 100e3, s)
-    tr.compute_trajectory(nb_nodes=500)
+    tr = TwoDimAscGuess(moon.GM, moon.R, 86870, s)
+
+    t_pcr = np.linspace(0.0, tr.pcr.tof, 500)
+    t_ht = np.linspace(0.0, tr.ht.tof, 500) + tr.pcr.tof
+    t_all = np.hstack((t_pcr, t_ht[1:]))
+
+    tr.compute_trajectory(t=t_all)

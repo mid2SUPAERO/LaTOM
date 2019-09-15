@@ -248,6 +248,80 @@ class ODE2dVarThrust(ExplicitComponent):
         jacobian['mdot', 'w'] = thrust / w ** 2
 
 
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
+class ODE2dVertical(ExplicitComponent):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+        self.options.declare('T', types=float)
+        self.options.declare('w', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+        thrust = self.options['T']
+        w = self.options['w']
+
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('m', val=np.zeros(nn), desc='mass', units='kg')
+
+        self.add_input('thrust', val=thrust*np.ones(nn), desc='thrust', units='N')
+        self.add_input('w', val=w*np.ones(nn), desc='exhaust velocity', units='m/s')
+
+        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
+        self.add_output('mdot', val=np.zeros(nn), desc='mass flow rate', units='kg/s')
+
+        ar = np.arange(self.options['num_nodes'])
+
+        self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1.0)
+
+        self.declare_partials(of='udot', wrt='r', rows=ar, cols=ar)
+        self.declare_partials(of='udot', wrt='m', rows=ar, cols=ar)
+        self.declare_partials(of='udot', wrt='thrust', rows=ar, cols=ar)
+
+        self.declare_partials(of='mdot', wrt='thrust', rows=ar, cols=ar)
+        self.declare_partials(of='mdot', wrt='w', rows=ar, cols=ar)
+
+    def compute(self, inputs, outputs):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        u = inputs['u']
+        m = inputs['m']
+        thrust = inputs['thrust']
+        w = inputs['w']
+
+        outputs['rdot'] = u
+        outputs['udot'] = -gm / r ** 2 + thrust / m
+        outputs['mdot'] = -thrust / w
+
+    def compute_partials(self, inputs, jacobian):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        m = inputs['m']
+        thrust = inputs['thrust']
+        w = inputs['w']
+
+        jacobian['udot', 'r'] = 2 * gm / r ** 3
+        jacobian['udot', 'm'] = -thrust / m ** 2
+        jacobian['udot', 'thrust'] = 1 / m
+
+        jacobian['mdot', 'thrust'] = -1 / w
+        jacobian['mdot', 'w'] = thrust / w ** 2
+
+
 class SafeAlt(ExplicitComponent):
 
     def initialize(self):

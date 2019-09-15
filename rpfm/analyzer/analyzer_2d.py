@@ -6,9 +6,10 @@
 import numpy as np
 
 from rpfm.analyzer.analyzer import Analyzer
-from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP
+from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP
 from rpfm.plots.solutions import TwoDimSolPlot
 from rpfm.utils.const import states_2d
+from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
 
 
 class TwoDimAnalyzer(Analyzer):
@@ -158,3 +159,45 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
                                  self.controls_exp, r_safe=self.r_safe)
         sol_plot.plot()
+
+
+class TwoDimDescConstAnalyzer(TwoDimAnalyzer):
+
+    def __init__(self, body, sc, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
+                 rec_file=None, check_partials=False):
+
+        ra = body.R + alt
+        rp = body.R + alt_p
+        self.ht = HohmannTransfer(body.GM, ra, rp)
+        self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
+
+        TwoDimAnalyzer.__init__(self, body, sc)
+
+        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.vp, theta, (0.0, np.pi), tof,
+                                      t_bounds, method, nb_seg, order, solver, self.phase_name, snopt_opts=snopt_opts,
+                                      rec_file=rec_file, check_partials=check_partials)
+
+    def get_time_series(self, p):
+
+        tof, t, states, alpha = self.get_states_alpha_time_series(p)
+        thrust = self.sc.T_max*np.ones((len(t), 1))
+        controls = np.hstack((thrust, alpha))
+
+        return tof, t, states, controls
+
+    def plot(self):
+
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 self.controls_exp, threshold=None, kind='descent')
+        sol_plot.plot()
+
+
+class TwoDimDescTwoPhasesAnalyzer(Analyzer):
+
+    def __init__(self, body, sc, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order, solver,
+                 snopt_opts=None, rec_file=None, check_partials=False, fix='alt'):
+
+        Analyzer.__init__(self, body, sc)
+
+        self.phase_name = ('free', 'vertical')
+        self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, 1.0])
