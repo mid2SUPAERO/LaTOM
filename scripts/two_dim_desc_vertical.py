@@ -7,44 +7,40 @@ import numpy as np
 
 from rpfm.utils.primary import Moon
 from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer
+from rpfm.analyzer.analyzer_2d import TwoDimDescTwoPhasesAnalyzer
 
 
 # trajectory
-kind = 'c'
+kind = 'v'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
-alt_p = 100e3  # periselene altitude [m]
+alt_p = 15e3  # periselene altitude [m]
+alt_switch = 4e3  # switch altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
-tof = 1000  # guessed time of flight [s]
+tof = (1000, 100)  # guessed time of flight [s]
 t_bounds = None  # time of flight bounds [-]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
+isp = 310.  # specific impulse [s]
 twr = 0.9  # initial thrust/weight ratio [-]
-
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 60
+segments = (60, 10)
 order = 3
 solver = 'IPOPT'
 
 # additional settings
-check_partials = True  # check partial derivatives
+check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
 exp_sim = True  # perform explicit simulation
 rec = False  # record the solution
 
-# record databases
-rec_file = '/home/alberto/Downloads/rec.sql'
-rec_file_exp = '/home/alberto/Downloads/rec_exp.sql'
-
 # init analyzer
-if kind == 'c':
-    tr = TwoDimDescConstAnalyzer(moon, sc, alt, alt_p, theta, tof, t_bounds, method, segments, order, solver,
-                                 check_partials=check_partials)
+if kind == 'v':
+    tr = TwoDimDescTwoPhasesAnalyzer(moon, sc, alt, alt_p, alt_switch, theta, tof, t_bounds, method, segments, order,
+                                     solver, check_partials=check_partials, fix='alt')
 else:
     raise ValueError('kind not recognized')
 

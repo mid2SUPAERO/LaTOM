@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 class TwoDimStatesTimeSeries:
 
-    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-6, r_safe=None):
+    def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-6, r_safe=None,
+                 labels=('powered', 'coast')):
 
         self.R = r
 
@@ -28,6 +29,7 @@ class TwoDimStatesTimeSeries:
             self.states_coast = self.states[(thrust < threshold).flatten(), :]
 
         self.r_safe = r_safe
+        self.labels = labels
 
     def plot(self):
 
@@ -53,20 +55,21 @@ class TwoDimStatesTimeSeries:
 
         else:  # implicit solution with variable thrust
 
-            axs[0, 0].plot(self.time_coast, (self.states_coast[:, 0] - self.R)/1e3, 'o', color='b', label='coast')
-            axs[1, 0].plot(self.time_coast, self.states_coast[:, 1]*180/np.pi, 'o', color='b', label='coast')
-            axs[0, 1].plot(self.time_coast, self.states_coast[:, 2]/1e3, 'o', color='b', label='coast')
-            axs[1, 1].plot(self.time_coast, self.states_coast[:, 3]/1e3, 'o', color='b', label='coast')
+            axs[0, 0].plot(self.time_coast, (self.states_coast[:, 0] - self.R)/1e3, 'o', color='b',
+                           label=self.labels[1])
+            axs[1, 0].plot(self.time_coast, self.states_coast[:, 1]*180/np.pi, 'o', color='b', label=self.labels[1])
+            axs[0, 1].plot(self.time_coast, self.states_coast[:, 2]/1e3, 'o', color='b', label=self.labels[1])
+            axs[1, 1].plot(self.time_coast, self.states_coast[:, 3]/1e3, 'o', color='b', label=self.labels[1])
 
-            axs[0, 0].plot(self.time_pow, (self.states_pow[:, 0] - self.R)/1e3, 'o', color='r', label='powered')
-            axs[1, 0].plot(self.time_pow, self.states_pow[:, 1]*180/np.pi, 'o', color='r', label='powered')
-            axs[0, 1].plot(self.time_pow, self.states_pow[:, 2]/1e3, 'o', color='r', label='powered')
-            axs[1, 1].plot(self.time_pow, self.states_pow[:, 3]/1e3, 'o', color='r', label='powered')
+            axs[0, 0].plot(self.time_pow, (self.states_pow[:, 0] - self.R)/1e3, 'o', color='r', label=self.labels[0])
+            axs[1, 0].plot(self.time_pow, self.states_pow[:, 1]*180/np.pi, 'o', color='r', label=self.labels[0])
+            axs[0, 1].plot(self.time_pow, self.states_pow[:, 2]/1e3, 'o', color='r', label=self.labels[0])
+            axs[1, 1].plot(self.time_pow, self.states_pow[:, 3]/1e3, 'o', color='r', label=self.labels[0])
 
         axs[0, 0].set_ylabel('h (km)')
         axs[0, 0].set_title('Altitude')
 
-        axs[0, 0].set_ylabel('theta (deg)')
+        axs[1, 0].set_ylabel('theta (deg)')
         axs[1, 0].set_title('Angle')
 
         axs[0, 1].set_ylabel('u (km/s)')

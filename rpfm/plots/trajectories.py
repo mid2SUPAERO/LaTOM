@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 class TwoDimAltProfile:
 
-    def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6, r_safe=None):
+    def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6, r_safe=None,
+                 labels=('powered', 'coast')):
 
         self.R = r
 
@@ -32,6 +33,7 @@ class TwoDimAltProfile:
             self.theta_exp = states_exp[:, 1]
 
         self.r_safe = r_safe
+        self.labels = labels
 
     def plot(self):
 
@@ -47,8 +49,8 @@ class TwoDimAltProfile:
 
         if hasattr(self, 'r_pow'):  # implicit solution with variable thrust
 
-            ax.plot(self.theta_coast * 180 / np.pi, (self.r_coast - self.R) / 1e3, 'o', color='b', label='coast')
-            ax.plot(self.theta_pow*180/np.pi, (self.r_pow - self.R)/1e3, 'o', color='r', label='powered')
+            ax.plot(self.theta_coast * 180 / np.pi, (self.r_coast - self.R) / 1e3, 'o', color='b', label=self.labels[1])
+            ax.plot(self.theta_pow*180/np.pi, (self.r_pow - self.R)/1e3, 'o', color='r', label=self.labels[0])
 
         else:  # implicit solution with constant thrust
 

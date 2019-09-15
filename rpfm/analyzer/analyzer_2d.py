@@ -6,8 +6,9 @@
 import numpy as np
 
 from rpfm.analyzer.analyzer import Analyzer
-from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP
-from rpfm.plots.solutions import TwoDimSolPlot
+from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
+    TwoDimDescTwoPhasesNLP
+from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
 from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
 
@@ -36,28 +37,6 @@ class TwoDimAnalyzer(Analyzer):
         alpha = p.get_val(self.nlp.phase_name + '.timeseries.controls:alpha')
 
         return tof, t, states, alpha
-
-    def get_time_series(self, p):
-
-        return None, None, None, None
-
-    def get_solutions(self, explicit=True):
-
-        tof, t, states, controls = self.get_time_series(self.nlp.p)
-
-        self.tof = tof
-        self.time = t
-        self.states = states
-        self.controls = controls
-
-        if explicit:
-
-            tof, t, states, controls = self.get_time_series(self.nlp.p_exp)
-
-            self.tof_exp = tof
-            self.time_exp = t
-            self.states_exp = states
-            self.controls_exp = controls
 
     def __str__(self):
 
@@ -105,7 +84,7 @@ class TwoDimAscConstAnalyzer(TwoDimAnalyzer):
     def plot(self):
 
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 self.controls_exp, threshold=None)
+                                 threshold=None)
         sol_plot.plot()
 
 
@@ -130,8 +109,7 @@ class TwoDimAscVarAnalyzer(TwoDimAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 self.controls_exp)
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp)
         sol_plot.plot()
 
 
@@ -157,7 +135,7 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
     def plot(self):
 
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 self.controls_exp, r_safe=self.r_safe)
+                                 r_safe=self.r_safe)
         sol_plot.plot()
 
 
@@ -166,9 +144,7 @@ class TwoDimDescConstAnalyzer(TwoDimAnalyzer):
     def __init__(self, body, sc, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False):
 
-        ra = body.R + alt
-        rp = body.R + alt_p
-        self.ht = HohmannTransfer(body.GM, ra, rp)
+        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p))
         self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
 
         TwoDimAnalyzer.__init__(self, body, sc)
@@ -188,7 +164,7 @@ class TwoDimDescConstAnalyzer(TwoDimAnalyzer):
     def plot(self):
 
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 self.controls_exp, threshold=None, kind='descent')
+                                 threshold=None, kind='descent')
         sol_plot.plot()
 
 
@@ -201,3 +177,56 @@ class TwoDimDescTwoPhasesAnalyzer(Analyzer):
 
         self.phase_name = ('free', 'vertical')
         self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, 1.0])
+
+        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p))
+        self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
+
+        self.nlp = TwoDimDescTwoPhasesNLP(body, self.deorbit_burn.sc, alt_p, alt_switch, self.ht.vp, theta,
+                                          (0.0, np.pi), tof, t_bounds, method, nb_seg, order, solver, self.phase_name,
+                                          snopt_opts=snopt_opts, rec_file=rec_file, check_partials=check_partials,
+                                          fix=fix)
+
+    def get_time_series(self, p):
+
+        # attitude free
+        tof_free = float(p.get_val(self.nlp.phase_name[0] + '.t_duration'))*self.body.tc
+        t_free = p.get_val(self.nlp.phase_name[0] + '.timeseries.time')*self.body.tc
+
+        states_free = np.empty((np.size(t_free), 0))
+
+        for k in states_2d:
+            s = p.get_val(self.nlp.phase_name[0] + '.timeseries.states:' + k)
+            states_free = np.append(states_free, s, axis=1)
+
+        states_free = states_free*self.states_scalers
+
+        alpha_free = p.get_val(self.nlp.phase_name[0] + '.timeseries.controls:alpha')
+        controls_free = np.hstack((self.sc.T_max*np.ones((np.size(t_free), 1)), alpha_free))
+
+        # vertical
+        tof_vertical = float(p.get_val(self.nlp.phase_name[1] + '.t_duration'))*self.body.tc
+        t_vertical = p.get_val(self.nlp.phase_name[1] + '.timeseries.time')*self.body.tc
+
+        r_vertical = p.get_val(self.nlp.phase_name[1] + '.timeseries.states:r')*self.body.R
+        theta_vertical = states_free[-1, 1] * np.ones((np.size(t_vertical), 1))
+        u_vertical = p.get_val(self.nlp.phase_name[1] + '.timeseries.states:u')*self.body.vc
+        m_vertical = p.get_val(self.nlp.phase_name[1] + '.timeseries.states:m')
+
+        states_vertical = np.hstack((r_vertical, theta_vertical, u_vertical, np.zeros((np.size(t_vertical), 1)),
+                                     m_vertical))
+
+        controls_vertical = np.hstack((self.sc.T_max*np.ones((np.size(t_vertical), 1)),
+                                       np.pi/2*np.ones((np.size(t_vertical), 1))))
+
+        tof = [tof_free, tof_vertical]
+        t = [t_free, t_vertical]
+        states = [states_free, states_vertical]
+        controls = [controls_free, controls_vertical]
+
+        return tof, t, states, controls
+
+    def plot(self):
+
+        sol_plot = TwoDimTwoPhasesSolPlot(self.body.R, self.time, self.states, self.controls, time_exp=self.time_exp,
+                                          states_exp=self.states_exp, kind='descent')
+        sol_plot.plot()

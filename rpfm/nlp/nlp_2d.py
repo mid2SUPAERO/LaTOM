@@ -57,6 +57,7 @@ class TwoDimAscConstNLP(TwoDimNLP):
                            ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
 
         self.set_options(theta, tof, t_bounds, u_bound=u_bound)
+        self.setup()
         self.set_initial_guess(theta, check_partials=check_partials)
 
     def set_options(self, theta, tof, t_bounds, u_bound=False):
@@ -65,7 +66,6 @@ class TwoDimAscConstNLP(TwoDimNLP):
         self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
         self.set_time_options(tof, t_bounds)
         self.set_objective()
-        self.setup()
 
     def set_initial_guess(self, theta, check_partials=False):
 
@@ -100,6 +100,7 @@ class TwoDimAscVarNLP(TwoDimNLP):
 
         self.guess = TwoDimAscGuess(self.body.GM, self.body.R, alt, sc)
         self.set_options(t_bounds, u_bound=u_bound)
+        self.setup()
         self.set_initial_guess(check_partials=check_partials)
 
     def set_options(self, t_bounds, u_bound=False):
@@ -113,7 +114,6 @@ class TwoDimAscVarNLP(TwoDimNLP):
 
         self.set_time_options(self.guess.tof, t_bounds)
         self.set_objective()
-        self.setup()
 
     def set_initial_guess(self, check_partials=False):
 
@@ -149,6 +149,7 @@ class TwoDimAscVToffNLP(TwoDimAscVarNLP):
         self.slope = slope
         self.guess = TwoDimAscGuess(self.body.GM, self.body.R, alt, sc)
         self.set_options(t_bounds, u_bound=u_bound)
+        self.setup()
         self.set_initial_guess(check_partials=check_partials)
 
     def set_options(self, t_bounds, u_bound=False):
@@ -171,6 +172,7 @@ class TwoDimDescConstNLP(TwoDimNLP):
 
         self.vp = vp
         self.set_options(theta, tof, t_bounds)
+        self.setup()
         self.set_initial_guess(theta, check_partials=check_partials)
 
     def set_options(self, theta, tof, t_bounds):
@@ -179,7 +181,6 @@ class TwoDimDescConstNLP(TwoDimNLP):
         self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
         self.set_time_options(tof, t_bounds)
         self.set_objective()
-        self.setup()
 
     def set_initial_guess(self, theta, check_partials=False):
 
@@ -229,6 +230,8 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
             raise ValueError('fix must be either alt or time')
 
         self.set_options(theta, t_bounds)
+        self.trajectory.link_phases(ph_name, vars=['time', 'r', 'u', 'm'])
+        self.setup()
         self.set_initial_guess(theta, check_partials=check_partials)
 
     def set_options(self, theta, t_bounds):
@@ -269,7 +272,7 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
             self.phase[0].set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0,
                                             ref=self.rp/self.body.R)
 
-        self.phase[0].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=theta[0])
+        self.phase[0].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=theta)
         self.phase[0].set_state_options('u', fix_initial=True, fix_final=False, ref=self.vp/self.body.vc)
         self.phase[0].set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.vp/self.body.vc)
         self.phase[0].set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
@@ -297,8 +300,6 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
         # objective
         self.phase[1].add_objective('m', loc='final', scaler=-1.0)
 
-        self.setup()
-
     def set_initial_guess(self, theta, check_partials=False):
 
         # time
@@ -308,23 +309,23 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
         self.p[self.phase_name[1] + '.t_duration'] = self.tof[1]/self.body.tc
 
         self.p[self.phase_name[0] + '.states:r'] =\
-            self.phase.interpolate(ys=(self.rp/self.body.R, self.r_switch/self.body.R), nodes='state_input')
-        self.p[self.phase_name[0] + '.states:theta'] = self.phase.interpolate(ys=(0.0, theta), nodes='state_input')
-        self.p[self.phase_name[0] + '.states:u'] = self.phase.interpolate(ys=(0.0, 100/self.body.vc),
-                                                                          nodes='state_input')
-        self.p[self.phase_name[0] + '.states:v'] = self.phase.interpolate(ys=(self.vp/self.body.vc, 0.0),
-                                                                          nodes='state_input')
-        self.p[self.phase_name[0] + '.states:m'] = self.phase.interpolate(ys=(self.sc.m0, self.sc.m0/2),
-                                                                          nodes='state_input')
-        self.p[self.phase_name[0] + '.controls:alpha'] = self.phase.interpolate(ys=(np.pi, np.pi/2),
-                                                                                nodes='control_input')
+            self.phase[0].interpolate(ys=(self.rp/self.body.R, self.r_switch/self.body.R), nodes='state_input')
+        self.p[self.phase_name[0] + '.states:theta'] = self.phase[0].interpolate(ys=(0.0, theta), nodes='state_input')
+        self.p[self.phase_name[0] + '.states:u'] = self.phase[0].interpolate(ys=(0.0, -100/self.body.vc),
+                                                                             nodes='state_input')
+        self.p[self.phase_name[0] + '.states:v'] = self.phase[0].interpolate(ys=(self.vp/self.body.vc, 0.0),
+                                                                             nodes='state_input')
+        self.p[self.phase_name[0] + '.states:m'] = self.phase[0].interpolate(ys=(self.sc.m0, self.sc.m0/2),
+                                                                             nodes='state_input')
+        self.p[self.phase_name[0] + '.controls:alpha'] = self.phase[0].interpolate(ys=(np.pi, np.pi/2),
+                                                                                   nodes='control_input')
 
-        self.p[self.phase_name[1] + '.states:r'] = self.phase.interpolate(ys=(self.r_switch/self.body.R, 1.0),
-                                                                          nodes='state_input')
-        self.p[self.phase_name[1] + '.states:u'] = self.phase.interpolate(ys=(100/self.body.vc, 0.0),
-                                                                          nodes='state_input')
-        self.p[self.phase_name[1] + '.states:m'] = self.phase.interpolate(ys=(self.sc.m0/2, self.sc.m_dry),
-                                                                          nodes='state_input')
+        self.p[self.phase_name[1] + '.states:r'] = self.phase[1].interpolate(ys=(self.r_switch/self.body.R, 1.0),
+                                                                             nodes='state_input')
+        self.p[self.phase_name[1] + '.states:u'] = self.phase[1].interpolate(ys=(-100/self.body.vc, 0.0),
+                                                                             nodes='state_input')
+        self.p[self.phase_name[1] + '.states:m'] = self.phase[1].interpolate(ys=(self.sc.m0/2, self.sc.m_dry),
+                                                                             nodes='state_input')
 
         self.p.run_model()
 
