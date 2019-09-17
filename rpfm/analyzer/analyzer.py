@@ -12,18 +12,12 @@ class Analyzer:
 
         self.body = body
         self.sc = sc
+        self.phase_name = None
 
         self.nlp = None
-
-        self.tof = None
-        self.time = None
-        self.states = None
-        self.controls = None
-
-        self.tof_exp = None
-        self.time_exp = None
-        self.states_exp = None
-        self.controls_exp = None
+        self.tof = self.time = self.states = self.controls = None
+        self.tof_exp = self.time_exp = self.states_exp = self.controls_exp = None
+        self.err = None
 
     def run_driver(self):
 
@@ -67,3 +61,8 @@ class Analyzer:
             self.time_exp = t
             self.states_exp = states
             self.controls_exp = controls
+
+            if isinstance(self.phase_name, str):
+                self.err = self.states[-1, :] - self.states_exp[-1, :]
+            else:
+                self.err = self.states[-1][-1, :] - self.states_exp[-1][-1, :]

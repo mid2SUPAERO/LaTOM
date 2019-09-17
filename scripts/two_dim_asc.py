@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyz
 
 
 # trajectory
-kind = 'c'
+kind = 's'
 moon = Moon()
 alt = 86.87e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
@@ -28,7 +28,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 10
+segments = 150
 order = 3
 solver = 'SNOPT'
 
