@@ -33,7 +33,7 @@ order = 3
 solver = 'SNOPT'
 
 # additional settings
-u_bound = True  # lower bound on radial velocity
+u_bound = False  # lower bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
 exp_sim = True  # perform explicit simulation
