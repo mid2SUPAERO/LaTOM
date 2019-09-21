@@ -5,6 +5,7 @@
 
 import numpy as np
 from smt.sampling_methods import LHS, Random, FullFactorial
+from smt.surrogate_models import RMTB, RMTC
 
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.nlp.nlp_2d import TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescTwoPhasesNLP
@@ -12,7 +13,7 @@ from rpfm.nlp.nlp_2d import TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescTwoPha
 
 class SurrogateModel:
 
-    def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
+    def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, nb_eval,
                  snopt_opts=None, samp_method='lhs', criterion='c'):
 
         self.body = body
@@ -24,21 +25,30 @@ class SurrogateModel:
         self.solver = solver
         self.snopt_opts = snopt_opts
         self.nb_samp = nb_samp
+        self.nb_eval = nb_eval
 
-        limits = np.vstack((np.asarray(isp_lim), np.asarray(twr_lim)))
+        self.tof_samp = np.zeros((nb_samp, 1))
+        self.m_samp = np.zeros((nb_samp, 1))
+        self.train_mass = self.train_time = None
+        self.m_eval = np.zeros((nb_eval, nb_eval))
+        self.tof_eval = np.zeros((nb_eval, nb_eval))
+
+        self.limits = np.vstack((np.asarray(isp_lim), np.asarray(twr_lim)))
 
         if samp_method == 'rand':
-            samp = Random(xlimits=limits)
+            samp = Random(xlimits=self.limits)
         elif samp_method == 'lhs':
-            samp = LHS(xlimits=limits, criterion=criterion)
+            samp = LHS(xlimits=self.limits, criterion=criterion)
         elif samp_method == 'full':
-            samp = FullFactorial(xlimits=limits)
+            samp = FullFactorial(xlimits=self.limits)
         else:
             raise ValueError('samp_method must be one of rand, lhs, full')
 
         self.x_samp = samp(nb_samp)
-        self.tof = np.zeros((nb_samp, 1))
-        self.mf = np.zeros((nb_samp, 1))
+
+        samp_eval = FullFactorial(xlimits=self.limits)
+
+        self.x_eval = samp_eval(nb_eval**2)
 
     def solve(self, nlp, i):
 
@@ -49,19 +59,47 @@ class SurrogateModel:
         else:
             phase_name = nlp.phase_name[-1]
 
-        self.mf[i, 0] = nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
-        self.tof[i, 0] = nlp.p.get_val(phase_name + '.time')[-1]
+        self.m_samp[i, 0] = nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
+        self.tof_samp[i, 0] = nlp.p.get_val(phase_name + '.time')[-1]*self.body.tc
 
         nlp.cleanup()
+
+    def train(self, train_method, **kwargs):
+
+        if train_method == 'RMTB':
+            self.train_mass = RMTB(xlimits=self.limits, **kwargs)
+            self.train_time = RMTB(xlimits=self.limits, **kwargs)
+        elif train_method == 'RMTC':
+            self.train_mass = RMTC(xlimits=self.limits, **kwargs)
+            self.train_time = RMTC(xlimits=self.limits, **kwargs)
+        else:
+            raise ValueError('train_method must be RMTB or RMTC')
+
+        self.train_mass.set_training_values(self.x_samp, self.m_samp[:, 0])
+        self.train_time.set_training_values(self.x_samp, self.tof_samp[:, 0])
+
+        self.train_mass.train()
+        self.train_time.train()
+
+    def evaluate(self):
+
+        m_eval = self.train_mass.predict_values(self.x_eval)
+        tof_eval = self.train_time.predict_values(self.x_eval)
+
+        self.m_eval_1d = m_eval
+        self.tof_eval_1d = tof_eval
+
+        self.m_eval = np.reshape(m_eval, (self.nb_eval, self.nb_eval))
+        self.tof_eval = np.reshape(tof_eval, (self.nb_eval, self.nb_eval))
 
 
 class TwoDimAscSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver,
-                 nb_samp, snopt_opts=None, samp_method='lhs', criterion='c'):
+                 nb_samp, nb_eval, snopt_opts=None, samp_method='lhs', criterion='c'):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                snopt_opts=snopt_opts, samp_method=samp_method, criterion=criterion)
+                                nb_eval, snopt_opts=snopt_opts, samp_method=samp_method, criterion=criterion)
 
     def sampling(self):
 
@@ -72,6 +110,7 @@ class TwoDimAscSurrogate(SurrogateModel):
                                   self.order, self.solver, 'powered', snopt_opts=self.snopt_opts, u_bound=True)
 
             self.solve(nlp, i)
+
 
 class TwoDimAscVToffSurrogate(SurrogateModel):
 
