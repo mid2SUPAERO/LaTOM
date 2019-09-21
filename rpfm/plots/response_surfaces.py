@@ -11,10 +11,10 @@ from copy import deepcopy
 
 class RespSurf:
 
-    def __init__(self, x, m, tof):
+    def __init__(self, isp, twr, m, tof):
 
-        self.Isp = np.unique(x[:, 0])
-        self.twr = np.unique(x[:, 1])
+        self.Isp = isp
+        self.twr = twr
         self.m = deepcopy(m)
         self.tof = deepcopy(tof)
 

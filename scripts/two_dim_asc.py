@@ -21,8 +21,8 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = 10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
-twr = 2.1  # initial thrust/weight ratio [-]
+isp = 300.  # specific impulse [s]
+twr = 3.  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
@@ -30,7 +30,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 method = 'gauss-lobatto'
 segments = 10
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 
 # additional settings
 u_bound = False  # lower bound on radial velocity
