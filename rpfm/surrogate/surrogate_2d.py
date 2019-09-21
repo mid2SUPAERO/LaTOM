@@ -9,6 +9,7 @@ from smt.surrogate_models import RMTB, RMTC
 
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.nlp.nlp_2d import TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescTwoPhasesNLP
+from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
 
 
 class SurrogateModel:
@@ -114,9 +115,49 @@ class TwoDimAscSurrogate(SurrogateModel):
 
 class TwoDimAscVToffSurrogate(SurrogateModel):
 
-    pass
+    def __init__(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
+                 nb_samp, nb_eval, snopt_opts=None, samp_method='lhs', criterion='c'):
+
+        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
+                                nb_eval, snopt_opts=snopt_opts, samp_method=samp_method, criterion=criterion)
+
+        self.alt_safe = alt_safe
+        self.slope = slope
+
+    def sampling(self):
+
+        for i in range(self.nb_samp):
+
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
+            nlp = TwoDimAscVToffNLP(self.body, sc, self.alt, self.alt_safe, self.slope, (-np.pi/2, np.pi/2),
+                                    self.t_bounds, self.method, self.nb_seg, self.order, self.solver, 'powered',
+                                    snopt_opts=self.snopt_opts, u_bound=True)
+
+            self.solve(nlp, i)
 
 
 class TwoDimDescVertSurrogate(SurrogateModel):
 
-    pass
+    def __init__(self, body, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order,
+                 solver, nb_samp, nb_eval, snopt_opts=None, samp_method='lhs', criterion='c'):
+
+        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt_p, t_bounds, method, nb_seg, order, solver, nb_samp,
+                                nb_eval, snopt_opts=snopt_opts, samp_method=samp_method, criterion=criterion)
+
+        self.alt_switch = alt_switch
+        self.theta = theta
+        self.tof = tof
+
+        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p))
+
+    def sampling(self):
+
+        for i in range(self.nb_samp):
+
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
+            deorbit_burn = DeorbitBurn(sc, self.ht.dva)
+            nlp = TwoDimDescTwoPhasesNLP(self.body, deorbit_burn.sc, self.alt, self.alt_switch, self.ht.vp, self.theta,
+                                         (0., np.pi), self.tof, self.t_bounds, self.method, self.nb_seg, self.order,
+                                         self.solver, ('free', 'vertical'), snopt_opts=self.snopt_opts)
+
+            self.solve(nlp, i)
