@@ -21,22 +21,23 @@ alt_p = 15e3  # perigee altitude (descent only) [m]
 alt_switch = 3e3  # switch altitude (descent only) [m]
 alt_safe = 5e3  # minimum safe altitude (ascent safe only) [m]
 slope = 10.  # slope of the constraint on minimum safe altitude (ascent safe only) [-]
-isp_lim = (300., 450.)
-twr_lim = (1.1, 3.)
+isp_lim = (300., 500.)  # specific impulse lower and upper limits [s]
+twr_lim = (1.1, 4.)  # initial thrust/weight ratio lower and upper limits [-]
 
 # NLP
 method = 'gauss-lobatto'
 segments_asc = 10
 segments_desc = (10, 10)
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 
-# surrogate model
-samp_method = 'full'
-train_method = 'RMTB'
-nb_samp = 100
+# sampling scheme
+samp_method = 'lhs'
+nb_samp = 20
+
+# surrogate model (accepted methods are IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC)
+train_method = 'KRG'
 nb_eval = 100
-train = True
 
 if kind == 'c':
     sm = TwoDimAscConstSurrogate(moon, isp_lim, twr_lim, alt, theta, tof_asc, t_bounds, method, segments_asc, order,
@@ -55,7 +56,8 @@ else:
 
 sm.sampling()
 
-if train:
+if samp_method != 'full':
     sm.train(train_method)
-    sm.evaluate()
-    sm.plot()
+
+sm.evaluate()
+sm.plot()

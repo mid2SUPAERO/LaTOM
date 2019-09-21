@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from smt.sampling_methods import LHS, FullFactorial
-from smt.surrogate_models import RMTB, RMTC
+from smt.surrogate_models import IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
 
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescTwoPhasesNLP
@@ -18,7 +18,7 @@ from rpfm.plots.response_surfaces import RespSurf
 class SurrogateModel:
 
     def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='lhs', criterion='c', nb_eval=100, snopt_opts=None):
+                 samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         # parameters
         self.body = body
@@ -46,18 +46,19 @@ class SurrogateModel:
         # sampling grid
         if samp_method == 'lhs':
             samp = LHS(xlimits=self.limits, criterion=criterion)
-            self.x_samp = samp(nb_samp)
-
         elif samp_method == 'full':
             samp = FullFactorial(xlimits=self.limits)
-            self.x_samp = samp(nb_samp**2)
+            self.nb_eval = self.nb_samp
         else:
             raise ValueError('samp_method must be one of rand, lhs, full')
 
+        self.x_samp = samp(nb_samp)
         self.samp_method = samp_method
         self.surf_plot = None
 
     def solve(self, nlp, i):
+
+        print('\nIteration:', i, '\n')
 
         nlp.p.run_driver()
 
@@ -73,14 +74,35 @@ class SurrogateModel:
 
     def train(self, train_method, **kwargs):
 
-        if train_method == 'RMTB':
+        if train_method == 'IDW':
+            self.train_mass = IDW(**kwargs)
+            self.train_time = IDW(**kwargs)
+        elif train_method == 'KPLS':
+            self.train_mass = KPLS(**kwargs)
+            self.train_time = KPLS(**kwargs)
+        elif train_method == 'KPLSK':
+            self.train_mass = KPLSK(**kwargs)
+            self.train_time = KPLSK(**kwargs)
+        elif train_method == 'KRG':
+            self.train_mass = KRG(**kwargs)
+            self.train_time = KRG(**kwargs)
+        elif train_method == 'LS':
+            self.train_mass = LS(**kwargs)
+            self.train_time = LS(**kwargs)
+        elif train_method == 'QP':
+            self.train_mass = QP(**kwargs)
+            self.train_time = QP(**kwargs)
+        elif train_method == 'RBF':
+            self.train_mass = RBF(**kwargs)
+            self.train_time = RBF(**kwargs)
+        elif train_method == 'RMTB':
             self.train_mass = RMTB(xlimits=self.limits, **kwargs)
             self.train_time = RMTB(xlimits=self.limits, **kwargs)
         elif train_method == 'RMTC':
             self.train_mass = RMTC(xlimits=self.limits, **kwargs)
             self.train_time = RMTC(xlimits=self.limits, **kwargs)
         else:
-            raise ValueError('train_method must be RMTB or RMTC')
+            raise ValueError('train_method must be one between IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC')
 
         self.train_mass.set_training_values(self.x_samp, self.m_samp[:, 0])
         self.train_time.set_training_values(self.x_samp, self.tof_samp[:, 0])
@@ -100,14 +122,16 @@ class SurrogateModel:
 
             samp_eval = FullFactorial(xlimits=self.limits)
 
-            self.x_eval = samp_eval(self.nb_eval**2)
+            self.x_eval = samp_eval(self.nb_eval)
             self.m_eval = self.train_mass.predict_values(self.x_eval)
             self.tof_eval = self.train_time.predict_values(self.x_eval)
 
         self.isp = np.unique(self.x_eval[:, 0])
         self.twr = np.unique(self.x_eval[:, 1])
-        self.m_mat = np.reshape(self.m_eval, (self.nb_eval, self.nb_eval))
-        self.tof_mat = np.reshape(self.tof_eval, (self.nb_eval, self.nb_eval))
+
+        n = int(np.sqrt(self.nb_eval))
+        self.m_mat = np.reshape(self.m_eval, (n, n))
+        self.tof_mat = np.reshape(self.tof_eval, (n, n))
 
     def plot(self):
 
@@ -120,7 +144,7 @@ class SurrogateModel:
 class TwoDimAscConstSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='lhs', criterion='c', nb_eval=100, snopt_opts=None):
+                 samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
@@ -143,7 +167,7 @@ class TwoDimAscConstSurrogate(SurrogateModel):
 class TwoDimAscVarSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, samp_method='lhs',
-                 criterion='c', nb_eval=100, snopt_opts=None):
+                 criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
@@ -162,7 +186,7 @@ class TwoDimAscVarSurrogate(SurrogateModel):
 class TwoDimAscVToffSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
-                 nb_samp, samp_method='lhs', criterion='c', nb_eval=100, snopt_opts=None):
+                 nb_samp, samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
@@ -185,7 +209,7 @@ class TwoDimAscVToffSurrogate(SurrogateModel):
 class TwoDimDescVertSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order,
-                 solver, nb_samp, samp_method='lhs', criterion='c', nb_eval=100, snopt_opts=None):
+                 solver, nb_samp, samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt_p, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
