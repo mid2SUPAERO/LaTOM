@@ -18,7 +18,7 @@ from rpfm.plots.response_surfaces import RespSurf
 class SurrogateModel:
 
     def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
+                 samp_method='lhs', criterion='m', snopt_opts=None):
 
         # parameters
         self.body = body
@@ -30,30 +30,28 @@ class SurrogateModel:
         self.order = order
         self.solver = solver
         self.nb_samp = nb_samp
-        self.nb_eval = nb_eval
         self.snopt_opts = snopt_opts
 
         # training models
-        self.train_mass = self.train_time = None
+        self.train_mass = self.train_tof = None
 
         # sampling, evaluation and matrices values
         self.tof_samp = np.zeros((nb_samp, 1))
         self.m_samp = np.zeros((nb_samp, 1))
 
-        self.x_eval = self.m_eval = self.tof_eval = None
+        self.nb_eval = self.samp_eval = self.x_eval = self.m_eval = self.tof_eval = None
         self.isp = self.twr = self.m_mat = self.tof_mat = None
 
         # sampling grid
         if samp_method == 'lhs':
-            samp = LHS(xlimits=self.limits, criterion=criterion)
+            self.samp = LHS(xlimits=self.limits, criterion=criterion)
         elif samp_method == 'full':
-            samp = FullFactorial(xlimits=self.limits)
+            self.samp = FullFactorial(xlimits=self.limits)
             self.nb_eval = self.nb_samp
         else:
             raise ValueError('samp_method must be one of rand, lhs, full')
 
-        self.x_samp = samp(nb_samp)
-        self.samp_method = samp_method
+        self.x_samp = self.samp(self.nb_samp)
         self.surf_plot = None
 
     def solve(self, nlp, i):
@@ -76,62 +74,82 @@ class SurrogateModel:
 
         if train_method == 'IDW':
             self.train_mass = IDW(**kwargs)
-            self.train_time = IDW(**kwargs)
+            self.train_tof = IDW(**kwargs)
         elif train_method == 'KPLS':
             self.train_mass = KPLS(**kwargs)
-            self.train_time = KPLS(**kwargs)
+            self.train_tof = KPLS(**kwargs)
         elif train_method == 'KPLSK':
             self.train_mass = KPLSK(**kwargs)
-            self.train_time = KPLSK(**kwargs)
+            self.train_tof = KPLSK(**kwargs)
         elif train_method == 'KRG':
             self.train_mass = KRG(**kwargs)
-            self.train_time = KRG(**kwargs)
+            self.train_tof = KRG(**kwargs)
         elif train_method == 'LS':
             self.train_mass = LS(**kwargs)
-            self.train_time = LS(**kwargs)
+            self.train_tof = LS(**kwargs)
         elif train_method == 'QP':
             self.train_mass = QP(**kwargs)
-            self.train_time = QP(**kwargs)
+            self.train_tof = QP(**kwargs)
         elif train_method == 'RBF':
             self.train_mass = RBF(**kwargs)
-            self.train_time = RBF(**kwargs)
+            self.train_tof = RBF(**kwargs)
         elif train_method == 'RMTB':
             self.train_mass = RMTB(xlimits=self.limits, **kwargs)
-            self.train_time = RMTB(xlimits=self.limits, **kwargs)
+            self.train_tof = RMTB(xlimits=self.limits, **kwargs)
         elif train_method == 'RMTC':
             self.train_mass = RMTC(xlimits=self.limits, **kwargs)
-            self.train_time = RMTC(xlimits=self.limits, **kwargs)
+            self.train_tof = RMTC(xlimits=self.limits, **kwargs)
         else:
             raise ValueError('train_method must be one between IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC')
 
         self.train_mass.set_training_values(self.x_samp, self.m_samp[:, 0])
-        self.train_time.set_training_values(self.x_samp, self.tof_samp[:, 0])
+        self.train_tof.set_training_values(self.x_samp, self.tof_samp[:, 0])
 
         self.train_mass.train()
-        self.train_time.train()
+        self.train_tof.train()
 
-    def evaluate(self):
+    def evaluate(self, **kwargs):
 
-        if self.samp_method == 'full':
+        if ('isp' in kwargs) and ('twr' in kwargs):
 
-            self.x_eval = self.x_samp
-            self.m_eval = self.m_samp
-            self.tof_eval = self.tof_samp
+            isp = kwargs['isp']
+            twr = kwargs['twr']
+
+            x_eval = np.hstack((np.reshape(isp, (len(isp), 1)), np.reshape(twr, (len(twr), 1))))
+            m_eval = self.train_mass.predict_values(x_eval)
+            tof_eval = self.train_tof.predict_values(x_eval)
+
+            return m_eval, tof_eval
 
         else:
 
-            samp_eval = FullFactorial(xlimits=self.limits)
+            if 'nb_eval' in kwargs:
 
-            self.x_eval = samp_eval(self.nb_eval)
-            self.m_eval = self.train_mass.predict_values(self.x_eval)
-            self.tof_eval = self.train_time.predict_values(self.x_eval)
+                self.nb_eval = kwargs['nb_eval']
 
-        self.isp = np.unique(self.x_eval[:, 0])
-        self.twr = np.unique(self.x_eval[:, 1])
+                self.samp_eval = FullFactorial(xlimits=self.limits)
 
-        n = int(np.sqrt(self.nb_eval))
-        self.m_mat = np.reshape(self.m_eval, (n, n))
-        self.tof_mat = np.reshape(self.tof_eval, (n, n))
+                self.x_eval = self.samp_eval(self.nb_eval)
+                self.m_eval = self.train_mass.predict_values(self.x_eval)
+                self.tof_eval = self.train_tof.predict_values(self.x_eval)
+
+            elif self.nb_eval is not None:
+
+                self.x_eval = self.x_samp
+                self.m_eval = self.m_samp
+                self.tof_eval = self.tof_samp
+
+            else:
+                raise ValueError('Surrogate model built with LHS sampling method.'
+                                 '\nThe two arrays isp, twr or nb_eval must be provided')
+
+            self.isp = np.unique(self.x_eval[:, 0])
+            self.twr = np.unique(self.x_eval[:, 1])
+
+            n = int(np.sqrt(self.nb_eval))
+
+            self.m_mat = np.reshape(self.m_eval, (n, n))
+            self.tof_mat = np.reshape(self.tof_eval, (n, n))
 
     def plot(self):
 
@@ -147,7 +165,7 @@ class TwoDimAscConstSurrogate(SurrogateModel):
                  samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
+                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
 
         self.theta = theta
         self.tof = tof
@@ -170,7 +188,7 @@ class TwoDimAscVarSurrogate(SurrogateModel):
                  criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
+                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
 
     def sampling(self):
 
@@ -189,7 +207,7 @@ class TwoDimAscVToffSurrogate(SurrogateModel):
                  nb_samp, samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
+                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
 
         self.alt_safe = alt_safe
         self.slope = slope
@@ -212,7 +230,7 @@ class TwoDimDescVertSurrogate(SurrogateModel):
                  solver, nb_samp, samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt_p, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, nb_eval=nb_eval, snopt_opts=snopt_opts)
+                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
 
         self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p))
         self.alt_switch = alt_switch
