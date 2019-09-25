@@ -13,7 +13,7 @@ from rpfm.utils.primary import Moon
 # trajectory
 kind = 'c'
 moon = Moon()
-alt = 86.87e3  # final orbit altitude [m]
+alt = 100e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
 tof_asc = 500  # guessed time of flight (ascent) [s]
 tof_desc = (1000, 100)  # guessed time of flight (descent) [s]
