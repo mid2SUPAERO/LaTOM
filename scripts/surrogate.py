@@ -9,7 +9,6 @@ from rpfm.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSur
     TwoDimDescVertSurrogate
 
 from rpfm.utils.primary import Moon
-from rpfm.utils.pickle_utils import save
 
 # trajectory
 kind = 'c'
@@ -35,11 +34,11 @@ solver = 'IPOPT'
 
 # sampling scheme
 samp_method = 'lhs'
-nb_samp = 20
+nb_samp = 10
 
 # surrogate model (accepted methods are IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC)
 train_method = 'KRG'
-nb_eval = 100
+nb_eval = 400
 
 if kind == 'c':
     sm = TwoDimAscConstSurrogate(moon, isp_lim, twr_lim, alt, theta, tof_asc, t_bounds, method, segments_asc, order,
@@ -65,4 +64,3 @@ else:
     sm.evaluate()
 
 sm.plot()
-

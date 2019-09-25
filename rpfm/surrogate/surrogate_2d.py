@@ -22,7 +22,7 @@ class SurrogateModel:
 
         # parameters
         self.body = body
-        self.limits = np.vstack((np.asarray(isp_lim), np.asarray(twr_lim)))
+        self.limits = np.vstack((np.asarray(isp_lim)/100, np.asarray(twr_lim)))  # Isp/100, twr
         self.alt = alt
         self.t_bounds = t_bounds
         self.method = method
@@ -51,7 +51,7 @@ class SurrogateModel:
         else:
             raise ValueError('samp_method must be one of rand, lhs, full')
 
-        self.x_samp = self.samp(self.nb_samp)
+        self.x_samp = self.samp(self.nb_samp)  # Isp/100, twr
         self.surf_plot = None
 
     def solve(self, nlp, i):
@@ -66,7 +66,7 @@ class SurrogateModel:
             phase_name = nlp.phase_name[-1]
 
         self.m_samp[i, 0] = nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
-        self.tof_samp[i, 0] = nlp.p.get_val(phase_name + '.time')[-1]*self.body.tc
+        self.tof_samp[i, 0] = nlp.p.get_val(phase_name + '.time')[-1]  # non dimensional
 
         nlp.cleanup()
 
@@ -115,9 +115,9 @@ class SurrogateModel:
             isp = kwargs['isp']
             twr = kwargs['twr']
 
-            x_eval = np.hstack((np.reshape(isp, (len(isp), 1)), np.reshape(twr, (len(twr), 1))))
+            x_eval = np.hstack((np.reshape(isp, (len(isp), 1))/100, np.reshape(twr, (len(twr), 1))))
             m_eval = self.train_mass.predict_values(x_eval)
-            tof_eval = self.train_tof.predict_values(x_eval)
+            tof_eval = self.train_tof.predict_values(x_eval)*self.body.tc  # dimensional
 
             return m_eval, tof_eval
 
@@ -129,27 +129,27 @@ class SurrogateModel:
 
                 self.samp_eval = FullFactorial(xlimits=self.limits)
 
-                self.x_eval = self.samp_eval(self.nb_eval)
+                self.x_eval = self.samp_eval(self.nb_eval)  # Isp/100, twr
                 self.m_eval = self.train_mass.predict_values(self.x_eval)
-                self.tof_eval = self.train_tof.predict_values(self.x_eval)
+                self.tof_eval = self.train_tof.predict_values(self.x_eval)  # non dimensional
 
             elif self.nb_eval is not None:
 
                 self.x_eval = self.x_samp
                 self.m_eval = self.m_samp
-                self.tof_eval = self.tof_samp
+                self.tof_eval = self.tof_samp  # non dimensional
 
             else:
                 raise ValueError('Surrogate model built with LHS sampling method.'
                                  '\nThe two arrays isp, twr or nb_eval must be provided')
 
-            self.isp = np.unique(self.x_eval[:, 0])
+            self.isp = np.unique(self.x_eval[:, 0])*100
             self.twr = np.unique(self.x_eval[:, 1])
 
             n = int(np.sqrt(self.nb_eval))
 
             self.m_mat = np.reshape(self.m_eval, (n, n))
-            self.tof_mat = np.reshape(self.tof_eval, (n, n))
+            self.tof_mat = np.reshape(self.tof_eval, (n, n))*self.body.tc
 
     def plot(self):
 
@@ -162,7 +162,7 @@ class SurrogateModel:
 class TwoDimAscConstSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
+                 samp_method='lhs', criterion='m', snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
@@ -174,7 +174,7 @@ class TwoDimAscConstSurrogate(SurrogateModel):
 
         for i in range(self.nb_samp):
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
+            sc = Spacecraft(self.x_samp[i, 0]*100, self.x_samp[i, 1], g=self.body.g)
             nlp = TwoDimAscConstNLP(self.body, sc, self.alt, self.theta, (-np.pi/2, np.pi/2), self.tof, self.t_bounds,
                                     self.method, self.nb_seg, self.order, self.solver, 'powered',
                                     snopt_opts=self.snopt_opts, u_bound=True)
@@ -185,7 +185,7 @@ class TwoDimAscConstSurrogate(SurrogateModel):
 class TwoDimAscVarSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, samp_method='lhs',
-                 criterion='m', nb_eval=100, snopt_opts=None):
+                 criterion='m', snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
@@ -194,7 +194,7 @@ class TwoDimAscVarSurrogate(SurrogateModel):
 
         for i in range(self.nb_samp):
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
+            sc = Spacecraft(self.x_samp[i, 0]*100, self.x_samp[i, 1], g=self.body.g)
             nlp = TwoDimAscVarNLP(self.body, sc, self.alt, (-np.pi/2, np.pi/2), self.t_bounds, self.method, self.nb_seg,
                                   self.order, self.solver, 'powered', snopt_opts=self.snopt_opts, u_bound=True)
 
@@ -204,7 +204,7 @@ class TwoDimAscVarSurrogate(SurrogateModel):
 class TwoDimAscVToffSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
-                 nb_samp, samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
+                 nb_samp, samp_method='lhs', criterion='m', snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
@@ -216,7 +216,7 @@ class TwoDimAscVToffSurrogate(SurrogateModel):
 
         for i in range(self.nb_samp):
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
+            sc = Spacecraft(self.x_samp[i, 0]*100, self.x_samp[i, 1], g=self.body.g)
             nlp = TwoDimAscVToffNLP(self.body, sc, self.alt, self.alt_safe, self.slope, (-np.pi/2, np.pi/2),
                                     self.t_bounds, self.method, self.nb_seg, self.order, self.solver, 'powered',
                                     snopt_opts=self.snopt_opts, u_bound=True)
@@ -227,7 +227,7 @@ class TwoDimAscVToffSurrogate(SurrogateModel):
 class TwoDimDescVertSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order,
-                 solver, nb_samp, samp_method='lhs', criterion='m', nb_eval=100, snopt_opts=None):
+                 solver, nb_samp, samp_method='lhs', criterion='m', snopt_opts=None):
 
         SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt_p, t_bounds, method, nb_seg, order, solver, nb_samp,
                                 samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
@@ -241,7 +241,7 @@ class TwoDimDescVertSurrogate(SurrogateModel):
 
         for i in range(self.nb_samp):
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
+            sc = Spacecraft(self.x_samp[i, 0]*100, self.x_samp[i, 1], g=self.body.g)
 
             deorbit_burn = DeorbitBurn(sc, self.ht.dva)
 
