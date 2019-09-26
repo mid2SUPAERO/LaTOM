@@ -36,6 +36,7 @@ class SurrogateModel:
         self.train_mass = self.train_tof = None
 
         # sampling, evaluation and matrices values
+        self.failures = []
         self.tof_samp = np.zeros((nb_samp, 1))
         self.m_samp = np.zeros((nb_samp, 1))
 
@@ -58,7 +59,7 @@ class SurrogateModel:
 
         print('\nIteration:', i, '\n')
 
-        nlp.p.run_driver()
+        f = nlp.p.run_driver()
 
         if isinstance(nlp.phase_name, str):
             phase_name = nlp.phase_name
@@ -67,6 +68,7 @@ class SurrogateModel:
 
         self.m_samp[i, 0] = nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
         self.tof_samp[i, 0] = nlp.p.get_val(phase_name + '.time')[-1]*self.body.tc
+        self.failures.append(f)
 
         nlp.cleanup()
 

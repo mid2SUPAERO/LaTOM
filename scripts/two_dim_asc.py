@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyz
 
 
 # trajectory
-kind = 's'
+kind = 'c'
 moon = Moon()
 alt = 100e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
@@ -21,14 +21,14 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = 10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 250.  # specific impulse [s]
-twr = 1.1  # initial thrust/weight ratio [-]
+isp = 500.  # specific impulse [s]
+twr = 4.  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 200
+segments = 20
 order = 3
 solver = 'SNOPT'
 
@@ -58,7 +58,7 @@ else:
 
 if run_driver:
 
-    tr.run_driver()
+    f = tr.run_driver()
 
     if exp_sim:
         tr.nlp.exp_sim()
