@@ -34,24 +34,25 @@ solver = 'IPOPT'
 
 # sampling scheme
 samp_method = 'lhs'
-nb_samp = 10
+nb_samp = 20
 
 # surrogate model (accepted methods are IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC)
+criterion = 'ese'
 train_method = 'KRG'
 nb_eval = 400
 
 if kind == 'c':
     sm = TwoDimAscConstSurrogate(moon, isp_lim, twr_lim, alt, theta, tof_asc, t_bounds, method, segments_asc, order,
-                                 solver, nb_samp, samp_method=samp_method)
+                                 solver, nb_samp, samp_method=samp_method, criterion=criterion)
 elif kind == 'v':
     sm = TwoDimAscVarSurrogate(moon, isp_lim, twr_lim, alt, t_bounds, method, segments_asc, order, solver, nb_samp,
-                               samp_method=samp_method)
+                               samp_method=samp_method, criterion=criterion)
 elif kind == 's':
     sm = TwoDimAscVToffSurrogate(moon, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, segments_asc, order,
-                                 solver, nb_samp, samp_method=samp_method)
+                                 solver, nb_samp, samp_method=samp_method, criterion=criterion)
 elif kind == 'd':
     sm = TwoDimDescVertSurrogate(moon, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof_desc, t_bounds, method,
-                                 segments_desc, order, solver, nb_samp, samp_method=samp_method)
+                                 segments_desc, order, solver, nb_samp, samp_method=samp_method, criterion=criterion)
 else:
     raise ValueError('kind must be c, v, s or d')
 

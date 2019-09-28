@@ -50,7 +50,7 @@ class SurrogateModel:
             self.samp = FullFactorial(xlimits=self.limits)
             self.nb_eval = self.nb_samp
         else:
-            raise ValueError('samp_method must be one of rand, lhs, full')
+            raise ValueError('samp_method must be either lhs or full')
 
         self.x_samp = self.samp(self.nb_samp)
         self.surf_plot = None
@@ -60,6 +60,8 @@ class SurrogateModel:
         print('\nIteration:', i, '\n')
 
         f = nlp.p.run_driver()
+
+        print('\nFailure:', f, '\n')
 
         if isinstance(nlp.phase_name, str):
             phase_name = nlp.phase_name

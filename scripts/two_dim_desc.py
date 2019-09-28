@@ -14,14 +14,14 @@ from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer
 kind = 'c'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
-alt_p = 15e3  # periselene altitude [m]
+alt_p = 10e3  # periselene altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
 tof = 1000  # guessed time of flight [s]
 t_bounds = None  # time of flight bounds [-]
 
 # spacecraft
 isp = 450.  # specific impulse [s]
-twr = 0.9  # initial thrust/weight ratio [-]
+twr = 2.1  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
@@ -29,7 +29,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 method = 'gauss-lobatto'
 segments = 60
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 
 # additional settings
 check_partials = True  # check partial derivatives

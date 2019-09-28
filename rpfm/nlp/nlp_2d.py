@@ -7,7 +7,7 @@ import numpy as np
 
 from rpfm.nlp.nlp import SinglePhaseNLP, MultiPhaseNLP
 from rpfm.odes.odes_2d import ODE2dVarThrust, ODE2dConstThrust, ODE2dVToff, ODE2dVertical
-from rpfm.guess.guess_2d import TwoDimAscGuess
+from rpfm.guess.guess_2d import TwoDimAscGuess, TwoDimDescGuess
 
 
 class TwoDimNLP(SinglePhaseNLP):
@@ -44,6 +44,60 @@ class TwoDimNLP(SinglePhaseNLP):
                                ref=self.alpha_bounds[1])
 
         self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
+
+
+class TwoDimVarNLP(TwoDimNLP):
+
+    def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
+                 snopt_opts=None, rec_file=None, check_partials=False, u_bound=False, kind='ascent'):
+
+        ode_kwargs = {'GM': 1.0, 'w': sc.w / body.vc}
+
+        TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dVarThrust, ode_kwargs,
+                           ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
+
+        if kind == 'ascent':
+            self.guess = TwoDimAscGuess(self.body.GM, self.body.R, alt, sc)
+        elif kind == 'descent':
+            self.guess = TwoDimDescGuess(self.body.GM, self.body.R, alt, sc)
+            u_bound = False
+        else:
+            raise ValueError('kind must be either ascent or descent')
+
+        self.set_options(t_bounds, u_bound=u_bound)
+        self.setup()
+        self.set_initial_guess(check_partials=check_partials)
+
+    def set_options(self, t_bounds, u_bound=False):
+
+        self.set_states_alpha_options(np.pi, u_bound=u_bound)  # was pi/2
+
+        twr_min = self.sc.T_min/self.sc.m0/self.body.g
+
+        self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False, rate_continuity=False,
+                               rate2_continuity=False, lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
+
+        self.set_time_options(self.guess.tof, t_bounds)
+        self.set_objective()
+
+    def set_initial_guess(self, check_partials=False):
+
+        self.set_time_guess(self.tof)
+        self.guess.compute_trajectory(t=self.t_control*self.body.tc)
+
+        self.p[self.phase_name + '.states:r'] = np.take(self.guess.r/self.body.R, self.idx_state_control)
+        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.theta, self.idx_state_control)
+        self.p[self.phase_name + '.states:u'] = np.take(self.guess.u/self.body.vc, self.idx_state_control)
+        self.p[self.phase_name + '.states:v'] = np.take(self.guess.v/self.body.vc, self.idx_state_control)
+        self.p[self.phase_name + '.states:m'] = np.take(self.guess.m, self.idx_state_control)
+
+        self.p[self.phase_name + '.controls:thrust'] = self.guess.T/self.sc.m0/self.body.g
+        self.p[self.phase_name + '.controls:alpha'] = self.guess.alpha
+
+        self.p.run_model()
+
+        if check_partials:
+            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
 
 class TwoDimAscConstNLP(TwoDimNLP):
@@ -88,54 +142,7 @@ class TwoDimAscConstNLP(TwoDimNLP):
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
 
-class TwoDimAscVarNLP(TwoDimNLP):
-
-    def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, check_partials=False, u_bound=False):
-
-        ode_kwargs = {'GM': 1.0, 'w': sc.w/body.vc}
-
-        TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dVarThrust,
-                           ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
-
-        self.guess = TwoDimAscGuess(self.body.GM, self.body.R, alt, sc)
-        self.set_options(t_bounds, u_bound=u_bound)
-        self.setup()
-        self.set_initial_guess(check_partials=check_partials)
-
-    def set_options(self, t_bounds, u_bound=False):
-
-        self.set_states_alpha_options(np.pi/2, u_bound=u_bound)
-
-        twr_min = self.sc.T_min/self.sc.m0/self.body.g
-
-        self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False, rate_continuity=False,
-                               rate2_continuity=False, lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
-
-        self.set_time_options(self.guess.tof, t_bounds)
-        self.set_objective()
-
-    def set_initial_guess(self, check_partials=False):
-
-        self.set_time_guess(self.tof)
-        self.guess.compute_trajectory(t=self.t_control*self.body.tc)
-
-        self.p[self.phase_name + '.states:r'] = np.take(self.guess.r/self.body.R, self.idx_state_control)
-        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.theta, self.idx_state_control)
-        self.p[self.phase_name + '.states:u'] = np.take(self.guess.u/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:v'] = np.take(self.guess.v/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:m'] = np.take(self.guess.m, self.idx_state_control)
-
-        self.p[self.phase_name + '.controls:thrust'] = self.guess.T/self.sc.m0/self.body.g
-        self.p[self.phase_name + '.controls:alpha'] = self.guess.alpha
-
-        self.p.run_model()
-
-        if check_partials:
-            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
-
-
-class TwoDimAscVToffNLP(TwoDimAscVarNLP):
+class TwoDimAscVToffNLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound=False):
@@ -157,7 +164,7 @@ class TwoDimAscVToffNLP(TwoDimAscVarNLP):
         self.phase.add_path_constraint('dist_safe', lower=0.0, ref=self.alt_safe/self.body.R)
         self.phase.add_timeseries_output('r_safe')
 
-        TwoDimAscVarNLP.set_options(self, t_bounds, u_bound=u_bound)
+        TwoDimVarNLP.set_options(self, t_bounds, u_bound=u_bound)
 
 
 class TwoDimDescConstNLP(TwoDimNLP):

@@ -46,11 +46,7 @@ class HohmannTransfer:
         self.dva = self.va_circ - self.va
         self.dvp = self.vp - self.vp_circ
 
-        self.ea = None
-        self.theta = None
-        self.r = None
-        self.u = None
-        self.v = None
+        self.ea = self.theta = self.r = self.u = self.v = None
 
     def compute_states(self, t):
 
@@ -75,34 +71,26 @@ class HohmannTransfer:
 
 class PowConstRadius:
 
-    def __init__(self, gm, r, vp, m0, thrust, isp):
+    def __init__(self, gm, r, v0, vf, m0, thrust, isp):
 
         self.GM = gm
         self.R = r
-        self.vp = vp
+        self.v0 = v0
+        self.vf = vf
         self.m0 = m0
         self.T = thrust
         self.Isp = isp
 
-        self.tof = None
-        self.t = None
-        self.theta = None
-        self.v = None
-        self.m = None
-        self.alpha = None
+        self.tof = self.t = self.theta = self.v = self.m = self.alpha = None
 
     def compute_tof(self):
 
         print('\nComputing time of flight for initial powered trajectory at constant R using Scipy solve_ivp function')
 
         sol = spi.solve_ivp(fun=lambda v, t: self.dt_dv(v, t, self.GM, self.R, self.m0, self.T, self.Isp),
-                            t_span=(0, self.vp), y0=[0], rtol=1e-20, atol=1e-20)
+                            t_span=(self.v0, self.vf), y0=[0], rtol=1e-20, atol=1e-20)
 
         self.tof = sol.y[-1, -1]
-
-        # y, sol = spi.odeint(self.dt_dv, y0=[0], t=[0, self.vp], args=(self.mu, self.R, self.m0, self.F, self.w),
-        #                    full_output=1, rtol=1e-9, atol=1e-12, tfirst=True)
-        # self.tof = y[-1,-1] #sufrace grazing time of flight (s)
 
         print('output:', sol['message'])
 
@@ -116,7 +104,7 @@ class PowConstRadius:
 
         try:
             sol = spi.solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.T, self.Isp),
-                                t_span=(0, self.tof), y0=[0, 0], t_eval=t_eval, rtol=1e-20, atol=1e-20)
+                                t_span=(0, self.tof + 1e-6), y0=[0, self.v0], t_eval=t_eval, rtol=1e-20, atol=1e-20)
 
             print('using Scipy solve_ivp function')
 
@@ -127,8 +115,10 @@ class PowConstRadius:
         except:
             print('time vector not strictly monotonically increasing, using Scipy odeint function')
 
-            y, sol = spi.odeint(self.dx_dt, y0=[0, 0], t=t_eval, args=(self.GM, self.R, self.m0, self.T, self.Isp),
+            y, sol = spi.odeint(self.dx_dt, y0=[0, self.v0], t=t_eval,
+                                args=(self.GM, self.R, self.m0, self.T, self.Isp),
                                 full_output=True, rtol=1e-20, atol=1e-20, tfirst=True)
+
             self.t = np.reshape(t_eval, (nb_nodes, 1))
             self.theta = y[:, 0]
             self.v = y[:, 1]
@@ -140,7 +130,8 @@ class PowConstRadius:
 
         v_dot = self.dv_dt(self.t, self.v, self.GM, self.R, self.m0, self.T, self.Isp)
         num = self.GM/self.R**2 - self.v**2/self.R
-        self.alpha = np.arctan2(num, v_dot)
+        self.alpha = np.arctan2(num, v_dot)  # angles in [-pi, pi]
+        self.alpha[self.alpha < -np.pi/2] = self.alpha[self.alpha < -np.pi/2] + 2*np.pi  # angles in [0, 2pi]
 
         return sol
 
@@ -150,12 +141,14 @@ class PowConstRadius:
 
         return dt_dv
 
-    @staticmethod
-    def dv_dt(t, v, gm, r, m0, thrust, isp):
+    def dv_dt(self, t, v, gm, r, m0, thrust, isp):
 
         dv_dt = ((thrust/(m0 - (thrust/isp/g0)*t))**2 - (gm/r**2 - v**2/r)**2)**0.5
 
-        return dv_dt
+        if self.v0 < self.vf:
+            return dv_dt
+        else:
+            return -dv_dt
 
     def dx_dt(self, t, x, gm, r, m0, thrust, isp):
 
@@ -165,7 +158,7 @@ class PowConstRadius:
         return [x0_dot, x1_dot]
 
 
-class TwoDimAscGuess:
+class TwoDimGuess:
 
     def __init__(self, gm, r, alt, sc):
 
@@ -177,37 +170,41 @@ class TwoDimAscGuess:
         self.ht = HohmannTransfer(gm, (r + alt), r)
         self.vp = self.ht.vp
 
-        self.pcr = PowConstRadius(gm, r, self.vp, sc.m0, sc.T_max, sc.Isp)
-        self.pcr.compute_tof()
+        self.t = self.tof = None
+        self.r = self.theta = self.u = self.v = self.m = None
+        self.T = self.alpha = None
+        self.states = self.controls = None
 
-        self.tof = self.ht.tof + self.pcr.tof
-        self.t = None
-
-        self.r = None
-        self.theta = None
-        self.u = None
-        self.v = None
-        self.m = None
-
-        self.T = None
-        self.alpha = None
-
-        self.states = None
-        self.controls = None
-
-    def compute_trajectory(self, **kwargs):
+    def t_phases(self, t_switch, **kwargs):
 
         if 't' in kwargs:
             self.t = kwargs['t']
         elif 'nb_nodes' in kwargs:
-            nb_nodes = kwargs['nb_nodes']
-            self.t = np.reshape(np.linspace(0.0, self.tof, nb_nodes), (nb_nodes, 1))
+            self.t = np.reshape(np.linspace(0.0, self.tof, kwargs['nb_nodes']), (kwargs['nb_nodes'], 1))
 
-        t_pcr = self.t[self.t <= self.pcr.tof]
-        t_ht = self.t[self.t > self.pcr.tof]
+        t1 = self.t[self.t <= t_switch]
+        t2 = self.t[self.t > t_switch]
 
-        nb_pcr = len(t_pcr)
-        nb_ht = len(t_ht)
+        nb1 = len(t1)
+        nb2 = len(t2)
+
+        return t1, t2, nb1, nb2
+
+
+class TwoDimAscGuess(TwoDimGuess):
+
+    def __init__(self, gm, r, alt, sc):
+
+        TwoDimGuess.__init__(self, gm, r, alt, sc)
+
+        self.pcr = PowConstRadius(gm, r, 0.0, self.vp, sc.m0, sc.T_max, sc.Isp)
+        self.pcr.compute_tof()
+
+        self.tof = self.ht.tof + self.pcr.tof
+
+    def compute_trajectory(self, **kwargs):
+
+        t_pcr, t_ht, nb_pcr, nb_ht = self.t_phases(self.pcr.tof, **kwargs)
 
         self.pcr.compute_states(t_pcr)
         self.ht.compute_states(t_ht - self.pcr.tof)
@@ -218,12 +215,48 @@ class TwoDimAscGuess:
         self.v = np.vstack((self.pcr.v, self.ht.v))
 
         m_ht = self.pcr.m[-1, -1]
-        mf = m_ht*np.exp(-self.ht.dva/self.sc.Isp/g0)
+        m_final = m_ht*np.exp(-self.ht.dva/self.sc.Isp/g0)
 
-        self.m = np.vstack((self.pcr.m, m_ht*np.ones(((nb_ht - 1), 1)), [mf]))
+        self.m = np.vstack((self.pcr.m, m_ht*np.ones(((nb_ht - 1), 1)), [m_final]))
         self.alpha = np.vstack((self.pcr.alpha, np.zeros((nb_ht, 1))))
 
         throttle = np.vstack((np.ones((nb_pcr, 1)), np.zeros(((nb_ht - 1), 1)), [1]))
+
+        self.T = self.sc.T_max*throttle
+
+        self.states = np.hstack((self.r, self.theta, self.u, self.v, self.m))
+        self.controls = np.hstack((self.T, self.alpha))
+
+
+class TwoDimDescGuess(TwoDimGuess):
+
+    def __init__(self, gm, r, alt, sc):
+
+        TwoDimGuess.__init__(self, gm, r, alt, sc)
+
+        self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
+
+        self.pcr = PowConstRadius(gm, r, self.vp, 0.0, self.deorbit_burn.sc.m0, sc.T_max, sc.Isp)
+        self.pcr.compute_tof()
+
+        self.tof = self.ht.tof + self.pcr.tof
+
+    def compute_trajectory(self, **kwargs):
+
+        t_ht, t_pcr, nb_ht, nb_pcr = self.t_phases(self.ht.tof, **kwargs)
+
+        self.ht.compute_states(t_ht)
+        self.pcr.compute_states(t_pcr - self.ht.tof)
+
+        self.r = np.vstack((np.flip(self.ht.r), self.R*np.ones((nb_pcr, 1))))
+        self.theta = np.vstack((self.ht.theta, (self.pcr.theta + self.ht.theta[-1])))
+        self.u = np.vstack((np.flip(-1.0*self.ht.u), np.zeros((nb_pcr, 1))))
+        self.v = np.vstack((np.flip(self.ht.v), self.pcr.v))
+
+        self.m = np.vstack(([self.sc.m0], self.deorbit_burn.sc.m0*np.ones(((nb_ht - 1), 1)), self.pcr.m))
+        self.alpha = np.vstack((np.pi*np.ones((nb_ht, 1)), self.pcr.alpha))
+
+        throttle = np.vstack(([1.], np.zeros(((nb_ht - 1), 1)), np.ones((nb_pcr, 1))))
 
         self.T = self.sc.T_max*throttle
 
@@ -235,14 +268,27 @@ if __name__ == '__main__':
 
     from rpfm.utils.spacecraft import Spacecraft
     from rpfm.utils.primary import Moon
+    from rpfm.plots.solutions import TwoDimSolPlot
+
+    case = 'a'
 
     moon = Moon()
+    a = 100e3
     s = Spacecraft(450., 2.1, g=moon.g)
+    nb = 200
 
-    tr = TwoDimAscGuess(moon.GM, moon.R, 86870, s)
-
-    t_pcr = np.linspace(0.0, tr.pcr.tof, 500)
-    t_ht = np.linspace(0.0, tr.ht.tof, 500) + tr.pcr.tof
-    t_all = np.hstack((t_pcr, t_ht[1:]))
+    if case == 'a':
+        tr = TwoDimAscGuess(moon.GM, moon.R, a, s)
+        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.pcr.tof, nb),
+                                      np.linspace(tr.pcr.tof, tr.ht.tof + tr.pcr.tof, nb)[1:])), (2*nb - 1, 1))
+    elif case == 'd':
+        tr = TwoDimDescGuess(moon.GM, moon.R, a, s)
+        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.ht.tof, nb),
+                                      np.linspace(tr.ht.tof, tr.pcr.tof + tr.ht.tof, nb)[1:])), (2*nb - 1, 1))
+    else:
+        raise ValueError('case must be equal to a or d')
 
     tr.compute_trajectory(t=t_all)
+
+    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls)
+    p.plot()
