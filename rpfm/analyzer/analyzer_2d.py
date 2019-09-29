@@ -6,7 +6,7 @@
 import numpy as np
 
 from rpfm.analyzer.analyzer import Analyzer
-from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
+from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
     TwoDimDescTwoPhasesNLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
@@ -134,9 +134,9 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
         else:
             alpha_bounds = (0.0, 1.5*np.pi)
 
-        self.nlp = TwoDimVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
-                                self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                check_partials=check_partials, u_bound=u_bound, kind=kind)
+        self.nlp = TwoDimAscVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
+                                   self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                   check_partials=check_partials, u_bound=u_bound)
 
     def get_time_series(self, p):
 

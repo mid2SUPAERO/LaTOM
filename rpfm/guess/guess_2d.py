@@ -4,7 +4,7 @@
 """
 
 import numpy as np
-import scipy.integrate as spi
+from scipy.integrate import solve_ivp, odeint
 from scipy.optimize import root
 from copy import deepcopy
 
@@ -87,8 +87,8 @@ class PowConstRadius:
 
         print('\nComputing time of flight for initial powered trajectory at constant R using Scipy solve_ivp function')
 
-        sol = spi.solve_ivp(fun=lambda v, t: self.dt_dv(v, t, self.GM, self.R, self.m0, self.T, self.Isp),
-                            t_span=(self.v0, self.vf), y0=[0], rtol=1e-20, atol=1e-20)
+        sol = solve_ivp(fun=lambda v, t: self.dt_dv(v, t, self.GM, self.R, self.m0, self.T, self.Isp),
+                        t_span=(self.v0, self.vf), y0=[0], rtol=1e-20, atol=1e-20)
 
         self.tof = sol.y[-1, -1]
 
@@ -103,8 +103,8 @@ class PowConstRadius:
         print('\nIntegrating ODEs for initial powered trajectory at constant R...')
 
         try:
-            sol = spi.solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.T, self.Isp),
-                                t_span=(0, self.tof + 1e-6), y0=[0, self.v0], t_eval=t_eval, rtol=1e-20, atol=1e-20)
+            sol = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.T, self.Isp),
+                            t_span=(0, self.tof + 1e-6), y0=[0, self.v0], t_eval=t_eval, rtol=1e-20, atol=1e-20)
 
             print('using Scipy solve_ivp function')
 
@@ -115,9 +115,8 @@ class PowConstRadius:
         except:
             print('time vector not strictly monotonically increasing, using Scipy odeint function')
 
-            y, sol = spi.odeint(self.dx_dt, y0=[0, self.v0], t=t_eval,
-                                args=(self.GM, self.R, self.m0, self.T, self.Isp),
-                                full_output=True, rtol=1e-20, atol=1e-20, tfirst=True)
+            y, sol = odeint(self.dx_dt, y0=[0, self.v0], t=t_eval, args=(self.GM, self.R, self.m0, self.T, self.Isp),
+                            full_output=True, rtol=1e-20, atol=1e-20, tfirst=True)
 
             self.t = np.reshape(t_eval, (nb_nodes, 1))
             self.theta = y[:, 0]
@@ -131,7 +130,7 @@ class PowConstRadius:
         v_dot = self.dv_dt(self.t, self.v, self.GM, self.R, self.m0, self.T, self.Isp)
         num = self.GM/self.R**2 - self.v**2/self.R
         self.alpha = np.arctan2(num, v_dot)  # angles in [-pi, pi]
-        self.alpha[self.alpha < -np.pi/2] = self.alpha[self.alpha < -np.pi/2] + 2*np.pi  # angles in [0, 2pi]
+        self.alpha[self.alpha < -np.pi/2] = self.alpha[self.alpha < -np.pi/2] + 2*np.pi  # angles in [-pi/2, 3/2pi]
 
         return sol
 
@@ -270,25 +269,25 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'a'
+    case = 'ascent'
 
     moon = Moon()
     a = 100e3
     s = Spacecraft(450., 2.1, g=moon.g)
-    nb = 200
+    nb = 10
 
-    if case == 'a':
+    if case == 'ascent':
         tr = TwoDimAscGuess(moon.GM, moon.R, a, s)
         t_all = np.reshape(np.hstack((np.linspace(0.0, tr.pcr.tof, nb),
                                       np.linspace(tr.pcr.tof, tr.ht.tof + tr.pcr.tof, nb)[1:])), (2*nb - 1, 1))
-    elif case == 'd':
+    elif case == 'descent':
         tr = TwoDimDescGuess(moon.GM, moon.R, a, s)
         t_all = np.reshape(np.hstack((np.linspace(0.0, tr.ht.tof, nb),
                                       np.linspace(tr.ht.tof, tr.pcr.tof + tr.ht.tof, nb)[1:])), (2*nb - 1, 1))
     else:
-        raise ValueError('case must be equal to a or d')
+        raise ValueError('case must be equal to ascent or descent')
 
     tr.compute_trajectory(t=t_all)
 
-    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls)
+    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case)
     p.plot()

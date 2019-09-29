@@ -8,6 +8,7 @@ import numpy as np
 from openmdao.api import ExplicitComponent, Group
 from dymos import declare_time, declare_state, declare_parameter
 
+
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
 @declare_state('theta', rate_source='thetadot', units='rad')
@@ -328,7 +329,7 @@ class SafeAlt(ExplicitComponent):
 
         self.options.declare('num_nodes', types=int)
         self.options.declare('R', types=float)
-        self.options.declare('alt_min', types=float)
+        self.options.declare('alt_safe', types=float)
         self.options.declare('slope', types=float)
 
     def setup(self):
@@ -338,8 +339,8 @@ class SafeAlt(ExplicitComponent):
         self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
         self.add_input('theta', val=np.zeros(nn), desc='true anomaly', units='rad')
 
-        self.add_output('r_safe', val=np.zeros(nn), desc='minimum safe radius', units='m')
-        self.add_output('dist_safe', val=np.zeros(nn), desc='distance from minimum safe radius', units='m')
+        self.add_output('r_safe', val=np.zeros(nn), desc='minimum safe radius')
+        self.add_output('dist_safe', val=np.zeros(nn), desc='distance from minimum safe radius')
 
         ar = np.arange(self.options['num_nodes'])
 
@@ -350,13 +351,13 @@ class SafeAlt(ExplicitComponent):
     def compute(self, inputs, outputs):
 
         r_moon = self.options['R']
-        alt_min = self.options['alt_min']
+        alt_safe = self.options['alt_safe']
         slope = self.options['slope']
 
         r = inputs['r']
         theta = inputs['theta']
 
-        r_safe = r_moon + alt_min*r_moon*theta/(r_moon*theta + alt_min/slope)
+        r_safe = r_moon + alt_safe*r_moon*theta/(r_moon*theta + alt_safe/slope)
 
         outputs['r_safe'] = r_safe
         outputs['dist_safe'] = r - r_safe
@@ -364,15 +365,16 @@ class SafeAlt(ExplicitComponent):
     def compute_partials(self, inputs, jacobian):
 
         r_moon = self.options['R']
-        alt_min = self.options['alt_min']
+        alt_safe = self.options['alt_safe']
         slope = self.options['slope']
 
         theta = inputs['theta']
 
-        drsafe_dtheta = alt_min**2*r_moon*slope/(alt_min + slope*r_moon*theta)**2
+        drsafe_dtheta = alt_safe**2*r_moon*slope/(alt_safe + slope*r_moon*theta)**2
 
         jacobian['r_safe', 'theta'] = drsafe_dtheta
         jacobian['dist_safe', 'theta'] = -drsafe_dtheta
+
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
@@ -392,7 +394,7 @@ class ODE2dVToff(Group):
         self.options.declare('GM', types=float)
         self.options.declare('w', types=float)
         self.options.declare('R', types=float)
-        self.options.declare('alt_min', types=float)
+        self.options.declare('alt_safe', types=float)
         self.options.declare('slope', types=float)
 
     def setup(self):
@@ -404,7 +406,7 @@ class ODE2dVToff(Group):
                            promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
 
         self.add_subsystem(name='safe_alt',
-                           subsys=SafeAlt(num_nodes=nn, R=self.options['R'], alt_min=self.options['alt_min'],
+                           subsys=SafeAlt(num_nodes=nn, R=self.options['R'], alt_safe=self.options['alt_safe'],
                                           slope=self.options['slope']),
                            promotes_inputs=['r', 'theta'],
                            promotes_outputs=['r_safe', 'dist_safe'])
