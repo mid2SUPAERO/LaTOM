@@ -11,7 +11,8 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyz
 
 
 # trajectory
-thrust = 's'
+thrust = 'v'
+kind = 'descent'
 moon = Moon()
 alt = 100e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
@@ -49,7 +50,7 @@ if thrust == 'c':
                                 check_partials=check_partials)
 elif thrust == 'v':
     tr = TwoDimAscVarAnalyzer(moon, sc, alt, t_bounds, method, segments, order, solver, u_bound=u_bound,
-                              check_partials=check_partials, kind='ascent')
+                              check_partials=check_partials, kind=kind)
 elif thrust == 's':
     tr = TwoDimAscVToffAnalyzer(moon, sc, alt, alt_safe, slope, t_bounds, method, segments, order, solver,
                                 u_bound=u_bound, check_partials=check_partials)

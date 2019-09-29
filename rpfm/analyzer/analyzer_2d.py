@@ -7,7 +7,7 @@ import numpy as np
 
 from rpfm.analyzer.analyzer import Analyzer
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
-    TwoDimDescTwoPhasesNLP
+    TwoDimDescTwoPhasesNLP, TwoDimDescVarNLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
 from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
@@ -129,14 +129,20 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
         self.kind = kind
+
         if kind == 'ascent':
             alpha_bounds = (-np.pi/2, np.pi/2)
+
+            self.nlp = TwoDimAscVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
+                                       self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                       check_partials=check_partials, u_bound=u_bound)
+
         else:
             alpha_bounds = (0.0, 1.5*np.pi)
 
-        self.nlp = TwoDimAscVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
-                                   self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                   check_partials=check_partials, u_bound=u_bound)
+            self.nlp = TwoDimDescVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
+                                        self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                        check_partials=check_partials)
 
     def get_time_series(self, p):
 

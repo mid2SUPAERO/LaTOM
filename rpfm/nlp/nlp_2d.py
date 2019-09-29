@@ -226,7 +226,7 @@ class TwoDimDescVarNLP(TwoDimVarNLP):
                  rec_file=None, check_partials=False):
 
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                              TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
+                              TwoDimDescGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
                               check_partials=check_partials, u_bound=False)
 
 
