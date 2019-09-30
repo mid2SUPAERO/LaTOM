@@ -12,9 +12,9 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyz
 
 # trajectory
 thrust = 'v'
-kind = 'descent'
+kind = 'ascent'
 moon = Moon()
-alt = 100e3  # final orbit altitude [m]
+alt = 86.87e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
 tof = 500  # guessed time of flight [s]
 t_bounds = None  # time of flight bounds [-]
@@ -29,9 +29,10 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 150
+segments = 200
 order = 3
 solver = 'SNOPT'
+snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8, 'Minor feasibility tolerance': 1e-8}
 
 # additional settings
 u_bound = True  # lower bound on radial velocity
@@ -50,7 +51,7 @@ if thrust == 'c':
                                 check_partials=check_partials)
 elif thrust == 'v':
     tr = TwoDimAscVarAnalyzer(moon, sc, alt, t_bounds, method, segments, order, solver, u_bound=u_bound,
-                              check_partials=check_partials, kind=kind)
+                              check_partials=check_partials, kind=kind, snopt_opts=snopt_opts)
 elif thrust == 's':
     tr = TwoDimAscVToffAnalyzer(moon, sc, alt, alt_safe, slope, t_bounds, method, segments, order, solver,
                                 u_bound=u_bound, check_partials=check_partials)

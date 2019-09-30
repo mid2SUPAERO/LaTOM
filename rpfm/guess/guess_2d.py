@@ -48,7 +48,7 @@ class HohmannTransfer:
 
         self.ea = self.theta = self.r = self.u = self.v = None
 
-    def compute_states(self, t):
+    def compute_states(self, t, kind='ascent'):
 
         nb_nodes = len(t)
         n = (self.GM/self.a**3)**0.5
@@ -62,9 +62,15 @@ class HohmannTransfer:
 
         self.ea = np.reshape(sol.x, (nb_nodes, 1))
         self.theta = 2*np.arctan(((1 + self.e)/(1 - self.e))**0.5*np.tan(self.ea/2))
-        self.r = self.a*(1 - self.e**2)/(1 + self.e*np.cos(self.theta))
-        self.u = self.GM/self.h*self.e*np.sin(self.theta)
-        self.v = self.GM/self.h*(1 + self.e*np.cos(self.theta))
+
+        if kind == 'ascent':
+            self.r = self.a*(1 - self.e**2)/(1 + self.e*np.cos(self.theta))
+            self.u = self.GM/self.h*self.e*np.sin(self.theta)
+            self.v = self.GM/self.h*(1 + self.e*np.cos(self.theta))
+        elif kind == 'descent':
+            self.r = self.a*(1 - self.e**2)/(1 + self.e*np.cos(self.theta + np.pi))
+            self.u = self.GM/self.h*self.e*np.sin(self.theta + np.pi)
+            self.v = self.GM/self.h*(1 + self.e*np.cos(self.theta + np.pi))
 
         return sol
 
@@ -206,7 +212,7 @@ class TwoDimAscGuess(TwoDimGuess):
         t_pcr, t_ht, nb_pcr, nb_ht = self.t_phases(self.pcr.tof, **kwargs)
 
         self.pcr.compute_states(t_pcr)
-        self.ht.compute_states(t_ht - self.pcr.tof)
+        self.ht.compute_states((t_ht - self.pcr.tof), kind='ascent')
 
         self.r = np.vstack((self.R*np.ones((nb_pcr, 1)), self.ht.r))
         self.theta = np.vstack((self.pcr.theta, (self.ht.theta + self.pcr.theta[-1])))
@@ -244,13 +250,13 @@ class TwoDimDescGuess(TwoDimGuess):
 
         t_ht, t_pcr, nb_ht, nb_pcr = self.t_phases(self.ht.tof, **kwargs)
 
-        self.ht.compute_states(t_ht)
+        self.ht.compute_states(t_ht, kind='descent')
         self.pcr.compute_states(t_pcr - self.ht.tof)
 
-        self.r = np.vstack((np.flip(self.ht.r), self.R*np.ones((nb_pcr, 1))))
+        self.r = np.vstack((self.ht.r, self.R*np.ones((nb_pcr, 1))))
         self.theta = np.vstack((self.ht.theta, (self.pcr.theta + self.ht.theta[-1])))
-        self.u = np.vstack((np.flip(-1.0*self.ht.u), np.zeros((nb_pcr, 1))))
-        self.v = np.vstack((np.flip(self.ht.v), self.pcr.v))
+        self.u = np.vstack((self.ht.u, np.zeros((nb_pcr, 1))))
+        self.v = np.vstack(([self.ht.va_circ], self.ht.v[1:], self.pcr.v))
 
         self.m = np.vstack(([self.sc.m0], self.deorbit_burn.sc.m0*np.ones(((nb_ht - 1), 1)), self.pcr.m))
         self.alpha = np.vstack((np.pi*np.ones((nb_ht, 1)), self.pcr.alpha))
@@ -274,7 +280,7 @@ if __name__ == '__main__':
     moon = Moon()
     a = 100e3
     s = Spacecraft(450., 2.1, g=moon.g)
-    nb = 10
+    nb = 100
 
     if case == 'ascent':
         tr = TwoDimAscGuess(moon.GM, moon.R, a, s)

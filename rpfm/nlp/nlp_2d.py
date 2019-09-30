@@ -38,7 +38,7 @@ class TwoDimNLP(SinglePhaseNLP):
         else:
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, ref=self.v_circ/self.body.vc)
 
-        self.phase.set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
+        self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0, ref=self.v_circ/self.body.vc)
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
 
@@ -100,28 +100,6 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
 
         self.set_initial_guess(bcs, check_partials=check_partials)
 
-    """
-    def set_initial_guess(self, theta, check_partials=False):
-
-        self.set_time_guess(self.tof)
-
-        self.p[self.phase_name + '.states:r'] = self.phase.interpolate(ys=(1.0, self.r_circ/self.body.R),
-                                                                       nodes='state_input')
-        self.p[self.phase_name + '.states:theta'] = self.phase.interpolate(ys=(0.0, theta), nodes='state_input')
-        self.p[self.phase_name + '.states:u'] = self.phase.interpolate(ys=(0.0, 0.0), nodes='state_input')
-        self.p[self.phase_name + '.states:v'] = self.phase.interpolate(ys=(0.0, self.v_circ/self.body.vc),
-                                                                       nodes='state_input')
-        self.p[self.phase_name + '.states:m'] = self.phase.interpolate(ys=(self.sc.m0, self.sc.m_dry),
-                                                                       nodes='state_input')
-
-        self.p[self.phase_name + '.controls:alpha'] = self.phase.interpolate(ys=(0.0, 0.0), nodes='control_input')
-
-        self.p.run_model()
-
-        if check_partials:
-            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
-    """
-
 
 class TwoDimDescConstNLP(TwoDimConstNLP):
 
@@ -137,28 +115,6 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
                         [self.sc.m0, self.sc.m_dry], [np.pi, np.pi/2]])
 
         self.set_initial_guess(bcs, check_partials=check_partials)
-
-    """
-    def set_initial_guess(self, theta, check_partials=False):
-
-        self.set_time_guess(self.tof)
-
-        self.p[self.phase_name + '.states:r'] = self.phase.interpolate(ys=(self.r_circ/self.body.R, 1.0),
-                                                                       nodes='state_input')
-        self.p[self.phase_name + '.states:theta'] = self.phase.interpolate(ys=(0.0, theta), nodes='state_input')
-        self.p[self.phase_name + '.states:u'] = self.phase.interpolate(ys=(0.0, 0.0), nodes='state_input')
-        self.p[self.phase_name + '.states:v'] = self.phase.interpolate(ys=(self.vp/self.body.vc, 0.0),
-                                                                       nodes='state_input')
-        self.p[self.phase_name + '.states:m'] = self.phase.interpolate(ys=(self.sc.m0, self.sc.m_dry),
-                                                                       nodes='state_input')
-
-        self.p[self.phase_name + '.controls:alpha'] = self.phase.interpolate(ys=(np.pi, np.pi/2), nodes='control_input')
-
-        self.p.run_model()
-
-        if check_partials:
-            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
-    """
 
 
 class TwoDimVarNLP(TwoDimNLP):
@@ -218,6 +174,12 @@ class TwoDimAscVarNLP(TwoDimVarNLP):
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                               TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
                               check_partials=check_partials, u_bound=u_bound)
+
+    def set_options(self, theta, t_bounds, u_bound=False):
+
+        TwoDimVarNLP.set_options(self, theta, t_bounds, u_bound=u_bound)
+
+        self.phase.add_boundary_constraint('v', loc='final', equals=self.guess.ht.va_circ/self.body.vc)
 
 
 class TwoDimDescVarNLP(TwoDimVarNLP):
