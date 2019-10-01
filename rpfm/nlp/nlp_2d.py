@@ -38,7 +38,7 @@ class TwoDimNLP(SinglePhaseNLP):
         else:
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, ref=self.v_circ/self.body.vc)
 
-        self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0, ref=self.v_circ/self.body.vc)
+        self.phase.set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
 
@@ -142,7 +142,7 @@ class TwoDimVarNLP(TwoDimNLP):
         self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False, rate_continuity=False,
                                rate2_continuity=False, lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
 
-        self.set_time_options(self.guess.tof, t_bounds)
+        self.set_time_options(self.guess.pow2.tf, t_bounds)
         self.set_objective()
 
     def set_initial_guess(self, check_partials=False):
@@ -151,14 +151,15 @@ class TwoDimVarNLP(TwoDimNLP):
 
         self.guess.compute_trajectory(t=self.t_control*self.body.tc)
 
-        self.p[self.phase_name + '.states:r'] = np.take(self.guess.r/self.body.R, self.idx_state_control)
-        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.theta, self.idx_state_control)
-        self.p[self.phase_name + '.states:u'] = np.take(self.guess.u/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:v'] = np.take(self.guess.v/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:m'] = np.take(self.guess.m, self.idx_state_control)
+        self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)
+        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.idx_state_control)
+        self.p[self.phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, self.idx_state_control)
+        self.p[self.phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, self.idx_state_control)
+        self.p[self.phase_name + '.states:m'] = np.take(self.guess.states[:, 4], self.idx_state_control)
 
-        self.p[self.phase_name + '.controls:thrust'] = self.guess.T/self.sc.m0/self.body.g
-        self.p[self.phase_name + '.controls:alpha'] = self.guess.alpha
+        self.p[self.phase_name + '.controls:thrust'] =\
+            np.reshape(self.guess.controls[:, 0]/self.sc.m0/self.body.g, (len(self.t_control), 1))
+        self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
 
         self.p.run_model()
 
@@ -175,17 +176,13 @@ class TwoDimAscVarNLP(TwoDimVarNLP):
                               TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
                               check_partials=check_partials, u_bound=u_bound)
 
-    def set_options(self, theta, t_bounds, u_bound=False):
-
-        TwoDimVarNLP.set_options(self, theta, t_bounds, u_bound=u_bound)
-
-        self.phase.add_boundary_constraint('v', loc='final', equals=self.guess.ht.va_circ/self.body.vc)
-
 
 class TwoDimDescVarNLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
                  rec_file=None, check_partials=False):
+
+        print(body.R, alt)
 
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                               TwoDimDescGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
