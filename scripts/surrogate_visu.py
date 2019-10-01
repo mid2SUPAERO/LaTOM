@@ -9,8 +9,8 @@ from rpfm.utils.pickle_utils import load
 from rpfm.plots.response_surfaces import RespSurf
 
 path = '/home/alberto/Nextcloud/HOmeBOX/Documents/surrogate/'
-
-fid = path + 'sm_var1.pkl'
+"""
+fid = path + 'sm_cost1.pkl'
 sm = load(fid)
 print(len(sm.isp))
 
@@ -18,7 +18,7 @@ train = True
 nb_eval = 2500
 
 if train:
-    sm.train('QP')  # train_method must be one between IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
+    sm.train('LS')  # train_method must be one between IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
     sm.evaluate(nb_eval=nb_eval)
 
 sm.plot()
@@ -54,4 +54,4 @@ rs_ese = RespSurf(sm_ese.isp, sm_ese.twr, err_ese_m, err_ese_tof)
 
 rs_m.plot()
 rs_ese.plot()
-"""
+

@@ -65,6 +65,22 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
 
         return tof, t, states, alpha
 
+    def get_time_series_const(self, p):
+
+        tof, t, states, alpha = self.get_states_alpha_time_series(p)
+        thrust = self.sc.T_max*np.ones((len(alpha), 1))
+        controls = np.hstack((thrust, alpha))
+
+        return tof, t, states, controls
+
+    def get_time_series_var(self, p):
+
+        tof, t, states, alpha = self.get_states_alpha_time_series(p)
+        thrust = p.get_val(self.nlp.phase_name + '.timeseries.controls:thrust') * self.body.g * self.sc.m0
+        controls = np.hstack((thrust, alpha))
+
+        return tof, t, states, controls
+
     def __str__(self):
 
         lines = ['{:<25s}{:>20.4f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1, -1]/self.sc.m0), ''),
@@ -108,9 +124,7 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 
     def get_time_series(self, p):
 
-        tof, t, states, alpha = self.get_states_alpha_time_series(p)
-        thrust = self.sc.T_max*np.ones((len(t), 1))
-        controls = np.hstack((thrust, alpha))
+        tof, t, states, controls = self.get_time_series_const(p)
 
         return tof, t, states, controls
 
@@ -124,38 +138,23 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 
     def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
-                 check_partials=False, u_bound=False, kind='ascent'):
+                 check_partials=False, u_bound=False):
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
-        self.kind = kind
-
-        if kind == 'ascent':
-            alpha_bounds = (-np.pi/2, np.pi/2)
-
-            self.nlp = TwoDimAscVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
-                                       self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                       check_partials=check_partials, u_bound=u_bound)
-
-        else:
-            alpha_bounds = (0.0, 1.5*np.pi)
-
-            self.nlp = TwoDimDescVarNLP(body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver,
-                                        self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                        check_partials=check_partials)
+        self.nlp = TwoDimAscVarNLP(body, sc, alt, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order, solver,
+                                   self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                   check_partials=check_partials, u_bound=u_bound)
 
     def get_time_series(self, p):
 
-        tof, t, states, alpha = self.get_states_alpha_time_series(p)
-        thrust = p.get_val(self.nlp.phase_name + '.timeseries.controls:thrust')*self.body.g*self.sc.m0
-        controls = np.hstack((thrust, alpha))
+        tof, t, states, controls = self.get_time_series_var(p)
 
         return tof, t, states, controls
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 kind=self.kind)
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp)
         sol_plot.plot()
 
 
@@ -198,12 +197,30 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
         sol_plot.plot()
 
 
-class TwoDimDescConstAnalyzer(TwoDimSinglePhaseAnalyzer):
+class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
+
+    def __init__(self, body, sc, alt):
+
+        TwoDimSinglePhaseAnalyzer.__init__(self, body, sc)
+
+        self.alt = alt
+
+    def __str__(self):
+        lines = ['\n{:^50s}'.format('2D Descent Trajectory:'),
+                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
+                 TwoDimSinglePhaseAnalyzer.__str__(self)]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
 
     def __init__(self, body, sc, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False):
 
-        TwoDimSinglePhaseAnalyzer.__init__(self, body, sc)
+        TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
         self.alt = alt
         self.alt_p = alt_p
@@ -217,9 +234,7 @@ class TwoDimDescConstAnalyzer(TwoDimSinglePhaseAnalyzer):
 
     def get_time_series(self, p):
 
-        tof, t, states, alpha = self.get_states_alpha_time_series(p)
-        thrust = self.sc.T_max*np.ones((len(t), 1))
-        controls = np.hstack((thrust, alpha))
+        tof, t, states, controls = self.get_time_series_const(p)
 
         return tof, t, states, controls
 
@@ -235,9 +250,69 @@ class TwoDimDescConstAnalyzer(TwoDimSinglePhaseAnalyzer):
         return s
 
     def plot(self):
-
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
                                  threshold=None, kind='descent')
+        sol_plot.plot()
+
+
+class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
+
+    def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
+                 check_partials=False):
+
+        TwoDimDescAnalyzer.__init__(self, body, sc, alt)
+
+        self.nlp = TwoDimDescVarNLP(body, sc, alt, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg, order, solver,
+                                    self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                    check_partials=check_partials)
+
+    def get_time_series(self, p):
+
+        tof, t, states, controls = self.get_time_series_var(p)
+
+        return tof, t, states, controls
+
+    def plot(self):
+
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 kind='descent')
+        sol_plot.plot()
+
+
+class TwoDimDescVToffAnalyzer(TwoDimDescVarAnalyzer):
+
+    def __init__(self, body, sc, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
+                 rec_file=None, check_partials=False):
+
+        TwoDimDescAnalyzer.__init__(self, body, sc, alt)
+
+        self.nlp = TwoDimAscVToffNLP(body, sc, alt, alt_safe, slope, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg,
+                                     order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                     check_partials=check_partials)
+
+        self.alt_safe = alt_safe
+        self.slope = slope
+        self.r_safe = None
+
+    def get_solutions(self, explicit=True):
+
+        TwoDimAnalyzer.get_solutions(self, explicit=explicit)
+        self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe') * self.body.R
+
+    def __str__(self):
+        lines = ['\n{:^50s}'.format('2D Descent Trajectory with Safe Altitude:'),
+                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
+                 '{:<25s}{:>20.4f}{:>5s}'.format('Safe altitude:', self.alt_safe / 1e3, 'km'),
+                 '{:<25s}{:>20.4f}{:>5s}'.format('Slope:', self.slope, ''),
+                 TwoDimSinglePhaseAnalyzer.__str__(self)]
+
+        s = '\n'.join(lines)
+
+        return s
+
+    def plot(self):
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 r_safe=self.r_safe, kind='descent')
         sol_plot.plot()
 
 
