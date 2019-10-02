@@ -69,5 +69,5 @@ class TwoDimReader(Reader):
             threshold = 1e-6
 
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 self.controls_exp, self.r_safe, threshold, self.kind[0])
+                                 self.r_safe, threshold, self.kind[0])
         sol_plot.plot()

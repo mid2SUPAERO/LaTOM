@@ -62,9 +62,9 @@ class HohmannTransfer:
 
         print("\nSolving Kepler's equation using Scipy root function")
 
-        sol = root(KepOrb.kepler_eqn, ea0, args=(self.e, self.n, t, tp), tol=1e-20)
+        sol = root(KepOrb.kepler_eqn, ea0, args=(self.e, self.n, t, tp), tol=1e-15)
 
-        print("output:", sol['message'])
+        print("output:", sol.message)
 
         ea = np.reshape(sol.x, (nb_nodes, 1))
         theta = 2*np.arctan(((1 + self.e)/(1 - self.e))**0.5*np.tan(ea/2))
@@ -118,7 +118,7 @@ class PowConstRadius:
         self.tf = sol.y[-1, -1]
         self.mf = self.compute_mass(self.tf)
 
-        print('output:', sol['message'])
+        print('output:', sol.message)
 
         return sol
 
@@ -139,7 +139,7 @@ class PowConstRadius:
             self.theta = np.reshape(sol.y[0], (nb_nodes, 1))
             self.v = np.reshape(sol.y[1], (nb_nodes, 1))
 
-        except:
+        except ValueError:
             print('time vector not strictly monotonically increasing, using Scipy odeint function')
 
             y, sol = odeint(self.dx_dt, y0=[self.theta0, self.v0], t=t_eval,
@@ -202,7 +202,7 @@ class TwoDimGuess:
         self.pow1 = self.pow2 = self.ht = None
         self.t = self.states = self.controls = None
 
-    def compute_trajectory(self, **kwargs):
+    def compute_trajectory(self, fix_final=False, **kwargs):
 
         if 't' in kwargs:
             self.t = kwargs['t']
@@ -232,6 +232,9 @@ class TwoDimGuess:
 
         self.states = np.vstack((self.pow1.states, states_ht, self.pow2.states))
         self.controls = np.vstack((self.pow1.controls, controls_ht, self.pow2.controls))
+
+        if fix_final:
+            self.states[:, 1] = self.states[:, 1] - self.states[-1, 1]
 
 
 class TwoDimAscGuess(TwoDimGuess):
@@ -292,7 +295,7 @@ if __name__ == '__main__':
 
     t_all = np.reshape(np.hstack((t1, t2[1:-1], t3)), (np.sum(nb), 1))
 
-    tr.compute_trajectory(t=t_all)
+    tr.compute_trajectory(t=t_all, fix_final=True)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case)
     p.plot()
