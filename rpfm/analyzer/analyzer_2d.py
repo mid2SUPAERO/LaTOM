@@ -74,8 +74,8 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
 
     def __str__(self):
 
-        lines = ['{:<25s}{:>20.4f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1, -1] / self.sc.m0), ''),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Time of flight:', self.tof, 's'),
+        lines = ['{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1, -1] / self.sc.m0), ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's'),
                  TwoDimAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -88,7 +88,7 @@ class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
     def __str__(self):
 
         lines = ['\n{:^50s}'.format('2D Ascent Trajectory:'),
-                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Final orbit altitude:', self.alt / 1e3, 'km'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Final orbit altitude:', self.alt / 1e3, 'km'),
                  TwoDimSinglePhaseAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -99,7 +99,7 @@ class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
 class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 
     def __init__(self, body, sc, alt, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
-                 rec_file=None, check_partials=False, u_bound=False):
+                 rec_file=None, check_partials=False, u_bound='lower'):
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -118,7 +118,7 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 
     def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
-                 check_partials=False, u_bound=False):
+                 check_partials=False, u_bound='lower'):
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -135,7 +135,7 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
     def __init__(self, body, sc, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
-                 rec_file=None, check_partials=False, u_bound=False):
+                 rec_file=None, check_partials=False, u_bound='lower'):
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -155,9 +155,9 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
     def __str__(self):
         lines = ['\n{:^50s}'.format('2D Ascent Trajectory with Safe Altitude:'),
-                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Final orbit altitude:', self.alt / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Safe altitude:', self.alt_safe / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Slope:', self.slope, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Final orbit altitude:', self.alt / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Safe altitude:', self.alt_safe / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Slope:', self.slope, ''),
                  TwoDimSinglePhaseAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -176,7 +176,7 @@ class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
     def __str__(self):
 
         lines = ['\n{:^50s}'.format('2D Descent Trajectory:'),
-                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
                  TwoDimSinglePhaseAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -187,25 +187,25 @@ class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
 class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
 
     def __init__(self, body, sc, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
-                 rec_file=None, check_partials=False):
+                 rec_file=None, check_partials=False, u_bound='upper'):
 
         TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
         self.alt_p = alt_p
 
-        self.ht = HohmannTransfer(body.GM, (body.R + alt_p), (body.R + alt))
+        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p), kind='descent')
         self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
 
         self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.vp, theta, (0.0, np.pi), tof,
                                       t_bounds, method, nb_seg, order, solver, self.phase_name, snopt_opts=snopt_opts,
-                                      rec_file=rec_file, check_partials=check_partials)
+                                      rec_file=rec_file, check_partials=check_partials, u_bound=u_bound)
 
     def __str__(self):
 
         lines = ['\n{:^50s}'.format('2D Descent Trajectory at constant thrust:'),
-                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Parking orbit altitude:', self.alt / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Periapsis altitude:', self.alt_p / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Deorbit burn fraction:', self.deorbit_burn.dm / self.sc.m0, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Parking orbit altitude:', self.alt / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Periapsis altitude:', self.alt_p / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Deorbit burn fraction:', self.deorbit_burn.dm / self.sc.m0, ''),
                  TwoDimSinglePhaseAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -222,13 +222,13 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
 class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
 
     def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
-                 check_partials=False):
+                 check_partials=False, u_bound='upper'):
 
         TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
         self.nlp = TwoDimDescVarNLP(body, sc, alt, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg, order, solver,
                                     self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                    check_partials=check_partials)
+                                    check_partials=check_partials, u_bound=u_bound)
 
     def plot(self):
 
@@ -240,13 +240,13 @@ class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
 class TwoDimDescVToffAnalyzer(TwoDimDescVarAnalyzer):
 
     def __init__(self, body, sc, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
-                 rec_file=None, check_partials=False):
+                 rec_file=None, check_partials=False, u_bound='upper'):
 
         TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
         self.nlp = TwoDimDescVToffNLP(body, sc, alt, alt_safe, slope, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg,
                                       order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                      check_partials=check_partials)
+                                      check_partials=check_partials, u_bound=u_bound)
 
         self.alt_safe = alt_safe
         self.slope = slope
@@ -269,9 +269,9 @@ class TwoDimDescVToffAnalyzer(TwoDimDescVarAnalyzer):
     def __str__(self):
 
         lines = ['\n{:^50s}'.format('2D Descent Trajectory with Safe Altitude:'),
-                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Safe altitude:', self.alt_safe / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Slope:', self.slope, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Safe altitude:', self.alt_safe / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Slope:', self.slope, ''),
                  TwoDimSinglePhaseAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -298,7 +298,7 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
 
         self.phase_name = ('free', 'vertical')
 
-        self.ht = HohmannTransfer(body.GM, (body.R + alt_p), (body.R + alt))
+        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p), kind='descent')
         self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
 
         self.nlp = TwoDimDescTwoPhasesNLP(body, self.deorbit_burn.sc, alt_p, alt_switch, self.ht.vp, theta,
@@ -348,13 +348,13 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
     def __str__(self):
 
         lines = ['\n{:^50s}'.format('2D Descent Trajectory with vertical touch-down:'),
-                 '\n{:<25s}{:>20.4f}{:>5s}'.format('Parking orbit altitude:', self.alt / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Periapsis altitude:', self.alt_p / 1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Switch altitude:', (self.states[0][-1, 0] - self.body.R)/1e3, 'km'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Deorbit burn fraction:', self.deorbit_burn.dm / self.sc.m0, ''),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1][-1, -1]/self.sc.m0), ''),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Time of flight:', sum(self.tof), 's'),
-                 '{:<25s}{:>20.4f}{:>5s}'.format('Switch time:', self.tof[0], 's'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Parking orbit altitude:', self.alt / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Periapsis altitude:', self.alt_p / 1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Switch altitude:', (self.states[0][-1, 0] - self.body.R)/1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Deorbit burn fraction:', self.deorbit_burn.dm / self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1][-1, -1]/self.sc.m0), ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', sum(self.tof), 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Switch time:', self.tof[0], 's'),
                  TwoDimAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)

@@ -23,21 +23,26 @@ class TwoDimNLP(SinglePhaseNLP):
         self.r_circ = body.R + self.alt
         self.v_circ = (body.GM/self.r_circ)**0.5
 
-    def set_states_alpha_options(self, theta, u_bound=False):
+    def set_states_alpha_options(self, theta, u_bound=None):
 
         self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0, ref0=1.0,
                                      ref=self.r_circ/self.body.R)
 
-        if theta > 0.0:
+        if theta > 0.0:  # all cases except descent with variable thrust and constraint on minimum safe altitude
             self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=theta)
-        else:
+        else:  # only descent with variable thrust and constraint on minimum safe altitude
             self.phase.set_state_options('theta', fix_initial=False, fix_final=True, upper=0.0, adder=-theta,
                                          scaler=-1.0/theta)
 
-        if u_bound:
+        if u_bound == 'lower':  # positive radial velocity (ascent)
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
-        else:
+        elif u_bound == 'upper':  # negative radial velocity (descent)
+            self.phase.set_state_options('u', fix_initial=True, fix_final=True, upper=0.0,
+                                         adder=self.v_circ/self.body.vc, scaler=self.body.vc/self.v_circ)
+        elif u_bound is None:  # no path constraints on radial velocity
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, ref=self.v_circ/self.body.vc)
+        else:
+            raise ValueError('u_bound must be either lower, upper or None')
 
         self.phase.set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
@@ -53,7 +58,7 @@ class TwoDimNLP(SinglePhaseNLP):
 class TwoDimConstNLP(TwoDimNLP):
 
     def __init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, u_bound=False):
+                 snopt_opts=None, rec_file=None, u_bound=None):
 
         ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc}
 
@@ -63,7 +68,7 @@ class TwoDimConstNLP(TwoDimNLP):
         self.set_options(theta, tof, t_bounds, u_bound=u_bound)
         self.setup()
 
-    def set_options(self, theta, tof, t_bounds, u_bound=False):
+    def set_options(self, theta, tof, t_bounds, u_bound=None):
 
         self.set_states_alpha_options(theta, u_bound=u_bound)
         self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
@@ -91,7 +96,7 @@ class TwoDimConstNLP(TwoDimNLP):
 class TwoDimAscConstNLP(TwoDimConstNLP):
 
     def __init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
-                 ph_name, snopt_opts=None, rec_file=None, check_partials=False, u_bound=False):
+                 ph_name, snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower'):
 
         TwoDimConstNLP.__init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                                 ph_name, snopt_opts=snopt_opts, rec_file=rec_file, u_bound=u_bound)
@@ -105,10 +110,10 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
 class TwoDimDescConstNLP(TwoDimConstNLP):
 
     def __init__(self, body, sc, alt, vp, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
-                 ph_name, snopt_opts=None, rec_file=None, check_partials=False):
+                 ph_name, snopt_opts=None, rec_file=None, check_partials=False, u_bound='upper'):
 
         TwoDimConstNLP.__init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
-                                ph_name, snopt_opts=snopt_opts, rec_file=rec_file, u_bound=False)
+                                ph_name, snopt_opts=snopt_opts, rec_file=rec_file, u_bound=u_bound)
 
         self.vp = vp
 
@@ -121,7 +126,7 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
 class TwoDimVarNLP(TwoDimNLP):
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, guess,
-                 snopt_opts=None, rec_file=None, check_partials=False, u_bound=False, fix_final=False):
+                 snopt_opts=None, rec_file=None, check_partials=False, u_bound=None, fix_final=False):
 
         ode_kwargs = {'GM': 1.0, 'w': sc.w / body.vc}
 
@@ -134,7 +139,7 @@ class TwoDimVarNLP(TwoDimNLP):
         self.setup()
         self.set_initial_guess(check_partials=check_partials, fix_final=fix_final)
 
-    def set_options(self, theta, t_bounds, u_bound=False):
+    def set_options(self, theta, t_bounds, u_bound=None):
 
         self.set_states_alpha_options(theta, u_bound=u_bound)
 
@@ -171,7 +176,7 @@ class TwoDimVarNLP(TwoDimNLP):
 class TwoDimAscVarNLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
-                 rec_file=None, check_partials=False, u_bound=False, fix_final=False):
+                 rec_file=None, check_partials=False, u_bound='lower', fix_final=False):
 
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                               TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
@@ -181,17 +186,17 @@ class TwoDimAscVarNLP(TwoDimVarNLP):
 class TwoDimDescVarNLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
-                 rec_file=None, check_partials=False, fix_final=False):
+                 rec_file=None, check_partials=False, u_bound='upper', fix_final=False):
 
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                               TwoDimDescGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
-                              check_partials=check_partials, u_bound=False, fix_final=fix_final)
+                              check_partials=check_partials, u_bound=u_bound, fix_final=fix_final)
 
 
 class TwoDimVToffNLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 guess, snopt_opts=None, rec_file=None, check_partials=False, u_bound=False, fix_final=False):
+                 guess, snopt_opts=None, rec_file=None, check_partials=False, u_bound=None, fix_final=False):
 
         ode_kwargs = {'GM': 1.0, 'w': sc.w/body.vc, 'R': 1.0, 'alt_safe': alt_safe/body.R, 'slope': slope}
 
@@ -207,7 +212,7 @@ class TwoDimVToffNLP(TwoDimVarNLP):
         self.setup()
         self.set_initial_guess(check_partials=check_partials, fix_final=fix_final)
 
-    def set_options(self, theta, t_bounds, u_bound=False):
+    def set_options(self, theta, t_bounds, u_bound=None):
 
         self.phase.add_path_constraint('dist_safe', lower=0.0, ref=self.alt_safe/self.body.R)
         self.phase.add_timeseries_output('r_safe')
@@ -218,7 +223,7 @@ class TwoDimVToffNLP(TwoDimVarNLP):
 class TwoDimAscVToffNLP(TwoDimVToffNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, check_partials=False, u_bound=False, fix_final=False):
+                 snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower', fix_final=False):
 
         TwoDimVToffNLP.__init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order,
                                 solver, ph_name, TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts,
@@ -228,11 +233,11 @@ class TwoDimAscVToffNLP(TwoDimVToffNLP):
 class TwoDimDescVToffNLP(TwoDimVToffNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, check_partials=False, fix_final=True):
+                 snopt_opts=None, rec_file=None, check_partials=False, u_bound='upper', fix_final=True):
 
         TwoDimVToffNLP.__init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order,
                                 solver, ph_name, TwoDimDescGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts,
-                                rec_file=rec_file, check_partials=check_partials, u_bound=False, fix_final=fix_final)
+                                rec_file=rec_file, check_partials=check_partials, u_bound=u_bound, fix_final=fix_final)
 
 
 class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):

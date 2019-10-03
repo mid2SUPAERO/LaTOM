@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyz
 
 
 # trajectory
-thrust = 'c'
+thrust = 's'
 moon = Moon()
 alt = 86.87e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
@@ -28,14 +28,14 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 20
+segments = 200
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
               'Minor feasibility tolerance': 1e-8}
 
 # additional settings
-u_bound = True  # lower bound on radial velocity
+u_bound = 'lower'  # lower bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
 exp_sim = True  # perform explicit simulation

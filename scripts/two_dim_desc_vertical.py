@@ -14,7 +14,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimDescTwoPhasesAnalyzer
 kind = 'v'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
-alt_p = 100e3  # periselene altitude [m]
+alt_p = 15e3  # periselene altitude [m]
 alt_switch = 4e3  # switch altitude [m]
 theta = np.pi  # guessed spawn angle [rad]
 tof = (1000, 100)  # guessed time of flight [s]
@@ -22,7 +22,7 @@ t_bounds = None  # time of flight bounds [-]
 fix = 'alt'
 
 # spacecraft
-isp = 450.  # specific impulse [s]
+isp = 310.  # specific impulse [s]
 twr = 0.9  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
