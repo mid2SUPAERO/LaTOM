@@ -196,7 +196,7 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
         self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p), kind='descent')
         self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
 
-        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.vp, theta, (0.0, np.pi), tof,
+        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.vp, theta, (0.0, 1.5*np.pi), tof,
                                       t_bounds, method, nb_seg, order, solver, self.phase_name, snopt_opts=snopt_opts,
                                       rec_file=rec_file, check_partials=check_partials, u_bound=u_bound)
 
