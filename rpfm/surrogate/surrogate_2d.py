@@ -11,7 +11,7 @@ from smt.surrogate_models import IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
 
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescTwoPhasesNLP,\
-    TwoDimDescConstNLP, TwoDimDescVarNLP, TwoDimDescVToffNLP
+    TwoDimDescConstNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
 from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
 from rpfm.plots.response_surfaces import RespSurf
 
@@ -275,7 +275,7 @@ class TwoDimDescVarSurrogate(SurrogateModel):
             self.solve(nlp, i)
 
 
-class TwoDimDescVToffSurrogate(SurrogateModel):
+class TwoDimDescVLandSurrogate(SurrogateModel):
 
     def __init__(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
                  nb_samp, samp_method='lhs', criterion='m', snopt_opts=None, u_bound='upper'):
@@ -291,7 +291,7 @@ class TwoDimDescVToffSurrogate(SurrogateModel):
         for i in range(self.nb_samp):
 
             sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            nlp = TwoDimDescVToffNLP(self.body, sc, self.alt, self.alt_safe, self.slope, (0.0, 3/2*np.pi),
+            nlp = TwoDimDescVLandNLP(self.body, sc, self.alt, self.alt_safe, self.slope, (0.0, 3/2*np.pi),
                                      self.t_bounds, self.method, self.nb_seg, self.order, self.solver, 'powered',
                                      snopt_opts=self.snopt_opts, u_bound=self.u_bound)
 

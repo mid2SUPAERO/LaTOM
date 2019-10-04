@@ -7,7 +7,7 @@ import numpy as np
 
 from rpfm.utils.primary import Moon
 from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnalyzer, TwoDimDescVToffAnalyzer
+from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnalyzer, TwoDimDescVLandAnalyzer
 
 
 # trajectory
@@ -54,7 +54,7 @@ elif kind == 'v':
     tr = TwoDimDescVarAnalyzer(moon, sc, alt, t_bounds, method, segments, order, solver, check_partials=check_partials,
                                snopt_opts=snopt_opts, u_bound=u_bound)
 elif kind == 's':
-    tr = TwoDimDescVToffAnalyzer(moon, sc, alt, alt_safe, slope, t_bounds, method, segments, order, solver,
+    tr = TwoDimDescVLandAnalyzer(moon, sc, alt, alt_safe, slope, t_bounds, method, segments, order, solver,
                                  check_partials=check_partials, snopt_opts=snopt_opts, u_bound=u_bound)
 else:
     raise ValueError('kind not recognized')

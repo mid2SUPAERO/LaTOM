@@ -7,7 +7,7 @@ import numpy as np
 
 from rpfm.analyzer.analyzer import Analyzer
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP, \
-    TwoDimDescTwoPhasesNLP, TwoDimDescVarNLP, TwoDimDescVToffNLP
+    TwoDimDescTwoPhasesNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
 from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
@@ -237,14 +237,14 @@ class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
         sol_plot.plot()
 
 
-class TwoDimDescVToffAnalyzer(TwoDimDescVarAnalyzer):
+class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
 
     def __init__(self, body, sc, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='upper'):
 
         TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
-        self.nlp = TwoDimDescVToffNLP(body, sc, alt, alt_safe, slope, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg,
+        self.nlp = TwoDimDescVLandNLP(body, sc, alt, alt_safe, slope, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg,
                                       order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                       check_partials=check_partials, u_bound=u_bound)
 

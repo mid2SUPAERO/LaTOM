@@ -230,7 +230,7 @@ class TwoDimAscVToffNLP(TwoDimVToffNLP):
                                 rec_file=rec_file, check_partials=check_partials, u_bound=u_bound, fix_final=fix_final)
 
 
-class TwoDimDescVToffNLP(TwoDimVToffNLP):
+class TwoDimDescVLandNLP(TwoDimVToffNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound='upper', fix_final=True):
