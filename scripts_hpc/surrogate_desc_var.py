@@ -89,8 +89,5 @@ sm.train(train_method)
 sm.evaluate(nb_eval=nb_eval)
 sm_full.evaluate()
 
-sm.sampling()
-sm_full.sampling()
-
 save(sm, 'desc_var_lhs.pkl')
 save(sm_full, 'desc_var_full.pkl')
