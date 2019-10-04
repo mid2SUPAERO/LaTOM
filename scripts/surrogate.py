@@ -11,7 +11,7 @@ from rpfm.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSur
 from rpfm.utils.primary import Moon
 
 # trajectory
-kind = 'dc'
+kind = 'dv'
 moon = Moon()
 alt = 100e3  # final orbit altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
@@ -30,15 +30,15 @@ method = 'gauss-lobatto'
 segments_asc = 20
 segments_desc_2p = (10, 10)
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 
 # sampling scheme
 samp_method = 'lhs'
-nb_samp = 20
+nb_samp = 10
 
 # surrogate model (accepted methods are IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC)
-criterion = 'ese'
-train_method = 'KRG'
+criterion = 'm'
+train_method = 'QP'
 nb_eval = 400
 
 if kind == 'ac':
