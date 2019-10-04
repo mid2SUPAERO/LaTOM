@@ -249,7 +249,7 @@ class TwoDimDescConstSurrogate(SurrogateModel):
 
             sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
             deorbit_burn = DeorbitBurn(sc, self.ht.dva)
-            nlp = TwoDimDescConstNLP(self.body, deorbit_burn.sc, self.alt, self.ht.vp, self.theta, (0, 3/2*np.pi),
+            nlp = TwoDimDescConstNLP(self.body, deorbit_burn.sc, self.alt_p, self.ht.vp, self.theta, (0, 3/2*np.pi),
                                      self.tof, self.t_bounds, self.method, self.nb_seg, self.order, self.solver,
                                      'powered', snopt_opts=self.snopt_opts, u_bound=self.u_bound)
 

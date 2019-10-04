@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnal
 
 
 # trajectory
-kind = 's'
+kind = 'c'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
 alt_p = 15e3  # periselene altitude [m]
@@ -22,8 +22,8 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = -10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 310.  # specific impulse [s]
-twr = 0.9  # initial thrust/weight ratio [-]
+isp = 375.54  # specific impulse [s]
+twr = 3.18  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
