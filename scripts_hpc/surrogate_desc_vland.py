@@ -83,11 +83,10 @@ else:
     raise ValueError('kind must be ac, av, as or d2p, dc, dv, ds')
 
 sm.sampling()
-sm_full.sampling()
-
 sm.train(train_method)
 sm.evaluate(nb_eval=nb_eval)
-sm_full.evaluate()
-
 save(sm, 'desc_vland_lhs.pkl')
+
+sm_full.sampling()
+sm_full.evaluate()
 save(sm_full, 'desc_vland_full.pkl')
