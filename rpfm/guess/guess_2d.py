@@ -275,11 +275,11 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'descent'
+    case = 'ascent'
 
     moon = Moon()
     a = 15e3
-    s = Spacecraft(450., 2.1, g=moon.g)
+    s = Spacecraft(250., 4., g=moon.g)
     nb = (100, 100, 50)
 
     if case == 'ascent':

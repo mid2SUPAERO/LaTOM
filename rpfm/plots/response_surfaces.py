@@ -20,7 +20,7 @@ class RespSurf:
 
     def plot(self):
 
-        [twr, isp] = np.meshgrid(self.twr, self.Isp)  # indexing='ij'
+        [twr, isp] = np.meshgrid(self.twr, self.Isp)
 
         fig, ax = plt.subplots()
         cs = ax.contour(twr, isp, self.m, 25)
@@ -30,7 +30,7 @@ class RespSurf:
         ax.set_title('Final/initial mass ratio')
 
         fig, ax = plt.subplots()
-        cs = ax.contour(twr, isp, self.tof, 25)
+        cs = ax.contour(twr, isp, self.tof, 50)
         ax.clabel(cs)
         ax.set_xlabel('Thrust/initial weight ratio')
         ax.set_ylabel('Isp (s)')

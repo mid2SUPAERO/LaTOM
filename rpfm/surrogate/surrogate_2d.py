@@ -5,6 +5,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from copy import deepcopy
 
 from smt.sampling_methods import LHS, FullFactorial
 from smt.surrogate_models import IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
@@ -116,10 +117,15 @@ class SurrogateModel:
 
     def evaluate(self, **kwargs):
 
-        if ('isp' in kwargs) and ('twr' in kwargs):
+        if ('isp' in kwargs) and ('twr' in kwargs):  # single values
 
             isp = kwargs['isp']
             twr = kwargs['twr']
+
+            if isinstance(isp, float):
+                isp = [isp]
+            if isinstance(twr, float):
+                twr = [twr]
 
             x_eval = np.hstack((np.reshape(isp, (len(isp), 1)), np.reshape(twr, (len(twr), 1))))
             m_eval = self.train_mass.predict_values(x_eval)
@@ -127,7 +133,7 @@ class SurrogateModel:
 
             return m_eval, tof_eval
 
-        else:
+        else:  # full grid
 
             if 'nb_eval' in kwargs:
 
@@ -141,9 +147,9 @@ class SurrogateModel:
 
             elif self.nb_eval is not None:
 
-                self.x_eval = self.x_samp
-                self.m_eval = self.m_samp
-                self.tof_eval = self.tof_samp
+                self.x_eval = deepcopy(self.x_samp)
+                self.m_eval = deepcopy(self.m_samp)
+                self.tof_eval = deepcopy(self.tof_samp)
 
             else:
                 raise ValueError('Surrogate model built with LHS sampling method.'
