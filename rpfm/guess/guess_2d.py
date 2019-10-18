@@ -200,7 +200,7 @@ class TwoDimGuess:
         self.sc = sc
 
         self.pow1 = self.pow2 = self.ht = None
-        self.t = self.states = self.controls = None
+        self.t = self.tf = self.states = self.controls = None
 
     def compute_trajectory(self, fix_final=False, **kwargs):
 
@@ -232,6 +232,7 @@ class TwoDimGuess:
 
         self.states = np.vstack((self.pow1.states, states_ht, self.pow2.states))
         self.controls = np.vstack((self.pow1.controls, controls_ht, self.pow2.controls))
+        self.tf = self.pow2.tf
 
         if fix_final:
             self.states[:, 1] = self.states[:, 1] - self.states[-1, 1]

@@ -23,22 +23,13 @@ class EllipticOrbParam:
 
 class HohmannTransferEl(HohmannTransfer):
 
-    def __init__(self, gm, rp_nrho, t_nrho, r_moon, alt_llo, kind='ascent'):
+    def __init__(self, gm, ep, r_moon, alt_llo, kind='ascent'):
 
-        self.ep = EllipticOrbParam(gm, rp_nrho, t_nrho)
         self.r_llo = r_moon + alt_llo
 
-        HohmannTransfer.__init__(self, gm, self.ep.ra_nrho, self.r_llo, kind='ascent')
+        HohmannTransfer.__init__(self, gm, ep.ra_nrho, self.r_llo, kind='ascent')
 
-        self.dvp = self.vp - self.vp_circ
-        self.dva = self.ep.va_nrho - self.va
-
-        if kind in ['ascent', 'descent']:
-            self.kind = kind
-        else:
-            raise ValueError('kind must be either ascent or descent')
-
-
+        self.dva = ep.va_nrho - self.va
 
 class TwoDimGuessNRHO:
 
@@ -49,7 +40,7 @@ class TwoDimGuessNRHO:
         self.alt_llo = alt
         self.r_llo = r + alt
         self.vc_llo = (gm/self.r_llo)**0.5
-        self.ep = EllipticOrbParam(gm, rp, t)
+        self.ep = EllipticOrbParam(gm, rp, t)  # define NRHO
 
         self.sc = sc
 
@@ -63,10 +54,12 @@ class TwoDimAscGuessNRHO(TwoDimGuessNRHO):
 
         TwoDimGuessNRHO.__init__(self, gm, r, alt, rp, t, sc)
 
-        self.ht = HohmannTransfer(gm, self.ep.ra_nrho, self.r_llo)
+        self.ht = HohmannTransferEl(gm, self.ep, self.R, self.alt_llo)
 
         self.pow = PowConstRadius(gm, (r + alt), self.vc_llo, self.ht.vp, sc.m0, sc.T_max, sc.Isp)
         self.pow.compute_final_time_mass()
+
+        self.tf = self.pow.tf + self.ht.tof
 
     def compute_trajectory(self, fix_final=False, **kwargs):
 
@@ -85,8 +78,7 @@ class TwoDimAscGuessNRHO(TwoDimGuessNRHO):
         states_ht = np.hstack((self.ht.states, self.pow.mf*np.ones((nb_ht, 1))))
         controls_ht = np.zeros((nb_ht, 2))
 
-        self.dva = self.ep.va_nrho - self.ht.va
-        self.mf = self.pow.m[-1, -1]*np.exp(-self.dva/self.sc.Isp/g0)
+        self.mf = self.pow.m[-1, -1]*np.exp(-self.ht.dva/self.sc.Isp/g0)
 
         self.states = np.vstack((self.pow.states, states_ht))
         self.controls = np.vstack((self.pow.controls, controls_ht))
@@ -124,7 +116,7 @@ if __name__ == '__main__':
     a = 100e3
     rp = 3150e3
     T = 6.5655
-    s = Spacecraft(450., 2., g=moon.g)
+    s = Spacecraft(250., 4., g=moon.g)
     nb = (100, 1000)
 
     if case == 'ascent':

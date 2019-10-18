@@ -148,7 +148,7 @@ class TwoDimVarNLP(TwoDimNLP):
         self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False, rate_continuity=False,
                                rate2_continuity=False, lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
 
-        self.set_time_options(self.guess.pow2.tf, t_bounds)
+        self.set_time_options(self.guess.tf, t_bounds)
         self.set_objective()
 
     def set_initial_guess(self, check_partials=False, fix_final=False):
