@@ -90,6 +90,7 @@ class TwoDimAscGuessNRHO(TwoDimGuessNRHO):
 
         self.states = np.vstack((self.pow.states, states_ht))
         self.controls = np.vstack((self.pow.controls, controls_ht))
+        self.states[:, 1] = self.states[:, 1] - self.pow.theta[-1, -1]
         self.states[-1, 3] = self.ep.va_nrho
         self.states[-1, 4] = self.mf
         self.controls[-1, 0] = self.sc.T_max
@@ -123,7 +124,7 @@ if __name__ == '__main__':
     a = 100e3
     rp = 3150e3
     T = 6.5655
-    s = Spacecraft(250., 4., g=moon.g)
+    s = Spacecraft(450., 2., g=moon.g)
     nb = (100, 1000)
 
     if case == 'ascent':
@@ -141,5 +142,5 @@ if __name__ == '__main__':
 
     tr.compute_trajectory(t=t_all, fix_final=False)
 
-    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case)
+    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=tr.ep.a_nrho, e=tr.ep.e_nrho)
     p.plot()
