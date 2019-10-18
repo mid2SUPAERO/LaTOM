@@ -7,13 +7,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from copy import deepcopy
 from rpfm.plots.timeseries import TwoDimStatesTimeSeries, TwoDimControlsTimeSeries
-from rpfm.plots.trajectories import TwoDimAltProfile, TwoDimTrajectory
+from rpfm.plots.trajectories import TwoDimAltProfile, TwoDimSurface2LLO, TwoDimLLO2NRHO
 
 
 class TwoDimSolPlot:
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, r_safe=None,
-                 threshold=1e-6, kind='ascent'):
+                 threshold=1e-6, kind='ascent', a=None, e=None):
 
         self.R = deepcopy(r)
 
@@ -42,7 +42,11 @@ class TwoDimSolPlot:
         self.controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, threshold=threshold)
         self.alt_plot = TwoDimAltProfile(self.R, self.states, self.states_exp, thrust=thrust, threshold=threshold,
                                          r_safe=self.r_safe)
-        self.trajectory_plot = TwoDimTrajectory(self.R, self.states, self.kind)
+
+        if (a is not None) and (e is not None):
+            self.trajectory_plot = TwoDimLLO2NRHO(self.R, a, e, self.states, self.kind)
+        else:
+            self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, self.kind)
 
     def plot(self):
 
@@ -87,7 +91,7 @@ class TwoDimTwoPhasesSolPlot:
         self.controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, threshold=None)
         self.alt_plot = TwoDimAltProfile(self.R, self.states, self.states_exp, thrust=thrust,
                                          labels=('vertical', 'attitude-free'))
-        self.trajectory_plot = TwoDimTrajectory(self.R, self.states, self.kind)
+        self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, self.kind)
 
     def plot(self):
 

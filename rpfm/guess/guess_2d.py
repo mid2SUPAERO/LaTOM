@@ -278,7 +278,7 @@ if __name__ == '__main__':
     case = 'ascent'
 
     moon = Moon()
-    a = 15e3
+    a = 100e3
     s = Spacecraft(250., 4., g=moon.g)
     nb = (100, 100, 50)
 

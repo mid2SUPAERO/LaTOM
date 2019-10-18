@@ -65,31 +65,22 @@ class TwoDimAltProfile:
 
 class TwoDimTrajectory:
 
-    def __init__(self, r_moon, states, kind='ascent'):
+    def __init__(self, r_moon, r_llo, states, kind='ascent'):
 
-        # kind
-        if kind == 'ascent':
-            self.kind = kind
-            r_orbit = states[-1, 0]
-        elif kind == 'descent':
-            self.kind = kind
-            r_orbit = states[0, 0]
-        else:
-            raise ValueError('kind must be either ascent or descent')
-
-        ang = np.linspace(0.0, 2 * np.pi, 500)
+        self.kind = kind
+        self.ang = np.linspace(0.0, 2 * np.pi, 500)
 
         # Moon
-        self.x_moon = r_moon/1e3 * np.cos(ang)
-        self.y_moon = r_moon/1e3 * np.sin(ang)
-
-        # orbit
-        self.x_orbit = r_orbit/1e3 * np.cos(ang)
-        self.y_orbit = r_orbit/1e3 * np.sin(ang)
+        self.x_moon = r_moon/1e3 * np.cos(self.ang)
+        self.y_moon = r_moon/1e3 * np.sin(self.ang)
 
         # trajectory
         self.x = states[:, 0]/1e3 * np.cos(states[:, 1])
         self.y = states[:, 0]/1e3 * np.sin(states[:, 1])
+
+        # LLO
+        self.x_llo = r_llo/1e3 * np.cos(self.ang)
+        self.y_llo = r_llo/1e3 * np.sin(self.ang)
 
     def plot(self):
 
@@ -99,20 +90,57 @@ class TwoDimTrajectory:
         title = ' '.join(['Optimal', label])
 
         ax.plot(self.x_moon, self.y_moon, label='Moon surface')
-        ax.plot(self.x_orbit, self.y_orbit, label='target orbit')
+
+        if hasattr(self, 'x_nrho') and hasattr(self, 'y_nrho'):
+            ax.plot(self.x_llo, self.y_llo, label='departure orbit')
+            ax.plot(self.x_nrho, self.y_nrho, label='target orbit')
+        else:
+            ax.plot(self.x_llo, self.y_llo, label='target orbit')
+
         ax.plot(self.x, self.y, label=label)
 
         ax.set_aspect('equal')
         ax.grid()
 
-        limit = np.ceil(self.x_orbit[0]/1e3)*1e3
-        ticks = np.linspace(-limit, limit, 9)
-
-        ax.set_xticks(ticks)
-        ax.set_yticks(ticks)
         ax.tick_params(axis='x', rotation=60)
 
         ax.set_xlabel('x (km)')
         ax.set_ylabel('y (km)')
         ax.set_title(title)
         ax.legend(bbox_to_anchor=(1, 1), loc=2)
+
+
+class TwoDimSurface2LLO(TwoDimTrajectory):
+
+    def __init__(self, r_moon, states, kind='ascent'):
+
+        # kind
+        if kind == 'ascent':
+            r_llo = states[-1, 0]
+        elif kind == 'descent':
+            r_llo = states[0, 0]
+        else:
+            raise ValueError('kind must be either ascent or descent')
+
+        TwoDimTrajectory.__init__(self, r_moon, r_llo, states, kind=kind)
+
+
+class TwoDimLLO2NRHO(TwoDimTrajectory):
+
+    def __init__(self, r_moon, a_nrho, e_nrho, states, kind='ascent'):
+
+        # kind
+        if kind == 'ascent':
+            r_llo = states[0, 0]
+        elif kind == 'descent':
+            r_llo = states[-1, 0]
+        else:
+            raise ValueError('kind must be either ascent or descent')
+
+        TwoDimTrajectory.__init__(self, r_moon, r_llo, states, kind=kind)
+
+        # NRHO
+        r_nrho = a_nrho*(1 - e_nrho**2)/(1 + e_nrho*np.cos(self.ang))/1e3
+        self.x_nrho = r_nrho*np.cos(self.ang)
+        self.y_nrho = r_nrho*np.sin(self.ang)
+
