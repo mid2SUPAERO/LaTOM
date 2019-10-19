@@ -4,82 +4,76 @@
 """
 
 import numpy as np
+
 from scipy.integrate import solve_ivp, odeint
 from scipy.optimize import root
-from copy import deepcopy
 
-from rpfm.utils.keplerian_orbit import KepOrb
+from rpfm.utils.keplerian_orbit import KepOrb, TwoDimOrb
 from rpfm.utils.const import g0
-
-
-class DeorbitBurn:
-
-    def __init__(self, sc, dv):
-
-        self.sc = deepcopy(sc)
-        self.dv = dv
-
-        self.sc.m0 = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
-        self.dm = sc.m0 - self.sc.m0
 
 
 class HohmannTransfer:
 
-    def __init__(self, gm, ra, rp, kind='ascent'):
+    def __init__(self, gm, dep, arr):
 
         self.GM = gm
-        self.ra = ra
-        self.rp = rp
+        self.depOrb = dep
+        self.arrOrb = arr
 
-        self.a = (ra + rp)/2
-        self.e = (ra - rp)/(ra + rp)
+        if self.depOrb.a < self.arrOrb.a:  # ascent
+            self.ra = self.arrOrb.ra
+            self.rp = self.depOrb.rp
+        else:  # descent
+            self.ra = self.depOrb.ra
+            self.rp = self.arrOrb.rp
 
-        self.h = (gm*self.a*(1 - self.e**2))**0.5
-        self.n = (gm/self.a**3)**0.5
-        self.tof = np.pi/gm**0.5*self.a**1.5
+        self.transfer = TwoDimOrb(self.GM, ra=self.ra, rp=self.rp)
+        self.tof = self.transfer.T/2
 
-        self.va_circ = (gm/ra)**0.5
-        self.vp_circ = (gm/rp)**0.5
-
-        self.va = (2*gm*rp/(ra*(ra + rp)))**0.5
-        self.vp = (2*gm*ra/(rp*(ra + rp)))**0.5
-
-        self.dva = self.va_circ - self.va
-        self.dvp = self.vp - self.vp_circ
-
-        if kind in ['ascent', 'descent']:
-            self.kind = kind
-        else:
-            raise ValueError('kind must be either ascent or descent')
+        if self.depOrb.a < self.arrOrb.a:  # ascent
+            self.dvp = self.transfer.vp - self.depOrb.vp
+            self.dva = self.arrOrb.va - self.transfer.va
+            # self.dmp = m0*(1 - np.exp(-self.dvp/isp/g0))
+            # self.m = m0 - self.dmp
+            # self.dma = self.m*(1 - np.exp(-self.dva/isp/g0))
+        else:  # descent
+            self.dva = self.depOrb.va - self.transfer.va
+            self.dvp = self.transfer.vp - self.arrOrb.vp
+            # self.dma = m0*(1 - np.exp(-self.dva/isp/g0))
+            # self.m = m0 - self.dma
+            # self.dmp = self.m*(1 - np.exp(-self.dvp/isp/g0))
 
         self.r = self.theta = self.u = self.v = None
-        self.states = None
+        self.states = self.controls = None
 
-    def compute_states(self, t, tp, theta0=0.0):
+    def compute_states(self, t, tp, theta0=0.0, m=1.0):
 
         nb_nodes = len(t)
         ea0 = np.reshape(np.linspace(0.0, np.pi, nb_nodes), (nb_nodes, 1))
 
         print("\nSolving Kepler's equation using Scipy root function")
 
-        sol = root(KepOrb.kepler_eqn, ea0, args=(self.e, self.n, t, tp), tol=1e-15)
+        sol = root(KepOrb.kepler_eqn, ea0, args=(self.transfer.e, self.transfer.n, t, tp), tol=1e-15)
 
         print("output:", sol.message)
 
         ea = np.reshape(sol.x, (nb_nodes, 1))
-        theta = 2*np.arctan(((1 + self.e)/(1 - self.e))**0.5*np.tan(ea/2))
+        theta = 2*np.arctan(((1 + self.transfer.e)/(1 - self.transfer.e))**0.5*np.tan(ea/2))
 
-        if self.kind == 'ascent':
-            self.r = self.a*(1 - self.e**2)/(1 + self.e*np.cos(theta))
-            self.u = self.GM/self.h*self.e*np.sin(theta)
-            self.v = self.GM/self.h*(1 + self.e*np.cos(theta))
-        elif self.kind == 'descent':
-            self.r = self.a*(1 - self.e**2)/(1 + self.e*np.cos(theta + np.pi))
-            self.u = self.GM/self.h*self.e*np.sin(theta + np.pi)
-            self.v = self.GM/self.h*(1 + self.e*np.cos(theta + np.pi))
+        if self.depOrb.a < self.arrOrb.a:  # ascent
+            self.r = self.transfer.a*(1 - self.transfer.e**2)/(1 + self.transfer.e*np.cos(theta))
+            self.u = self.GM/self.transfer.h*self.transfer.e*np.sin(theta)
+            self.v = self.GM/self.transfer.h*(1 + self.transfer.e*np.cos(theta))
+            alpha = np.zeros((nb_nodes, 1))
+        else:  # descent
+            self.r = self.transfer.a*(1 - self.transfer.e**2)/(1 + self.transfer.e*np.cos(theta + np.pi))
+            self.u = self.GM/self.transfer.h*self.transfer.e*np.sin(theta + np.pi)
+            self.v = self.GM/self.transfer.h*(1 + self.transfer.e*np.cos(theta + np.pi))
+            alpha = np.pi*np.ones((nb_nodes, 1))
 
         self.theta = theta + theta0
-        self.states = np.hstack((self.r, self.theta, self.u, self.v))
+        self.states = np.hstack((self.r, self.theta, self.u, self.v, m*np.ones((nb_nodes, 1))))
+        self.controls = np.hstack((np.zeros((nb_nodes, 1)), alpha))
 
         return sol
 
@@ -98,7 +92,7 @@ class PowConstRadius:
         self.theta0 = theta0
         self.t0 = t0
 
-        self.tf = self.mf = None
+        self.tf = self.mf = self.dv = None
         self.t = self.r = self.theta = self.u = self.v = self.m = self.alpha = None
         self.states = self.controls = None
 
@@ -117,6 +111,7 @@ class PowConstRadius:
 
         self.tf = sol.y[-1, -1]
         self.mf = self.compute_mass(self.tf)
+        self.dv = self.Isp*g0*np.log(self.m0/self.mf)
 
         print('output:', sol.message)
 
@@ -192,11 +187,10 @@ class PowConstRadius:
 
 class TwoDimGuess:
 
-    def __init__(self, gm, r, alt, sc):
+    def __init__(self, gm, r, sc):
 
         self.GM = gm
         self.R = r
-        self.alt = alt
         self.sc = sc
 
         self.pow1 = self.pow2 = self.ht = None
@@ -214,24 +208,14 @@ class TwoDimGuess:
         t_pow2 = self.t[self.t >= (self.pow1.tf + self.ht.tof)]
 
         self.pow1.compute_states(t_pow1)
-        self.ht.compute_states(t_ht, self.pow1.tf, theta0=self.pow1.theta[-1, -1])
-
-        nb_ht = len(t_ht)
-        states_ht = np.hstack((self.ht.states, self.pow1.mf*np.ones((nb_ht, 1))))
-
-        if self.ht.kind == 'ascent':
-            controls_ht = np.zeros((nb_ht, 2))
-        elif self.ht.kind == 'descent':
-            controls_ht = np.hstack((np.zeros((nb_ht, 1)), np.pi*np.ones((nb_ht, 1))))
-        else:
-            raise ValueError('kind must be either ascent or descent')
+        self.ht.compute_states(t_ht, self.pow1.tf, theta0=self.pow1.theta[-1, -1], m=self.pow1.mf)
 
         self.pow2.theta0 = self.ht.theta[-1, -1]
         self.pow2.compute_states(t_pow2)
         self.pow2.states[-1, 3] = self.pow2.vf
 
-        self.states = np.vstack((self.pow1.states, states_ht, self.pow2.states))
-        self.controls = np.vstack((self.pow1.controls, controls_ht, self.pow2.controls))
+        self.states = np.vstack((self.pow1.states, self.ht.states, self.pow2.states))
+        self.controls = np.vstack((self.pow1.controls, self.ht.controls, self.pow2.controls))
         self.tf = self.pow2.tf
 
         if fix_final:
@@ -242,15 +226,18 @@ class TwoDimAscGuess(TwoDimGuess):
 
     def __init__(self, gm, r, alt, sc):
 
-        TwoDimGuess.__init__(self, gm, r, alt, sc)
+        TwoDimGuess.__init__(self, gm, r, sc)
 
-        self.ht = HohmannTransfer(gm, (r + alt), r)
+        dep = TwoDimOrb(gm, a=r, e=0)
+        arr = TwoDimOrb(gm, a=(r + alt), e=0)
 
-        self.pow1 = PowConstRadius(gm, r, 0.0, self.ht.vp, sc.m0, sc.T_max, sc.Isp)
+        self.ht = HohmannTransfer(gm, dep, arr)
+
+        self.pow1 = PowConstRadius(gm, r, 0.0, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
         self.pow1.compute_final_time_mass()
 
-        self.pow2 = PowConstRadius(gm, (r + alt), self.ht.va, self.ht.va_circ, self.pow1.mf, sc.T_max, sc.Isp,
-                                   t0=(self.pow1.tf + self.ht.tof))
+        self.pow2 = PowConstRadius(gm, (r + alt), self.ht.transfer.va, self.ht.arrOrb.va, self.pow1.mf, sc.T_max,
+                                   sc.Isp, t0=(self.pow1.tf + self.ht.tof))
         self.pow2.compute_final_time_mass()
 
 
@@ -258,14 +245,17 @@ class TwoDimDescGuess(TwoDimGuess):
 
     def __init__(self, gm, r, alt, sc):
 
-        TwoDimGuess.__init__(self, gm, r, alt, sc)
+        TwoDimGuess.__init__(self, gm, r, sc)
 
-        self.ht = HohmannTransfer(gm, (r + alt), r, kind='descent')
+        arr = TwoDimOrb(gm, a=r, e=0)
+        dep = TwoDimOrb(gm, a=(r + alt), e=0)
 
-        self.pow1 = PowConstRadius(gm, (r + alt), self.ht.va_circ, self.ht.va, sc.m0, sc.T_max, sc.Isp)
+        self.ht = HohmannTransfer(gm, dep, arr)
+
+        self.pow1 = PowConstRadius(gm, (r + alt), self.ht.depOrb.va, self.ht.transfer.va, sc.m0, sc.T_max, sc.Isp)
         self.pow1.compute_final_time_mass()
 
-        self.pow2 = PowConstRadius(gm, r, self.ht.vp, 0.0, self.pow1.mf, sc.T_max, sc.Isp,
+        self.pow2 = PowConstRadius(gm, r, self.ht.transfer.vp, 0.0, self.pow1.mf, sc.T_max, sc.Isp,
                                    t0=(self.pow1.tf + self.ht.tof))
         self.pow2.compute_final_time_mass()
 
@@ -276,12 +266,12 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'ascent'
+    case = 'descent'
 
     moon = Moon()
     a = 100e3
-    s = Spacecraft(250., 4., g=moon.g)
-    nb = (100, 100, 50)
+    s = Spacecraft(450., 2., g=moon.g)
+    nb = (100, 100, 100)
 
     if case == 'ascent':
         tr = TwoDimAscGuess(moon.GM, moon.R, a, s)
@@ -296,7 +286,7 @@ if __name__ == '__main__':
 
     t_all = np.reshape(np.hstack((t1, t2[1:-1], t3)), (np.sum(nb), 1))
 
-    tr.compute_trajectory(t=t_all, fix_final=True)
+    tr.compute_trajectory(t=t_all, fix_final=False)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case)
     p.plot()

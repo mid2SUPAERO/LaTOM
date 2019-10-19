@@ -6,103 +6,82 @@
 import numpy as np
 
 from rpfm.utils.const import g0
-from rpfm.guess.guess_2d import HohmannTransfer, PowConstRadius
+from rpfm.utils.keplerian_orbit import TwoDimOrb
+from rpfm.guess.guess_2d import HohmannTransfer, TwoDimGuess, PowConstRadius
 
 
-class EllipticOrbParam:
-
-    def __init__(self, gm, rp, t):
-
-        self.rp_nrho = rp
-        self.T_nrho = t * 86400  # period in seconds
-        self.a_nrho = (gm * self.T_nrho ** 2 / 4 / np.pi ** 2) ** (1 / 3)
-        self.e_nrho = 1 - self.rp_nrho / self.a_nrho
-        self.ra_nrho = self.a_nrho * (1 + self.e_nrho)
-        self.va_nrho = (gm / self.a_nrho * (1 - self.e_nrho) / (1 + self.e_nrho)) ** 0.5
-
-
-class HohmannTransferEl(HohmannTransfer):
-
-    def __init__(self, gm, ep, r_moon, alt_llo, kind='ascent'):
-
-        self.r_llo = r_moon + alt_llo
-
-        HohmannTransfer.__init__(self, gm, ep.ra_nrho, self.r_llo, kind='ascent')
-
-        self.dva = ep.va_nrho - self.va
-
-class TwoDimGuessNRHO:
+class TwoDimLLO2NRHOGuess(TwoDimGuess):
 
     def __init__(self, gm, r, alt, rp, t, sc):
 
-        self.GM = gm
-        self.R = r
-        self.alt_llo = alt
-        self.r_llo = r + alt
-        self.vc_llo = (gm/self.r_llo)**0.5
-        self.ep = EllipticOrbParam(gm, rp, t)  # define NRHO
+        TwoDimGuess.__init__(self, gm, r, sc)
 
-        self.sc = sc
+        dep = TwoDimOrb(gm, a=(r + alt), e=0)
+        arr = TwoDimOrb(gm, T=t, rp=rp)
 
-        self.pow = self.ht = None
-        self.t = self.states = self.controls = None
+        self.ht = HohmannTransfer(gm, dep, arr)
 
-
-class TwoDimAscGuessNRHO(TwoDimGuessNRHO):
-
-    def __init__(self, gm, r, alt, rp, t, sc):
-
-        TwoDimGuessNRHO.__init__(self, gm, r, alt, rp, t, sc)
-
-        self.ht = HohmannTransferEl(gm, self.ep, self.R, self.alt_llo)
-
-        self.pow = PowConstRadius(gm, (r + alt), self.vc_llo, self.ht.vp, sc.m0, sc.T_max, sc.Isp)
+        self.pow = PowConstRadius(gm, dep.a, dep.vp, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
         self.pow.compute_final_time_mass()
 
-        self.tf = self.pow.tf + self.ht.tof
-
-    def compute_trajectory(self, fix_final=False, **kwargs):
+    def compute_trajectory(self, **kwargs):
 
         if 't' in kwargs:
             self.t = kwargs['t']
         elif 'nb_nodes' in kwargs:
-            self.t = np.reshape(np.linspace(0.0, self.pow.tf + self.ht.tof, kwargs['nb_nodes']), (kwargs['nb_nodes'], 1))
+            self.t = np.reshape(np.linspace(0.0, self.pow.tf+self.ht.tof, kwargs['nb_nodes']), (kwargs['nb_nodes'], 1))
 
         t_pow = self.t[self.t <= self.pow.tf]
         t_ht = self.t[self.t > self.pow.tf]
 
         self.pow.compute_states(t_pow)
-        self.ht.compute_states(t_ht, self.pow.tf, theta0=self.pow.theta[-1, -1])
+        self.ht.compute_states(t_ht, self.pow.tf, theta0=self.pow.theta[-1, -1], m=self.pow.mf)
 
-        nb_ht = len(t_ht)
-        states_ht = np.hstack((self.ht.states, self.pow.mf*np.ones((nb_ht, 1))))
-        controls_ht = np.zeros((nb_ht, 2))
+        self.states = np.vstack((self.pow.states, self.ht.states))
+        self.controls = np.vstack((self.pow.controls, self.ht.controls))
 
-        self.mf = self.pow.m[-1, -1]*np.exp(-self.ht.dva/self.sc.Isp/g0)
-
-        self.states = np.vstack((self.pow.states, states_ht))
-        self.controls = np.vstack((self.pow.controls, controls_ht))
         self.states[:, 1] = self.states[:, 1] - self.pow.theta[-1, -1]
-        self.states[-1, 3] = self.ep.va_nrho
-        self.states[-1, 4] = self.mf
+
+        self.states[-1, 3] = self.ht.arrOrb.va
+        self.states[-1, 4] = self.pow.mf*np.exp(-self.ht.dva/self.sc.Isp/g0)
         self.controls[-1, 0] = self.sc.T_max
 
-"""
-class TwoDimDescGuess(TwoDimGuess):
 
-    def __init__(self, gm, r, alt, sc):
+class TwoDimNRHO2LLOGuess(TwoDimGuess):
 
-        TwoDimGuess.__init__(self, gm, r, alt, sc)
+    def __init__(self, gm, r, alt, rp, t, sc):
 
-        self.ht = HohmannTransfer(gm, (r + alt), r, kind='descent')
+        TwoDimGuess.__init__(self, gm, r, sc)
 
-        self.pow1 = PowConstRadius(gm, (r + alt), self.ht.va_circ, self.ht.va, sc.m0, sc.T_max, sc.Isp)
-        self.pow1.compute_final_time_mass()
+        arr = TwoDimOrb(gm, a=(r + alt), e=0)
+        dep = TwoDimOrb(gm, T=t, rp=rp)
 
-        self.pow2 = PowConstRadius(gm, r, self.ht.vp, 0.0, self.pow1.mf, sc.T_max, sc.Isp,
-                                   t0=(self.pow1.tf + self.ht.tof))
-        self.pow2.compute_final_time_mass()
-"""
+        self.ht = HohmannTransfer(gm, dep, arr)
+        self.m_hoh = self.sc.m0*np.exp(-self.ht.dva/self.sc.Isp/g0)
+
+        self.pow = PowConstRadius(gm, arr.a, self.ht.transfer.vp, arr.vp, self.m_hoh, sc.T_max, sc.Isp)
+        self.pow.compute_final_time_mass()
+
+    def compute_trajectory(self, **kwargs):
+
+        if 't' in kwargs:
+            self.t = kwargs['t']
+        elif 'nb_nodes' in kwargs:
+            self.t = np.reshape(np.linspace(0.0, self.pow.tf+self.ht.tof, kwargs['nb_nodes']), (kwargs['nb_nodes'], 1))
+
+        t_ht = self.t[self.t < self.ht.tof]
+        t_pow = self.t[self.t >= self.ht.tof]
+
+        self.ht.compute_states(t_ht, 0.0, theta0=np.pi, m=self.m_hoh)
+        self.pow.compute_states(t_pow)
+
+        self.states = np.vstack((self.ht.states, self.pow.states))
+        self.controls = np.vstack((self.ht.controls, self.pow.controls))
+
+        self.states[0, 3] = self.ht.depOrb.va
+        self.states[0, 4] = self.sc.m0
+        self.controls[0, 0] = self.sc.T_max
+
 
 if __name__ == '__main__':
 
@@ -110,29 +89,34 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'ascent'
+    case = 'descent'
 
     moon = Moon()
-    a = 100e3
-    rp = 3150e3
-    T = 6.5655
+    h = 100e3
+    r_p = 3150e3
+    T = 6.5655*86400
     s = Spacecraft(250., 4., g=moon.g)
     nb = (100, 1000)
 
     if case == 'ascent':
-        tr = TwoDimAscGuessNRHO(moon.GM, moon.R, a, rp, T, s)
+        tr = TwoDimLLO2NRHOGuess(moon.GM, moon.R, h, r_p, T, s)
+        a = tr.ht.arrOrb.a
+        e = tr.ht.arrOrb.e
+        t1 = np.linspace(0.0, tr.pow.tf, nb[0])
+        t2 = np.linspace(tr.pow.tf, tr.pow.tf + tr.ht.tof, nb[1] + 1)
     elif case == 'descent':
         pass
-        # tr = TwoDimDescGuessNRHO(moon.GM, moon.R, a, s)
+        tr = TwoDimNRHO2LLOGuess(moon.GM, moon.R, h, r_p, T, s)
+        a = tr.ht.depOrb.a
+        e = tr.ht.depOrb.e
+        t1 = np.linspace(0.0, tr.ht.tof, nb[0])
+        t2 = np.linspace(tr.ht.tof, tr.ht.tof + tr.pow.tf, nb[1] + 1)
     else:
         raise ValueError('case must be equal to ascent or descent')
 
-    t1 = np.linspace(0.0, tr.pow.tf, nb[0])
-    t2 = np.linspace(tr.pow.tf, tr.pow.tf + tr.ht.tof, nb[1]+1)
-
     t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
 
-    tr.compute_trajectory(t=t_all, fix_final=False)
+    tr.compute_trajectory(t=t_all)
 
-    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=tr.ep.a_nrho, e=tr.ep.e_nrho)
+    p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

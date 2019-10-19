@@ -9,6 +9,77 @@ from scipy.optimize import root
 from rpfm.utils.coc import per2eq, coe2sv_vec
 
 
+class TwoDimOrb:
+
+    def __init__(self, gm, **kwargs):
+
+        self.GM = gm
+
+        if ('ra' in kwargs) and ('rp' in kwargs):
+
+            self.ra = kwargs['ra']
+            self.rp = kwargs['rp']
+            self.a = (self.ra + self.rp)/2
+            self.e = (self.ra - self.rp)/(self.ra + self.rp)
+            self.T = 2 * np.pi / self.GM ** 0.5 * self.a ** 1.5
+
+        elif ('a' in kwargs) or ('T' in kwargs):
+
+            if 'T' in kwargs:
+
+                self.T = kwargs['T']
+                self.a = (self.GM*self.T**2/4/np.pi**2)**(1/3)
+
+            else:
+
+                self.a = kwargs['a']
+                self.T = 2*np.pi/self.GM**0.5*self.a**1.5
+
+            if 'ra' in kwargs:
+
+                self.ra = kwargs['ra']
+                self.e = self.ra/self.a - 1
+                self.rp = self.a*(1 - self.e)
+
+            elif 'rp' in kwargs:
+
+                self.rp = kwargs['rp']
+                self.e = 1 - self.rp/self.a
+                self.ra = self.a*(1 + self.e)
+
+            elif 'e' in kwargs:
+
+                self.e = kwargs['e']
+                self.ra = self.a*(1 + self.e)
+                self.rp = self.a * (1 - self.e)
+
+            else:
+                raise AttributeError('a or T must be provided with ra, rp or e')
+
+        else:
+            raise AttributeError('kwargs must be (ra, rp) or one between (a, T) and one between (ra, rp, e)')
+
+        self.va = (2*self.GM*self.rp/(self.ra*(self.ra + self.rp)))**0.5
+        self.vp = (2*self.GM*self.ra/(self.rp*(self.ra + self.rp)))**0.5
+        self.h = (gm * self.a * (1 - self.e ** 2)) ** 0.5
+        self.n = (gm / self.a ** 3) ** 0.5
+
+    def __str__(self):
+
+        lines = ['\n{:^50s}'.format('2D Keplerian Orbit:'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Semimajor axis:', self.a/1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Eccentricity:', self.e, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Periapsis radius:', self.rp/1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Apoapsis radius:', self.ra/1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Orbital period:', self.T, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Periapsis velocity:', self.vp/1e3, 'km/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Apoapsis velocity:', self.va/1e3, 'km/s')]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
 class KepOrb:
     """KepOrb defines a Keplerian Orbit.
 
@@ -388,5 +459,10 @@ class KepOrb:
         return s
 
 
+if __name__ == '__main__':
 
+    gme = 398600e9
+    re = 6378.14e3
 
+    o = TwoDimOrb(gme, a=42164e3, e=0.)
+    print(o)
