@@ -22,19 +22,18 @@ class TwoDimLLO2HEOGuess(TwoDimGuess):
 
     def __init__(self, gm, r, alt, rp, t, sc):
 
-        TwoDimGuess.__init__(self, gm, r, sc)
-
         dep = TwoDimOrb(gm, a=(r + alt), e=0)
         arr = TwoDimOrb(gm, T=t, rp=rp)
 
-        self.ht = HohmannTransfer(gm, dep, arr)
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
 
         self.pow = PowConstRadius(gm, dep.a, dep.vp, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
-        self.pow.compute_final_time_mass()
+        self.pow.compute_final_states()
 
         self.tf = self.pow.tf + self.ht.tof
 
-        self.estimate_losses, self.computed_losses = compute_losses(gm, dep.a, self.ht.dvp, self.pow.dv, sc.T_max/sc.m0)
+        # self.estimate_losses, self.computed_losses = compute_losses(gm, dep.a, self.ht.dvp, self.pow.dv,
+        # sc.T_max/sc.m0)
 
     def compute_trajectory(self, **kwargs):
 
@@ -48,12 +47,12 @@ class TwoDimLLO2HEOGuess(TwoDimGuess):
         t_ht = self.t[self.t > self.pow.tf]
 
         self.pow.compute_states(t_pow)
-        self.ht.compute_states(t_ht, self.pow.tf, theta0=self.pow.theta[-1, -1], m=self.pow.mf)
+        self.ht.compute_states(t_ht, self.pow.tf, theta0=self.pow.thetaf, m=self.pow.mf)
 
         self.states = np.vstack((self.pow.states, self.ht.states))
         self.controls = np.vstack((self.pow.controls, self.ht.controls))
 
-        self.states[:, 1] = self.states[:, 1] - self.pow.theta[-1, -1]  # final true anomaly equal to pi
+        self.states[:, 1] = self.states[:, 1] - self.pow.thetaf  # final true anomaly equal to pi
 
         # injection burn at the NRHO aposelene
         self.states[-1, 3] = self.ht.arrOrb.va
@@ -65,21 +64,20 @@ class TwoDimHEO2LLOGuess(TwoDimGuess):
 
     def __init__(self, gm, r, alt, rp, t, sc):
 
-        TwoDimGuess.__init__(self, gm, r, sc)
-
         arr = TwoDimOrb(gm, a=(r + alt), e=0)
         dep = TwoDimOrb(gm, T=t, rp=rp)
 
-        self.ht = HohmannTransfer(gm, dep, arr)
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
         self.m_ht = self.sc.m0*np.exp(-self.ht.dva/self.sc.Isp/g0)
 
         self.pow = PowConstRadius(gm, arr.a, self.ht.transfer.vp, arr.vp, self.m_ht, sc.T_max, sc.Isp, t0=self.ht.tof)
-        self.pow.compute_final_time_mass()
+        self.pow.compute_final_states()
 
         self.tf = self.pow.tf
 
-        self.estimate_losses, self.computed_losses =\
-            compute_losses(gm, arr.a, self.ht.dvp, self.pow.dv, sc.T_max/self.m_ht)
+        # self.estimate_losses, self.computed_losses =\
+        #    compute_losses(gm, arr.a, self.ht.dvp, self.pow.dv, sc.T_max/self.m_ht)
 
     def compute_trajectory(self, **kwargs):
 
@@ -134,6 +132,7 @@ if __name__ == '__main__':
         raise ValueError('case must be equal to ascent or descent')
 
     t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
+    t_all = np.reshape(np.linspace(0.0, tr.pow.tf + tr.ht.tof, 401), (401, 1))
 
     tr.compute_trajectory(t=t_all)
 

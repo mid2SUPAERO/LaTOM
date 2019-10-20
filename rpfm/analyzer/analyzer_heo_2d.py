@@ -29,11 +29,11 @@ if __name__ == '__main__':
     from rpfm.utils.spacecraft import Spacecraft
 
     moon = Moon()
-    sat = Spacecraft(450., 2.)
+    sat = Spacecraft(450., 2., g=moon.g)
 
     tr = TwoDimAscAnalyzerNRHO(moon, sat, 100e3, 3150e3, 6.5655*86400, None, 'gauss-lobatto', 200, 3, 'SNOPT')
 
-    # tr.run_driver()
+    tr.run_driver()
     # tr.nlp.exp_sim()
 
     tr.get_solutions(explicit=False)
