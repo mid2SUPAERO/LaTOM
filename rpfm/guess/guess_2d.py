@@ -4,12 +4,24 @@
 """
 
 import numpy as np
+from copy import deepcopy
 
 from scipy.integrate import solve_ivp, odeint
 from scipy.optimize import root
 
 from rpfm.utils.keplerian_orbit import KepOrb, TwoDimOrb
 from rpfm.utils.const import g0
+
+
+class ImpulsiveBurn:
+
+    def __init__(self, sc, dv):
+
+        self.sc = deepcopy(sc)
+        self.dv = dv
+
+        self.sc.m0 = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
+        self.dm = sc.m0 - self.sc.m0
 
 
 class HohmannTransfer:
@@ -33,15 +45,9 @@ class HohmannTransfer:
         if self.depOrb.a < self.arrOrb.a:  # ascent
             self.dvp = self.transfer.vp - self.depOrb.vp
             self.dva = self.arrOrb.va - self.transfer.va
-            # self.dmp = m0*(1 - np.exp(-self.dvp/isp/g0))
-            # self.m = m0 - self.dmp
-            # self.dma = self.m*(1 - np.exp(-self.dva/isp/g0))
         else:  # descent
             self.dva = self.depOrb.va - self.transfer.va
             self.dvp = self.transfer.vp - self.arrOrb.vp
-            # self.dma = m0*(1 - np.exp(-self.dva/isp/g0))
-            # self.m = m0 - self.dma
-            # self.dmp = self.m*(1 - np.exp(-self.dvp/isp/g0))
 
         self.r = self.theta = self.u = self.v = None
         self.states = self.controls = None
@@ -221,6 +227,19 @@ class TwoDimGuess:
         if fix_final:
             self.states[:, 1] = self.states[:, 1] - self.states[-1, 1]
 
+    def __str__(self):
+
+        lines = ['\n{:^50s}'.format('Departure Orbit:'),
+                 self.ht.depOrb.__str__(),
+                 '\n{:^50s}'.format('Arrival Orbit:'),
+                 self.ht.arrOrb.__str__(),
+                 '\n{:^50s}'.format('Hohmann transfer:'),
+                 self.ht.transfer.__str__()]
+
+        s = '\n'.join(lines)
+
+        return s
+
 
 class TwoDimAscGuess(TwoDimGuess):
 
@@ -239,6 +258,8 @@ class TwoDimAscGuess(TwoDimGuess):
         self.pow2 = PowConstRadius(gm, (r + alt), self.ht.transfer.va, self.ht.arrOrb.va, self.pow1.mf, sc.T_max,
                                    sc.Isp, t0=(self.pow1.tf + self.ht.tof))
         self.pow2.compute_final_time_mass()
+
+        self.tf = self.pow2.tf
 
 
 class TwoDimDescGuess(TwoDimGuess):
@@ -259,6 +280,8 @@ class TwoDimDescGuess(TwoDimGuess):
                                    t0=(self.pow1.tf + self.ht.tof))
         self.pow2.compute_final_time_mass()
 
+        self.tf = self.pow2.tf
+
 
 if __name__ == '__main__':
 
@@ -266,17 +289,17 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'descent'
+    case = 'ascent'
 
     moon = Moon()
-    a = 100e3
-    s = Spacecraft(450., 2., g=moon.g)
+    sma = 100e3
+    sat = Spacecraft(450., 2., g=moon.g)
     nb = (100, 100, 100)
 
     if case == 'ascent':
-        tr = TwoDimAscGuess(moon.GM, moon.R, a, s)
+        tr = TwoDimAscGuess(moon.GM, moon.R, sma, sat)
     elif case == 'descent':
-        tr = TwoDimDescGuess(moon.GM, moon.R, a, s)
+        tr = TwoDimDescGuess(moon.GM, moon.R, sma, sat)
     else:
         raise ValueError('case must be equal to ascent or descent')
 
@@ -290,3 +313,5 @@ if __name__ == '__main__':
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case)
     p.plot()
+
+    print(tr)

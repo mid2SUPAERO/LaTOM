@@ -22,7 +22,7 @@ slope = 10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
 isp = 450.  # specific impulse [s]
-twr = 1.0  # initial thrust/weight ratio [-]
+twr = 2.  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 

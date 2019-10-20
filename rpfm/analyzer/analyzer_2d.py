@@ -10,7 +10,8 @@ from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNL
     TwoDimDescTwoPhasesNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
-from rpfm.guess.guess_2d import HohmannTransfer, DeorbitBurn
+from rpfm.guess.guess_2d import HohmannTransfer, ImpulsiveBurn
+from rpfm.utils.keplerian_orbit import TwoDimOrb
 
 
 class TwoDimAnalyzer(Analyzer):
@@ -193,12 +194,16 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
 
         self.alt_p = alt_p
 
-        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p), kind='descent')
-        self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
+        dep = TwoDimOrb(body.GM, a=(body.R + alt), e=0.0)
+        arr = TwoDimOrb(body.GM, a=(body.R + alt_p), e=0.0)
 
-        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.vp, theta, (0.0, 1.5*np.pi), tof,
-                                      t_bounds, method, nb_seg, order, solver, self.phase_name, snopt_opts=snopt_opts,
-                                      rec_file=rec_file, check_partials=check_partials, u_bound=u_bound)
+        self.ht = HohmannTransfer(body.GM, dep, arr)
+        self.deorbit_burn = ImpulsiveBurn(sc, self.ht.dva)
+
+        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.transfer.vp, theta, (0.0, 1.5*np.pi),
+                                      tof, t_bounds, method, nb_seg, order, solver, self.phase_name,
+                                      snopt_opts=snopt_opts, rec_file=rec_file, check_partials=check_partials,
+                                      u_bound=u_bound)
 
     def __str__(self):
 
@@ -298,10 +303,13 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
 
         self.phase_name = ('free', 'vertical')
 
-        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p), kind='descent')
-        self.deorbit_burn = DeorbitBurn(sc, self.ht.dva)
+        dep = TwoDimOrb(body.GM, a=(body.R + alt), e=0.0)
+        arr = TwoDimOrb(body.GM, a=(body.R + alt_p), e=0.0)
 
-        self.nlp = TwoDimDescTwoPhasesNLP(body, self.deorbit_burn.sc, alt_p, alt_switch, self.ht.vp, theta,
+        self.ht = HohmannTransfer(body.GM, dep, arr)
+        self.deorbit_burn = ImpulsiveBurn(sc, self.ht.dva)
+
+        self.nlp = TwoDimDescTwoPhasesNLP(body, self.deorbit_burn.sc, alt_p, alt_switch, self.ht.transfer.vp, theta,
                                           (0.0, np.pi), tof, t_bounds, method, nb_seg, order, solver, self.phase_name,
                                           snopt_opts=snopt_opts, rec_file=rec_file, check_partials=check_partials,
                                           fix=fix)

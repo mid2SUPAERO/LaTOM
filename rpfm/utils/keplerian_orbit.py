@@ -15,59 +15,61 @@ class TwoDimOrb:
 
         self.GM = gm
 
-        if ('ra' in kwargs) and ('rp' in kwargs):
+        if 'T' in kwargs:
+            self.T = kwargs['T']
+            self.a = (self.GM*self.T**2/4/np.pi**2)**(1/3)
+        elif 'a' in kwargs:
+            self.a = kwargs['a']
 
+        if hasattr(self, 'a'):
+            if 'e' in kwargs:
+                self.e = kwargs['e']
+                self.ra = self.a*(1 + self.e)
+                self.rp = self.a*(1 - self.e)
+            elif 'ra' in kwargs:
+                self.ra = kwargs['ra']
+                self.rp = 2*self.a - self.ra
+                self.e = self.ra/self.a - 1
+            elif 'rp' in kwargs:
+                self.rp = kwargs['rp']
+                self.ra = 2*self.a - self.rp
+                self.e = 1 - self.rp/self.a
+            else:
+                raise AttributeError('T or a must be provided with e, ra or rp')
+
+        elif ('e' in kwargs) and ('ra' in kwargs):
+            self.e = kwargs['e']
+            self.ra = kwargs['ra']
+            self.a = self.ra/(1 + self.e)
+            self.rp = self.a*(1 - self.e)
+        elif ('e' in kwargs) and ('rp' in kwargs):
+            self.e = kwargs['e']
+            self.rp = kwargs['rp']
+            self.a = self.rp/(1 - self.e)
+            self.ra = self.a*(1 + self.e)
+        elif ('ra' in kwargs) and ('rp' in kwargs):
             self.ra = kwargs['ra']
             self.rp = kwargs['rp']
             self.a = (self.ra + self.rp)/2
             self.e = (self.ra - self.rp)/(self.ra + self.rp)
-            self.T = 2 * np.pi / self.GM ** 0.5 * self.a ** 1.5
-
-        elif ('a' in kwargs) or ('T' in kwargs):
-
-            if 'T' in kwargs:
-
-                self.T = kwargs['T']
-                self.a = (self.GM*self.T**2/4/np.pi**2)**(1/3)
-
-            else:
-
-                self.a = kwargs['a']
-                self.T = 2*np.pi/self.GM**0.5*self.a**1.5
-
-            if 'ra' in kwargs:
-
-                self.ra = kwargs['ra']
-                self.e = self.ra/self.a - 1
-                self.rp = self.a*(1 - self.e)
-
-            elif 'rp' in kwargs:
-
-                self.rp = kwargs['rp']
-                self.e = 1 - self.rp/self.a
-                self.ra = self.a*(1 + self.e)
-
-            elif 'e' in kwargs:
-
-                self.e = kwargs['e']
-                self.ra = self.a*(1 + self.e)
-                self.rp = self.a * (1 - self.e)
-
-            else:
-                raise AttributeError('a or T must be provided with ra, rp or e')
-
         else:
-            raise AttributeError('kwargs must be (ra, rp) or one between (a, T) and one between (ra, rp, e)')
+            raise AttributeError('invalid kwargs combination')
 
-        self.va = (2*self.GM*self.rp/(self.ra*(self.ra + self.rp)))**0.5
-        self.vp = (2*self.GM*self.ra/(self.rp*(self.ra + self.rp)))**0.5
+        if not hasattr(self, 'T'):
+            self.T = 2*np.pi/gm**0.5*self.a**1.5
+
+        if self.e == 0.0:
+            self.va = self.vp = (gm/self.a)**0.5
+        else:
+            self.va = (2*gm*self.rp/(self.ra*(self.ra + self.rp)))**0.5
+            self.vp = (2*gm*self.ra/(self.rp*(self.ra + self.rp)))**0.5
+
         self.h = (gm * self.a * (1 - self.e ** 2)) ** 0.5
         self.n = (gm / self.a ** 3) ** 0.5
 
     def __str__(self):
 
-        lines = ['\n{:^50s}'.format('2D Keplerian Orbit:'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Semimajor axis:', self.a/1e3, 'km'),
+        lines = ['\n{:<25s}{:>20.6f}{:>5s}'.format('Semimajor axis:', self.a/1e3, 'km'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Eccentricity:', self.e, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Periapsis radius:', self.rp/1e3, 'km'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Apoapsis radius:', self.ra/1e3, 'km'),
@@ -464,5 +466,5 @@ if __name__ == '__main__':
     gme = 398600e9
     re = 6378.14e3
 
-    o = TwoDimOrb(gme, a=42164e3, e=0.)
+    o = TwoDimOrb(gme, rp=200e3, T=86164)
     print(o)
