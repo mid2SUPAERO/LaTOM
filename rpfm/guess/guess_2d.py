@@ -6,7 +6,7 @@
 import numpy as np
 from copy import deepcopy
 
-from scipy.integrate import solve_ivp, odeint
+from scipy.integrate import solve_ivp, odeint, simps
 from scipy.optimize import root
 
 from rpfm.utils.keplerian_orbit import KepOrb, TwoDimOrb
@@ -98,7 +98,9 @@ class PowConstRadius:
         self.theta0 = theta0
         self.t0 = t0
 
-        self.tf = self.thetaf = self.mf = self.vf2 = self.dv = None
+        self.dv_inf = self.vf - self.v0  # impulsive dV [m/s]
+
+        self.tf = self.thetaf = self.mf = self.dv = None
         self.t = self.r = self.theta = self.u = self.v = self.m = self.alpha = None
         self.states = self.controls = None
 
@@ -108,27 +110,31 @@ class PowConstRadius:
 
         return m
 
-    def compute_final_states(self):
+    def compute_final_time_states(self):
 
-        print('\nComputing final states for initial powered trajectory at constant R')
+        print('\nComputing final time for powered trajectory at constant R')
 
-        sol = solve_ivp(fun=lambda v, t: self.dt_dv(v, t, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
-                        t_span=(self.v0, self.vf), y0=[self.t0], rtol=1e-20, atol=1e-20)
+        sol_time = solve_ivp(fun=lambda v, t: self.dt_dv(v, t, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
+                             t_span=(self.v0, self.vf), y0=[self.t0], rtol=1e-20, atol=1e-20)
 
-        self.tf = sol.y[-1, -1]
+        print('output:', sol_time.message)
 
-        sol2 = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
-                         t_span=(self.t0, self.tf), y0=[self.theta0, self.v0], rtol=1e-20, atol=1e-20)
+        self.tf = sol_time.y[-1, -1]
 
-        self.thetaf = sol2.y[0, -1]
-        self.vf2 = sol2.y[1, -1]
+        print('\nComputing final states for powered trajectory at constant R')
 
+        sol_states = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
+                               t_span=(self.t0, self.tf), y0=[self.theta0, self.v0], rtol=1e-20, atol=1e-20)
+
+        print('output:', sol_states.message)
+
+        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-14, atol=1e-14))
+
+        self.thetaf = sol_states.y[0, -1]
         self.mf = self.compute_mass(self.tf)
-        self.dv = self.Isp*g0*np.log(self.m0/self.mf)
+        self.dv = self.Isp * g0 * np.log(self.m0 / self.mf)
 
-        print('output:', sol.message)
-
-        return sol
+        return sol_time, sol_states
 
     def compute_states(self, t_eval):
 
@@ -208,8 +214,29 @@ class TwoDimGuess:
 
         self.ht = HohmannTransfer(gm, dep, arr)
 
-        self.pow1 = self.pow2 = None
         self.t = self.states = self.controls = None
+
+    def __str__(self):
+
+        lines = ['\n{:^50s}'.format('Departure Orbit:'),
+                 self.ht.depOrb.__str__(),
+                 '\n{:^50s}'.format('Arrival Orbit:'),
+                 self.ht.arrOrb.__str__(),
+                 '\n{:^50s}'.format('Hohmann transfer:'),
+                 self.ht.transfer.__str__()]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class TwoDimLLOGuess(TwoDimGuess):
+
+    def __init__(self, gm, r, dep, arr, sc):
+
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
+        self.pow1 = self.pow2 = None
 
     def compute_trajectory(self, fix_final=False, **kwargs):
 
@@ -226,7 +253,7 @@ class TwoDimGuess:
         self.ht.compute_states(t_ht, self.pow1.tf, theta0=self.pow1.thetaf, m=self.pow1.mf)
 
         self.pow2.compute_states(t_pow2)
-        # self.pow2.states[-1, 3] = self.pow2.vf
+        self.pow2.states[-1, 3] = self.pow2.vf
 
         self.states = np.vstack((self.pow1.states, self.ht.states, self.pow2.states))
         self.controls = np.vstack((self.pow1.controls, self.ht.controls, self.pow2.controls))
@@ -236,19 +263,22 @@ class TwoDimGuess:
 
     def __str__(self):
 
-        lines = ['\n{:^50s}'.format('Departure Orbit:'),
-                 self.ht.depOrb.__str__(),
-                 '\n{:^50s}'.format('Arrival Orbit:'),
-                 self.ht.arrOrb.__str__(),
-                 '\n{:^50s}'.format('Hohmann transfer:'),
-                 self.ht.transfer.__str__()]
+        lines = [TwoDimGuess.__str__(self),
+                 '\n{:^50s}'.format('Departure burn:'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow1.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow1.dv, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.pow1.m0 - self.pow1.mf, 'kg'),
+                 '\n{:^50s}'.format('Arrival burn:'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow2.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow2.dv, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant mass:', self.pow2.m0 - self.pow2.mf, 'kg')]
 
         s = '\n'.join(lines)
 
         return s
 
 
-class TwoDimAscGuess(TwoDimGuess):
+class TwoDimAscGuess(TwoDimLLOGuess):
 
     def __init__(self, gm, r, alt, sc):
 
@@ -258,16 +288,16 @@ class TwoDimAscGuess(TwoDimGuess):
         TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
 
         self.pow1 = PowConstRadius(gm, r, 0.0, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
-        self.pow1.compute_final_states()
+        self.pow1.compute_final_time_states()
 
         self.pow2 = PowConstRadius(gm, (r + alt), self.ht.transfer.va, self.ht.arrOrb.va, self.pow1.mf, sc.T_max,
                                    sc.Isp, t0=(self.pow1.tf + self.ht.tof), theta0=(self.pow1.thetaf + np.pi))
-        self.pow2.compute_final_states()
+        self.pow2.compute_final_time_states()
 
         self.tf = self.pow2.tf
 
 
-class TwoDimDescGuess(TwoDimGuess):
+class TwoDimDescGuess(TwoDimLLOGuess):
 
     def __init__(self, gm, r, alt, sc):
 
@@ -277,11 +307,11 @@ class TwoDimDescGuess(TwoDimGuess):
         TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
 
         self.pow1 = PowConstRadius(gm, (r + alt), self.ht.depOrb.va, self.ht.transfer.va, sc.m0, sc.T_max, sc.Isp)
-        self.pow1.compute_final_states()
+        self.pow1.compute_final_time_states()
 
         self.pow2 = PowConstRadius(gm, r, self.ht.transfer.vp, 0.0, self.pow1.mf, sc.T_max, sc.Isp,
                                    t0=(self.pow1.tf + self.ht.tof), theta0=(self.pow1.thetaf + np.pi))
-        self.pow2.compute_final_states()
+        self.pow2.compute_final_time_states()
 
         self.tf = self.pow2.tf
 

@@ -31,12 +31,12 @@ if __name__ == '__main__':
     moon = Moon()
     sat = Spacecraft(450., 2., g=moon.g)
 
-    tr = TwoDimAscAnalyzerNRHO(moon, sat, 100e3, 3150e3, 6.5655*86400, None, 'gauss-lobatto', 200, 3, 'SNOPT')
+    tr = TwoDimAscAnalyzerNRHO(moon, sat, 100e3, 3150e3, 6.5655*86400, None, 'gauss-lobatto', 800, 3, 'SNOPT')
 
     tr.run_driver()
-    # tr.nlp.exp_sim()
+    tr.nlp.exp_sim()
 
-    tr.get_solutions(explicit=False)
+    tr.get_solutions(explicit=True)
 
     print(tr)
 

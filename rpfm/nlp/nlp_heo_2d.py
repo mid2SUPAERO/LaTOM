@@ -22,7 +22,8 @@ class TwoDimLLO2HEONLP(TwoDimVarNLP):
 
     def set_states_alpha_options(self, theta, u_bound=None):
 
-        self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=self.guess.ht.depOrb.a/self.body.R,
+        self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0,
+                                     # lower=self.guess.ht.depOrb.a/self.body.R,
                                      ref0=self.guess.ht.depOrb.a/self.body.R,
                                      ref=self.guess.ht.arrOrb.ra/self.body.R)
 
