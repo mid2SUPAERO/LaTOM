@@ -6,7 +6,7 @@
 import numpy as np
 from copy import deepcopy
 
-from scipy.integrate import solve_ivp, odeint, simps
+from scipy.integrate import solve_ivp, odeint
 from scipy.optimize import root
 
 from rpfm.utils.keplerian_orbit import KepOrb, TwoDimOrb
@@ -22,6 +22,13 @@ class ImpulsiveBurn:
 
         self.sc.m0 = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
         self.dm = sc.m0 - self.sc.m0
+
+
+class DeorbitBurn(ImpulsiveBurn):
+
+    def __init__(self, sc, dv):
+
+        ImpulsiveBurn.__init__(self, sc, dv)
 
 
 class HohmannTransfer:
@@ -264,14 +271,19 @@ class TwoDimLLOGuess(TwoDimGuess):
     def __str__(self):
 
         lines = [TwoDimGuess.__str__(self),
+                 '\n{:^50s}'.format('Initial guess:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
+                                                   (self.sc.m0 - self.pow2.mf)/self.sc.m0, ''),
                  '\n{:^50s}'.format('Departure burn:'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow1.dv_inf, 'm/s'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow1.dv_inf, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow1.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.pow1.m0 - self.pow1.mf, 'kg'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
+                                                 (self.pow1.m0 - self.pow1.mf)/self.sc.m0, ''),
                  '\n{:^50s}'.format('Arrival burn:'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow2.dv_inf, 'm/s'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow2.dv_inf, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow2.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant mass:', self.pow2.m0 - self.pow2.mf, 'kg')]
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
+                                                 (self.pow2.m0 - self.pow2.mf)/self.sc.m0, '')]
 
         s = '\n'.join(lines)
 

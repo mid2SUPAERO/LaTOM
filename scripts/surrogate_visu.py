@@ -16,14 +16,14 @@ path = dirname  # directory where the data are stored
 # desc_var: descent trajectory with variable thrust
 # desc_vland: descent trajectory with variable thrust and constraint on minimum safe altitude (not available for full)
 
-kind_lhs = 'desc_var'  # kind of transfer with full grid sampling
-kind_full = 'desc_var'  # kind of transfer with latin hypercube sampling
+kind_lhs = 'asc_var'  # kind of transfer with full grid sampling
+kind_full = 'asc_var'  # kind of transfer with latin hypercube sampling
 
 fid_lhs = ''.join([path, '/', kind_lhs, '_lhs.pkl'])
-fid_full = ''.join([path, '/', kind_lhs, '_lhs.pkl'])
+fid_full = ''.join([path, '/', kind_full, '_full.pkl'])
 
 train = True  # train the surrogate model (to be done before the first iteration)
-plot = False
+plot = True
 nb_eval = 2500  # number of evaluation point (must be a perfect square)
 
 sm_lhs = load(fid_lhs)  # object for full grid sampling

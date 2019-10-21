@@ -5,7 +5,7 @@ from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP
 from rpfm.plots.solutions import TwoDimSolPlot
 
 
-class TwoDimAscAnalyzerNRHO(TwoDimAscAnalyzer):
+class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False, u_bound='lower'):
@@ -22,22 +22,14 @@ class TwoDimAscAnalyzerNRHO(TwoDimAscAnalyzer):
                                  a=self.nlp.guess.ht.arrOrb.a, e=self.nlp.guess.ht.arrOrb.e)
         sol_plot.plot()
 
+    def __str__(self):
 
-if __name__ == '__main__':
+        lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
+                 self.nlp.guess.__str__(),
+                 '\n{:^50s}'.format('Optimal transfer:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1. - self.states[-1, -1]/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's')]
 
-    from rpfm.utils.primary import Moon
-    from rpfm.utils.spacecraft import Spacecraft
+        s = '\n'.join(lines)
 
-    moon = Moon()
-    sat = Spacecraft(450., 2., g=moon.g)
-
-    tr = TwoDimAscAnalyzerNRHO(moon, sat, 100e3, 3150e3, 6.5655*86400, None, 'gauss-lobatto', 800, 3, 'SNOPT')
-
-    tr.run_driver()
-    tr.nlp.exp_sim()
-
-    tr.get_solutions(explicit=True)
-
-    print(tr)
-
-    tr.plot()
+        return s

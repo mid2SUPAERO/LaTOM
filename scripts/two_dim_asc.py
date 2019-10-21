@@ -28,7 +28,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 240
+segments = 200
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
@@ -38,7 +38,7 @@ snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance':
 u_bound = 'lower'  # lower bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
-exp_sim = True  # perform explicit simulation
+exp_sim = False  # perform explicit simulation
 rec = False  # record the solution
 
 # record databases
