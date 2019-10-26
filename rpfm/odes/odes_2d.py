@@ -432,9 +432,9 @@ class Injection2Apolune(ExplicitComponent):
 
         ar = np.arange(self.options['num_nodes'])
 
-        self.declare_partials(of='c', wrt='r', rows=ar, cols=ar)
-        self.declare_partials(of='c', wrt='u', rows=ar, cols=ar)
-        self.declare_partials(of='c', wrt='v', rows=ar, cols=ar)
+        self.declare_partials(of='c', wrt='r', cols=ar, rows=ar)  # method='cs')
+        self.declare_partials(of='c', wrt='u', cols=ar, rows=ar)  # method='cs')
+        self.declare_partials(of='c', wrt='v', cols=ar, rows=ar)  # method='cs')
 
     def compute(self, inputs, outputs):
 
@@ -444,8 +444,8 @@ class Injection2Apolune(ExplicitComponent):
         u = inputs['u']
         v = inputs['v']
 
-        a = 2*gm - r*(u*u+v*v)
-        c = a*(a*ra**2 - 2*gm*r*ra + (r*v)**2)
+        c = ((2*gm - r*(u**2 + v**2))*ra - gm*r)**2 - r**2*((r*v**2 - gm)**2 + (r*u*v)**2)
+        # c = (2*gm - r*(u**2 + v**2))*ra - gm*r - r*((r*v**2 - gm)**2 + (r*u*v)**2)**0.5
 
         outputs['c'] = c
 
@@ -457,18 +457,13 @@ class Injection2Apolune(ExplicitComponent):
         u = inputs['u']
         v = inputs['v']
 
-        a = 2 * gm - r * (u * u + v * v)
-        dadr = -(u*u+v*v)
-        dadu = -2*r*u
-        dadv = -2*r*v
+        jacobian['c', 'r'] = 2*r*ra**2*(u**2+v**2)**2 + 2*r*gm**2 - 4*gm*ra*(u**2+v**2) - 4*gm**2*ra + \
+                             4*gm*ra*r*(u**2+v**2) - 2*r*(r*v**2 - gm)**2 - r**2*2*(r*v**2 - gm)*v**2 - 4*r**3*u**2*v**2
 
-        dcdr = (2*a*ra - gm*r)*ra*dadr + (2*a + r*dadr)*(r*v*v - gm*ra)
-        dcdu = dadu*(2*a*ra**2 + r**2*v**2 - 2*gm*r*ra)
-        dcdv = 2*a*(ra**2*dadv + v*r**2) + dadv*(r**2*v**2 - 2*gm*r*ra)
+        jacobian['c', 'u'] = r**2*ra**2*4*u*(u**2+v**2) - 8*gm*r*ra**2*u + 4*gm*ra*r**2*u - 2*r**4*v**2*u
+        jacobian['c', 'v'] = r**2*ra**2*4*v*(u**2+v**2) - 8*gm*r*ra**2*v + 4*gm*ra*r**2*v - 4*r**3*v*(r*v**2 - gm) - \
+                             2*r**4*v*u**2
 
-        jacobian['c', 'r'] = dcdr
-        jacobian['c', 'u'] = dcdu
-        jacobian['c', 'v'] = dcdv
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')

@@ -56,12 +56,9 @@ class TwoDimNLP(SinglePhaseNLP):
 
         self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
 
-    def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
+    def set_initial_guess(self, throttle=True, check_partials=False, fix_final=False):
 
         self.set_time_guess(self.tof)
-
-        print(self.t_control*self.body.tc)
-
         self.guess.compute_trajectory(t_eval=self.t_control*self.body.tc, fix_final=fix_final)
 
         self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)
@@ -77,8 +74,6 @@ class TwoDimNLP(SinglePhaseNLP):
         self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
 
         self.p.run_model()
-
-        print(np.take(self.guess.states[:, 1], self.idx_state_control))
 
         if check_partials:
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
@@ -104,7 +99,7 @@ class TwoDimConstNLP(TwoDimNLP):
         self.set_time_options(tof, t_bounds)
         self.set_objective()
 
-    def set_initial_guess(self, bcs, check_partials=False):
+    def set_initial_guess_interpolation(self, bcs, check_partials=False):
 
         self.set_time_guess(self.tof)
 
@@ -133,7 +128,7 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
         bcs = np.array([[1.0, self.r_circ/self.body.R], [0.0, theta], [0.0, 0.0], [0.0, self.v_circ/self.body.vc],
                         [self.sc.m0, self.sc.m_dry], [0.0, 0.0]])
 
-        self.set_initial_guess(bcs, check_partials=check_partials)
+        self.set_initial_guess_interpolation(bcs, check_partials=check_partials)
 
 
 class TwoDimDescConstNLP(TwoDimConstNLP):
@@ -149,7 +144,7 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
         bcs = np.array([[self.r_circ/self.body.R, 1.0], [0.0, theta], [0.0, 0.0], [self.vp/self.body.vc, 0.0],
                         [self.sc.m0, self.sc.m_dry], [1.5*np.pi, np.pi/2]])
 
-        self.set_initial_guess(bcs, check_partials=check_partials)
+        self.set_initial_guess_interpolation(bcs, check_partials=check_partials)
 
 
 class TwoDimVarNLP(TwoDimNLP):

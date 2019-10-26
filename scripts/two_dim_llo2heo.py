@@ -24,15 +24,15 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 30
+segments = 100
 order = 3
 solver = 'IPOPT'
-snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
-              'Minor feasibility tolerance': 1e-8}
+snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
+              'Minor feasibility tolerance': 1e-12}
 
 # additional settings
 run_driver = True  # solve the NLP
-exp_sim = True  # perform explicit simulation
+exp_sim = run_driver  # perform explicit simulation
 
 # analyzer
 if kind == 'full':
@@ -40,7 +40,7 @@ if kind == 'full':
                                snopt_opts=snopt_opts)
 elif kind == 'first':
     tr = TwoDimLLO2ApoAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, None, method, segments, order, solver,
-                               snopt_opts=snopt_opts)
+                               snopt_opts=snopt_opts, check_partials=True)
 else:
     raise ValueError('wrong kind')
 
@@ -52,6 +52,9 @@ if run_driver:
         tr.nlp.exp_sim()
 
 tr.get_solutions(explicit=exp_sim)
+
+if kind == 'first':
+    tr.compute_ra()
 
 print(tr)
 

@@ -46,17 +46,17 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         guess = TwoDimLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
         ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': guess.ht.arrOrb.ra/body.R}
 
+        print(guess.ht.arrOrb.ra)
+
         TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dLLO2Apo,
                            ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
 
-        self.guess = guess.pow
-
-        print(self.guess.theta0, self.guess.thetaf)
+        self.guess = guess
 
         # states options
         self.phase.set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0,
                                      ref=self.r_circ / self.body.R)
-        self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=self.guess.thetaf)
+        self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=self.guess.pow.thetaf)
         self.phase.set_state_options('u', fix_initial=True, fix_final=False, ref0=0.0, ref=self.v_circ / self.body.vc)
         self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0, ref=self.v_circ / self.body.vc)
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
@@ -72,10 +72,10 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
 
         # time options
-        self.set_time_options(self.guess.tf, t_bounds)
+        self.set_time_options(self.guess.pow.tf, t_bounds)
 
         # constraint on injection
-        self.phase.add_boundary_constraint('c', loc='final', equals=0.0)
+        self.phase.add_boundary_constraint('c', loc='final', equals=0.0, shape=(1,), scaler=100.)
 
         # objective
         self.set_objective()
@@ -85,5 +85,3 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
 
         # initial guess
         TwoDimNLP.set_initial_guess(self, check_partials=check_partials, throttle=False)
-
-        # print(self.guess.pow.states[:, 1])

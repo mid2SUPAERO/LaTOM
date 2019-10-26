@@ -41,7 +41,7 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
 
         self.tf = self.pow.tf + self.ht.tof
 
-    def compute_trajectory(self, **kwargs):
+    def compute_trajectory(self, fix_final=True, **kwargs):
 
         TwoDimHEOGuess.compute_trajectory(self, **kwargs)
 
@@ -54,12 +54,13 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
         self.states = np.vstack((self.pow.states, self.ht.states))
         self.controls = np.vstack((self.pow.controls, self.ht.controls))
 
-        self.states[:, 1] = self.states[:, 1] - self.pow.thetaf  # final true anomaly equal to pi
+        if fix_final:
+            self.states[:, 1] = self.states[:, 1] - self.pow.thetaf  # final true anomaly equal to pi
 
         # injection burn at the NRHO aposelene
-        self.states[-1, 3] = self.ht.arrOrb.va
-        self.states[-1, 4] = self.pow.mf*np.exp(-self.ht.dva/self.sc.Isp/g0)
-        self.controls[-1, 0] = self.sc.T_max
+        # self.states[-1, 3] = self.ht.arrOrb.va
+        # self.states[-1, 4] = self.pow.mf*np.exp(-self.ht.dva/self.sc.Isp/g0)
+        # self.controls[-1, 0] = self.sc.T_max
 
     def __str__(self):
 
@@ -143,7 +144,7 @@ if __name__ == '__main__':
     case = 'ascent'
 
     moon = Moon()
-    h = 0.
+    h = 100.
     r_p = 3150e3
     T = 6.5655*86400
     sat = Spacecraft(450, 100., g=moon.g)
@@ -165,9 +166,8 @@ if __name__ == '__main__':
         raise ValueError('case must be equal to ascent or descent')
 
     t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
-    # t_all = np.reshape(np.linspace(0.0, tr.pow.tf + tr.ht.tof, 401), (401, 1))
 
-    tr.compute_trajectory(t_eval=t_all)
+    tr.compute_trajectory(t_eval=t_all, fix_final=False)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

@@ -143,9 +143,8 @@ class PowConstRadius:
 
         return sol_time, sol_states
 
-    def compute_trajectory(self, t_eval, fix_final=False):
+    def compute_trajectory(self, t_eval):
 
-        t_eval = t_eval.flatten()
         nb_nodes = len(t_eval)
 
         print('\nIntegrating ODEs for initial powered trajectory at constant R ')

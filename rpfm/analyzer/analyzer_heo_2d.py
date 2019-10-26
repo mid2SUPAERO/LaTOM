@@ -46,8 +46,33 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                                     solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                     check_partials=check_partials)
 
+        self.rf = self.uf = self.vf = self.ef = self.af = self.raf = None
+
+    def compute_ra(self):
+
+        self.rf = self.states[-1, 0]
+        self.uf = self.states[-1, 2]
+        self.vf = self.states[-1, 3]
+
+        hf = self.rf*self.vf
+        self.af = self.body.GM*self.rf/(2*self.body.GM - self.rf*(self.uf**2+self.vf**2))
+        self.ef = (1 - hf**2/self.body.GM/self.af)**0.5
+        self.raf = self.af*(1 + self.ef)
+
     def plot(self):
 
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
                                  threshold=None)
         sol_plot.plot()
+
+    def __str__(self):
+
+        lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
+                 self.nlp.guess.__str__(),
+                 '\n{:^50s}'.format('Optimal transfer:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1. - self.states[-1, -1]/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's')]
+
+        s = '\n'.join(lines)
+
+        return s
