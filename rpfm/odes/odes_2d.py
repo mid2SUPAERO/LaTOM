@@ -432,9 +432,9 @@ class Injection2Apolune(ExplicitComponent):
 
         ar = np.arange(self.options['num_nodes'])
 
-        self.declare_partials(of='c', wrt='r', cols=ar, rows=ar)  # method='cs')
-        self.declare_partials(of='c', wrt='u', cols=ar, rows=ar)  # method='cs')
-        self.declare_partials(of='c', wrt='v', cols=ar, rows=ar)  # method='cs')
+        self.declare_partials(of='c', wrt='r', method='cs')
+        self.declare_partials(of='c', wrt='u', method='cs')
+        self.declare_partials(of='c', wrt='v', method='cs')
 
     def compute(self, inputs, outputs):
 
@@ -449,6 +449,7 @@ class Injection2Apolune(ExplicitComponent):
 
         outputs['c'] = c
 
+    """
     def compute_partials(self, inputs, jacobian):
 
         gm = self.options['GM']
@@ -463,7 +464,7 @@ class Injection2Apolune(ExplicitComponent):
         jacobian['c', 'u'] = r**2*ra**2*4*u*(u**2+v**2) - 8*gm*r*ra**2*u + 4*gm*ra*r**2*u - 2*r**4*v**2*u
         jacobian['c', 'v'] = r**2*ra**2*4*v*(u**2+v**2) - 8*gm*r*ra**2*v + 4*gm*ra*r**2*v - 4*r**3*v*(r*v**2 - gm) - \
                              2*r**4*v*u**2
-
+        """
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')

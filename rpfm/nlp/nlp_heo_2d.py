@@ -46,8 +46,6 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         guess = TwoDimLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
         ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': guess.ht.arrOrb.ra/body.R}
 
-        print(guess.ht.arrOrb.ra)
-
         TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dLLO2Apo,
                            ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
 
@@ -75,7 +73,7 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         self.set_time_options(self.guess.pow.tf, t_bounds)
 
         # constraint on injection
-        self.phase.add_boundary_constraint('c', loc='final', equals=0.0, shape=(1,), scaler=100.)
+        self.phase.add_boundary_constraint('c', loc='final', equals=0.0, shape=(1,))
 
         # objective
         self.set_objective()

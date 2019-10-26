@@ -1,8 +1,17 @@
+"""
+@authors: Alberto FOSSA' Giuliana Elena MICELI
+
+"""
+
 import numpy as np
+from copy import deepcopy
 
 from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer
 from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP
 from rpfm.plots.solutions import TwoDimSolPlot
+from rpfm.utils.keplerian_orbit import TwoDimOrb
+from rpfm.guess.guess_2d import ImpulsiveBurn
+from rpfm.utils.const import g0
 
 
 class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
@@ -46,23 +55,30 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                                     solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                     check_partials=check_partials)
 
-        self.rf = self.uf = self.vf = self.ef = self.af = self.raf = None
+        self.transfer = self.insertion_burn = self.dv = None
 
-    def compute_ra(self):
+    def compute_insertion_burn(self):
 
-        self.rf = self.states[-1, 0]
-        self.uf = self.states[-1, 2]
-        self.vf = self.states[-1, 3]
+        rf = self.states[-1, 0]
+        uf = self.states[-1, 2]
+        vf = self.states[-1, 3]
+        mf = self.states[-1, -1]
 
-        hf = self.rf*self.vf
-        self.af = self.body.GM*self.rf/(2*self.body.GM - self.rf*(self.uf**2+self.vf**2))
-        self.ef = (1 - hf**2/self.body.GM/self.af)**0.5
-        self.raf = self.af*(1 + self.ef)
+        ht = rf*vf
+        at = self.body.GM*rf/(2*self.body.GM - rf*(uf**2 + vf**2))
+        et = (1 - ht**2/self.body.GM/at)**0.5
+
+        sc = deepcopy(self.sc)
+        sc.m0 = mf
+
+        self.dv = self.sc.Isp*g0*np.log(self.sc.m0/mf)
+        self.transfer = TwoDimOrb(self.body.GM, a=at, e=et)
+        self.insertion_burn = ImpulsiveBurn(sc, self.nlp.guess.ht.arrOrb.va - self.transfer.va)
 
     def plot(self):
 
         sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 threshold=None)
+                                 threshold=None, a=self.nlp.guess.ht.arrOrb.a, e=self.nlp.guess.ht.arrOrb.e)
         sol_plot.plot()
 
     def __str__(self):
@@ -70,8 +86,16 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
                  self.nlp.guess.__str__(),
                  '\n{:^50s}'.format('Optimal transfer:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1. - self.states[-1, -1]/self.sc.m0, ''),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's')]
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
+                                                   1 - self.insertion_burn.sc.m0/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight (burn):', self.tof, 's'),
+                 '\n{:^50s}'.format('Departure burn:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.nlp.guess.pow.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[-1, -1]/self.sc.m0, ''),
+                 '\n{:^50s}'.format('Injection burn:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.insertion_burn.dv, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.insertion_burn.dm/self.sc.m0, '')]
 
         s = '\n'.join(lines)
 

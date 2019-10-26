@@ -56,10 +56,10 @@ class TwoDimNLP(SinglePhaseNLP):
 
         self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
 
-    def set_initial_guess(self, throttle=True, check_partials=False, fix_final=False):
+    def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
 
         self.set_time_guess(self.tof)
-        self.guess.compute_trajectory(t_eval=self.t_control*self.body.tc, fix_final=fix_final)
+        self.guess.compute_trajectory(t_eval=self.t_control*self.body.tc, fix_final=fix_final, throttle=throttle)
 
         self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)
         self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.idx_state_control)

@@ -4,10 +4,11 @@
 """
 
 import numpy as np
+from copy import deepcopy
 
 from rpfm.utils.const import g0
 from rpfm.utils.keplerian_orbit import TwoDimOrb
-from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius
+from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius, ImpulsiveBurn
 
 
 class TwoDimHEOGuess(TwoDimGuess):
@@ -41,7 +42,9 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
 
         self.tf = self.pow.tf + self.ht.tof
 
-    def compute_trajectory(self, fix_final=True, **kwargs):
+        self.insertion_burn = None
+
+    def compute_trajectory(self, fix_final=True, throttle=True, **kwargs):
 
         TwoDimHEOGuess.compute_trajectory(self, **kwargs)
 
@@ -57,25 +60,30 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
         if fix_final:
             self.states[:, 1] = self.states[:, 1] - self.pow.thetaf  # final true anomaly equal to pi
 
-        # injection burn at the NRHO aposelene
-        # self.states[-1, 3] = self.ht.arrOrb.va
-        # self.states[-1, 4] = self.pow.mf*np.exp(-self.ht.dva/self.sc.Isp/g0)
-        # self.controls[-1, 0] = self.sc.T_max
+        # insertion burn at the NRHO aposelene
+        sc = deepcopy(self.sc)
+        sc.m0 = self.pow.mf
+
+        self.insertion_burn = ImpulsiveBurn(sc, self.ht.dva)
+
+        if throttle:
+            self.states[-1, 3] = self.ht.arrOrb.va
+            self.states[-1, 4] = self.insertion_burn.mf  # self.pow.mf*np.exp(-self.ht.dva/self.sc.Isp/g0)
+            self.controls[-1, 0] = self.sc.T_max
 
     def __str__(self):
 
         lines = [TwoDimHEOGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                   (self.sc.m0 - self.states[-1, -1]) / self.sc.m0, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.insertion_burn.mf/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tf/86400, 'days'),
                  '\n{:^50s}'.format('Departure burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow.dv_inf, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow.dv, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (self.pow.m0 - self.pow.mf)/self.sc.m0, ''),
                  '\n{:^50s}'.format('Injection burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.ht.dva, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                 (self.pow.mf - self.states[-1, -1])/self.sc.m0, '')]
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.insertion_burn.dm/self.sc.m0, '')]
 
         s = '\n'.join(lines)
 
@@ -122,6 +130,7 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
                  '\n{:^50s}'.format('Initial guess:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
                                                    (self.sc.m0 - self.states[-1, -1]) / self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tf/86400, 'days'),
                  '\n{:^50s}'.format('Deorbit burn:'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.ht.dva, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (self.sc.m0 - self.m_ht)/self.sc.m0, ''),
@@ -144,10 +153,10 @@ if __name__ == '__main__':
     case = 'ascent'
 
     moon = Moon()
-    h = 100.
+    h = 100e3
     r_p = 3150e3
     T = 6.5655*86400
-    sat = Spacecraft(450, 100., g=moon.g)
+    sat = Spacecraft(450, 2.1, g=moon.g)
     nb = (100, 100)
 
     if case == 'ascent':

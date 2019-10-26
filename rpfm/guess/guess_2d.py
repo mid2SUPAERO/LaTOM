@@ -20,8 +20,8 @@ class ImpulsiveBurn:
         self.sc = deepcopy(sc)
         self.dv = dv
 
-        self.sc.m0 = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
-        self.dm = sc.m0 - self.sc.m0
+        self.mf = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
+        self.dm = sc.m0 - self.mf
 
 
 class DeorbitBurn(ImpulsiveBurn):
@@ -105,7 +105,7 @@ class PowConstRadius:
         self.theta0 = theta0
         self.t0 = t0
 
-        self.dv_inf = self.vf - self.v0  # impulsive dV [m/s]
+        self.dv_inf = np.fabs(self.vf - self.v0)  # impulsive dV [m/s]
 
         self.tf = self.thetaf = self.mf = self.dv = None
         self.t = self.r = self.theta = self.u = self.v = self.m = self.alpha = None
@@ -274,6 +274,7 @@ class TwoDimLLOGuess(TwoDimGuess):
                  '\n{:^50s}'.format('Initial guess:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
                                                    (self.sc.m0 - self.pow2.mf)/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.pow2.tf, 's'),
                  '\n{:^50s}'.format('Departure burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow1.dv_inf, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow1.dv, 'm/s'),
