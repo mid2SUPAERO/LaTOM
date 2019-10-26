@@ -23,6 +23,8 @@ class TwoDimNLP(SinglePhaseNLP):
         self.r_circ = body.R + self.alt
         self.v_circ = (body.GM/self.r_circ)**0.5
 
+        self.guess = None
+
     def set_states_alpha_options(self, theta, u_bound=None):
 
         self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0, ref0=1.0,
@@ -53,6 +55,33 @@ class TwoDimNLP(SinglePhaseNLP):
                                ref=self.alpha_bounds[1])
 
         self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
+
+    def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
+
+        self.set_time_guess(self.tof)
+
+        print(self.t_control*self.body.tc)
+
+        self.guess.compute_trajectory(t_eval=self.t_control*self.body.tc, fix_final=fix_final)
+
+        self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)
+        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.idx_state_control)
+        self.p[self.phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, self.idx_state_control)
+        self.p[self.phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, self.idx_state_control)
+        self.p[self.phase_name + '.states:m'] = np.take(self.guess.states[:, 4], self.idx_state_control)
+
+        if throttle:
+            self.p[self.phase_name + '.controls:thrust'] =\
+                np.reshape(self.guess.controls[:, 0]/self.sc.m0/self.body.g, (len(self.t_control), 1))
+
+        self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
+
+        self.p.run_model()
+
+        print(np.take(self.guess.states[:, 1], self.idx_state_control))
+
+        if check_partials:
+            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
 
 class TwoDimConstNLP(TwoDimNLP):
@@ -150,27 +179,6 @@ class TwoDimVarNLP(TwoDimNLP):
 
         self.set_time_options(self.guess.tf, t_bounds)
         self.set_objective()
-
-    def set_initial_guess(self, check_partials=False, fix_final=False):
-
-        self.set_time_guess(self.tof)
-
-        self.guess.compute_trajectory(t=self.t_control*self.body.tc, fix_final=fix_final)
-
-        self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)
-        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.idx_state_control)
-        self.p[self.phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:m'] = np.take(self.guess.states[:, 4], self.idx_state_control)
-
-        self.p[self.phase_name + '.controls:thrust'] =\
-            np.reshape(self.guess.controls[:, 0]/self.sc.m0/self.body.g, (len(self.t_control), 1))
-        self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
-
-        self.p.run_model()
-
-        if check_partials:
-            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
 
 class TwoDimAscVarNLP(TwoDimVarNLP):

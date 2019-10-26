@@ -10,14 +10,6 @@ from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius
 
 
-def compute_losses(gm, r, dv_inf, dv, a0, t):
-
-    estimate_losses = 2/3*gm/r**3*a0*t**3
-    computed_losses = dv - dv_inf
-
-    return estimate_losses, computed_losses
-
-
 class TwoDimHEOGuess(TwoDimGuess):
 
     def __init__(self, gm, r, dep, arr, sc):
@@ -28,8 +20,8 @@ class TwoDimHEOGuess(TwoDimGuess):
 
     def compute_trajectory(self, **kwargs):
 
-        if 't' in kwargs:
-            self.t = kwargs['t']
+        if 't_eval' in kwargs:
+            self.t = kwargs['t_eval']
         elif 'nb_nodes' in kwargs:
             self.t = np.reshape(np.linspace(0.0, self.pow.tf + self.ht.tof, kwargs['nb_nodes']),
                                 (kwargs['nb_nodes'], 1))
@@ -49,8 +41,6 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
 
         self.tf = self.pow.tf + self.ht.tof
 
-        self.el, self.cl = compute_losses(gm, (r+alt), self.ht.dvp, self.pow.dv, sc.T_max/sc.m0, self.pow.tf)
-
     def compute_trajectory(self, **kwargs):
 
         TwoDimHEOGuess.compute_trajectory(self, **kwargs)
@@ -58,8 +48,8 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
         t_pow = self.t[self.t <= self.pow.tf]
         t_ht = self.t[self.t > self.pow.tf]
 
-        self.pow.compute_states(t_pow)
-        self.ht.compute_states(t_ht, self.pow.tf, theta0=self.pow.thetaf, m=self.pow.mf)
+        self.pow.compute_trajectory(t_pow)
+        self.ht.compute_trajectory(t_ht, self.pow.tf, theta0=self.pow.thetaf, m=self.pow.mf)
 
         self.states = np.vstack((self.pow.states, self.ht.states))
         self.controls = np.vstack((self.pow.controls, self.ht.controls))
@@ -115,7 +105,7 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         t_pow = self.t[self.t >= self.ht.tof]
 
         self.ht.compute_states(t_ht, 0.0, theta0=np.pi, m=self.m_ht)
-        self.pow.compute_states(t_pow)
+        self.pow.compute_trajectory(t_pow)
 
         self.states = np.vstack((self.ht.states, self.pow.states))
         self.controls = np.vstack((self.ht.controls, self.pow.controls))
@@ -156,7 +146,7 @@ if __name__ == '__main__':
     h = 0.
     r_p = 3150e3
     T = 6.5655*86400
-    sat = Spacecraft(450, 2., g=moon.g)
+    sat = Spacecraft(450, 100., g=moon.g)
     nb = (100, 100)
 
     if case == 'ascent':
@@ -177,7 +167,7 @@ if __name__ == '__main__':
     t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
     # t_all = np.reshape(np.linspace(0.0, tr.pow.tf + tr.ht.tof, 401), (401, 1))
 
-    tr.compute_trajectory(t=t_all)
+    tr.compute_trajectory(t_eval=t_all)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

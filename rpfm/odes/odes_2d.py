@@ -410,3 +410,94 @@ class ODE2dVToff(Group):
                                           slope=self.options['slope']),
                            promotes_inputs=['r', 'theta'],
                            promotes_outputs=['r_safe', 'dist_safe'])
+
+
+class Injection2Apolune(ExplicitComponent):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+        self.options.declare('ra', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+
+        self.add_output('c', val=np.zeros(nn), desc='condition to reach the apolune')
+
+        ar = np.arange(self.options['num_nodes'])
+
+        self.declare_partials(of='c', wrt='r', rows=ar, cols=ar)
+        self.declare_partials(of='c', wrt='u', rows=ar, cols=ar)
+        self.declare_partials(of='c', wrt='v', rows=ar, cols=ar)
+
+    def compute(self, inputs, outputs):
+
+        gm = self.options['GM']
+        ra = self.options['ra']
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+
+        a = 2*gm - r*(u*u+v*v)
+        c = a*(a*ra**2 - 2*gm*r*ra + (r*v)**2)
+
+        outputs['c'] = c
+
+    def compute_partials(self, inputs, jacobian):
+
+        gm = self.options['GM']
+        ra = self.options['ra']
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+
+        a = 2 * gm - r * (u * u + v * v)
+        dadr = -(u*u+v*v)
+        dadu = -2*r*u
+        dadv = -2*r*v
+
+        dcdr = (2*a*ra - gm*r)*ra*dadr + (2*a + r*dadr)*(r*v*v - gm*ra)
+        dcdu = dadu*(2*a*ra**2 + r**2*v**2 - 2*gm*r*ra)
+        dcdv = 2*a*(ra**2*dadv + v*r**2) + dadv*(r**2*v**2 - 2*gm*r*ra)
+
+        jacobian['c', 'r'] = dcdr
+        jacobian['c', 'u'] = dcdu
+        jacobian['c', 'v'] = dcdv
+
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
+class ODE2dLLO2Apo(Group):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+        self.options.declare('T', types=float)
+        self.options.declare('w', types=float)
+        self.options.declare('ra', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        self.add_subsystem(name='odes', subsys=ODE2dConstThrust(num_nodes=nn, GM=self.options['GM'],
+                                                                T=self.options['T'], w=self.options['w']),
+                           promotes_inputs=['r', 'u', 'v', 'm', 'alpha', 'thrust', 'w'],
+                           promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
+
+        self.add_subsystem(name='injection2apo',
+                           subsys=Injection2Apolune(num_nodes=nn, GM=self.options['GM'], ra=self.options['ra']),
+                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['c'])

@@ -1,7 +1,7 @@
 import numpy as np
 
 from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer
-from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP
+from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP
 from rpfm.plots.solutions import TwoDimSolPlot
 
 
@@ -33,3 +33,21 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
         s = '\n'.join(lines)
 
         return s
+
+
+class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
+
+    def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
+                 check_partials=False, u_bound='lower'):
+
+        TwoDimAscAnalyzer.__init__(self, body, sc, alt)
+
+        self.nlp = TwoDimLLO2ApoNLP(body, sc, alt, rp, t, (-np.pi / 2, np.pi / 2), t_bounds, method, nb_seg, order,
+                                    solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                    check_partials=check_partials)
+
+    def plot(self):
+
+        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 threshold=None)
+        sol_plot.plot()

@@ -59,7 +59,7 @@ class HohmannTransfer:
         self.r = self.theta = self.u = self.v = None
         self.states = self.controls = None
 
-    def compute_states(self, t, tp, theta0=0.0, m=1.0):
+    def compute_trajectory(self, t, tp, theta0=0.0, m=1.0):
 
         nb_nodes = len(t)
         ea0 = np.reshape(np.linspace(0.0, np.pi, nb_nodes), (nb_nodes, 1))
@@ -143,8 +143,9 @@ class PowConstRadius:
 
         return sol_time, sol_states
 
-    def compute_states(self, t_eval):
+    def compute_trajectory(self, t_eval, fix_final=False):
 
+        t_eval = t_eval.flatten()
         nb_nodes = len(t_eval)
 
         print('\nIntegrating ODEs for initial powered trajectory at constant R ')
@@ -247,8 +248,8 @@ class TwoDimLLOGuess(TwoDimGuess):
 
     def compute_trajectory(self, fix_final=False, **kwargs):
 
-        if 't' in kwargs:
-            self.t = kwargs['t']
+        if 't_eval' in kwargs:
+            self.t = kwargs['t_eval']
         elif 'nb_nodes' in kwargs:
             self.t = np.reshape(np.linspace(0.0, self.pow2.tf, kwargs['nb_nodes']), (kwargs['nb_nodes'], 1))
 
@@ -256,10 +257,10 @@ class TwoDimLLOGuess(TwoDimGuess):
         t_ht = self.t[(self.t > self.pow1.tf) & (self.t < (self.pow1.tf + self.ht.tof))]
         t_pow2 = self.t[self.t >= (self.pow1.tf + self.ht.tof)]
 
-        self.pow1.compute_states(t_pow1)
-        self.ht.compute_states(t_ht, self.pow1.tf, theta0=self.pow1.thetaf, m=self.pow1.mf)
+        self.pow1.compute_trajectory(t_pow1)
+        self.ht.compute_trajectory(t_ht, self.pow1.tf, theta0=self.pow1.thetaf, m=self.pow1.mf)
 
-        self.pow2.compute_states(t_pow2)
+        self.pow2.compute_trajectory(t_pow2)
         self.pow2.states[-1, 3] = self.pow2.vf
 
         self.states = np.vstack((self.pow1.states, self.ht.states, self.pow2.states))
@@ -355,7 +356,7 @@ if __name__ == '__main__':
     t_all = np.reshape(np.hstack((t1, t2[1:-1], t3)), (np.sum(nb), 1))
     # t_all = np.reshape(np.linspace(0.0, tr.pow2.tf, 201), (201, 1))
 
-    tr.compute_trajectory(t=t_all, fix_final=False)
+    tr.compute_trajectory(t_eval=t_all, fix_final=False)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case)
     p.plot()
