@@ -13,7 +13,7 @@ from rpfm.odes.odes_2d import ODE2dLLO2Apo
 class TwoDimLLO2HEONLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower', fix_final=False):
+                 snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower', fix_final=True):
 
         guess = TwoDimLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
 

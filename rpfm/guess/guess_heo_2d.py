@@ -176,7 +176,7 @@ if __name__ == '__main__':
 
     t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
 
-    tr.compute_trajectory(t_eval=t_all, fix_final=False)
+    tr.compute_trajectory(t_eval=t_all, fix_final=True)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

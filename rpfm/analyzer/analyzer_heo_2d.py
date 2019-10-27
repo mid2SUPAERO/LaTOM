@@ -6,7 +6,7 @@
 import numpy as np
 from copy import deepcopy
 
-from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer
+from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
 from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP
 from rpfm.plots.solutions import TwoDimSolPlot
 from rpfm.utils.keplerian_orbit import TwoDimOrb
@@ -37,7 +37,8 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
                  self.nlp.guess.__str__(),
                  '\n{:^50s}'.format('Optimal transfer:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1. - self.states[-1, -1]/self.sc.m0, ''),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's')]
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's'),
+                 TwoDimAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
 
