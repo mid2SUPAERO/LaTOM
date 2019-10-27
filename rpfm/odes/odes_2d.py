@@ -457,7 +457,7 @@ class Injection2Apolune(ExplicitComponent):
         v = inputs['v']
 
         a = 2 * gm - r * (u * u + v * v)
-        b = 2*a*ra**2 + r**3*v**2 - 2*gm*ra*r
+        b = 2*ra*(a*ra - gm*r) + r**3*v**2
 
         jacobian['c', 'r'] = - (u*u + v*v)*b + a*(3*r**2*v**2 - 2*gm*ra)
         jacobian['c', 'u'] = - 2*r*u*b

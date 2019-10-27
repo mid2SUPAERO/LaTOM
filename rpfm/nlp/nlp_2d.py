@@ -25,30 +25,52 @@ class TwoDimNLP(SinglePhaseNLP):
 
         self.guess = None
 
-    def set_states_alpha_options(self, theta, u_bound=None):
+    def set_states_options(self, theta, u_bound=None):
 
+        # radius
         self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0, ref0=1.0,
                                      ref=self.r_circ/self.body.R)
 
-        if theta > 0.0:  # all cases except descent with variable thrust and constraint on minimum safe altitude
+        # angle (all cases except descent with variable thrust and constraint on minimum safe altitude)
+        if theta > 0.0:
             self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=theta)
-        else:  # only descent with variable thrust and constraint on minimum safe altitude
+
+        # angle (only descent with variable thrust and constraint on minimum safe altitude)
+        else:
             self.phase.set_state_options('theta', fix_initial=False, fix_final=True, upper=0.0, adder=-theta,
                                          scaler=-1.0/theta)
 
-        if u_bound == 'lower':  # positive radial velocity (ascent)
+        # positive radial velocity (ascent)
+        if u_bound == 'lower':
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
-        elif u_bound == 'upper':  # negative radial velocity (descent)
+
+        # negative radial velocity (descent)
+        elif u_bound == 'upper':
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, upper=0.0,
                                          adder=self.v_circ/self.body.vc, scaler=self.body.vc/self.v_circ)
-        elif u_bound is None:  # no path constraints on radial velocity
+
+        # no path constraints on radial velocity
+        elif u_bound is None:
             self.phase.set_state_options('u', fix_initial=True, fix_final=True, ref=self.v_circ/self.body.vc)
         else:
             raise ValueError('u_bound must be either lower, upper or None')
 
+        # tangential velocity
         self.phase.set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
+
+        # spacecraft mass
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
+
+    def set_controls_options(self, throttle=True):
+
+        if throttle:
+            twr_min = self.sc.T_min / self.sc.m0 / self.body.g
+            self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False,
+                                   rate_continuity=False, rate2_continuity=False, lower=twr_min, upper=self.sc.twr,
+                                   ref0=twr_min, ref=self.sc.twr)
+        else:
+            self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
 
         self.phase.add_control('alpha', fix_initial=False, fix_final=False, continuity=True, rate_continuity=True,
                                rate2_continuity=False, lower=self.alpha_bounds[0], upper=self.alpha_bounds[1],
@@ -66,12 +88,11 @@ class TwoDimNLP(SinglePhaseNLP):
         self.p[self.phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, self.idx_state_control)
         self.p[self.phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, self.idx_state_control)
         self.p[self.phase_name + '.states:m'] = np.take(self.guess.states[:, 4], self.idx_state_control)
+        self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
 
-        if throttle:
+        if throttle:  # variable thrust
             self.p[self.phase_name + '.controls:thrust'] =\
                 np.reshape(self.guess.controls[:, 0]/self.sc.m0/self.body.g, (len(self.t_control), 1))
-
-        self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
 
         self.p.run_model()
 
@@ -94,8 +115,8 @@ class TwoDimConstNLP(TwoDimNLP):
 
     def set_options(self, theta, tof, t_bounds, u_bound=None):
 
-        self.set_states_alpha_options(theta, u_bound=u_bound)
-        self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
+        self.set_states_options(theta, u_bound=u_bound)
+        self.set_controls_options(throttle=False)
         self.set_time_options(tof, t_bounds)
         self.set_objective()
 
@@ -165,13 +186,8 @@ class TwoDimVarNLP(TwoDimNLP):
 
     def set_options(self, theta, t_bounds, u_bound=None):
 
-        self.set_states_alpha_options(theta, u_bound=u_bound)
-
-        twr_min = self.sc.T_min/self.sc.m0/self.body.g
-
-        self.phase.add_control('thrust', fix_initial=False, fix_final=False, continuity=False, rate_continuity=False,
-                               rate2_continuity=False, lower=twr_min, upper=self.sc.twr, ref0=twr_min, ref=self.sc.twr)
-
+        self.set_states_options(theta, u_bound=u_bound)
+        self.set_controls_options(throttle=True)
         self.set_time_options(self.guess.tf, t_bounds)
         self.set_objective()
 

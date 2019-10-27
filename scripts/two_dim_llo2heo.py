@@ -40,7 +40,7 @@ if kind == 'full':
                                snopt_opts=snopt_opts)
 elif kind == 'first':
     tr = TwoDimLLO2ApoAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, None, method, segments, order, solver,
-                               snopt_opts=snopt_opts, check_partials=True)
+                               snopt_opts=snopt_opts, check_partials=False)
 else:
     raise ValueError('Kind must be either full or first')
 

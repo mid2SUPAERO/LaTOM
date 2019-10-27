@@ -21,7 +21,7 @@ class TwoDimLLO2HEONLP(TwoDimVarNLP):
                               guess, snopt_opts=snopt_opts, rec_file=rec_file, check_partials=check_partials,
                               u_bound=u_bound, fix_final=fix_final)
 
-    def set_states_alpha_options(self, theta, u_bound=None):
+    def set_states_options(self, theta, u_bound=None):
 
         self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0,
                                      ref0=self.guess.ht.depOrb.a/self.body.R,
@@ -30,12 +30,9 @@ class TwoDimLLO2HEONLP(TwoDimVarNLP):
         self.phase.set_state_options('theta', fix_initial=False, fix_final=True, lower=-np.pi/2, ref=theta)
         self.phase.set_state_options('u', fix_initial=True, fix_final=True, ref=self.v_circ/self.body.vc)
         self.phase.set_state_options('v', fix_initial=True, fix_final=True, lower=0.0, ref=self.v_circ/self.body.vc)
+
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
-        self.phase.add_control('alpha', fix_initial=False, fix_final=False, continuity=True, rate_continuity=True,
-                               rate2_continuity=False, lower=self.alpha_bounds[0], upper=self.alpha_bounds[1],
-                               ref=self.alpha_bounds[1])
-        self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
 
 
 class TwoDimLLO2ApoNLP(TwoDimNLP):

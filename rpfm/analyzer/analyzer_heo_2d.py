@@ -86,6 +86,8 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
         lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
                  self.nlp.guess.__str__(),
+                 '\n{:^50s}'.format('Coasting orbit:'),
+                 self.transfer.__str__(),
                  '\n{:^50s}'.format('Optimal transfer:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
                                                    1 - self.insertion_burn.sc.m0/self.sc.m0, ''),
@@ -96,7 +98,8 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[-1, -1]/self.sc.m0, ''),
                  '\n{:^50s}'.format('Injection burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.insertion_burn.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.insertion_burn.dm/self.sc.m0, '')]
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.insertion_burn.dm/self.sc.m0, ''),
+                 TwoDimAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
 
