@@ -9,7 +9,7 @@ from rpfm.utils.primary import Moon
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer
 
-kind = 'full'
+kind = 'first'
 
 # trajectory
 moon = Moon()
@@ -24,14 +24,14 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 200
+segments = 100
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
 
 # additional settings
-run_driver = False  # solve the NLP
+run_driver = True  # solve the NLP
 exp_sim = run_driver  # perform explicit simulation
 
 # analyzer
@@ -40,7 +40,7 @@ if kind == 'full':
                                snopt_opts=snopt_opts)
 elif kind == 'first':
     tr = TwoDimLLO2ApoAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, None, method, segments, order, solver,
-                               snopt_opts=snopt_opts, check_partials=False)
+                               snopt_opts=snopt_opts, check_partials=True)
 else:
     raise ValueError('Kind must be either full or first')
 

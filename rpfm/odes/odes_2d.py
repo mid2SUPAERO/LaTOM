@@ -432,9 +432,9 @@ class Injection2Apolune(ExplicitComponent):
 
         ar = np.arange(self.options['num_nodes'])
 
-        self.declare_partials(of='c', wrt='r', method='cs')
-        self.declare_partials(of='c', wrt='u', method='cs')
-        self.declare_partials(of='c', wrt='v', method='cs')
+        self.declare_partials(of='c', wrt='r', rows=ar, cols=ar)
+        self.declare_partials(of='c', wrt='u', rows=ar, cols=ar)
+        self.declare_partials(of='c', wrt='v', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
 
@@ -444,12 +444,10 @@ class Injection2Apolune(ExplicitComponent):
         u = inputs['u']
         v = inputs['v']
 
-        c = ((2*gm - r*(u**2 + v**2))*ra - gm*r)**2 - r**2*((r*v**2 - gm)**2 + (r*u*v)**2)
-        # c = (2*gm - r*(u**2 + v**2))*ra - gm*r - r*((r*v**2 - gm)**2 + (r*u*v)**2)**0.5
+        a = 2*gm - r*(u*u + v*v)
 
-        outputs['c'] = c
+        outputs['c'] = a*(a*ra*ra + r*(r*r*v*v - 2*gm*ra))
 
-    """
     def compute_partials(self, inputs, jacobian):
 
         gm = self.options['GM']
@@ -458,13 +456,13 @@ class Injection2Apolune(ExplicitComponent):
         u = inputs['u']
         v = inputs['v']
 
-        jacobian['c', 'r'] = 2*r*ra**2*(u**2+v**2)**2 + 2*r*gm**2 - 4*gm*ra*(u**2+v**2) - 4*gm**2*ra + \
-                             4*gm*ra*r*(u**2+v**2) - 2*r*(r*v**2 - gm)**2 - r**2*2*(r*v**2 - gm)*v**2 - 4*r**3*u**2*v**2
+        a = 2 * gm - r * (u * u + v * v)
+        b = 2*a*ra**2 + r**3*v**2 - 2*gm*ra*r
 
-        jacobian['c', 'u'] = r**2*ra**2*4*u*(u**2+v**2) - 8*gm*r*ra**2*u + 4*gm*ra*r**2*u - 2*r**4*v**2*u
-        jacobian['c', 'v'] = r**2*ra**2*4*v*(u**2+v**2) - 8*gm*r*ra**2*v + 4*gm*ra*r**2*v - 4*r**3*v*(r*v**2 - gm) - \
-                             2*r**4*v*u**2
-        """
+        jacobian['c', 'r'] = - (u*u + v*v)*b + a*(3*r**2*v**2 - 2*gm*ra)
+        jacobian['c', 'u'] = - 2*r*u*b
+        jacobian['c', 'v'] = - 2*r*v*b + 2*a*v*r**3
+
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
