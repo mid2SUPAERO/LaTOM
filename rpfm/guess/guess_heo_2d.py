@@ -8,7 +8,7 @@ from copy import deepcopy
 
 from rpfm.utils.const import g0
 from rpfm.utils.keplerian_orbit import TwoDimOrb
-from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius, ImpulsiveBurn
+from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius, ImpulsiveBurn, TwoDimLLOGuess
 
 
 class TwoDimHEOGuess(TwoDimGuess):
@@ -144,20 +144,39 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         return s
 
 
+class TwoDim3PhasesHEO2LLOGuess(TwoDimLLOGuess):
+
+    def __init__(self, gm, r, alt, rp, t, sc):
+
+        dep = TwoDimOrb(gm, a=(r + alt), e=0)
+        arr = TwoDimOrb(gm, T=t, rp=rp)
+
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
+        self.pow1 = PowConstRadius(gm, (r + alt), dep.vp, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
+        self.pow1.compute_final_time_states()
+
+        self.pow2 = PowConstRadius(gm, arr.ra, self.ht.transfer.va, arr.va, self.pow1.mf, sc.T_max,
+                                   sc.Isp, t0=(self.pow1.tf + self.ht.tof), theta0=(self.pow1.thetaf + np.pi))
+        self.pow2.compute_final_time_states()
+
+        self.tf = self.pow2.tf
+
+
 if __name__ == '__main__':
 
     from rpfm.utils.spacecraft import Spacecraft
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'ascent'
+    case = '3p'
 
     moon = Moon()
     h = 100e3
     r_p = 3150e3
     T = 6.5655*86400
     sat = Spacecraft(450, 2.1, g=moon.g)
-    nb = (100, 100)
+    nb = (100, 100, 100)
 
     if case == 'ascent':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
@@ -165,18 +184,27 @@ if __name__ == '__main__':
         e = tr.ht.arrOrb.e
         t1 = np.linspace(0.0, tr.pow.tf, nb[0])
         t2 = np.linspace(tr.pow.tf, tr.pow.tf + tr.ht.tof, nb[1] + 1)
+        t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
     elif case == 'descent':
         tr = TwoDimHEO2LLOGuess(moon.GM, moon.R, h, r_p, T, sat)
         a = tr.ht.depOrb.a
         e = tr.ht.depOrb.e
         t1 = np.linspace(0.0, tr.ht.tof, nb[0])
         t2 = np.linspace(tr.ht.tof, tr.pow.tf, nb[1] + 1)
+        t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
+    elif case == '3p':
+        case = 'ascent'
+        tr = TwoDim3PhasesHEO2LLOGuess(moon.GM, moon.R, h, r_p, T, sat)
+        a = tr.ht.arrOrb.a
+        e = tr.ht.arrOrb.e
+        t1 = np.linspace(0.0, tr.pow1.tf, nb[0])
+        t2 = np.linspace(tr.pow1.tf, tr.pow1.tf + tr.ht.tof, nb[1] + 2)
+        t3 = np.linspace(tr.pow1.tf + tr.ht.tof, tr.pow2.tf, nb[2])
+        t_all = np.reshape(np.hstack((t1, t2[1:-1], t3)), (np.sum(nb), 1))
     else:
         raise ValueError('case must be equal to ascent or descent')
 
-    t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
-
-    tr.compute_trajectory(t_eval=t_all, fix_final=True)
+    tr.compute_trajectory(t_eval=t_all, fix_final=False)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

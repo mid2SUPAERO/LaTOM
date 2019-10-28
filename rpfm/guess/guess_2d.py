@@ -268,6 +268,9 @@ class TwoDimLLOGuess(TwoDimGuess):
         if fix_final:
             self.states[:, 1] = self.states[:, 1] - self.pow2.thetaf
 
+        if 'theta' in kwargs:
+            self.states[:, 1] = self.states[:, 1] + kwargs['theta']
+
     def __str__(self):
 
         lines = [TwoDimGuess.__str__(self),

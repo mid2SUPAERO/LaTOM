@@ -90,7 +90,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                  self.transfer.__str__(),
                  '\n{:^50s}'.format('Optimal transfer:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                   1 - self.insertion_burn.sc.m0/self.sc.m0, ''),
+                                                   1 - self.insertion_burn.mf/self.sc.m0, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight (burn):', self.tof, 's'),
                  '\n{:^50s}'.format('Departure burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.nlp.guess.pow.dv_inf, 'm/s'),
