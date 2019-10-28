@@ -81,6 +81,9 @@ class TwoDimNLP(SinglePhaseNLP):
     def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
 
         self.set_time_guess(self.tof)
+
+        print(self.t_control*self.body.tc)
+
         self.guess.compute_trajectory(t_eval=self.t_control*self.body.tc, fix_final=fix_final, throttle=throttle)
 
         self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)

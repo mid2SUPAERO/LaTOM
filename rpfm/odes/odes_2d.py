@@ -586,8 +586,8 @@ class Injection2HEO(ExplicitComponent):
         self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
         self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
 
-        self.add_output('a', val=np.zeros(nn), desc='semimajor axis', units='m')
-        self.add_output('h', val=np.zeros(nn), desc='angular momentum', units='m^2/s')
+        self.add_output('a', val=np.zeros(nn), desc='semimajor axis')
+        self.add_output('h', val=np.zeros(nn), desc='angular momentum')
 
         # ar = np.arange(self.options['num_nodes'])
 
@@ -608,6 +608,10 @@ class Injection2HEO(ExplicitComponent):
 
         a = gm*r/(2*gm - r*(u*u + v*v))
         h = r*v
+
+        outputs['a'] = a
+        outputs['h'] = h
+
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')

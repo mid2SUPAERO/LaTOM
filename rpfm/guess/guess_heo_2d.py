@@ -169,14 +169,14 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = '3p'
+    case = 'ascent'
 
     moon = Moon()
     h = 100e3
     r_p = 3150e3
     T = 6.5655*86400
     sat = Spacecraft(450, 2.1, g=moon.g)
-    nb = (100, 100, 100)
+    nb = (100, 100)
 
     if case == 'ascent':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
