@@ -14,6 +14,80 @@ from dymos import declare_time, declare_state, declare_parameter
 @declare_state('theta', rate_source='thetadot', units='rad')
 @declare_state('u', rate_source='udot', targets=['u'], units='m/s')
 @declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+class ODE2dCoast(ExplicitComponent):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        # inputs (ODE right-hand side)
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+
+        # outputs (ODE left-hand side)
+        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_output('thetadot', val=np.zeros(nn), desc='angular rate', units='rad/s')
+        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
+        self.add_output('vdot', val=np.zeros(nn), desc='tangential acceleration', units='m/s**2')
+
+        # partial derivatives of the ODE outputs respect to the ODE inputs
+        ar = np.arange(self.options['num_nodes'])
+
+        self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1.0)
+
+        self.declare_partials(of='thetadot', wrt='r', rows=ar, cols=ar)
+        self.declare_partials(of='thetadot', wrt='v', rows=ar, cols=ar)
+
+        self.declare_partials(of='udot', wrt='r', rows=ar, cols=ar)
+        self.declare_partials(of='udot', wrt='v', rows=ar, cols=ar)
+
+        self.declare_partials(of='vdot', wrt='r', rows=ar, cols=ar)
+        self.declare_partials(of='vdot', wrt='u', rows=ar, cols=ar)
+        self.declare_partials(of='vdot', wrt='v', rows=ar, cols=ar)
+
+    def compute(self, inputs, outputs):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+
+        outputs['rdot'] = u
+        outputs['thetadot'] = v / r
+        outputs['udot'] = -gm / r ** 2 + v ** 2 / r
+        outputs['vdot'] = -u * v / r
+
+    def compute_partials(self, inputs, jacobian):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+
+        jacobian['thetadot', 'r'] = -v / r ** 2
+        jacobian['thetadot', 'v'] = 1 / r
+
+        jacobian['udot', 'r'] = 2 * gm / r ** 3 - (v / r) ** 2
+        jacobian['udot', 'v'] = 2 * v / r
+
+        jacobian['vdot', 'r'] = u * v / r ** 2
+        jacobian['vdot', 'u'] = -v / r
+        jacobian['vdot', 'v'] = -u / r
+
+
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
 @declare_state('m', rate_source='mdot', targets=['m'], units='kg')
 @declare_parameter('alpha', targets=['alpha'], units='rad')
 @declare_parameter('thrust', targets=['thrust'], units='N')
@@ -495,3 +569,73 @@ class ODE2dLLO2Apo(Group):
         self.add_subsystem(name='injection2apo',
                            subsys=Injection2Apolune(num_nodes=nn, GM=self.options['GM'], ra=self.options['ra']),
                            promotes_inputs=['r', 'u', 'v'], promotes_outputs=['c'])
+
+
+class Injection2HEO(ExplicitComponent):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+
+        self.add_output('a', val=np.zeros(nn), desc='semimajor axis', units='m')
+        self.add_output('h', val=np.zeros(nn), desc='angular momentum', units='m^2/s')
+
+        # ar = np.arange(self.options['num_nodes'])
+
+        self.declare_partials(of='a', wrt='r', method='cs')
+        self.declare_partials(of='a', wrt='u', method='cs')
+        self.declare_partials(of='a', wrt='v', method='cs')
+
+        self.declare_partials(of='h', wrt='r', method='cs')
+        self.declare_partials(of='h', wrt='v', method='cs')
+
+    def compute(self, inputs, outputs):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+
+        a = gm*r/(2*gm - r*(u*u + v*v))
+        h = r*v
+
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
+class ODE2dLLO2HEO(Group):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+        self.options.declare('T', types=float)
+        self.options.declare('w', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        self.add_subsystem(name='odes', subsys=ODE2dConstThrust(num_nodes=nn, GM=self.options['GM'],
+                                                                T=self.options['T'], w=self.options['w']),
+                           promotes_inputs=['r', 'u', 'v', 'm', 'alpha', 'thrust', 'w'],
+                           promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
+
+        self.add_subsystem(name='injection2heo',
+                           subsys=Injection2HEO(num_nodes=nn, GM=self.options['GM']),
+                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h'])

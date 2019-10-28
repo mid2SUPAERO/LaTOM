@@ -7,7 +7,7 @@ import numpy as np
 from copy import deepcopy
 
 from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
-from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP
+from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP
 from rpfm.plots.solutions import TwoDimSolPlot
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.guess.guess_2d import ImpulsiveBurn
@@ -104,3 +104,55 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         s = '\n'.join(lines)
 
         return s
+
+
+class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
+
+    def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
+                 rec_file=None, check_partials=False):
+
+        TwoDimAnalyzer.__init__(self, body, sc)
+
+        self.phase_name = ('dep', 'coast', 'arr')
+        self.nlp = TwoDim3PhasesLLO2HEONLP(body, sc, alt, rp, t, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order,
+                                           solver, ph_name, snopt_opts=snopt_opts, rec_file=rec_file,
+                                           check_partials=check_partials)
+
+    def get_time_series(self, p):
+
+        tof = []
+        t = []
+        states = []
+        controls = []
+
+        for i in range(3):
+            tof.append(float(p.get_val(self.nlp.phase_name[i] + '.t_duration'))*self.body.tc)
+            t.append(p.get_val(self.nlp.phase_name[i] + '.timeseries.time')*self.body.tc)
+
+            r = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:r')*self.body.R
+            theta = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:theta')
+            u = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:u')*self.body.vc
+            v = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:v')
+
+            if i == 1:
+                m = states[0][-1, -1]*np.ones(len(t), 1)
+                alpha = np.zeros(len(t), 1)
+                thrust = np.zeros(len(t), 1)
+            else:
+                m = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:m')
+                alpha = p.get_val(self.nlp.phase_name[i] + '.timeseries.controls:alpha')
+                thrust = self.nlp.sc.T_max*np.ones(len(t), 1)
+
+            s = np.hstack((r, theta, u, v, m))
+            c = np.hstack((thrust, alpha))
+
+            states.append(s)
+            controls.append(c)
+
+        return tof, t, states, controls
+
+    def plot(self):
+
+        sol_plot = TwoDimTwoPhasesSolPlot(self.body.R, self.time, self.states, self.controls, time_exp=self.time_exp,
+                                          states_exp=self.states_exp, kind='descent')
+        sol_plot.plot()
