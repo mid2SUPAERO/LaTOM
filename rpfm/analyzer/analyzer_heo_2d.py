@@ -157,7 +157,11 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
         time = np.vstack(self.time)
         states = np.vstack(self.states)
-        states[:, 1] = states[:, 1] + states[-1, 1] - np.pi
+
+        num = states[-1, 2]*states[-1, 0]*states[-1, 3]
+        den = (states[-1, 0]*states[-1, 3]**2 - self.body.GM)
+        theta_i = np.arctan2(num, den)
+        states[:, 1] = states[:, 1] - states[-1, 1] + theta_i
 
         controls = np.vstack(self.controls)
 
