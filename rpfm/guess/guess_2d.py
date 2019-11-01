@@ -210,6 +210,17 @@ class PowConstRadius:
 
         return [x0_dot, x1_dot]
 
+    def __str__(self):
+
+        lines = ['\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Burn time:', self.tf - self.t0, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1.0 - self.mf/self.m0, '')]
+
+        s = '\n'.join(lines)
+
+        return s
+
 
 class TwoDimGuess:
 
@@ -275,19 +286,12 @@ class TwoDimLLOGuess(TwoDimGuess):
 
         lines = [TwoDimGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                   (self.sc.m0 - self.pow2.mf)/self.sc.m0, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1.0 - self.pow2.mf/self.sc.m0, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.pow2.tf, 's'),
                  '\n{:^50s}'.format('Departure burn:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow1.dv_inf, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow1.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                 (self.pow1.m0 - self.pow1.mf)/self.sc.m0, ''),
+                 self.pow1.__str__(),
                  '\n{:^50s}'.format('Arrival burn:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow2.dv_inf, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow2.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                 (self.pow2.m0 - self.pow2.mf)/self.sc.m0, '')]
+                 self.pow2.__str__()]
 
         s = '\n'.join(lines)
 
@@ -352,12 +356,9 @@ if __name__ == '__main__':
     else:
         raise ValueError('case must be equal to ascent or descent')
 
-    t1 = np.linspace(0.0, tr.pow1.tf, nb[0])
-    t2 = np.linspace(tr.pow1.tf, tr.pow1.tf + tr.ht.tof, nb[1] + 2)
-    t3 = np.linspace(tr.pow1.tf + tr.ht.tof, tr.pow2.tf, nb[2])
-
-    t_all = np.reshape(np.hstack((t1, t2[1:-1], t3)), (np.sum(nb), 1))
-    # t_all = np.reshape(np.linspace(0.0, tr.pow2.tf, 201), (201, 1))
+    tht = np.linspace(tr.pow1.tf, tr.pow1.tf + tr.ht.tof, nb[1] + 2)
+    t_all = np.reshape(np.hstack((np.linspace(0.0, tr.pow1.tf, nb[0]), tht[1:-1],
+                                  np.linspace(tr.pow1.tf + tr.ht.tof, tr.pow2.tf, nb[2]))), (np.sum(nb), 1))
 
     tr.compute_trajectory(t_eval=t_all, fix_final=False)
 

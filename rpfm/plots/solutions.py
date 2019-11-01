@@ -63,6 +63,28 @@ class TwoDimSolPlot:
         plt.show()
 
 
+class TwoDimMultiPhaseSolPlot(TwoDimSolPlot):
+
+    def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, r_safe=None, threshold=1e-6,
+                 kind='ascent', a=None, e=None, dtheta=None):
+
+        time = np.vstack(time)
+        states = np.vstack(states)
+        controls = np.vstack(controls)
+
+        if (time_exp is not None) and (states_exp is not None):
+            time_exp = np.vstack(time_exp)
+            states_exp = np.vstack(states_exp)
+
+        if dtheta is not None:
+            states[:, 1] = states[:, 1] + dtheta
+            if states_exp is not None:
+                states_exp[:, 1] = states_exp[:, 1] + dtheta
+
+        TwoDimSolPlot.__init__(self, r, time, states, controls, time_exp=time_exp, states_exp=states_exp,
+                               r_safe=r_safe, threshold=threshold, kind=kind, a=a, e=e)
+
+
 class TwoDimTwoPhasesSolPlot:
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, kind='ascent'):

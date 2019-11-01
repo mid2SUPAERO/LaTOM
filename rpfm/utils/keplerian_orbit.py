@@ -83,7 +83,6 @@ class TwoDimOrb:
         elif ('h' in kwargs) and ('e' in kwargs):
             e = kwargs['e']
             h = kwargs['h']
-            # a = h*h/gm/(1-e*e)
         else:
             raise AttributeError('Two kwargs between a,e,h must be provided')
 
@@ -103,6 +102,19 @@ class TwoDimOrb:
 
         return a, e, h, ta
 
+    @staticmethod
+    def propagate(gm, a, e, tai, taf, nb, tp=0.0):
+
+        ta = np.reshape(np.linspace(tai, taf, nb), (nb, 1))  # true anomaly [rad]
+        ea = 2*np.arctan(((1 - e)/(1 + e))**0.5*np.tan(ta/2))  # eccentric anomaly [rad]
+        me = ea - e*np.sin(ea)  # mean anomaly [rad]
+        t = me*a**1.5/gm**0.5 + tp  # time [s]
+
+        r, u, v = TwoDimOrb.coe2polar(gm, ta, a=a, e=e)  # states [m, m/s, m/s]
+
+        states = np.hstack((r, ta, u, v))
+
+        return t, states
 
     def __str__(self):
 

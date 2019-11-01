@@ -8,7 +8,7 @@ from copy import deepcopy
 
 from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
 from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP, TwoDim2PhasesLLO2HEONLP
-from rpfm.plots.solutions import TwoDimSolPlot
+from rpfm.plots.solutions import TwoDimSolPlot, TwoDimMultiPhaseSolPlot
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.guess.guess_2d import ImpulsiveBurn
 from rpfm.utils.const import g0
@@ -120,54 +120,50 @@ class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
     def get_time_series(self, p, scaled=False):
 
-        tof = []
-        time = []
-        states = []
-        controls = []
+        tof1, t1, s1, c1 = self.get_time_series_phase(p, self.nlp.phase_name[0], scaled=scaled)
+        tof2, t2, s2, c2 = self.get_time_series_phase(p, self.nlp.phase_name[1], scaled=scaled)
 
-        for i in range(2):
+        return [tof1, tof2], [t1, t2], [s1, s2], [c1, c2]
 
-            tof.append(float(p.get_val(self.nlp.phase_name[i] + '.t_duration'))*self.body.tc)
-            t = p.get_val(self.nlp.phase_name[i] + '.timeseries.time')*self.body.tc
-            time.append(t)
+    def compute_coasting_arc(self, nb=200):
 
-            r = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:r')*self.body.R
-            theta = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:theta')
-            u = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:u')*self.body.vc
-            v = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:v')*self.body.vc
-            m = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:m')
-            alpha = p.get_val(self.nlp.phase_name[i] + '.timeseries.controls:alpha')
-            thrust = self.nlp.sc.T_max*np.ones((len(t), 1))
+        # COEs as (a, e, h, ta) at the end of the 1st powered phase and at the beginning of the 2nd one
+        coe1 = TwoDimOrb.polar2coe(self.gm_res, self.states[0][-1, 0], self.states[0][-1, 2], self.states[0][-1, 3])
+        coe2 = TwoDimOrb.polar2coe(self.gm_res, self.states[1][0, 0], self.states[1][0, 2], self.states[1][0, 3])
 
-            s = np.hstack((r, theta, u, v, m))
-            c = np.hstack((thrust, alpha))
+        if np.allclose(coe1[:3], coe2[:3], rtol=1e-4, atol=1e-6):
 
-            states.append(s)
-            controls.append(c)
+            t, states = TwoDimOrb.propagate(self.gm_res, coe1[0], coe1[1], coe1[-1], coe2[-1], nb)
+            tof = t[-1, 0] - t[0, 0]
 
-        return tof, time, states, controls
+            # adjust time
+            self.tof = [self.tof[0], tof, self.tof[1]]
+            self.time = [self.time[0], t + self.tof[0], self.time[1] + self.tof[0] + tof]
+
+            # adjust theta
+            states[:, 1] = states[:, 1] - coe1[-1] + self.states[0][-1, 1]
+            states = np.hstack((states, self.states[0][-1, -1] * np.ones((len(t), 1))))
+            self.states[1][:, 1] = self.states[1][:, 1] + states[-1, 1]
+
+            # adjust states
+            self.states = [self.states[0], states, self.states[1]]
+            self.controls = [self.controls[0], np.zeros((len(t), 2)), self.controls[1]]
+
+        else:
+            raise ValueError('a, e, h are not constant throughout the coasting phase')
+
+        return coe1, coe2
 
     def plot(self):
 
-        time = np.vstack(self.time)
-        states = np.vstack(self.states)
+        coe_inj = TwoDimOrb.polar2coe(self.gm_res, self.states[-1][-1, 0], self.states[-1][-1, 2],
+                                      self.states[-1][-1, 3])
 
-        num = states[-1, 2]*states[-1, 0]*states[-1, 3]
-        den = states[-1, 0]*states[-1, 3]**2 - self.body.GM
-        theta_i = np.arctan2(num, den)
-        states[:, 1] = states[:, 1] - states[-1, 1] + theta_i
+        dtheta = coe_inj[-1] - self.states[-1][-1, 1]
 
-        controls = np.vstack(self.controls)
-
-        if self.time_exp is not None:
-            time_exp = np.vstack(self.time_exp)
-            states_exp = np.vstack(self.states_exp)
-        else:
-            time_exp = None
-            states_exp = None
-
-        sol_plot = TwoDimSolPlot(self.body.R, time, states, controls, time_exp, states_exp, threshold=1e-6,
-                                 a=self.nlp.guess.ht.arrOrb.a, e=self.nlp.guess.ht.arrOrb.e)
+        sol_plot = TwoDimMultiPhaseSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
+                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a,
+                                           e=self.nlp.guess.ht.arrOrb.e, dtheta=dtheta)
         sol_plot.plot()
 
 
@@ -183,7 +179,7 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
                                            solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                            check_partials=check_partials)
 
-    def get_time_series(self, p):
+    def get_time_series(self, p, scaled=False):
 
         tof = []
         time = []
@@ -220,23 +216,15 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
     def plot(self):
 
-        time = np.vstack(self.time)
-        states = np.vstack(self.states)
+        coe_injection = TwoDimOrb.polar2coe(self.body.GM, self.states[-1][-1, 0], self.states[-1][-1, 2],
+                                            self.states[-1][-1, 3])
+        dtheta = coe_injection[-1] - self.states[-1][-1, 1]
 
-        num = states[-1, 2]*states[-1, 0]*states[-1, 3]
-        den = states[-1, 0]*states[-1, 3]**2 - self.body.GM
-        theta_i = np.arctan2(num, den)
-        states[:, 1] = states[:, 1] - states[-1, 1] + theta_i
+        # num = self.states[-1][-1, 0]*self.states[-1][-1, 2]*self.states[-1][-1, 3]
+        # den = self.states[-1][-1, 0]*self.states[-1][-1, 3]**2 - self.body.GM
+        # theta_injection = np.arctan2(num, den)
 
-        controls = np.vstack(self.controls)
-
-        if self.time_exp is not None:
-            time_exp = np.vstack(self.time_exp)
-            states_exp = np.vstack(self.states_exp)
-        else:
-            time_exp = None
-            states_exp = None
-
-        sol_plot = TwoDimSolPlot(self.body.R, time, states, controls, time_exp, states_exp, threshold=1e-6,
-                                 a=self.nlp.guess.ht.arrOrb.a, e=self.nlp.guess.ht.arrOrb.e)
+        sol_plot = TwoDimMultiPhaseSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp,
+                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a,
+                                           e=self.nlp.guess.ht.arrOrb.e, dtheta=dtheta)
         sol_plot.plot()

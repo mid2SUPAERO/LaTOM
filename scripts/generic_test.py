@@ -1,23 +1,21 @@
 import numpy as np
 
-from rpfm.utils.keplerian_orbit import TwoDimOrb
+from rpfm.plots.solutions import TwoDimSolPlot
+from rpfm.guess.guess_heo_2d import TwoDim2PhasesLLO2HEOGuess
+from rpfm.utils.primary import Moon
+from rpfm.utils.spacecraft import Spacecraft
 
-gm = 398600.4412
+moon = Moon()
+sc = Spacecraft(450., 2.1, g=moon.g)
 
-a0 = 8000
-e0 = 0.8
-h0 = (gm*a0*(1-e0*e0))**0.5
-ta0 = np.pi/6
+guess = TwoDim2PhasesLLO2HEOGuess(moon.GM, moon.R, 100e3, 3150e3, 6.5655*86400, sc)
+guess.compute_trajectory(nb1=100, nb2=50)
 
-r, u, v, = TwoDimOrb.coe2polar(gm, ta0, a=a0, h=h0)
+time = np.vstack((guess.pow1.t, guess.pow2.t))
+states = np.vstack((guess.pow1.states, guess.pow2.states))
+controls = np.vstack((guess.pow1.controls, guess.pow2.controls))
 
-print('r:', r, 'km')
-print('u:', u, 'km/s')
-print('v:', v, 'km/s')
+print(guess)
 
-a, e, h, ta = TwoDimOrb.polar2coe(gm, r, u, v)
-
-print('\na:', a, 'km')
-print('e:', e)
-print('h:', h, 'km^2/s')
-print('ta:', ta, 'rad')
+plt = TwoDimSolPlot(moon.R, time, states, controls, threshold=None, a=guess.ht.arrOrb.a, e=guess.ht.arrOrb.e)
+plt.plot()

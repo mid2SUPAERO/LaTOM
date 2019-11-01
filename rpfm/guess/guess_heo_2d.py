@@ -68,19 +68,17 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
 
         if throttle:
             self.states[-1, 3] = self.ht.arrOrb.va
-            self.states[-1, 4] = self.insertion_burn.mf  # self.pow.mf*np.exp(-self.ht.dva/self.sc.Isp/g0)
+            self.states[-1, 4] = self.insertion_burn.mf
             self.controls[-1, 0] = self.sc.T_max
 
     def __str__(self):
 
         lines = [TwoDimHEOGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.insertion_burn.mf/self.sc.m0, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1.0 - self.insertion_burn.mf/self.sc.m0, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tf/86400, 'days'),
                  '\n{:^50s}'.format('Departure burn:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow.dv_inf, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (self.pow.m0 - self.pow.mf)/self.sc.m0, ''),
+                 self.pow.__str__(),
                  '\n{:^50s}'.format('Injection burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.ht.dva, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.insertion_burn.dm/self.sc.m0, '')]
@@ -128,16 +126,62 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
 
         lines = [TwoDimHEOGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
-                                                   (self.sc.m0 - self.states[-1, -1]) / self.sc.m0, ''),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1.0 - self.states[-1, -1]/self.sc.m0, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tf/86400, 'days'),
                  '\n{:^50s}'.format('Deorbit burn:'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.ht.dva, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (self.sc.m0 - self.m_ht)/self.sc.m0, ''),
                  '\n{:^50s}'.format('Injection burn:'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.pow.dv_inf, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.pow.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (self.pow.m0 - self.pow.mf)/self.sc.m0, '')]
+                 self.pow.__str__()]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class TwoDim2PhasesLLO2HEOGuess(TwoDimLLOGuess):
+
+    def __init__(self, gm, r, alt, rp, t, sc):
+
+        dep = TwoDimOrb(gm, a=(r + alt), e=0)
+        arr = TwoDimOrb(gm, T=t, rp=rp)
+
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
+        self.pow1 = PowConstRadius(gm, (r + alt), dep.vp, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
+        self.pow1.compute_final_time_states()
+
+        self.pow2 = PowConstRadius(gm, arr.ra, self.ht.transfer.va, arr.va, self.pow1.mf, sc.T_max, sc.Isp)
+        self.pow2.compute_final_time_states()
+
+    def compute_trajectory(self, fix_final=False, **kwargs):
+
+        if ('t1' in kwargs) and ('t2' in kwargs):
+            t_pow1 = kwargs['t1']
+            t_pow2 = kwargs['t2']
+        elif ('nb1' in kwargs) and ('nb2' in kwargs):
+            t_pow1 = np.linspace(0.0, self.pow1.tf, kwargs['nb1'])
+            t_pow2 = np.linspace(0.0, self.pow2.tf, kwargs['nb2'])
+        else:
+            raise AttributeError('Either t1, t2 or nb1, nb2 must be provided')
+
+        self.pow1.compute_trajectory(t_pow1.flatten())
+        self.pow2.compute_trajectory(t_pow2.flatten())
+
+        self.pow2.states[-1, 0] = self.pow2.R
+        self.pow2.states[-1, 3] = self.pow2.vf
+
+        if fix_final:
+            self.pow1.states[:, 1] = self.pow1.states[:, 1] - self.pow1.thetaf
+            self.pow2.states[:, 1] = self.pow2.states[:, 1] - self.pow2.thetaf
+
+    def __str__(self):
+
+        lines = [TwoDimGuess.__str__(self),
+                 '\n{:^50s}'.format('Departure burn:'),
+                 self.pow1.__str__(),
+                 '\n{:^50s}'.format('Arrival burn:'),
+                 self.pow2.__str__()]
 
         s = '\n'.join(lines)
 
@@ -170,12 +214,10 @@ if __name__ == '__main__':
     from rpfm.plots.solutions import TwoDimSolPlot
 
     case = '3p'
-
     moon = Moon()
     h = 100e3
     r_p = 3150e3
     T = 6.5655*86400
-    # sat = Spacecraft(450/moon.vc, 2.1, g=1.)
     sat = Spacecraft(450, 2.1, g=moon.g)
     nb = (100, 100, 50)
 
@@ -183,26 +225,22 @@ if __name__ == '__main__':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
         a = tr.ht.arrOrb.a
         e = tr.ht.arrOrb.e
-        t1 = np.linspace(0.0, tr.pow.tf, nb[0])
-        t2 = np.linspace(tr.pow.tf, tr.pow.tf + tr.ht.tof, nb[1] + 1)
-        t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
+        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.pow.tf, nb[0]),
+                                      np.linspace(tr.pow.tf, tr.pow.tf + tr.ht.tof, nb[1] + 1)[1:])), (np.sum(nb), 1))
     elif case == 'descent':
         tr = TwoDimHEO2LLOGuess(moon.GM, moon.R, h, r_p, T, sat)
         a = tr.ht.depOrb.a
         e = tr.ht.depOrb.e
-        t1 = np.linspace(0.0, tr.ht.tof, nb[0])
-        t2 = np.linspace(tr.ht.tof, tr.pow.tf, nb[1] + 1)
-        t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
+        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.ht.tof, nb[0]),
+                                      np.linspace(tr.ht.tof, tr.pow.tf, nb[1] + 1)[1:])), (np.sum(nb), 1))
     elif case == '3p':
         case = 'ascent'
         tr = TwoDim3PhasesLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
-        # tr = TwoDim3PhasesLLO2HEOGuess(1., 1., h/moon.R, r_p/moon.R, T/moon.tc, sat)
         a = tr.ht.arrOrb.a
         e = tr.ht.arrOrb.e
-        t1 = np.linspace(0.0, tr.pow1.tf, nb[0])
-        t2 = np.linspace(tr.pow1.tf, tr.pow1.tf + tr.ht.tof, nb[1] + 2)
-        t3 = np.linspace(tr.pow1.tf + tr.ht.tof, tr.pow2.tf, nb[2])
-        t_all = np.reshape(np.hstack((t1, t2[1:-1], t3)), (np.sum(nb), 1))
+        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.pow1.tf, nb[0]),
+                                      np.linspace(tr.pow1.tf, tr.pow1.tf + tr.ht.tof, nb[1] + 2)[1:-1],
+                                      np.linspace(tr.pow1.tf + tr.ht.tof, tr.pow2.tf, nb[2]))), (np.sum(nb), 1))
     else:
         raise ValueError('case must be equal to ascent or descent')
 

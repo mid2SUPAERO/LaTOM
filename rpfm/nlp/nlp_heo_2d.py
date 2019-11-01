@@ -7,8 +7,8 @@ import numpy as np
 
 from rpfm.nlp.nlp import MultiPhaseNLP
 from rpfm.nlp.nlp_2d import TwoDimVarNLP, TwoDimNLP
-from rpfm.guess.guess_heo_2d import TwoDimLLO2HEOGuess, TwoDim3PhasesLLO2HEOGuess
-from rpfm.odes.odes_2d import ODE2dLLO2Apo, ODE2dConstThrust, ODE2dCoast, ODE2dLLO2HEO
+from rpfm.guess.guess_heo_2d import TwoDimLLO2HEOGuess, TwoDim2PhasesLLO2HEOGuess, TwoDim3PhasesLLO2HEOGuess
+from rpfm.odes.odes_2d import ODE2dLLO2Apo, ODE2dCoast, ODE2dLLO2HEO
 
 
 class TwoDimLLO2HEONLP(TwoDimVarNLP):
@@ -88,14 +88,13 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
     def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=None):
 
-        self.guess = TwoDim3PhasesLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
-        self.tof_adim = np.array([[self.guess.pow1.tf], [self.guess.pow2.tf - self.guess.pow2.t0]])/body.tc
+        self.guess = TwoDim2PhasesLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
+        self.tof_adim = np.reshape(np.array([self.guess.pow1.tf, self.guess.pow2.tf]), (2, 1))/body.tc
 
         ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc}
-        ode_class = (ODE2dLLO2HEO, ODE2dLLO2HEO)
 
-        MultiPhaseNLP.__init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name,
-                               snopt_opts=snopt_opts, rec_file=rec_file)
+        MultiPhaseNLP.__init__(self, body, sc, method, nb_seg, order, solver, (ODE2dLLO2HEO, ODE2dLLO2HEO),
+                               (ode_kwargs, ode_kwargs), ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
 
         # time options
         if t_bounds is None:
@@ -126,7 +125,7 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
                                         ref0=self.guess.ht.arrOrb.rp/self.body.R,
                                         ref=self.guess.ht.arrOrb.ra/self.body.R)
         self.phase[1].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0,
-                                        ref0=self.guess.pow2.theta0, ref=self.guess.pow2.thetaf)
+                                        ref=self.guess.pow2.thetaf)
         self.phase[1].set_state_options('u', fix_initial=False, fix_final=False,
                                         ref=self.guess.ht.arrOrb.va/self.body.vc)
         self.phase[1].set_state_options('v', fix_initial=False, fix_final=False,
@@ -152,7 +151,7 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
         self.phase[1].add_objective('m', loc='final', scaler=-1.0)
 
         # linkages
-        self.trajectory.link_phases(ph_name, vars=['a', 'h', 'e2', 'm', 'thrust', 'w'])
+        # self.trajectory.link_phases(ph_name, vars=['a', 'h', 'e2', 'm', 'thrust', 'w'])
 
         # additional outputs
         for i in range(2):
@@ -163,39 +162,28 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
         self.setup()
 
         # time grid and initial guess
-        t_control = []
-        idx_abs = []
-        nb_nodes = [0]
+        sn1, cn1, ts1, tc1, ta1, idx1 = self.set_time_phase(0.0, self.tof_adim[0, 0], self.phase[0], self.phase_name[0])
+        sn2, cn2, ts2, tc2, ta2, idx2 = self.set_time_phase(0.0, self.tof_adim[1, 0], self.phase[1], self.phase_name[1])
 
-        for i in range(2):
-            sn, cn, ts, tc, ta, idx = self.set_time_phase(0.0, self.tof_adim[i, 0], self.phase[i], self.phase_name[i])
-            t_control.append(tc)
-            idx_abs.append(idx + nb_nodes[-1])
-            nb_nodes.append(len(tc) + nb_nodes[-1])
+        self.guess.compute_trajectory(t1=tc1*self.body.tc, t2=tc2*self.body.tc)
+        self.set_initial_guess_phase(idx1, self.guess.pow1, self.phase_name[0])
+        self.set_initial_guess_phase(idx2, self.guess.pow2, self.phase_name[1])
 
-        t_row = np.hstack(t_control)
-        t = np.reshape(t_row, (len(t_row), 1))
-
-        self.guess.compute_trajectory(t_eval=t*self.body.tc)
-
-        for i in range(2):
-            self.set_initial_guess_phase(idx_abs[i], nb_nodes[i], nb_nodes[i+1], self.phase_name[i])
+        print(tc1, tc2, idx1, idx2)
 
         self.p.run_model()
 
         if check_partials:
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
-    def set_initial_guess_phase(self, idx_abs, nbi, nbf, phase_name):
+    def set_initial_guess_phase(self, idx, guess, phase_name):
 
-        self.p[phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, idx_abs)
-        self.p[phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], idx_abs)
-        self.p[phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, idx_abs)
-        self.p[phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, idx_abs)
-        self.p[phase_name + '.states:m'] = np.take(self.guess.states[:, 4], idx_abs)
-
-        alpha = self.guess.controls[nbi:nbf, 1]
-        self.p[phase_name + '.controls:alpha'] = np.reshape(alpha, (len(alpha), 1))
+        self.p[phase_name + '.states:r'] = np.take(guess.states[:, 0]/self.body.R, idx)
+        self.p[phase_name + '.states:theta'] = np.take(guess.states[:, 1], idx)
+        self.p[phase_name + '.states:u'] = np.take(guess.states[:, 2]/self.body.vc, idx)
+        self.p[phase_name + '.states:v'] = np.take(guess.states[:, 3]/self.body.vc, idx)
+        self.p[phase_name + '.states:m'] = np.take(guess.states[:, 4], idx)
+        self.p[phase_name + '.controls:alpha'] = np.reshape(guess.controls[:, 1], (len(guess.controls[:, 1]), 1))
 
 
 class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
@@ -309,7 +297,7 @@ class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
             self.phase[i].add_timeseries_output('a')
             self.phase[i].add_timeseries_output('h')
             self.phase[i].add_timeseries_output('e2')
-            self.phase[i].add_timeseries_output('ta')
+            # self.phase[i].add_timeseries_output('ta')
 
         # setup
         self.setup()

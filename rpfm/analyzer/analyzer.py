@@ -18,7 +18,7 @@ class Analyzer:
         self.tof = self.time = self.states = self.controls = None
         self.tof_exp = self.time_exp = self.states_exp = self.controls_exp = None
         self.err = None
-        self.r_moon_plot = self.body.R
+        self.rm_res = self.gm_res = None
 
     def run_driver(self):
 
@@ -69,6 +69,8 @@ class Analyzer:
                 self.err = self.states[-1][-1, :] - self.states_exp[-1][-1, :]
 
         if scaled:
-            self.r_moon_plot = 1.0
+            self.rm_res = 1.0
+            self.gm_res = 1.0
         else:
-            self.r_moon_plot = self.body.R
+            self.rm_res = self.body.R
+            self.gm_res = self.body.GM
