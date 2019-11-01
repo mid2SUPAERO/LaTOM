@@ -67,6 +67,43 @@ class TwoDimOrb:
         self.h = (gm * self.a * (1 - self.e ** 2)) ** 0.5
         self.n = (gm / self.a ** 3) ** 0.5
 
+    @staticmethod
+    def coe2polar(gm, ta, **kwargs):
+
+        if len(kwargs) != 2:
+            raise AttributeError('Exactly two kwargs between a,e,h must be provided')
+        elif ('a' in kwargs) and ('e' in kwargs):
+            a = kwargs['a']
+            e = kwargs['e']
+            h = (gm*a*(1-e*e))**0.5
+        elif ('a' in kwargs) and ('h' in kwargs):
+            a = kwargs['a']
+            h = kwargs['h']
+            e = (1-h*h/gm/a)**0.5
+        elif ('h' in kwargs) and ('e' in kwargs):
+            e = kwargs['e']
+            h = kwargs['h']
+            # a = h*h/gm/(1-e*e)
+        else:
+            raise AttributeError('Two kwargs between a,e,h must be provided')
+
+        r = h*h/gm/(1+e*np.cos(ta))
+        u = gm/h*e*np.sin(ta)
+        v = gm/h*(1 + e*np.cos(ta))
+
+        return r, u, v
+
+    @staticmethod
+    def polar2coe(gm, r, u, v):
+
+        a = gm*r/(2*gm - r*(u*u + v*v))
+        h = r*v
+        e = (((r*v*v - gm)**2 + (r*u*v)**2)**0.5)/gm
+        ta = np.arctan2(r*u*v, (r*v*v - gm))
+
+        return a, e, h, ta
+
+
     def __str__(self):
 
         lines = ['\n{:<25s}{:>20.6f}{:>5s}'.format('Semimajor axis:', self.a/1e3, 'km'),

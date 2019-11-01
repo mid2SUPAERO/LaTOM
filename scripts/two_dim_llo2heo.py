@@ -31,7 +31,7 @@ snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance'
               'Minor feasibility tolerance': 1e-12}
 
 # additional settings
-run_driver = True  # solve the NLP
+run_driver = False  # solve the NLP
 exp_sim = False  # perform explicit simulation
 
 # analyzer
@@ -42,8 +42,8 @@ elif kind == 'first':
     tr = TwoDimLLO2ApoAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, None, method, segments, order, solver,
                                snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
-    segments = (60, 200, 10)
-    t_bounds = ((0.5, 1.5), (0.5, 1.5), (0.5, 1.5))
+    segments = (20, 20, 10)
+    t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
                                       snopt_opts=snopt_opts, check_partials=False)

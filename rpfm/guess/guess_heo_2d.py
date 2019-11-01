@@ -144,7 +144,7 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         return s
 
 
-class TwoDim3PhasesHEO2LLOGuess(TwoDimLLOGuess):
+class TwoDim3PhasesLLO2HEOGuess(TwoDimLLOGuess):
 
     def __init__(self, gm, r, alt, rp, t, sc):
 
@@ -169,14 +169,15 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = 'ascent'
+    case = '3p'
 
     moon = Moon()
     h = 100e3
     r_p = 3150e3
     T = 6.5655*86400
+    # sat = Spacecraft(450/moon.vc, 2.1, g=1.)
     sat = Spacecraft(450, 2.1, g=moon.g)
-    nb = (100, 100)
+    nb = (100, 100, 50)
 
     if case == 'ascent':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
@@ -194,7 +195,8 @@ if __name__ == '__main__':
         t_all = np.reshape(np.hstack((t1, t2[1:])), (np.sum(nb), 1))
     elif case == '3p':
         case = 'ascent'
-        tr = TwoDim3PhasesHEO2LLOGuess(moon.GM, moon.R, h, r_p, T, sat)
+        tr = TwoDim3PhasesLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
+        # tr = TwoDim3PhasesLLO2HEOGuess(1., 1., h/moon.R, r_p/moon.R, T/moon.tc, sat)
         a = tr.ht.arrOrb.a
         e = tr.ht.arrOrb.e
         t1 = np.linspace(0.0, tr.pow1.tf, nb[0])

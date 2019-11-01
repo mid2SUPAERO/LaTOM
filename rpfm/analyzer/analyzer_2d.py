@@ -21,6 +21,7 @@ class TwoDimAnalyzer(Analyzer):
         Analyzer.__init__(self, body, sc)
 
         self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, 1.0])
+        self.controls_scalers = np.array([self.body.g*self.sc.m0, 1.0])
 
     def __str__(self):
 
@@ -50,26 +51,31 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
         self.alt = alt
         self.phase_name = 'powered'
 
-    def get_time_series(self, p):
+    def get_time_series(self, p, scaled=False):
 
-        tof = float(p.get_val(self.nlp.phase_name + '.t_duration')) * self.body.tc
-        t = p.get_val(self.nlp.phase_name + '.timeseries.time') * self.body.tc
+        tof = float(p.get_val(self.nlp.phase_name + '.t_duration'))  # non dimensional time of flight [-]
+        t = p.get_val(self.nlp.phase_name + '.timeseries.time')  # non dimensional time [-]
 
         states = np.empty((np.size(t), 0))
 
         for k in states_2d:
-            s = p.get_val(self.nlp.phase_name + '.timeseries.states:' + k)
+            s = p.get_val(self.nlp.phase_name + '.timeseries.states:' + k)  # non dimensional states [-]
             states = np.append(states, s, axis=1)
 
-        states = states * self.states_scalers
-        alpha = p.get_val(self.nlp.phase_name + '.timeseries.controls:alpha')
+        alpha = p.get_val(self.nlp.phase_name + '.timeseries.controls:alpha')  # thrust direction [rad]
 
         try:
-            thrust = p.get_val(self.nlp.phase_name + '.timeseries.controls:thrust') * self.body.g * self.sc.m0
+            thrust = p.get_val(self.nlp.phase_name + '.timeseries.controls:thrust')  # non dimensional thrust [-]
         except KeyError:
-            thrust = self.sc.T_max * np.ones((len(alpha), 1))
+            thrust = self.sc.twr*np.ones((len(alpha), 1))  # non dimensional thrust [-]
 
         controls = np.hstack((thrust, alpha))
+
+        if not scaled:
+            tof = tof*self.body.tc  # dimensional time of flight [s]
+            t = t*self.body.tc  # dimensional time [s]
+            states = states*self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
+            controls = controls*self.controls_scalers  # dimensional controls [N, rad]
 
         return tof, t, states, controls
 
@@ -111,8 +117,9 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 threshold=None)
+        sol_plot = TwoDimSolPlot(self.r_moon_plot, self.time, self.states, self.controls, self.time_exp,
+                                 self.states_exp, threshold=None)
+
         sol_plot.plot()
 
 
@@ -129,7 +136,9 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp)
+        sol_plot = TwoDimSolPlot(self.r_moon_plot, self.time, self.states, self.controls, self.time_exp,
+                                 self.states_exp)
+
         sol_plot.plot()
 
 
@@ -148,11 +157,14 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
         self.slope = slope
         self.r_safe = None
 
-    def get_solutions(self, explicit=True):
+    def get_solutions(self, explicit=True, scaled=False):
 
-        TwoDimAnalyzer.get_solutions(self, explicit=explicit)
+        TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
-        self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe') * self.body.R
+        self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')
+
+        if not scaled:
+            self.r_safe = self.r_safe*self.body.R
 
     def __str__(self):
         lines = ['\n{:^50s}'.format('2D Ascent Trajectory with Safe Altitude:'),
@@ -167,8 +179,9 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 r_safe=self.r_safe)
+        sol_plot = TwoDimSolPlot(self.r_moon_plot, self.time, self.states, self.controls, self.time_exp,
+                                 self.states_exp, r_safe=self.r_safe)
+
         sol_plot.plot()
 
 
@@ -219,8 +232,9 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 threshold=None, kind='descent')
+        sol_plot = TwoDimSolPlot(self.r_moon_plot, self.time, self.states, self.controls, self.time_exp,
+                                 self.states_exp, threshold=None, kind='descent')
+
         sol_plot.plot()
 
 
@@ -237,8 +251,9 @@ class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 kind='descent')
+        sol_plot = TwoDimSolPlot(self.r_moon_plot, self.time, self.states, self.controls, self.time_exp,
+                                 self.states_exp, kind='descent')
+
         sol_plot.plot()
 
 
@@ -257,19 +272,22 @@ class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
         self.slope = slope
         self.r_safe = None
 
-    def get_time_series(self, p):
+    def get_time_series(self, p, scaled=False):
 
-        tof, t, states, controls = TwoDimDescVarAnalyzer.get_time_series(self, p)
+        tof, t, states, controls = TwoDimDescVarAnalyzer.get_time_series(self, p, scaled=scaled)
 
         states[:, 1] = states[:, 1] - states[0, 1]
 
         return tof, t, states, controls
 
-    def get_solutions(self, explicit=True):
+    def get_solutions(self, explicit=True, scaled=False):
 
-        TwoDimAnalyzer.get_solutions(self, explicit=explicit)
+        TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
-        self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe') * self.body.R
+        self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')
+
+        if not scaled:
+            self.r_safe = self.r_safe*self.body.R
 
     def __str__(self):
 
@@ -285,8 +303,9 @@ class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 r_safe=self.r_safe, kind='descent')
+        sol_plot = TwoDimSolPlot(self.r_moon_plot, self.time, self.states, self.controls, self.time_exp,
+                                 self.states_exp, r_safe=self.r_safe, kind='descent')
+
         sol_plot.plot()
 
 
@@ -314,7 +333,7 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
                                           snopt_opts=snopt_opts, rec_file=rec_file, check_partials=check_partials,
                                           fix=fix)
 
-    def get_time_series(self, p):
+    def get_time_series(self, p, scaled=False):
 
         # attitude free
         tof_free = float(p.get_val(self.nlp.phase_name[0] + '.t_duration')) * self.body.tc
@@ -371,6 +390,7 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimTwoPhasesSolPlot(self.body.R, self.time, self.states, self.controls, time_exp=self.time_exp,
-                                          states_exp=self.states_exp, kind='descent')
+        sol_plot = TwoDimTwoPhasesSolPlot(self.r_moon_plot, self.time, self.states, self.controls,
+                                          time_exp=self.time_exp, states_exp=self.states_exp, kind='descent')
+
         sol_plot.plot()

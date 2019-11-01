@@ -125,6 +125,7 @@ class SinglePhaseNLP(NLP):
         # discretization nodes
         self.state_nodes = None
         self.control_nodes = None
+        self.t_all = None
         self.t_state = None
         self.t_control = None
         self.idx_state_control = None
@@ -156,18 +157,13 @@ class SinglePhaseNLP(NLP):
         self.p.run_model()  # compute time grid
 
         # states and controls nodes
-        state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
-        control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
-
-        self.state_nodes = np.reshape(state_nodes, (len(state_nodes), 1))
-        self.control_nodes = np.reshape(control_nodes, (len(control_nodes), 1))
+        self.state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
+        self.control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
 
         # time on the discretization nodes
-        t_all = self.p[self.phase_name + '.time']
-        t_all = np.reshape(t_all, (len(t_all), 1))
-
-        self.t_state = np.take(t_all, self.state_nodes)
-        self.t_control = np.take(t_all, self.control_nodes)
+        self.t_all = self.p[self.phase_name + '.time']
+        self.t_state = np.take(self.t_all, self.state_nodes)
+        self.t_control = np.take(self.t_all, self.control_nodes)
 
         # indices of the states time vector elements in the controls time vector
         idx_state_control = np.nonzero(np.isin(self.t_control, self.t_state))[0]
@@ -205,6 +201,29 @@ class MultiPhaseNLP(NLP):
                                                              transcription=self.transcription[i]))
             self.phase.append(ph)
             self.phase_name.append(''.join(['traj.', ph_name[i]]))
+
+    def set_time_phase(self, ti, tof, phase, phase_name):
+
+        # set the initial time and the time of flight initial guesses
+        self.p[phase_name + '.t_initial'] = ti
+        self.p[phase_name + '.t_duration'] = tof
+
+        self.p.run_model()  # run the model to compute the time grid
+
+        # states and controls nodes indices
+        state_nodes = phase.options['transcription'].grid_data.subset_node_indices['state_input']
+        control_nodes = phase.options['transcription'].grid_data.subset_node_indices['control_input']
+
+        # time vectors on all, states and controls nodes
+        t_all = self.p[phase_name + '.time']
+        t_control = np.take(t_all, control_nodes)
+        t_state = np.take(t_all, state_nodes)
+
+        # indices of the states time vector elements in the controls time vector
+        idx_state_control = np.nonzero(np.isin(t_control, t_state))[0]
+        idx_state_control = np.reshape(idx_state_control, (len(idx_state_control), 1))
+
+        return state_nodes, control_nodes, t_state, t_control, t_all, idx_state_control
 
 
 if __name__ == '__main__':

@@ -18,6 +18,7 @@ class Analyzer:
         self.tof = self.time = self.states = self.controls = None
         self.tof_exp = self.time_exp = self.states_exp = self.controls_exp = None
         self.err = None
+        self.r_moon_plot = self.body.R
 
     def run_driver(self):
 
@@ -40,13 +41,13 @@ class Analyzer:
 
         return failed
 
-    def get_time_series(self, p):
+    def get_time_series(self, p, scaled=False):
 
         return None, None, None, None
 
-    def get_solutions(self, explicit=True):
+    def get_solutions(self, explicit=True, scaled=False):
 
-        tof, t, states, controls = self.get_time_series(self.nlp.p)
+        tof, t, states, controls = self.get_time_series(self.nlp.p, scaled=scaled)
 
         self.tof = tof
         self.time = t
@@ -55,7 +56,7 @@ class Analyzer:
 
         if explicit:
 
-            tof, t, states, controls = self.get_time_series(self.nlp.p_exp)
+            tof, t, states, controls = self.get_time_series(self.nlp.p_exp, scaled=scaled)
 
             self.tof_exp = tof
             self.time_exp = t
@@ -66,3 +67,8 @@ class Analyzer:
                 self.err = self.states[-1, :] - self.states_exp[-1, :]
             else:
                 self.err = self.states[-1][-1, :] - self.states_exp[-1][-1, :]
+
+        if scaled:
+            self.r_moon_plot = 1.0
+        else:
+            self.r_moon_plot = self.body.R

@@ -61,8 +61,8 @@ class ODE2dCoast(ExplicitComponent):
 
         outputs['rdot'] = u
         outputs['thetadot'] = v / r
-        outputs['udot'] = -gm / r ** 2 + v ** 2 / r
-        outputs['vdot'] = -u * v / r
+        outputs['udot'] = - gm / r ** 2 + v ** 2 / r
+        outputs['vdot'] = - u * v / r
 
     def compute_partials(self, inputs, jacobian):
 
@@ -571,7 +571,7 @@ class ODE2dLLO2Apo(Group):
                            promotes_inputs=['r', 'u', 'v'], promotes_outputs=['c'])
 
 
-class Injection2HEO(ExplicitComponent):
+class Polar2COE(ExplicitComponent):
 
     def initialize(self):
 
@@ -587,16 +587,27 @@ class Injection2HEO(ExplicitComponent):
         self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
 
         self.add_output('a', val=np.zeros(nn), desc='semimajor axis')
+        self.add_output('e2', val=np.zeros(nn), desc='eccentricity squared')
         self.add_output('h', val=np.zeros(nn), desc='angular momentum')
+        # self.add_output('ta', val=np.zeros(nn), desc='true anomaly')
 
-        # ar = np.arange(self.options['num_nodes'])
+        ar = np.arange(self.options['num_nodes'])
 
-        self.declare_partials(of='a', wrt='r', method='cs')
-        self.declare_partials(of='a', wrt='u', method='cs')
-        self.declare_partials(of='a', wrt='v', method='cs')
+        self.declare_partials(of='a', wrt='r', cols=ar, rows=ar)
+        self.declare_partials(of='a', wrt='u', cols=ar, rows=ar)
+        self.declare_partials(of='a', wrt='v', cols=ar, rows=ar)
 
-        self.declare_partials(of='h', wrt='r', method='cs')
-        self.declare_partials(of='h', wrt='v', method='cs')
+        self.declare_partials(of='h', wrt='r', cols=ar, rows=ar)
+        self.declare_partials(of='h', wrt='v', cols=ar, rows=ar)
+
+        self.declare_partials(of='e2', wrt='r', cols=ar, rows=ar)
+        self.declare_partials(of='e2', wrt='u', cols=ar, rows=ar)
+        self.declare_partials(of='e2', wrt='v', cols=ar, rows=ar)
+
+        # self.declare_partials(of='ta', wrt='r', cols=ar, rows=ar)
+        # self.declare_partials(of='ta', wrt='u', cols=ar, rows=ar)
+        # self.declare_partials(of='ta', wrt='v', cols=ar, rows=ar)
+
 
     def compute(self, inputs, outputs):
 
@@ -606,11 +617,39 @@ class Injection2HEO(ExplicitComponent):
         u = inputs['u']
         v = inputs['v']
 
-        a = gm*r/(2*gm - r*(u*u + v*v))
-        h = r*v
+        n = r*u*v
+        d = r*v*v - gm
 
-        outputs['a'] = a
-        outputs['h'] = h
+        outputs['a'] = gm*r/(2*gm - r*(u*u + v*v))
+        outputs['e2'] = (d * d + n * n) / gm / gm
+        outputs['h'] = r*v
+        # outputs['ta'] = np.arctan2(n, d)
+
+    def compute_partials(self, inputs, jacobian):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+
+        d = 2*gm - r*(u*u + v*v)
+        # c = (r*v*v - gm)**2 + (r*u*v)**2
+
+        jacobian['a', 'r'] = 2*gm*gm/d/d
+        jacobian['a', 'u'] = 2*gm*r*r*u/d/d
+        jacobian['a', 'v'] = 2*gm*r*r*v/d/d
+
+        jacobian['h', 'r'] = v
+        jacobian['h', 'v'] = r
+
+        jacobian['e2', 'r'] = 2*v*v/gm/gm*(r*(u*u + v*v) - gm)
+        jacobian['e2', 'u'] = 2*r*r*v*v*u/gm/gm
+        jacobian['e2', 'v'] = 2*r*v/gm/gm*(2*(r*v*v - gm) + r*u*u*v)
+
+        # jacobian['ta', 'r'] = - gm*u*v/c
+        # jacobian['ta', 'u'] = (r*v*v - gm)*r*v/c
+        # jacobian['ta', 'v'] = - r*u*(gm + r*v*v)/c
 
 
 @declare_time(units='s')
@@ -640,6 +679,6 @@ class ODE2dLLO2HEO(Group):
                            promotes_inputs=['r', 'u', 'v', 'm', 'alpha', 'thrust', 'w'],
                            promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
 
-        self.add_subsystem(name='injection2heo',
-                           subsys=Injection2HEO(num_nodes=nn, GM=self.options['GM']),
-                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h'])
+        self.add_subsystem(name='polar2coe',
+                           subsys=Polar2COE(num_nodes=nn, GM=self.options['GM']),
+                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h', 'e2'])

@@ -39,9 +39,14 @@ class TwoDimSolPlot:
 
         self.states_plot = TwoDimStatesTimeSeries(self.R, self.time, self.states, self.time_exp, self.states_exp,
                                                   thrust=thrust, threshold=threshold, r_safe=self.r_safe)
-        self.controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, threshold=threshold)
         self.alt_plot = TwoDimAltProfile(self.R, self.states, self.states_exp, thrust=thrust, threshold=threshold,
                                          r_safe=self.r_safe)
+
+        if not np.isclose(r, 1.0):
+            self.controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, threshold=threshold)
+        else:
+            self.controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, threshold=threshold,
+                                                          units=('-', '-'))
 
         if (a is not None) and (e is not None):
             self.trajectory_plot = TwoDimLLO2NRHO(self.R, a, e, self.states, self.kind)
