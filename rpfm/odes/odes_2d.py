@@ -5,8 +5,10 @@
 
 import numpy as np
 
-from openmdao.api import ExplicitComponent, Group
+from openmdao.api import ExplicitComponent
 from dymos import declare_time, declare_state, declare_parameter
+
+from rpfm.dynamics.dynamics_2d import states_rates_pow
 
 
 @declare_time(units='s')
@@ -18,19 +20,17 @@ from dymos import declare_time, declare_state, declare_parameter
 @declare_parameter('alpha', targets=['alpha'], units='rad')
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
-class ODE2dConstThrust(ExplicitComponent):
+class ODE2dThrust(ExplicitComponent):
 
     def initialize(self):
 
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
-        self.options.declare('T', types=float)
         self.options.declare('w', types=float)
 
     def setup(self):
 
         nn = self.options['num_nodes']
-        thrust = self.options['T']
         w = self.options['w']
 
         # inputs (ODE right-hand side)
@@ -40,7 +40,6 @@ class ODE2dConstThrust(ExplicitComponent):
         self.add_input('m', val=np.zeros(nn), desc='mass', units='kg')
 
         self.add_input('alpha', val=np.zeros(nn), desc='thrust direction', units='rad')
-        self.add_input('thrust', val=thrust*np.ones(nn), desc='thrust', units='N')
         self.add_input('w', val=w*np.ones(nn), desc='exhaust velocity', units='m/s')
 
         # outputs (ODE left-hand side)
@@ -130,124 +129,25 @@ class ODE2dConstThrust(ExplicitComponent):
         jacobian['mdot', 'w'] = thrust / w ** 2
 
 
-@declare_time(units='s')
-@declare_state('r', rate_source='rdot', targets=['r'], units='m')
-@declare_state('theta', rate_source='thetadot', units='rad')
-@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
-@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
-@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
-@declare_parameter('alpha', targets=['alpha'], units='rad')
-@declare_parameter('thrust', targets=['thrust'], units='N')
-@declare_parameter('w', targets=['w'], units='m/s')
-class ODE2dVarThrust(ExplicitComponent):
+class ODE2dConstThrust(ODE2dThrust):
 
     def initialize(self):
 
-        self.options.declare('num_nodes', types=int)
-        self.options.declare('GM', types=float)
-        self.options.declare('w', types=float)
+        ODE2dThrust.initialize(self)
+        self.options.declare('T', types=float)
 
     def setup(self):
 
-        nn = self.options['num_nodes']
-        w = self.options['w']
+        ODE2dThrust.setup(self)
+        self.add_input('thrust', val=self.options['T']*np.ones(self.options['num_nodes']), desc='thrust', units='N')
 
-        # inputs (ODE right-hand side)
-        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
-        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
-        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
-        self.add_input('m', val=np.zeros(nn), desc='mass', units='kg')
 
-        self.add_input('alpha', val=np.zeros(nn), desc='thrust direction', units='rad')
-        self.add_input('thrust', val=np.zeros(nn), desc='thrust', units='N')
-        self.add_input('w', val=w * np.ones(nn), desc='exhaust velocity', units='m/s')
+class ODE2dVarThrust(ODE2dThrust):
 
-        # outputs (ODE left-hand side)
-        self.add_output('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
-        self.add_output('thetadot', val=np.zeros(nn), desc='angular rate', units='rad/s')
-        self.add_output('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
-        self.add_output('vdot', val=np.zeros(nn), desc='tangential acceleration', units='m/s**2')
-        self.add_output('mdot', val=np.zeros(nn), desc='mass rate', units='kg/s')
+    def setup(self):
 
-        # partial derivatives of the ODE outputs respect to the ODE inputs
-        ar = np.arange(self.options['num_nodes'])
-
-        self.declare_partials(of='rdot', wrt='u', rows=ar, cols=ar, val=1.0)
-
-        self.declare_partials(of='thetadot', wrt='r', rows=ar, cols=ar)
-        self.declare_partials(of='thetadot', wrt='v', rows=ar, cols=ar)
-
-        self.declare_partials(of='udot', wrt='r', rows=ar, cols=ar)
-        self.declare_partials(of='udot', wrt='v', rows=ar, cols=ar)
-        self.declare_partials(of='udot', wrt='m', rows=ar, cols=ar)
-        self.declare_partials(of='udot', wrt='alpha', rows=ar, cols=ar)
-        self.declare_partials(of='udot', wrt='thrust', rows=ar, cols=ar)
-
-        self.declare_partials(of='vdot', wrt='r', rows=ar, cols=ar)
-        self.declare_partials(of='vdot', wrt='u', rows=ar, cols=ar)
-        self.declare_partials(of='vdot', wrt='v', rows=ar, cols=ar)
-        self.declare_partials(of='vdot', wrt='m', rows=ar, cols=ar)
-        self.declare_partials(of='vdot', wrt='alpha', rows=ar, cols=ar)
-        self.declare_partials(of='vdot', wrt='thrust', rows=ar, cols=ar)
-
-        self.declare_partials(of='mdot', wrt='thrust', rows=ar, cols=ar)
-        self.declare_partials(of='mdot', wrt='w', rows=ar, cols=ar)
-
-    def compute(self, inputs, outputs):
-
-        gm = self.options['GM']
-
-        r = inputs['r']
-        u = inputs['u']
-        v = inputs['v']
-        m = inputs['m']
-        alpha = inputs['alpha']
-        thrust = inputs['thrust']
-        w = inputs['w']
-
-        cos_alpha = np.cos(alpha)
-        sin_alpha = np.sin(alpha)
-
-        outputs['rdot'] = u
-        outputs['thetadot'] = v / r
-        outputs['udot'] = -gm / r ** 2 + v ** 2 / r + (thrust / m) * sin_alpha
-        outputs['vdot'] = -u * v / r + (thrust / m) * cos_alpha
-        outputs['mdot'] = -thrust / w
-
-    def compute_partials(self, inputs, jacobian):
-
-        gm = self.options['GM']
-
-        r = inputs['r']
-        u = inputs['u']
-        v = inputs['v']
-        m = inputs['m']
-        alpha = inputs['alpha']
-        thrust = inputs['thrust']
-        w = inputs['w']
-
-        cos_alpha = np.cos(alpha)
-        sin_alpha = np.sin(alpha)
-
-        jacobian['thetadot', 'r'] = -v / r ** 2
-        jacobian['thetadot', 'v'] = 1 / r
-
-        jacobian['udot', 'r'] = 2 * gm / r ** 3 - (v / r) ** 2
-        jacobian['udot', 'v'] = 2 * v / r
-        jacobian['udot', 'm'] = -(thrust / m ** 2) * sin_alpha
-        jacobian['udot', 'alpha'] = (thrust / m) * cos_alpha
-        jacobian['udot', 'thrust'] = sin_alpha / m
-
-        jacobian['vdot', 'r'] = u * v / r ** 2
-        jacobian['vdot', 'u'] = -v / r
-        jacobian['vdot', 'v'] = -u / r
-        jacobian['vdot', 'm'] = -(thrust / m ** 2) * cos_alpha
-        jacobian['vdot', 'alpha'] = -(thrust / m) * sin_alpha
-        jacobian['vdot', 'thrust'] = cos_alpha / m
-
-        jacobian['mdot', 'thrust'] = -1 / w
-        jacobian['mdot', 'w'] = thrust / w ** 2
-
+        ODE2dThrust.setup(self)
+        self.add_input('thrust', val=np.zeros(self.options['num_nodes']), desc='thrust', units='N')
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
@@ -267,15 +167,13 @@ class ODE2dVertical(ExplicitComponent):
     def setup(self):
 
         nn = self.options['num_nodes']
-        thrust = self.options['T']
-        w = self.options['w']
 
         self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
         self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
         self.add_input('m', val=np.zeros(nn), desc='mass', units='kg')
 
-        self.add_input('thrust', val=thrust*np.ones(nn), desc='thrust', units='N')
-        self.add_input('w', val=w*np.ones(nn), desc='exhaust velocity', units='m/s')
+        self.add_input('thrust', val=self.options['T']*np.ones(nn), desc='thrust', units='N')
+        self.add_input('w', val=self.options['w']*np.ones(nn), desc='exhaust velocity', units='m/s')
 
         self.add_output('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
         self.add_output('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
@@ -376,13 +274,12 @@ class SafeAlt(ExplicitComponent):
         jacobian['dist_safe', 'theta'] = -drsafe_dtheta
 
 
-class Injection2Apolune(ExplicitComponent):
+class Polar2COE(ExplicitComponent):
 
     def initialize(self):
 
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
-        self.options.declare('ra', types=float)
 
     def setup(self):
 
@@ -392,7 +289,19 @@ class Injection2Apolune(ExplicitComponent):
         self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
         self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
 
-        self.add_output('c', val=np.zeros(nn), desc='condition to reach the apolune')
+
+class Polar2RApo(Polar2COE):
+
+    def initialize(self):
+
+        Polar2COE.initialize(self)
+        self.options.declare('ra', types=float)
+
+    def setup(self):
+
+        Polar2COE.setup(self)
+
+        self.add_output('c', val=np.zeros(self.options['num_nodes']), desc='condition to reach the apolune')
 
         ar = np.arange(self.options['num_nodes'])
 
@@ -428,20 +337,13 @@ class Injection2Apolune(ExplicitComponent):
         jacobian['c', 'v'] = - 2*r*v*b + 2*a*v*r**3
 
 
-class Polar2COE(ExplicitComponent):
-
-    def initialize(self):
-
-        self.options.declare('num_nodes', types=int)
-        self.options.declare('GM', types=float)
+class Polar2AEH(Polar2COE):
 
     def setup(self):
 
-        nn = self.options['num_nodes']
+        Polar2COE.setup(self)
 
-        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
-        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
-        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+        nn = self.options['num_nodes']
 
         self.add_output('a', val=np.zeros(nn), desc='semimajor axis')
         self.add_output('e2', val=np.zeros(nn), desc='eccentricity squared')
@@ -495,3 +397,65 @@ class Polar2COE(ExplicitComponent):
         jacobian['e2', 'r'] = 2*v*v/gm/gm*(r*(u*u + v*v) - gm)
         jacobian['e2', 'u'] = 2*r*r*v*v*u/gm/gm
         jacobian['e2', 'v'] = 2*r*v/gm/gm*(2*(r*v*v - gm) + r*u*u*v)
+
+
+class ODE2dPolar(ExplicitComponent):
+
+    def initialize(self):
+
+        self.options.declare('num_nodes', types=int)
+        self.options.declare('GM', types=float)
+
+    def setup(self):
+
+        nn = self.options['num_nodes']
+
+        # inputs (ODE right-hand side)
+        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
+        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
+        self.add_input('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
+        self.add_input('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
+        self.add_input('vdot', val=np.zeros(nn), desc='tangential acceleration', units='m/s**2')
+
+        # outputs (ODE left-hand side)
+        self.add_output('adot', val=np.zeros(nn), desc='semi-major axis rate', units='m/s')
+        self.add_output('e2dot', val=np.zeros(nn), desc='eccentricity rate', units='1/s')
+        self.add_output('hdot', val=np.zeros(nn), desc='angular momentum rate', units='m**2/s**2')
+
+        # partial derivatives of the ODE outputs respect to the ODE inputs
+        self.declare_partials(of='adot', wrt='r', method='cs')
+        self.declare_partials(of='adot', wrt='u', method='cs')
+        self.declare_partials(of='adot', wrt='v', method='cs')
+        self.declare_partials(of='adot', wrt='rdot', method='cs')
+        self.declare_partials(of='adot', wrt='udot', method='cs')
+        self.declare_partials(of='adot', wrt='vdot', method='cs')
+
+        self.declare_partials(of='hdot', wrt='r', method='cs')
+        self.declare_partials(of='hdot', wrt='v', method='cs')
+        self.declare_partials(of='hdot', wrt='rdot', method='cs')
+        self.declare_partials(of='hdot', wrt='vdot', method='cs')
+
+        self.declare_partials(of='e2dot', wrt='r', method='cs')
+        self.declare_partials(of='e2dot', wrt='u', method='cs')
+        self.declare_partials(of='e2dot', wrt='v', method='cs')
+        self.declare_partials(of='e2dot', wrt='rdot', method='cs')
+        self.declare_partials(of='e2dot', wrt='udot', method='cs')
+        self.declare_partials(of='e2dot', wrt='vdot', method='cs')
+
+    def compute(self, inputs, outputs):
+
+        gm = self.options['GM']
+
+        r = inputs['r']
+        u = inputs['u']
+        v = inputs['v']
+        rdot = inputs['rdot']
+        udot = inputs['udot']
+        vdot = inputs['vdot']
+        a = 2*gm - r*(u*u + v*v)
+
+        outputs['adot'] = 2*gm*gm/a/a*rdot + 2*gm*r*r*u/a/a*udot + 2*gm*r*r*v/a/a*vdot
+        outputs['hdot'] = v*rdot + r*vdot
+        outputs['e2dot'] =\
+            2*v*v/gm/gm*(r*(u*u + v*v) - gm)*rdot + 2*r*r*v*v*u/gm/gm*udot + 2*r*v/gm/gm*(2*(r*v*v - gm) + r*u*u*v)*vdot

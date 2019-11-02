@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnal
 
 
 # trajectory
-kind = 'c'
+kind = 's'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
 alt_p = 15e3  # periselene altitude [m]
@@ -29,7 +29,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 100
+segments = 300
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,

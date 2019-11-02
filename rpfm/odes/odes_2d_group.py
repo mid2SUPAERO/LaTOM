@@ -4,10 +4,9 @@
 """
 
 from openmdao.api import Group
+
 from dymos import declare_time, declare_state, declare_parameter
-
-from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Injection2Apolune, Polar2COE
-
+from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2RApo, Polar2AEH
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
@@ -45,15 +44,6 @@ class ODE2dVToff(Group):
                            promotes_outputs=['r_safe', 'dist_safe'])
 
 
-@declare_time(units='s')
-@declare_state('r', rate_source='rdot', targets=['r'], units='m')
-@declare_state('theta', rate_source='thetadot', units='rad')
-@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
-@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
-@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
-@declare_parameter('alpha', targets=['alpha'], units='rad')
-@declare_parameter('thrust', targets=['thrust'], units='N')
-@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2Apo(Group):
 
     def initialize(self):
@@ -74,19 +64,10 @@ class ODE2dLLO2Apo(Group):
                            promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
 
         self.add_subsystem(name='injection2apo',
-                           subsys=Injection2Apolune(num_nodes=nn, GM=self.options['GM'], ra=self.options['ra']),
+                           subsys=Polar2RApo(num_nodes=nn, GM=self.options['GM'], ra=self.options['ra']),
                            promotes_inputs=['r', 'u', 'v'], promotes_outputs=['c'])
 
 
-@declare_time(units='s')
-@declare_state('r', rate_source='rdot', targets=['r'], units='m')
-@declare_state('theta', rate_source='thetadot', units='rad')
-@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
-@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
-@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
-@declare_parameter('alpha', targets=['alpha'], units='rad')
-@declare_parameter('thrust', targets=['thrust'], units='N')
-@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2HEO(Group):
 
     def initialize(self):
@@ -106,5 +87,5 @@ class ODE2dLLO2HEO(Group):
                            promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
 
         self.add_subsystem(name='polar2coe',
-                           subsys=Polar2COE(num_nodes=nn, GM=self.options['GM']),
+                           subsys=Polar2AEH(num_nodes=nn, GM=self.options['GM']),
                            promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h', 'e2'])

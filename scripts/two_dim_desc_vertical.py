@@ -28,12 +28,12 @@ sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = (60, 10)
+segments = (60, 20)
 order = 3
 solver = 'IPOPT'
 
 # additional settings
-check_partials = False  # check partial derivatives
+check_partials = True # check partial derivatives
 run_driver = True  # solve the NLP
 exp_sim = False  # perform explicit simulation
 rec = False  # record the solution
