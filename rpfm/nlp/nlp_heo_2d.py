@@ -5,6 +5,8 @@
 
 import numpy as np
 
+from dymos.transcriptions.common import PhaseLinkageComp
+
 from rpfm.nlp.nlp import MultiPhaseNLP
 from rpfm.nlp.nlp_2d import TwoDimVarNLP, TwoDimNLP
 from rpfm.guess.guess_heo_2d import TwoDimLLO2HEOGuess, TwoDim2PhasesLLO2HEOGuess, TwoDim3PhasesLLO2HEOGuess
@@ -110,7 +112,7 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
 
         # first phase (departure)
         self.phase[0].set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0,
-                                        ref=self.guess.ht.rp/self.body.R)
+                                        ref=self.guess.ht.depOrb.rp/self.body.R)
         self.phase[0].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0,
                                         ref=self.guess.pow1.thetaf)
         self.phase[0].set_state_options('u', fix_initial=True, fix_final=False,
@@ -122,14 +124,14 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
 
         # second phase (injection)
         self.phase[1].set_state_options('r', fix_initial=False, fix_final=False, lower=1.0,
-                                        ref0=self.guess.ht.arrOrb.rp/self.body.R,
-                                        ref=self.guess.ht.arrOrb.ra/self.body.R)
+                                        ref0=1.0,
+                                        ref=self.guess.ht.depOrb.rp/self.body.R)
         self.phase[1].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0,
                                         ref=self.guess.pow2.thetaf)
         self.phase[1].set_state_options('u', fix_initial=False, fix_final=False,
-                                        ref=self.guess.ht.arrOrb.va/self.body.vc)
+                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
         self.phase[1].set_state_options('v', fix_initial=False, fix_final=False,
-                                        ref=self.guess.ht.arrOrb.va/self.body.vc)
+                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
         self.phase[1].set_state_options('m', fix_initial=False, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                         ref0=self.sc.m_dry, ref=self.sc.m0)
 
@@ -151,12 +153,24 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
         self.phase[1].add_objective('m', loc='final', scaler=-1.0)
 
         # linkages
-        # self.trajectory.link_phases(ph_name, vars=['a', 'h', 'e2', 'm', 'thrust', 'w'])
+        self.trajectory.link_phases(ph_name, vars=['m'])
 
-        # additional outputs
-        for i in range(2):
-            for s in ['a', 'h', 'e2']:
+        linkage_comp = PhaseLinkageComp()
+        self.trajectory.add_subsystem('linkage_comp', subsys=linkage_comp)
+
+        for s in ['a', 'h']:
+
+            linkage_comp.add_linkage(s, vars=(s,), equals=0.0, shape=(1,))
+            var_name = []
+
+            for i in range(2):
                 self.phase[i].add_timeseries_output(s)
+                ph_name_list = self.phase_name[i].split('.')
+                var_name.append('.'.join([ph_name_list[1], 'rhs_disc', s]))
+
+            link_name = ''.join(['linkage_comp.', s, '_', s])
+            self.trajectory.connect(var_name[0], link_name + ':lhs', src_indices=[-1], flat_src_indices=True)
+            self.trajectory.connect(var_name[1], link_name + ':rhs', src_indices=[0], flat_src_indices=True)
 
         # setup
         self.setup()
@@ -168,8 +182,6 @@ class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
         self.guess.compute_trajectory(t1=tc1*self.body.tc, t2=tc2*self.body.tc)
         self.set_initial_guess_phase(idx1, self.guess.pow1, self.phase_name[0])
         self.set_initial_guess_phase(idx2, self.guess.pow2, self.phase_name[1])
-
-        print(tc1, tc2, idx1, idx2)
 
         self.p.run_model()
 
