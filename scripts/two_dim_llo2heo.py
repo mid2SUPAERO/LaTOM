@@ -28,9 +28,8 @@ method = 'gauss-lobatto'
 segments = 100
 order = 3
 solver = 'SNOPT'
-# snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
-#              'Minor feasibility tolerance': 1e-12}
-snopt_opts = None
+snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
+              'Minor feasibility tolerance': 1e-12}
 
 # additional settings
 run_driver = True  # solve the NLP
@@ -50,7 +49,7 @@ elif kind == '2p':
     tr = TwoDim2PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
                                       snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
-    segments = (60, 200, 10)
+    segments = (60, 400, 10)
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
