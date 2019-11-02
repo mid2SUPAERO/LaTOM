@@ -39,7 +39,8 @@ class TwoDimAnalyzer(Analyzer):
         try:
             thrust = p.get_val(phase_name + '.timeseries.controls:thrust')  # non dimensional thrust [-]
         except KeyError:
-            thrust = self.sc.twr*np.ones((len(alpha), 1))  # non dimensional thrust [-]
+            thrust = p.get_val(phase_name + '.design_parameters:thrust')
+            thrust = thrust*np.ones((len(alpha), 1))  # non dimensional thrust [-]
 
         controls = np.hstack((thrust, alpha))
 

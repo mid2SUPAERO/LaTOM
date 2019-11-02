@@ -182,47 +182,25 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
     def get_time_series(self, p, scaled=False):
 
         tof = []
-        time = []
+        t = []
         states = []
         controls = []
 
         for i in range(3):
+            tofi, ti, si, ci = self.get_time_series_phase(p, self.nlp.phase_name[i], scaled=scaled)
 
-            tof.append(float(p.get_val(self.nlp.phase_name[i] + '.t_duration'))*self.body.tc)
-            t = p.get_val(self.nlp.phase_name[i] + '.timeseries.time')*self.body.tc
-            time.append(t)
+            tof.append(tofi)
+            t.append(ti)
+            states.append(si)
+            controls.append(ci)
 
-            r = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:r')*self.body.R
-            theta = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:theta')
-            u = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:u')*self.body.vc
-            v = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:v')*self.body.vc
-
-            if i == 1:
-                m = states[0][-1, -1]*np.ones((len(t), 1))
-                alpha = np.zeros((len(t), 1))
-                thrust = np.zeros((len(t), 1))
-            else:
-                m = p.get_val(self.nlp.phase_name[i] + '.timeseries.states:m')
-                alpha = p.get_val(self.nlp.phase_name[i] + '.timeseries.controls:alpha')
-                thrust = self.nlp.sc.T_max*np.ones((len(t), 1))
-
-            s = np.hstack((r, theta, u, v, m))
-            c = np.hstack((thrust, alpha))
-
-            states.append(s)
-            controls.append(c)
-
-        return tof, time, states, controls
+        return tof, t, states, controls
 
     def plot(self):
 
         coe_injection = TwoDimOrb.polar2coe(self.body.GM, self.states[-1][-1, 0], self.states[-1][-1, 2],
                                             self.states[-1][-1, 3])
         dtheta = coe_injection[-1] - self.states[-1][-1, 1]
-
-        # num = self.states[-1][-1, 0]*self.states[-1][-1, 2]*self.states[-1][-1, 3]
-        # den = self.states[-1][-1, 0]*self.states[-1][-1, 3]**2 - self.body.GM
-        # theta_injection = np.arctan2(num, den)
 
         sol_plot = TwoDimMultiPhaseSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp,
                                            self.states_exp, a=self.nlp.guess.ht.arrOrb.a,

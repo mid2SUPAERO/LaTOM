@@ -10,7 +10,7 @@ from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
     TwoDim3PhasesLLO2HEOAnalyzer
 
-kind = '2p'
+kind = '3p'
 
 # trajectory
 moon = Moon()
@@ -28,12 +28,13 @@ method = 'gauss-lobatto'
 segments = 100
 order = 3
 solver = 'SNOPT'
-snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
-              'Minor feasibility tolerance': 1e-12}
+# snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
+#              'Minor feasibility tolerance': 1e-12}
+snopt_opts = None
 
 # additional settings
-run_driver = False  # solve the NLP
-exp_sim = False  # perform explicit simulation
+run_driver = True  # solve the NLP
+exp_sim = True  # perform explicit simulation
 
 # analyzer
 if kind == 'full':

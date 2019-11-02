@@ -6,7 +6,8 @@
 import numpy as np
 
 from rpfm.nlp.nlp import SinglePhaseNLP, MultiPhaseNLP
-from rpfm.odes.odes_2d import ODE2dVarThrust, ODE2dConstThrust, ODE2dVToff, ODE2dVertical
+from rpfm.odes.odes_2d import ODE2dVarThrust, ODE2dConstThrust, ODE2dVertical
+from rpfm.odes.odes_2d_group import ODE2dVToff
 from rpfm.guess.guess_2d import TwoDimAscGuess, TwoDimDescGuess
 
 
