@@ -89,7 +89,6 @@ class NLP:
         self.p.cleanup()
 
     def __str__(self):
-        """Prints info on the NLP solver and transcription. """
 
         lines = ['\n{:^40s}'.format('NLP characteristics:'),
                  '\n{:<25s}{:<15s}'.format('Solver:', self.solver),

@@ -57,14 +57,26 @@ class TwoDimAnalyzer(Analyzer):
         lines = [self.sc.__str__(), self.nlp.__str__()]
 
         if self.err is not None:
-            lines_err = ['\n{:^50s}'.format('Error:'),
-                         '\n{:<25s}{:>20.12f}{:>5s}'.format('Radius:', self.err[0] / 1e3, 'km'),
-                         '{:<25s}{:>20.12f}{:>5s}'.format('Angle:', self.err[1] * np.pi / 180, 'deg'),
-                         '{:<25s}{:>20.12f}{:>5s}'.format('Radial velocity:', self.err[2] / 1e3, 'km/s'),
-                         '{:<25s}{:>20.12f}{:>5s}'.format('Tangential velocity:', self.err[3] / 1e3, 'km/s'),
-                         '{:<25s}{:>20.12f}{:>5s}'.format('Mass:', self.err[4], 'kg')]
 
-            lines.extend(lines_err)
+            try:
+                lines_err = ['\n{:^50s}'.format('Error:'),
+                             '\n{:<25s}{:>20.12f}{:>5s}'.format('Radius:', self.err[0] / 1e3, 'km'),
+                             '{:<25s}{:>20.12f}{:>5s}'.format('Angle:', self.err[1] * np.pi / 180, 'deg'),
+                             '{:<25s}{:>20.12f}{:>5s}'.format('Radial velocity:', self.err[2] / 1e3, 'km/s'),
+                             '{:<25s}{:>20.12f}{:>5s}'.format('Tangential velocity:', self.err[3] / 1e3, 'km/s'),
+                             '{:<25s}{:>20.12f}{:>5s}'.format('Mass:', self.err[4], 'kg')]
+
+                lines.extend(lines_err)
+
+            except TypeError:
+                lines_err = ['\n{:^50s}'.format('Error:'),
+                             '\n{:<25s}{:>50s}{:>5s}'.format('Radius:', str(self.err[:, 0]/1e3), 'km'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Angle:', str(self.err[:, 1]*np.pi/180), 'deg'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Radial velocity:', str(self.err[:, 2]/1e3), 'km/s'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Tangential velocity:', str(self.err[:, 3]/1e3), 'km/s'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Mass:', str(self.err[:, 4]), 'kg')]
+
+                lines.extend(lines_err)
 
         s = '\n'.join(lines)
 

@@ -135,7 +135,7 @@ class PowConstRadius:
 
         print('output:', sol_states.message)
 
-        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-14, atol=1e-14))
+        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-12, atol=1e-12))
 
         self.thetaf = sol_states.y[0, -1]
         self.mf = self.compute_mass(self.tf)

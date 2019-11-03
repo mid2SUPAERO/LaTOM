@@ -53,10 +53,12 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
 
         # states options
         self.phase.set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0,
-                                     ref=self.r_circ / self.body.R)
+                                     ref=self.guess.ht.depOrb.rp/self.body.R)
         self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=self.guess.pow.thetaf)
-        self.phase.set_state_options('u', fix_initial=True, fix_final=False, ref0=0.0, ref=self.v_circ / self.body.vc)
-        self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0, ref=self.v_circ / self.body.vc)
+        self.phase.set_state_options('u', fix_initial=True, fix_final=False, ref0=0.0,
+                                     ref=self.guess.ht.transfer.vp/self.body.vc)
+        self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0,
+                                     ref=self.guess.ht.transfer.vp/self.body.vc)
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
 
@@ -250,13 +252,14 @@ class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
         self.phase[0].set_state_options('u', fix_initial=True, fix_final=False,
                                         ref=self.guess.ht.depOrb.vp/self.body.vc)
         self.phase[0].set_state_options('v', fix_initial=True, fix_final=False, lower=0.0,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
+                                        ref=self.guess.ht.transfer.vp/self.body.vc)
         self.phase[0].set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                         ref0=self.sc.m_dry, ref=self.sc.m0)
 
         # states options - second phase
         self.phase[1].set_state_options('r', fix_initial=False, fix_final=False, lower=1.0, ref0=1.0,
-                                        ref=self.guess.ht.ra/self.body.R)
+                                        # ref0=self.guess.ht.arrOrb.a/self.body.R,
+                                        ref=self.guess.ht.arrOrb.ra/self.body.R)
         self.phase[1].set_state_options('theta', fix_initial=False, fix_final=False, lower=0.0, ref=np.pi)
         self.phase[1].set_state_options('u', fix_initial=False, fix_final=False,
                                         ref=self.guess.ht.depOrb.vp/self.body.vc)
@@ -267,13 +270,13 @@ class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
 
         # states options - third phase
         self.phase[2].set_state_options('r', fix_initial=False, fix_final=False, lower=1.0, ref0=1.0,
-                                        ref=self.guess.ht.ra/self.body.R)
-        self.phase[2].set_state_options('theta', fix_initial=False, fix_final=False, lower=0.0,
-                                        ref=np.pi)
+                                        # ref0=self.guess.ht.arrOrb.a/self.body.R,
+                                        ref=self.guess.ht.arrOrb.ra/self.body.R)
+        self.phase[2].set_state_options('theta', fix_initial=False, fix_final=False, lower=0.0, ref=np.pi)
         self.phase[2].set_state_options('u', fix_initial=False, fix_final=False,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
+                                        ref=self.guess.ht.arrOrb.va/self.body.vc)
         self.phase[2].set_state_options('v', fix_initial=False, fix_final=False,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
+                                        ref=self.guess.ht.arrOrb.va/self.body.vc)
         self.phase[2].set_state_options('m', fix_initial=False, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                         ref0=self.sc.m_dry, ref=self.sc.m0)
 

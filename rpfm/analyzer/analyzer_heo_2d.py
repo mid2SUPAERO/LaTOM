@@ -9,6 +9,7 @@ from copy import deepcopy
 from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
 from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP, TwoDim2PhasesLLO2HEONLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimMultiPhaseSolPlot
+from rpfm.plots.timeseries import TwoDimStatesTimeSeries, TwoDimControlsTimeSeries
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.guess.guess_2d import ImpulsiveBurn
 from rpfm.utils.const import g0
@@ -27,17 +28,22 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 a=self.nlp.guess.ht.arrOrb.a, e=self.nlp.guess.ht.arrOrb.e)
+        sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp, self.states_exp,
+                                 a=self.nlp.guess.ht.arrOrb.a*(self.rm_res/self.body.R), e=self.nlp.guess.ht.arrOrb.e)
         sol_plot.plot()
 
     def __str__(self):
+
+        if np.isclose(self.gm_res, 1.0):
+            tof = self.tof*self.body.tc/86400
+        else:
+            tof = self.tof/86400
 
         lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
                  self.nlp.guess.__str__(),
                  '\n{:^50s}'.format('Optimal transfer:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1. - self.states[-1, -1]/self.sc.m0, ''),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', tof, 'days'),
                  TwoDimAnalyzer.__str__(self)]
 
         s = '\n'.join(lines)
@@ -48,7 +54,7 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
 class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
-                 check_partials=False, u_bound='lower'):
+                 check_partials=False):
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -58,31 +64,78 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
         self.transfer = self.insertion_burn = self.dv = None
 
-    def compute_insertion_burn(self):
+    def compute_insertion_burn(self, nb=200):
 
-        rf = self.states[-1, 0]
-        uf = self.states[-1, 2]
-        vf = self.states[-1, 3]
-        mf = self.states[-1, -1]
+        # states and COEs at the end of the departure burn
+        states_end = self.states[-1]
+        a, e, h, ta = TwoDimOrb.polar2coe(self.gm_res, states_end[0], states_end[2], states_end[3])
 
-        ht = rf*vf
-        at = self.body.GM*rf/(2*self.body.GM - rf*(uf**2 + vf**2))
-        et = (1 - ht**2/self.body.GM/at)**0.5
+        # coasting orbit
+        if np.isclose(self.gm_res, 1.0):
+            self.transfer = TwoDimOrb(self.body.GM, a=a*self.body.R, e=e)
+        else:
+            self.transfer = TwoDimOrb(self.body.GM, a=a, e=e)
 
+        # finite dV at departure
+        self.dv = self.sc.Isp * g0 * np.log(self.sc.m0/states_end[-1])
+
+        # impulsive dV at arrival
         sc = deepcopy(self.sc)
-        sc.m0 = mf
-
-        self.dv = self.sc.Isp*g0*np.log(self.sc.m0/mf)
-        self.transfer = TwoDimOrb(self.body.GM, a=at, e=et)
+        sc.m0 = states_end[-1]
         self.insertion_burn = ImpulsiveBurn(sc, self.nlp.guess.ht.arrOrb.va - self.transfer.va)
+
+        # transfer orbit
+        t, states = TwoDimOrb.propagate(self.gm_res, a, e, ta, np.pi, nb)
+
+        # adjust time
+        t_end = self.time[-1]
+        self.tof = [self.tof, t[-1, 0] - t[0, 0]]
+        self.time = [self.time, t_end[-1] + t]
+
+        # add mass
+        m = np.vstack((states_end[-1]*np.ones((len(t) - 1, 1)), [self.insertion_burn.mf]))
+        states = np.hstack((states, m))
+
+        # stack states and controls
+        self.states = [self.states, states]
+        self.controls = [self.controls, np.zeros((len(t), 2))]
+        self.controls[-1][-1, 0] = self.controls[0][0, 0]
+
+        # adjust theta
+        dtheta = ta - self.states[0][-1, 1]
+        self.states[0][:, 1] = self.states[0][:, 1] + dtheta
+        if self.states_exp is not None:
+            self.states_exp[:, 1] = self.states_exp[:, 1] + dtheta
+
+    def get_solutions(self, explicit=True, scaled=False, nb=200):
+
+        TwoDimAscAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
+
+        self.compute_insertion_burn(nb=nb)
 
     def plot(self):
 
-        sol_plot = TwoDimSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp, self.states_exp,
-                                 threshold=None, a=self.nlp.guess.ht.arrOrb.a, e=self.nlp.guess.ht.arrOrb.e)
+        states_plot = TwoDimStatesTimeSeries(self.rm_res, self.time[0], self.states[0], self.time_exp, self.states_exp)
+
+        if np.isclose(self.rm_res, 1.0):
+            controls_plot = TwoDimControlsTimeSeries(self.time[0], self.controls[0], units=('-', '-'), threshold=None)
+        else:
+            controls_plot = TwoDimControlsTimeSeries(self.time[0], self.controls[0], threshold=None)
+
+        sol_plot = TwoDimMultiPhaseSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
+                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a*(self.rm_res/self.body.R),
+                                           e=self.nlp.guess.ht.arrOrb.e)
+
+        states_plot.plot()
+        controls_plot.plot()
         sol_plot.plot()
 
     def __str__(self):
+
+        if np.isclose(self.gm_res, 1.0):
+            time_scaler = self.body.tc
+        else:
+            time_scaler = 1.0
 
         lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
                  self.nlp.guess.__str__(),
@@ -91,11 +144,12 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                  '\n{:^50s}'.format('Optimal transfer:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
                                                    1 - self.insertion_burn.mf/self.sc.m0, ''),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight (burn):', self.tof, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', sum(self.tof)*time_scaler/86400, 'days'),
                  '\n{:^50s}'.format('Departure burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.nlp.guess.pow.dv_inf, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[-1, -1]/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Burn time:', self.tof[0]*time_scaler, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[0][-1, -1]/self.sc.m0, ''),
                  '\n{:^50s}'.format('Injection burn:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.insertion_burn.dv, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', self.insertion_burn.dm/self.sc.m0, ''),
@@ -106,12 +160,34 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         return s
 
 
-class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
+class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
+
+    def __init__(self, body, sc):
+
+        TwoDimAnalyzer.__init__(self, body, sc)
+
+        self.transfer = None
+        self.dv = []
+
+    def plot(self):
+
+        coe_inj = TwoDimOrb.polar2coe(self.gm_res, self.states[-1][-1, 0], self.states[-1][-1, 2],
+                                      self.states[-1][-1, 3])
+
+        dtheta = coe_inj[-1] - self.states[-1][-1, 1]
+
+        sol_plot = TwoDimMultiPhaseSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
+                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a*(self.rm_res/self.body.R),
+                                           e=self.nlp.guess.ht.arrOrb.e, dtheta=dtheta)
+        sol_plot.plot()
+
+
+class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False):
 
-        TwoDimAnalyzer.__init__(self, body, sc)
+        TwoDimMultiPhasesLLO2HEOAnalyzer.__init__(self, body, sc)
 
         self.phase_name = ('dep', 'arr')
         self.nlp = TwoDim2PhasesLLO2HEONLP(body, sc, alt, rp, t, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order,
@@ -145,7 +221,7 @@ class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
             states = np.hstack((states, self.states[0][-1, -1] * np.ones((len(t), 1))))
             self.states[1][:, 1] = self.states[1][:, 1] + states[-1, 1]
 
-            # adjust states
+            # adjust states and controls
             self.states = [self.states[0], states, self.states[1]]
             self.controls = [self.controls[0], np.zeros((len(t), 2)), self.controls[1]]
 
@@ -154,27 +230,26 @@ class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
         return coe1, coe2
 
-    def plot(self):
+    def get_solutions(self, explicit=True, scaled=False, nb=200):
 
-        coe_inj = TwoDimOrb.polar2coe(self.gm_res, self.states[-1][-1, 0], self.states[-1][-1, 2],
-                                      self.states[-1][-1, 3])
+        TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
-        dtheta = coe_inj[-1] - self.states[-1][-1, 1]
+        self.compute_coasting_arc(nb=nb)
 
-        sol_plot = TwoDimMultiPhaseSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
-                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a,
-                                           e=self.nlp.guess.ht.arrOrb.e, dtheta=dtheta)
-        sol_plot.plot()
+    def __str__(self):
+
+        pass
 
 
-class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
+class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False):
 
-        TwoDimAnalyzer.__init__(self, body, sc)
+        TwoDimMultiPhasesLLO2HEOAnalyzer.__init__(self, body, sc)
 
         self.phase_name = ('dep', 'coast', 'arr')
+
         self.nlp = TwoDim3PhasesLLO2HEONLP(body, sc, alt, rp, t, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order,
                                            solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                            check_partials=check_partials)
@@ -196,13 +271,43 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
         return tof, t, states, controls
 
-    def plot(self):
+    def get_solutions(self, explicit=True, scaled=False):
 
-        coe_injection = TwoDimOrb.polar2coe(self.body.GM, self.states[-1][-1, 0], self.states[-1][-1, 2],
-                                            self.states[-1][-1, 3])
-        dtheta = coe_injection[-1] - self.states[-1][-1, 1]
+        TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
-        sol_plot = TwoDimMultiPhaseSolPlot(self.body.R, self.time, self.states, self.controls, self.time_exp,
-                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a,
-                                           e=self.nlp.guess.ht.arrOrb.e, dtheta=dtheta)
-        sol_plot.plot()
+        coe = TwoDimOrb.polar2coe(self.gm_res, self.states[0][-1, 0], self.states[0][-1, 2], self.states[0][-1, 3])
+
+        self.transfer = TwoDimOrb(self.body.GM, a=coe[0]*self.body.R/self.rm_res, e=coe[1])
+        for i in [0, 2]:
+            self.dv.append(self.sc.Isp*g0*np.log(self.states[i][0, -1]/self.states[i][-1, -1]))
+
+    def __str__(self):
+
+        if np.isclose(self.gm_res, 1.0):
+            time_scaler = self.body.tc
+        else:
+            time_scaler = 1.0
+
+        lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
+                 self.nlp.guess.__str__(),
+                 '\n{:^50s}'.format('Coasting orbit:'),
+                 self.transfer.__str__(),
+                 '\n{:^50s}'.format('Optimal transfer:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[-1][-1, -1]/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', sum(self.tof)*time_scaler/86400, 'days'),
+                 '\n{:^50s}'.format('Departure burn:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.nlp.guess.pow1.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv[0], 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Burn time:', self.tof[0]*time_scaler, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[0][-1, -1]/self.sc.m0, ''),
+                 '\n{:^50s}'.format('Injection burn:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.nlp.guess.pow2.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv[-1], 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Burn time:', self.tof[-1]*time_scaler, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
+                                                 1 - self.states[-1][-1, -1]/self.states[-1][0, -1], ''),
+                 TwoDimAnalyzer.__str__(self)]
+
+        s = '\n'.join(lines)
+
+        return s

@@ -44,6 +44,15 @@ class ODE2dVToff(Group):
                            promotes_outputs=['r_safe', 'dist_safe'])
 
 
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2Apo(Group):
 
     def initialize(self):
@@ -68,6 +77,15 @@ class ODE2dLLO2Apo(Group):
                            promotes_inputs=['r', 'u', 'v'], promotes_outputs=['c'])
 
 
+@declare_time(units='s')
+@declare_state('r', rate_source='rdot', targets=['r'], units='m')
+@declare_state('theta', rate_source='thetadot', units='rad')
+@declare_state('u', rate_source='udot', targets=['u'], units='m/s')
+@declare_state('v', rate_source='vdot', targets=['v'], units='m/s')
+@declare_state('m', rate_source='mdot', targets=['m'], units='kg')
+@declare_parameter('alpha', targets=['alpha'], units='rad')
+@declare_parameter('thrust', targets=['thrust'], units='N')
+@declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2HEO(Group):
 
     def initialize(self):

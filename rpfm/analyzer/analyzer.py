@@ -3,6 +3,8 @@
 
 """
 
+import numpy as np
+
 from time import time
 
 
@@ -66,7 +68,11 @@ class Analyzer:
             if isinstance(self.phase_name, str):
                 self.err = self.states[-1, :] - self.states_exp[-1, :]
             else:
-                self.err = self.states[-1][-1, :] - self.states_exp[-1][-1, :]
+                self.err = np.empty((0, np.size(self.states[0][0, :])))
+                for i in range(len(self.phase_name)):
+                    err = np.reshape(self.states[i][-1, :] - self.states_exp[i][-1, :],
+                                     (1, np.size(self.states[i][-1, :])))
+                    self.err = np.append(self.err, err, axis=0)
 
         if scaled:
             self.rm_res = 1.0
