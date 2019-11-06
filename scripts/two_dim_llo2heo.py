@@ -49,7 +49,7 @@ elif kind == '2p':
     tr = TwoDim2PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
                                       snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
-    segments = (100, 400, 60)
+    segments = (40, 100, 40)
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,

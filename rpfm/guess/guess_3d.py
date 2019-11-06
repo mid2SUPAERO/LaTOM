@@ -1,0 +1,281 @@
+"""
+@authors: Alberto FOSSA' Giuliana Elena MICELI
+
+"""
+
+import numpy as np
+from copy import deepcopy
+
+from scipy.integrate import solve_ivp, odeint
+from scipy.optimize import root
+
+from rpfm.utils.const import g0
+from rpfm.utils.keplerian_orbit import KepOrb, TwoDimOrb
+from rpfm.utils.coc import eq2per
+from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius, ImpulsiveBurn, TwoDimLLOGuess, DeorbitBurn, HohmannTransfer
+
+
+class ImpulsiveBurnPer(ImpulsiveBurn):
+
+    def __init__(self, dv, raan, i, w):
+
+        self.dv = eq2per(raan, i, w)*dv
+
+
+class DeorbitBurnPer(DeorbitBurn):
+
+    def __init__(self, dv, raan, i, w):
+
+        ImpulsiveBurnPer.__init__(self, dv, raan, i, w)
+
+
+class HohmannTransferPer(HohmannTransfer):
+
+    def __init__(self, i, raan, w):
+
+        self.i = i
+        self.raan = raan
+        self.w = w
+
+    def compute_trajectory(self, t, tp, theta0=0.0, m=1.0):
+
+        nb_nodes = len(t)
+        ea0 = np.reshape(np.linspace(0.0, np.pi, nb_nodes), (nb_nodes, 1))
+
+        print("\nSolving Kepler's equation using Scipy root function")
+
+        sol = root(KepOrb.kepler_eqn, ea0, args=(self.transfer.e, self.transfer.n, t, tp), tol=1e-15)
+
+        print("output:", sol.message)
+
+        ea = np.reshape(sol.x, (nb_nodes, 1))
+        theta = 2*np.arctan(((1 + self.transfer.e)/(1 - self.transfer.e))**0.5*np.tan(ea/2))
+
+        if self.depOrb.a < self.arrOrb.a:  # ascent
+            self.r = self.transfer.a*(1 - self.transfer.e**2)/(1 + self.transfer.e*np.cos(theta))
+            self.u = self.GM/self.transfer.h*self.transfer.e*np.sin(theta)
+            self.v = self.GM/self.transfer.h*(1 + self.transfer.e*np.cos(theta))
+            alpha = np.zeros((nb_nodes, 1))
+        else:  # descent
+            self.r = self.transfer.a*(1 - self.transfer.e**2)/(1 + self.transfer.e*np.cos(theta + np.pi))
+            self.u = self.GM/self.transfer.h*self.transfer.e*np.sin(theta + np.pi)
+            self.v = self.GM/self.transfer.h*(1 + self.transfer.e*np.cos(theta + np.pi))
+            alpha = np.pi*np.ones((nb_nodes, 1))
+
+        self.theta = theta + theta0
+
+        self.r = eq2per(self.raan, self.i, self.w) * self.r
+        self.u = eq2per(self.raan, self.i, self.w) * self.u
+        self.v = eq2per(self.raan, self.i, self.w) * self.v
+
+        self.states = np.hstack((self.r, self.theta, self.u, self.v, m*np.ones((nb_nodes, 1))))
+        self.controls = np.hstack((np.zeros((nb_nodes, 1)), alpha))
+
+        return sol
+
+
+class PowConstRadiusPer(PowConstRadius):
+
+    def __init__(self, i, raan, w, r, v0, vf, thrust):
+
+        self.i = i
+        self.raan = raan
+        self.w = w
+        self.R = eq2per(raan, i, w)*r
+        self.v0 = eq2per(raan, i, w)*v0
+        self.vf = eq2per(raan, i, w)*vf
+        self.T = thrust
+
+
+    def compute_trajectory(self, t_eval):
+
+        nb_nodes = len(t_eval)
+
+        print('\nIntegrating ODEs for initial powered trajectory at constant R ')
+
+        try:
+            sol = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
+                            t_span=(self.t0, self.tf + 1e-6), y0=[self.theta0, self.v0], t_eval=t_eval,
+                            rtol=1e-20, atol=1e-20)
+
+            print('using Scipy solve_ivp function')
+
+            self.t = np.reshape(sol.t, (nb_nodes, 1))
+            self.theta = np.reshape(sol.y[0], (nb_nodes, 1))
+            self.v = np.reshape(sol.y[1], (nb_nodes, 1))
+
+        except ValueError:
+            print('time vector not strictly monotonically increasing, using Scipy odeint function')
+
+            y, sol = odeint(self.dx_dt, y0=[self.theta0, self.v0], t=t_eval,
+                            args=(self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
+                            full_output=True, rtol=1e-12, atol=1e-12, tfirst=True)
+
+            self.t = np.reshape(t_eval, (nb_nodes, 1))
+            self.theta = np.reshape(y[:, 0], (nb_nodes, 1))
+            self.v = np.reshape(y[:, 1], (nb_nodes, 1))
+
+        print('output:', sol['message'])
+
+        self.r = self.R*np.ones((nb_nodes, 1))
+        self.u = np.zeros((nb_nodes, 1))
+        self.m = self.compute_mass(self.t)
+
+        v_dot = self.dv_dt(self.t, self.v, self.GM, self.R, self.m0, self.t0, self.T, self.Isp)
+        num = self.GM/self.R**2 - self.v**2/self.R
+
+        self.alpha = np.arctan2(num, v_dot)  # angles in [-pi, pi]
+        self.alpha[self.alpha < -np.pi/2] = self.alpha[self.alpha < -np.pi/2] + 2*np.pi  # angles in [-pi/2, 3/2pi]
+
+        self.states = np.hstack((self.r, self.theta, self.u, self.v, self.m))
+        self.controls = np.hstack((self.T*np.ones((nb_nodes, 1)), self.alpha))
+
+        return sol
+
+    def dt_dv(self, v, t, gm, r, m0, t0, thrust, isp):
+
+        dt_dv = 1/self.dv_dt(t, v, gm, r, m0, t0, thrust, isp)
+
+        return dt_dv
+
+    def dv_dt(self, t, v, gm, r, m0, t0, thrust, isp):
+
+        dv_dt = ((thrust/(m0 - (thrust/isp/g0)*(t - t0)))**2 - (gm/r**2 - v**2/r)**2)**0.5
+
+        if self.v0 < self.vf:
+            return dv_dt
+        else:
+            return -dv_dt
+
+    def dx_dt(self, t, x, gm, r, m0, t0, thrust, isp):
+
+        x0_dot = x[1]/r
+        x1_dot = self.dv_dt(t, x[1], gm, r, m0, t0, thrust, isp)
+
+        return [x0_dot, x1_dot]
+
+    def __str__(self):
+
+        lines = ['\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Burn time:', self.tf - self.t0, 's'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1.0 - self.mf/self.m0, '')]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class TwoDimGuess:
+
+    def __init__(self, gm, r, dep, arr, sc):
+
+        self.GM = gm
+        self.R = r
+        self.sc = sc
+
+        self.ht = HohmannTransfer(gm, dep, arr)
+
+        self.t = self.states = self.controls = None
+
+    def __str__(self):
+
+        lines = ['\n{:^50s}'.format('Departure Orbit:'),
+                 self.ht.depOrb.__str__(),
+                 '\n{:^50s}'.format('Arrival Orbit:'),
+                 self.ht.arrOrb.__str__(),
+                 '\n{:^50s}'.format('Hohmann transfer:'),
+                 self.ht.transfer.__str__()]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class TwoDimLLOGuess(TwoDimGuess):
+
+    def __init__(self, gm, r, dep, arr, sc):
+
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
+        self.pow1 = self.pow2 = None
+
+    def compute_trajectory(self, fix_final=False, **kwargs):
+
+        if 't_eval' in kwargs:
+            self.t = kwargs['t_eval']
+        elif 'nb_nodes' in kwargs:
+            self.t = np.reshape(np.linspace(0.0, self.pow2.tf, kwargs['nb_nodes']), (kwargs['nb_nodes'], 1))
+
+        t_pow1 = self.t[self.t <= self.pow1.tf]
+        t_ht = self.t[(self.t > self.pow1.tf) & (self.t < (self.pow1.tf + self.ht.tof))]
+        t_pow2 = self.t[self.t >= (self.pow1.tf + self.ht.tof)]
+
+        self.pow1.compute_trajectory(t_pow1)
+        self.ht.compute_trajectory(t_ht, self.pow1.tf, theta0=self.pow1.thetaf, m=self.pow1.mf)
+
+        self.pow2.compute_trajectory(t_pow2)
+        self.pow2.states[-1, 3] = self.pow2.vf
+
+        self.states = np.vstack((self.pow1.states, self.ht.states, self.pow2.states))
+        self.controls = np.vstack((self.pow1.controls, self.ht.controls, self.pow2.controls))
+
+        if fix_final:
+            self.states[:, 1] = self.states[:, 1] - self.pow2.thetaf
+
+        if 'theta' in kwargs:
+            self.states[:, 1] = self.states[:, 1] + kwargs['theta']
+
+    def __str__(self):
+
+        lines = [TwoDimGuess.__str__(self),
+                 '\n{:^50s}'.format('Initial guess:'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1.0 - self.pow2.mf/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.pow2.tf, 's'),
+                 '\n{:^50s}'.format('Departure burn:'),
+                 self.pow1.__str__(),
+                 '\n{:^50s}'.format('Arrival burn:'),
+                 self.pow2.__str__()]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class TwoDimAscGuess(TwoDimLLOGuess):
+
+    def __init__(self, gm, r, alt, sc):
+
+        dep = TwoDimOrb(gm, a=r, e=0)
+        arr = TwoDimOrb(gm, a=(r + alt), e=0)
+
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
+        self.pow1 = PowConstRadius(gm, r, 0.0, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
+        self.pow1.compute_final_time_states()
+
+        self.pow2 = PowConstRadius(gm, (r + alt), self.ht.transfer.va, self.ht.arrOrb.va, self.pow1.mf, sc.T_max,
+                                   sc.Isp, t0=(self.pow1.tf + self.ht.tof), theta0=(self.pow1.thetaf + np.pi))
+        self.pow2.compute_final_time_states()
+
+        self.tf = self.pow2.tf
+
+
+class TwoDimDescGuess(TwoDimLLOGuess):
+
+    def __init__(self, gm, r, alt, sc):
+
+        arr = TwoDimOrb(gm, a=r, e=0)
+        dep = TwoDimOrb(gm, a=(r + alt), e=0)
+
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+
+        self.pow1 = PowConstRadius(gm, (r + alt), self.ht.depOrb.va, self.ht.transfer.va, sc.m0, sc.T_max, sc.Isp)
+        self.pow1.compute_final_time_states()
+
+        self.pow2 = PowConstRadius(gm, r, self.ht.transfer.vp, 0.0, self.pow1.mf, sc.T_max, sc.Isp,
+                                   t0=(self.pow1.tf + self.ht.tof), theta0=(self.pow1.thetaf + np.pi))
+        self.pow2.compute_final_time_states()
+
+        self.tf = self.pow2.tf
+
