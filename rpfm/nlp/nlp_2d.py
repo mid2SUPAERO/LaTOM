@@ -82,18 +82,19 @@ class TwoDimNLP(SinglePhaseNLP):
     def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
 
         self.set_time_guess(self.tof)
-        self.guess.compute_trajectory(t_eval=self.t_control*self.body.tc, fix_final=fix_final, throttle=throttle)
 
-        self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.idx_state_control)
-        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.idx_state_control)
-        self.p[self.phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, self.idx_state_control)
-        self.p[self.phase_name + '.states:m'] = np.take(self.guess.states[:, 4], self.idx_state_control)
-        self.p[self.phase_name + '.controls:alpha'] = np.reshape(self.guess.controls[:, 1], (len(self.t_control), 1))
+        self.guess.compute_trajectory(t_eval=self.t_all*self.body.tc, fix_final=fix_final, throttle=throttle)
+
+        self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.state_nodes)
+        self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.state_nodes)
+        self.p[self.phase_name + '.states:u'] = np.take(self.guess.states[:, 2]/self.body.vc, self.state_nodes)
+        self.p[self.phase_name + '.states:v'] = np.take(self.guess.states[:, 3]/self.body.vc, self.state_nodes)
+        self.p[self.phase_name + '.states:m'] = np.take(self.guess.states[:, 4], self.state_nodes)
+        self.p[self.phase_name + '.controls:alpha'] = np.take(self.guess.controls[:, 1], self.control_nodes)
 
         if throttle:  # variable thrust
-            self.p[self.phase_name + '.controls:thrust'] =\
-                np.reshape(self.guess.controls[:, 0]/self.sc.m0/self.body.g, (len(self.t_control), 1))
+            self.p[self.phase_name + '.controls:thrust'] = np.take(self.guess.controls[:, 0]/self.sc.m0/self.body.g,
+                                                                   self.control_nodes)
 
         self.p.run_model()
 

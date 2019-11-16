@@ -10,7 +10,7 @@ from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
     TwoDim3PhasesLLO2HEOAnalyzer
 
-kind = '3p'
+kind = 'full'
 
 # trajectory
 moon = Moon()
@@ -24,9 +24,9 @@ twr = 2.1  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
-method = 'gauss-lobatto'
+method = 'radau-ps'
 segments = 100
-order = 3
+order = 5
 solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
@@ -49,7 +49,8 @@ elif kind == '2p':
     tr = TwoDim2PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
                                       snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
-    segments = (40, 100, 40)
+    method = ('gauss-lobatto', 'radau-ps', 'gauss-lobatto')
+    segments = (50, 200, 50)
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
@@ -64,7 +65,7 @@ if run_driver:
     if exp_sim:
         tr.nlp.exp_sim()
 
-tr.get_solutions(explicit=exp_sim, scaled=True)
+tr.get_solutions(explicit=exp_sim, scaled=False)
 
 print(tr)
 

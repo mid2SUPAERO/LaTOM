@@ -6,7 +6,7 @@
 import numpy as np
 
 from openmdao.api import Problem, Group, SqliteRecorder, DirectSolver, pyOptSparseDriver
-from dymos import Phase, Trajectory, GaussLobatto, Radau
+from dymos import Phase, Trajectory, GaussLobatto, Radau, RungeKutta
 
 from rpfm.utils.const import rec_excludes
 
@@ -92,7 +92,7 @@ class NLP:
 
         lines = ['\n{:^40s}'.format('NLP characteristics:'),
                  '\n{:<25s}{:<15s}'.format('Solver:', self.solver),
-                 '{:<25s}{:<15s}'.format('Transcription method:', self.method),
+                 '{:<25s}{:<15s}'.format('Transcription method:', str(self.method)),
                  '{:<25s}{:<15s}'.format('Number of segments:', str(self.nb_seg)),
                  '{:<25s}{:<15s}'.format('Transcription order:', str(self.order))]
 
@@ -113,6 +113,8 @@ class SinglePhaseNLP(NLP):
             self.transcription = GaussLobatto(num_segments=self.nb_seg, order=self.order, compressed=True)
         elif self.method == 'radau-ps':
             self.transcription = Radau(num_segments=self.nb_seg, order=self.order, compressed=True)
+        elif self.method == 'runge-kutta':
+            self.transcription = RungeKutta(num_segments=self.nb_seg, order=self.order, compressed=True)
         else:
             raise ValueError('method must be either gauss-lobatto or radau-ps')
 
@@ -156,17 +158,18 @@ class SinglePhaseNLP(NLP):
         self.p.run_model()  # compute time grid
 
         # states and controls nodes
-        self.state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
-        self.control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
+        state_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['state_input']
+        control_nodes = self.phase.options['transcription'].grid_data.subset_node_indices['control_input']
+
+        self.state_nodes = np.reshape(state_nodes, (len(state_nodes), 1))
+        self.control_nodes = np.reshape(control_nodes, (len(control_nodes), 1))
 
         # time on the discretization nodes
-        self.t_all = self.p[self.phase_name + '.time']
+        t_all = self.p[self.phase_name + '.time']
+
+        self.t_all = np.reshape(t_all, (len(t_all), 1))
         self.t_state = np.take(self.t_all, self.state_nodes)
         self.t_control = np.take(self.t_all, self.control_nodes)
-
-        # indices of the states time vector elements in the controls time vector
-        idx_state_control = np.nonzero(np.isin(self.t_control, self.t_state))[0]
-        self.idx_state_control = np.reshape(idx_state_control, (len(idx_state_control), 1))
 
 
 class MultiPhaseNLP(NLP):
@@ -177,18 +180,25 @@ class MultiPhaseNLP(NLP):
         if isinstance(order, int):
             order = tuple(order for _ in range(len(nb_seg)))
 
+        if isinstance(method, str):
+            method = tuple(method for _ in range(len(nb_seg)))
+
         NLP.__init__(self, body, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
+
+        print(self.method)
 
         # Transcription objects list
         self.transcription = []
 
         for i in range(len(self.nb_seg)):
-            if self.method == 'gauss-lobatto':
+            if self.method[i] == 'gauss-lobatto':
                 t = GaussLobatto(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
-            elif self.method == 'radau-ps':
+            elif self.method[i] == 'radau-ps':
                 t = Radau(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
+            elif self.method[i] == 'runge-kutta':
+                t = RungeKutta(num_segments=self.nb_seg[i], order=self.order[i], compressed=True)
             else:
-                raise ValueError('method must be either gauss-lobatto or radau-ps')
+                raise ValueError('method must be either gauss-lobatto, radau-ps or runge-kutta')
             self.transcription.append(t)
 
         # Phase objects list
@@ -210,19 +220,20 @@ class MultiPhaseNLP(NLP):
         self.p.run_model()  # run the model to compute the time grid
 
         # states and controls nodes indices
-        state_nodes = phase.options['transcription'].grid_data.subset_node_indices['state_input']
-        control_nodes = phase.options['transcription'].grid_data.subset_node_indices['control_input']
+        sn = phase.options['transcription'].grid_data.subset_node_indices['state_input']
+        cn = phase.options['transcription'].grid_data.subset_node_indices['control_input']
+
+        state_nodes = np.reshape(sn, (len(sn), 1))
+        control_nodes = np.reshape(cn, (len(cn), 1))
 
         # time vectors on all, states and controls nodes
         t_all = self.p[phase_name + '.time']
+
+        t_all = np.reshape(t_all, (len(t_all), 1))
         t_control = np.take(t_all, control_nodes)
         t_state = np.take(t_all, state_nodes)
 
-        # indices of the states time vector elements in the controls time vector
-        idx_state_control = np.nonzero(np.isin(t_control, t_state))[0]
-        idx_state_control = np.reshape(idx_state_control, (len(idx_state_control), 1))
-
-        return state_nodes, control_nodes, t_state, t_control, t_all, idx_state_control
+        return state_nodes, control_nodes, t_state, t_control, t_all
 
 
 if __name__ == '__main__':
