@@ -59,7 +59,6 @@ class TwoDim3PhasesLLO2HEOReader(Reader):
 
             for k in states_2d:
                 sk = case.outputs.get(self.phase_name[i] + '.states:' + k)
-                print(sk)
                 s = np.append(s, sk, axis=1)
 
             alpha = case.outputs.get(self.phase_name[i] + '.controls:alpha')

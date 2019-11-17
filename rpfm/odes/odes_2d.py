@@ -335,7 +335,7 @@ class Polar2RApo(Polar2COE):
         jacobian['c', 'v'] = - 2*r*v*b + 2*a*v*r**3
 
 
-class Polar2AEH(Polar2COE):
+class Polar2AH(Polar2COE):
 
     def setup(self):
 
@@ -344,7 +344,6 @@ class Polar2AEH(Polar2COE):
         nn = self.options['num_nodes']
 
         self.add_output('a', val=np.zeros(nn), desc='semimajor axis')
-        self.add_output('e2', val=np.zeros(nn), desc='eccentricity squared')
         self.add_output('h', val=np.zeros(nn), desc='angular momentum')
 
         ar = np.arange(self.options['num_nodes'])
@@ -356,10 +355,6 @@ class Polar2AEH(Polar2COE):
         self.declare_partials(of='h', wrt='r', cols=ar, rows=ar)
         self.declare_partials(of='h', wrt='v', cols=ar, rows=ar)
 
-        self.declare_partials(of='e2', wrt='r', cols=ar, rows=ar)
-        self.declare_partials(of='e2', wrt='u', cols=ar, rows=ar)
-        self.declare_partials(of='e2', wrt='v', cols=ar, rows=ar)
-
     def compute(self, inputs, outputs):
 
         gm = self.options['GM']
@@ -368,11 +363,7 @@ class Polar2AEH(Polar2COE):
         u = inputs['u']
         v = inputs['v']
 
-        n = r*u*v
-        d = r*v*v - gm
-
         outputs['a'] = gm*r/(2*gm - r*(u*u + v*v))
-        outputs['e2'] = (d * d + n * n) / gm / gm
         outputs['h'] = r*v
 
     def compute_partials(self, inputs, jacobian):
@@ -391,7 +382,3 @@ class Polar2AEH(Polar2COE):
 
         jacobian['h', 'r'] = v
         jacobian['h', 'v'] = r
-
-        jacobian['e2', 'r'] = 2*v*v/gm/gm*(r*(u*u + v*v) - gm)
-        jacobian['e2', 'u'] = 2*r*r*v*v*u/gm/gm
-        jacobian['e2', 'v'] = 2*r*v/gm/gm*(2*(r*v*v - gm) + r*u*u*v)

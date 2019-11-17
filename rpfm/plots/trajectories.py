@@ -83,7 +83,7 @@ class TwoDimTrajectory:
             self.units = '-'
 
         self.kind = kind
-        self.ang = np.linspace(0.0, 2 * np.pi, 500)
+        self.ang = np.linspace(0.0, 2 * np.pi, 2000)
 
         # Moon
         self.x_moon = r_moon/self.scaler*np.cos(self.ang)

@@ -50,7 +50,7 @@ elif kind == '2p':
                                       snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
     # method = ('gauss-lobatto', 'radau-ps', 'gauss-lobatto')
-    segments = (60, 200, 60)
+    segments = (60, 400, 60)
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,

@@ -307,7 +307,7 @@ class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
 
         # additional outputs
         for i in range(2):
-            for s in ['a', 'h', 'e2']:
+            for s in ['a', 'h']:
                 self.phase[i].add_timeseries_output(s)
 
         # setup
