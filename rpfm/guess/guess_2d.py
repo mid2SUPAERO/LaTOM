@@ -165,7 +165,7 @@ class PowConstRadius:
 
             y, sol = odeint(self.dx_dt, y0=[self.theta0, self.v0], t=t_eval,
                             args=(self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
-                            full_output=True, rtol=1e-12, atol=1e-12, tfirst=True)
+                            full_output=True, rtol=1e-12, atol=1e-20, tfirst=True)
 
             self.t = np.reshape(t_eval, (nb_nodes, 1))
             self.theta = np.reshape(y[:, 0], (nb_nodes, 1))

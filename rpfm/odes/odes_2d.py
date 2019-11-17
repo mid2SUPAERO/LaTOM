@@ -8,8 +8,6 @@ import numpy as np
 from openmdao.api import ExplicitComponent
 from dymos import declare_time, declare_state, declare_parameter
 
-from rpfm.dynamics.dynamics_2d import states_rates_pow
-
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
@@ -337,7 +335,7 @@ class Polar2RApo(Polar2COE):
         jacobian['c', 'v'] = - 2*r*v*b + 2*a*v*r**3
 
 
-class Polar2AEH(Polar2COE):
+class Polar2AH(Polar2COE):
 
     def setup(self):
 
@@ -346,7 +344,6 @@ class Polar2AEH(Polar2COE):
         nn = self.options['num_nodes']
 
         self.add_output('a', val=np.zeros(nn), desc='semimajor axis')
-        self.add_output('e2', val=np.zeros(nn), desc='eccentricity squared')
         self.add_output('h', val=np.zeros(nn), desc='angular momentum')
 
         ar = np.arange(self.options['num_nodes'])
@@ -358,10 +355,6 @@ class Polar2AEH(Polar2COE):
         self.declare_partials(of='h', wrt='r', cols=ar, rows=ar)
         self.declare_partials(of='h', wrt='v', cols=ar, rows=ar)
 
-        self.declare_partials(of='e2', wrt='r', cols=ar, rows=ar)
-        self.declare_partials(of='e2', wrt='u', cols=ar, rows=ar)
-        self.declare_partials(of='e2', wrt='v', cols=ar, rows=ar)
-
     def compute(self, inputs, outputs):
 
         gm = self.options['GM']
@@ -370,11 +363,7 @@ class Polar2AEH(Polar2COE):
         u = inputs['u']
         v = inputs['v']
 
-        n = r*u*v
-        d = r*v*v - gm
-
         outputs['a'] = gm*r/(2*gm - r*(u*u + v*v))
-        outputs['e2'] = (d * d + n * n) / gm / gm
         outputs['h'] = r*v
 
     def compute_partials(self, inputs, jacobian):
@@ -393,69 +382,3 @@ class Polar2AEH(Polar2COE):
 
         jacobian['h', 'r'] = v
         jacobian['h', 'v'] = r
-
-        jacobian['e2', 'r'] = 2*v*v/gm/gm*(r*(u*u + v*v) - gm)
-        jacobian['e2', 'u'] = 2*r*r*v*v*u/gm/gm
-        jacobian['e2', 'v'] = 2*r*v/gm/gm*(2*(r*v*v - gm) + r*u*u*v)
-
-
-class ODE2dPolar(ExplicitComponent):
-
-    def initialize(self):
-
-        self.options.declare('num_nodes', types=int)
-        self.options.declare('GM', types=float)
-
-    def setup(self):
-
-        nn = self.options['num_nodes']
-
-        # inputs (ODE right-hand side)
-        self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
-        self.add_input('u', val=np.zeros(nn), desc='radial velocity', units='m/s')
-        self.add_input('v', val=np.zeros(nn), desc='tangential velocity', units='m/s')
-        self.add_input('rdot', val=np.zeros(nn), desc='radial velocity', units='m/s')
-        self.add_input('udot', val=np.zeros(nn), desc='radial acceleration', units='m/s**2')
-        self.add_input('vdot', val=np.zeros(nn), desc='tangential acceleration', units='m/s**2')
-
-        # outputs (ODE left-hand side)
-        self.add_output('adot', val=np.zeros(nn), desc='semi-major axis rate', units='m/s')
-        self.add_output('e2dot', val=np.zeros(nn), desc='eccentricity rate', units='1/s')
-        self.add_output('hdot', val=np.zeros(nn), desc='angular momentum rate', units='m**2/s**2')
-
-        # partial derivatives of the ODE outputs respect to the ODE inputs
-        self.declare_partials(of='adot', wrt='r', method='cs')
-        self.declare_partials(of='adot', wrt='u', method='cs')
-        self.declare_partials(of='adot', wrt='v', method='cs')
-        self.declare_partials(of='adot', wrt='rdot', method='cs')
-        self.declare_partials(of='adot', wrt='udot', method='cs')
-        self.declare_partials(of='adot', wrt='vdot', method='cs')
-
-        self.declare_partials(of='hdot', wrt='r', method='cs')
-        self.declare_partials(of='hdot', wrt='v', method='cs')
-        self.declare_partials(of='hdot', wrt='rdot', method='cs')
-        self.declare_partials(of='hdot', wrt='vdot', method='cs')
-
-        self.declare_partials(of='e2dot', wrt='r', method='cs')
-        self.declare_partials(of='e2dot', wrt='u', method='cs')
-        self.declare_partials(of='e2dot', wrt='v', method='cs')
-        self.declare_partials(of='e2dot', wrt='rdot', method='cs')
-        self.declare_partials(of='e2dot', wrt='udot', method='cs')
-        self.declare_partials(of='e2dot', wrt='vdot', method='cs')
-
-    def compute(self, inputs, outputs):
-
-        gm = self.options['GM']
-
-        r = inputs['r']
-        u = inputs['u']
-        v = inputs['v']
-        rdot = inputs['rdot']
-        udot = inputs['udot']
-        vdot = inputs['vdot']
-        a = 2*gm - r*(u*u + v*v)
-
-        outputs['adot'] = 2*gm*gm/a/a*rdot + 2*gm*r*r*u/a/a*udot + 2*gm*r*r*v/a/a*vdot
-        outputs['hdot'] = v*rdot + r*vdot
-        outputs['e2dot'] =\
-            2*v*v/gm/gm*(r*(u*u + v*v) - gm)*rdot + 2*r*r*v*v*u/gm/gm*udot + 2*r*v/gm/gm*(2*(r*v*v - gm) + r*u*u*v)*vdot

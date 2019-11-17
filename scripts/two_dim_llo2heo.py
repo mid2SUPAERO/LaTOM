@@ -24,7 +24,7 @@ twr = 2.1  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
-method = 'gauss-lobatto'
+method = 'radau-ps'
 segments = 100
 order = 3
 solver = 'IPOPT'
@@ -49,11 +49,12 @@ elif kind == '2p':
     tr = TwoDim2PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
                                       snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
-    segments = (100, 400, 60)
+    # method = ('gauss-lobatto', 'radau-ps', 'gauss-lobatto')
+    segments = (60, 400, 60)
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
-                                      snopt_opts=snopt_opts, check_partials=False)
+                                      snopt_opts=snopt_opts, check_partials=False, rec_file='llo2heo.pkl')
 else:
     raise ValueError('Kind must be either full, first, 2p, 3p')
 
@@ -64,7 +65,7 @@ if run_driver:
     if exp_sim:
         tr.nlp.exp_sim()
 
-tr.get_solutions(explicit=exp_sim, scaled=True)
+tr.get_solutions(explicit=exp_sim, scaled=False)
 
 print(tr)
 

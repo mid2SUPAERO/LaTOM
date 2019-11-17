@@ -6,7 +6,7 @@
 from openmdao.api import Group
 
 from dymos import declare_time, declare_state, declare_parameter
-from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2RApo, Polar2AEH
+from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2RApo, Polar2AH
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
@@ -105,5 +105,5 @@ class ODE2dLLO2HEO(Group):
                            promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
 
         self.add_subsystem(name='polar2coe',
-                           subsys=Polar2AEH(num_nodes=nn, GM=self.options['GM']),
-                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h', 'e2'])
+                           subsys=Polar2AH(num_nodes=nn, GM=self.options['GM']),
+                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h'])
