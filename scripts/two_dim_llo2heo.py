@@ -10,7 +10,7 @@ from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
     TwoDim3PhasesLLO2HEOAnalyzer
 
-kind = 'full'
+kind = '3p'
 
 # trajectory
 moon = Moon()
@@ -26,7 +26,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 # NLP
 method = 'radau-ps'
 segments = 100
-order = 5
+order = 3
 solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
@@ -49,12 +49,12 @@ elif kind == '2p':
     tr = TwoDim2PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
                                       snopt_opts=snopt_opts, check_partials=False)
 elif kind == '3p':
-    method = ('gauss-lobatto', 'radau-ps', 'gauss-lobatto')
-    segments = (50, 200, 50)
+    # method = ('gauss-lobatto', 'radau-ps', 'gauss-lobatto')
+    segments = (60, 200, 60)
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
-                                      snopt_opts=snopt_opts, check_partials=False)
+                                      snopt_opts=snopt_opts, check_partials=False, rec_file='llo2heo.pkl')
 else:
     raise ValueError('Kind must be either full, first, 2p, 3p')
 
