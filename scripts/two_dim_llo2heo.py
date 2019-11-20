@@ -10,7 +10,7 @@ from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
     TwoDim3PhasesLLO2HEOAnalyzer
 
-kind = '3p'
+kind = 'first'
 
 # trajectory
 moon = Moon()
@@ -24,10 +24,10 @@ twr = 2.1  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
-method = 'radau-ps'
-segments = 100
+method = 'gauss-lobatto'
+segments = 200
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
 
