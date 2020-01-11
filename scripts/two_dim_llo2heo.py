@@ -32,8 +32,8 @@ snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance'
               'Minor feasibility tolerance': 1e-12}
 
 # additional settings
-run_driver = True  # solve the NLP
-exp_sim = True  # perform explicit simulation
+run_driver = False  # solve the NLP
+exp_sim = False  # perform explicit simulation
 
 # analyzer
 if kind == 'full':

@@ -6,17 +6,17 @@
 import numpy as np
 
 
-class Moon:
-    """Moon class defines the characteristic quantities for the Moon.
+class Primary:
+    """Primary class defines the characteristic quantities for a given primary body.
 
     Attributes
     ----------
     R : float
-        Moon radius [m]
+        Radius [m]
     GM : float
-        Moon standard gravitational parameter [m^3/s^2]
+        Standard gravitational parameter [m^3/s^2]
     g : float
-        Moon surface gravity [m/s]
+        Surface gravity [m/s]
     tc : float
         Characteristic time [s]
     vc : float
@@ -26,16 +26,24 @@ class Moon:
 
     """
 
-    def __init__(self):
-        """Init Moon class. """
+    def __init__(self, r, gm):
+        """Init Primary class. """
 
-        self.R = 1737.4e3
-        self.GM = 4.902800066163796e12
+        self.R = r
+        self.GM = gm
 
         self.g = self.GM*self.R**-2.0
         self.tc = self.R**1.5*self.GM**-0.5
         self.vc = self.GM**0.5*self.R**-0.5
         self.T_circ = 2*np.pi*self.tc
+
+
+class Moon(Primary):
+
+    def __init__(self):
+        """Init Moon class. """
+
+        Primary.__init__(self, 1737.4e3, 4.902800066163796e12)
 
 
 if __name__ == '__main__':
