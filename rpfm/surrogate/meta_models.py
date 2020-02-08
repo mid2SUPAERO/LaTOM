@@ -86,7 +86,7 @@ class MetaModel:
 
     def plot(self):
 
-        resp_surf = RespSurf(self.Isp, self.twr, self.m_prop.T)
+        resp_surf = RespSurf(self.Isp, self.twr, (1.-self.m_prop.T))
         resp_surf.plot()
 
 

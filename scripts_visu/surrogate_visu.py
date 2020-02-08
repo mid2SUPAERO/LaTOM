@@ -16,8 +16,8 @@ path = dirname  # directory where the data are stored
 # desc_var: descent trajectory with variable thrust
 # desc_vland: descent trajectory with variable thrust and constraint on minimum safe altitude (not available for full)
 
-kind_lhs = 'asc_var'  # kind of transfer with full grid sampling
-kind_full = 'asc_var'  # kind of transfer with latin hypercube sampling
+kind_lhs = 'asc_const'  # kind of transfer with full grid sampling
+kind_full = 'asc_const'  # kind of transfer with latin hypercube sampling
 
 fid_lhs = ''.join([path, '/', kind_lhs, '_lhs.pkl'])
 fid_full = ''.join([path, '/', kind_full, '_full.pkl'])

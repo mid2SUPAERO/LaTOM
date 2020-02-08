@@ -7,7 +7,7 @@ import numpy as np
 
 from rpfm.surrogate.meta_models import TwoDimAscConstMetaModel
 
-rec_file = 'asc_const_mm.pkl'
+rec_file = 'meta_model_test.pkl'
 
 a = TwoDimAscConstMetaModel(rec_file=rec_file, vec_size=2)
 
