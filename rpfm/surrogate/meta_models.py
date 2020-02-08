@@ -19,15 +19,13 @@ class MetaModel:
 
     def __init__(self, interp_method='cubic', rec_file=None):
 
-        if rec_file is not None:
-            rec_file = dirname + rec_file
-
         self.mm = MetaModelStructuredComp(method=interp_method, training_data_gradients=True)
         self.p = Problem()
         self.p.model.add_subsystem('mm', self.mm, promotes=['Isp', 'twr'])
 
         if rec_file is not None:
 
+            rec_file = dirname + '/' + rec_file
             d = load(rec_file)
 
             self.twr = d['twr']
@@ -74,6 +72,7 @@ class MetaModel:
 
         if rec_file is not None:
 
+            rec_file = dirname + '/' + rec_file
             d = {'Isp': self.Isp, 'twr': self.twr, 'm_prop': self.m_prop, 'failures': self.failures}
             save(d, rec_file)
 
@@ -187,4 +186,4 @@ if __name__ == '__main__':
     moon = Moon()
     a = TwoDimAscConstMetaModel()
     a.sampling(moon, [1.1, 4.0], [250., 500.], 100e3, None, 'gauss-lobatto', 20, 3, 'SNOPT', nb_samp=(15, 15),
-               theta=np.pi/18, tof=500., rec_file='meta_model_test.pkl')
+               theta=np.pi/18, tof=500., rec_file='../data/meta_model_test.pkl')
