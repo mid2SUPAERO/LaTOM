@@ -4,10 +4,11 @@
 """
 
 from rpfm.surrogate.meta_models import TwoDimAscConstMetaModel
+from rpfm.surrogate.meta_model_LLO2HEO import TwoDim3PhasesLLO2HEOMetaModel
 
 rec_file = 'meta_model_test.pkl'
 
-a = TwoDimAscConstMetaModel(rec_file=rec_file)
+a = TwoDim3PhasesLLO2HEOMetaModel(rec_file=rec_file)
 
 a.p['twr'] = 4.
 a.p['Isp'] = 500.
