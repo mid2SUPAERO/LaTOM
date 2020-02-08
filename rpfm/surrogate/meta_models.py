@@ -13,6 +13,7 @@ from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNL
 from rpfm.guess.guess_2d import HohmannTransfer, ImpulsiveBurn
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.data.data import dirname
+from rpfm.plots.response_surfaces import RespSurf
 
 
 class MetaModel:
@@ -75,6 +76,11 @@ class MetaModel:
             rec_file = dirname + '/' + rec_file
             d = {'Isp': self.Isp, 'twr': self.twr, 'm_prop': self.m_prop, 'failures': self.failures}
             save(d, rec_file)
+
+    def plot(self):
+
+        resp_surf = RespSurf(self.Isp, self.twr, self.m_prop.T)
+        resp_surf.plot()
 
 
 class TwoDimAscConstMetaModel(MetaModel):
@@ -185,5 +191,5 @@ if __name__ == '__main__':
 
     moon = Moon()
     a = TwoDimAscConstMetaModel()
-    a.sampling(moon, [1.1, 4.0], [250., 500.], 100e3, None, 'gauss-lobatto', 20, 3, 'SNOPT', nb_samp=(15, 15),
+    a.sampling(moon, [1.1, 4.0], [250., 500.], 100e3, None, 'gauss-lobatto', 20, 3, 'SNOPT', nb_samp=(5, 10),
                theta=np.pi/18, tof=500., rec_file='../data/meta_model_test.pkl')

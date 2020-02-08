@@ -11,12 +11,14 @@ from copy import deepcopy
 
 class RespSurf:
 
-    def __init__(self, isp, twr, m, tof):
+    def __init__(self, isp, twr, m, tof=None):
 
         self.Isp = isp
         self.twr = twr
         self.m = deepcopy(m)
-        self.tof = deepcopy(tof)
+
+        if tof is not None:
+            self.tof = deepcopy(tof)
 
     def plot(self):
 
@@ -29,9 +31,11 @@ class RespSurf:
         ax.set_ylabel('Isp (s)')
         ax.set_title('Final/initial mass ratio')
 
-        fig, ax = plt.subplots()
-        cs = ax.contour(twr, isp, self.tof, 50)
-        ax.clabel(cs)
-        ax.set_xlabel('Thrust/initial weight ratio')
-        ax.set_ylabel('Isp (s)')
-        ax.set_title('Time of flight')
+        if hasattr(self, 'tof'):
+
+            fig, ax = plt.subplots()
+            cs = ax.contour(twr, isp, self.tof, 50)
+            ax.clabel(cs)
+            ax.set_xlabel('Thrust/initial weight ratio')
+            ax.set_ylabel('Isp (s)')
+            ax.set_title('Time of flight')
