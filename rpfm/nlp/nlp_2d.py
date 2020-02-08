@@ -81,7 +81,8 @@ class TwoDimNLP(SinglePhaseNLP):
 
     def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
 
-        self.set_time_guess(self.tof)
+        self.set_initial_guess_interpolation(bcs=np.ones((7, 2)), check_partials=False, throttle=throttle)
+        # self.set_time_guess(self.tof)
 
         self.guess.compute_trajectory(t_eval=self.t_all*self.body.tc, fix_final=fix_final, throttle=throttle)
 
@@ -97,6 +98,28 @@ class TwoDimNLP(SinglePhaseNLP):
                                                                    self.control_nodes)
 
         self.p.run_model()
+
+        if check_partials:
+            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
+
+    def set_initial_guess_interpolation(self, bcs=np.ones((7, 2)), check_partials=False, throttle=True):
+
+        self.set_time_guess(self.tof)
+
+        self.p[self.phase_name + '.states:r'] = self.phase.interpolate(ys=bcs[0], nodes='state_input')
+        self.p[self.phase_name + '.states:theta'] = self.phase.interpolate(ys=bcs[1], nodes='state_input')
+        self.p[self.phase_name + '.states:u'] = self.phase.interpolate(ys=bcs[2], nodes='state_input')
+        self.p[self.phase_name + '.states:v'] = self.phase.interpolate(ys=bcs[3], nodes='state_input')
+        self.p[self.phase_name + '.states:m'] = self.phase.interpolate(ys=bcs[4], nodes='state_input')
+
+        self.p[self.phase_name + '.controls:alpha'] = self.phase.interpolate(ys=bcs[5], nodes='control_input')
+
+        if throttle:
+            self.p[self.phase_name + '.controls:alpha'] = self.phase.interpolate(ys=bcs[6], nodes='control_input')
+
+        self.p.run_model()
+
+        print('INTERP')
 
         if check_partials:
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
@@ -122,23 +145,6 @@ class TwoDimConstNLP(TwoDimNLP):
         self.set_time_options(tof, t_bounds)
         self.set_objective()
 
-    def set_initial_guess_interpolation(self, bcs, check_partials=False):
-
-        self.set_time_guess(self.tof)
-
-        self.p[self.phase_name + '.states:r'] = self.phase.interpolate(ys=bcs[0], nodes='state_input')
-        self.p[self.phase_name + '.states:theta'] = self.phase.interpolate(ys=bcs[1], nodes='state_input')
-        self.p[self.phase_name + '.states:u'] = self.phase.interpolate(ys=bcs[2], nodes='state_input')
-        self.p[self.phase_name + '.states:v'] = self.phase.interpolate(ys=bcs[3], nodes='state_input')
-        self.p[self.phase_name + '.states:m'] = self.phase.interpolate(ys=bcs[4], nodes='state_input')
-
-        self.p[self.phase_name + '.controls:alpha'] = self.phase.interpolate(ys=bcs[5], nodes='control_input')
-
-        self.p.run_model()
-
-        if check_partials:
-            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
-
 
 class TwoDimAscConstNLP(TwoDimConstNLP):
 
@@ -151,7 +157,7 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
         bcs = np.array([[1.0, self.r_circ/self.body.R], [0.0, theta], [0.0, 0.0], [0.0, self.v_circ/self.body.vc],
                         [self.sc.m0, self.sc.m_dry], [0.0, 0.0]])
 
-        self.set_initial_guess_interpolation(bcs, check_partials=check_partials)
+        self.set_initial_guess_interpolation(bcs, check_partials=check_partials, throttle=False)
 
 
 class TwoDimDescConstNLP(TwoDimConstNLP):
@@ -167,7 +173,7 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
         bcs = np.array([[self.r_circ/self.body.R, 1.0], [0.0, theta], [0.0, 0.0], [self.vp/self.body.vc, 0.0],
                         [self.sc.m0, self.sc.m_dry], [1.5*np.pi, np.pi/2]])
 
-        self.set_initial_guess_interpolation(bcs, check_partials=check_partials)
+        self.set_initial_guess_interpolation(bcs, check_partials=check_partials, throttle=False)
 
 
 class TwoDimVarNLP(TwoDimNLP):
