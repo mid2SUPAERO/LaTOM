@@ -8,12 +8,19 @@ import numpy as np
 from openmdao.api import Problem, MetaModelStructuredComp
 from rpfm.utils.pickle_utils import load, save
 from rpfm.utils.spacecraft import Spacecraft
-from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
+from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
+    TwoDimDescVarNLP, TwoDimDescVLandNLP
+from rpfm.guess.guess_2d import HohmannTransfer, ImpulsiveBurn
+from rpfm.utils.keplerian_orbit import TwoDimOrb
+from rpfm.data.data import dirname
 
 
 class MetaModel:
 
     def __init__(self, interp_method='cubic', rec_file=None):
+
+        if rec_file is not None:
+            rec_file = dirname + rec_file
 
         self.mm = MetaModelStructuredComp(method=interp_method, training_data_gradients=True)
         self.p = Problem()
@@ -108,6 +115,33 @@ class TwoDimAscVToffMetaModel(MetaModel):
 
         nlp = TwoDimAscVToffNLP(body, sc, alt, kwargs['alt_safe'], kwargs['slope'], (-np.pi / 2, np.pi / 2), t_bounds,
                                 method, nb_seg, order, solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
+
+        f = nlp.p.run_driver()
+        nlp.cleanup()
+        m_prop = 1. - nlp.p.get_val(nlp.phase_name + '.timeseries.states:m')[-1, -1]
+
+        return m_prop, f
+
+
+class TwoDimDescConstMetaModel(MetaModel):
+
+    @staticmethod
+    def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
+
+        if 'alt_p' in kwargs:
+            alt_p = kwargs['alt_p']
+        else:
+            alt_p = alt
+
+        dep = TwoDimOrb(body.GM, a=(body.R + alt), e=0.0)
+        arr = TwoDimOrb(body.GM, a=(body.R + alt_p), e=0.0)
+
+        ht = HohmannTransfer(body.GM, dep, arr)
+        deorbit_burn = ImpulsiveBurn(sc, ht.dva)
+
+        nlp = TwoDimDescConstNLP(body, deorbit_burn.sc, alt_p, ht.transfer.vp, kwargs['theta'], (0.0, 1.5*np.pi),
+                                 kwargs['tof'], t_bounds, method, nb_seg, order, solver, 'powered',
+                                 snopt_opts=snopt_opts, u_bound=u_bound)
 
         f = nlp.p.run_driver()
         nlp.cleanup()
