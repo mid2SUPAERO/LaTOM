@@ -8,7 +8,7 @@ from rpfm.utils.primary import Moon
 
 
 # MetaModel settings
-rec_file = 'mm.pkl'  # name of the file on which the solution is serialized
+rec_file = None  # name of the file on which the solution is serialized
 interp_method = 'cubic'  # interpolation method
 nb_samp = (5, 5)  # number of samples on which the actual solution is computed
 

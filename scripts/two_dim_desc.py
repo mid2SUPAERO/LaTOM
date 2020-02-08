@@ -31,7 +31,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 method = 'gauss-lobatto'
 segments = 30
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
               'Minor feasibility tolerance': 1e-8}
 

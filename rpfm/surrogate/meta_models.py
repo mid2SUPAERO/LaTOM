@@ -55,14 +55,21 @@ class MetaModel:
         self.m_prop = np.zeros(nb_samp)
         self.failures = np.zeros(nb_samp)
 
+        count = 1
+
         for i in range(nb_samp[0]):
             for j in range(nb_samp[1]):
+
+                print('\nIteration number: ' + str(count))
+                print('Isp: ' + str(self.Isp[j]) + ' s\ttwr: ' + str(self.twr[i]) + '\n')
 
                 sc = Spacecraft(self.Isp[j], self.twr[i], g=body.g)
 
                 self.m_prop[i, j], self.failures[i, j] = self.solve(body, sc, alt, t_bounds, method, nb_seg, order,
                                                                     solver, snopt_opts=snopt_opts, u_bound=u_bound,
                                                                     **kwargs)
+
+                count += 1
 
         self.mm.add_input('twr', training_data=self.twr)
         self.mm.add_input('Isp', training_data=self.Isp)

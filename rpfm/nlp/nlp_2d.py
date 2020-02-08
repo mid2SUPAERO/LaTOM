@@ -119,8 +119,6 @@ class TwoDimNLP(SinglePhaseNLP):
 
         self.p.run_model()
 
-        print('INTERP')
-
         if check_partials:
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 

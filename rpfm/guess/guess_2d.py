@@ -66,7 +66,7 @@ class HohmannTransfer:
 
         print("\nSolving Kepler's equation using Scipy root function")
 
-        sol = root(KepOrb.kepler_eqn, ea0, args=(self.transfer.e, self.transfer.n, t, tp), tol=1e-15)
+        sol = root(KepOrb.kepler_eqn, ea0, args=(self.transfer.e, self.transfer.n, t, tp), tol=1e-12)
 
         print("output:", sol.message)
 
@@ -122,7 +122,7 @@ class PowConstRadius:
         print('\nComputing final time for powered trajectory at constant R')
 
         sol_time = solve_ivp(fun=lambda v, t: self.dt_dv(v, t, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
-                             t_span=(self.v0, self.vf), y0=[self.t0], rtol=1e-20, atol=1e-20)
+                             t_span=(self.v0, self.vf), y0=[self.t0], rtol=1e-12, atol=1e-20)
 
         print('output:', sol_time.message)
 
@@ -131,11 +131,11 @@ class PowConstRadius:
         print('\nComputing final states for powered trajectory at constant R')
 
         sol_states = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
-                               t_span=(self.t0, self.tf), y0=[self.theta0, self.v0], rtol=1e-20, atol=1e-20)
+                               t_span=(self.t0, self.tf), y0=[self.theta0, self.v0], rtol=1e-12, atol=1e-20)
 
         print('output:', sol_states.message)
 
-        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-12, atol=1e-12))
+        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-10, atol=1e-10))
 
         self.thetaf = sol_states.y[0, -1]
         self.mf = self.compute_mass(self.tf)
@@ -152,7 +152,7 @@ class PowConstRadius:
         try:
             sol = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
                             t_span=(self.t0, self.tf + 1e-6), y0=[self.theta0, self.v0], t_eval=t_eval,
-                            rtol=1e-20, atol=1e-20)
+                            rtol=1e-12, atol=1e-20)
 
             print('using Scipy solve_ivp function')
 
