@@ -32,7 +32,7 @@ isp = [250., 500.]  # specific impulse [s]
 twr = [1.1, 4.0]  # initial thrust/weight ratio [-]
 
 # NLP
-method = 'radau-ps'
+method = 'gauss-lobatto'
 segments = 20
 order = 3
 solver = 'SNOPT'

@@ -9,10 +9,10 @@ from rpfm.surrogate.meta_models import TwoDimAscConstMetaModel
 
 rec_file = 'desc_var_mm.pkl'
 
-a = TwoDimAscConstMetaModel(rec_file=rec_file, vec_size=2)
+a = TwoDimAscConstMetaModel(rec_file=rec_file, vec_size=1)
 
-a.p['twr'] = [2., 2.5]
-a.p['Isp'] = [350., 400.]
+a.p['twr'] = [2.55]
+a.p['Isp'] = [375]
 
 a.p.run_model()
 a.plot()
