@@ -65,9 +65,15 @@ class MetaModel:
 
                 sc = Spacecraft(self.Isp[j], self.twr[i], g=body.g)
 
-                self.m_prop[i, j], self.failures[i, j] = self.solve(body, sc, alt, t_bounds, method, nb_seg, order,
-                                                                    solver, snopt_opts=snopt_opts, u_bound=u_bound,
-                                                                    **kwargs)
+                try:
+                    m, f = self.solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=snopt_opts,
+                                      u_bound=u_bound, **kwargs)
+                except:
+                    m = None
+                    f = 1.
+
+                self.m_prop[i, j] = m
+                self.failures[i, j] = f
 
                 count += 1
 

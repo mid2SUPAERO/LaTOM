@@ -21,13 +21,13 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = 10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
-twr = 2.1  # initial thrust/weight ratio [-]
+isp = 375.  # specific impulse [s]
+twr = 1.1  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
-method = 'radau-ps'
+method = 'gauss-lobatto'
 segments = 200
 order = 3
 solver = 'SNOPT'
@@ -37,8 +37,8 @@ snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance':
 # additional settings
 u_bound = 'lower'  # lower bound on radial velocity
 check_partials = False  # check partial derivatives
-run_driver = False  # solve the NLP
-exp_sim = False  # perform explicit simulation
+run_driver = True  # solve the NLP
+exp_sim = True  # perform explicit simulation
 rec = False  # record the solution
 
 # record databases

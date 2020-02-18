@@ -7,12 +7,12 @@ import numpy as np
 
 from rpfm.surrogate.meta_models import TwoDimAscConstMetaModel
 
-rec_file = 'desc_var_mm.pkl'
+rec_file = 'test2.pkl'
 
 a = TwoDimAscConstMetaModel(rec_file=rec_file, vec_size=1)
 
-a.p['twr'] = [2.55]
-a.p['Isp'] = [375]
+a.p['twr'] = [1.1]
+a.p['Isp'] = [375.]
 
 a.p.run_model()
 a.plot()

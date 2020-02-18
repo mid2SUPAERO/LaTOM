@@ -8,13 +8,13 @@ from rpfm.utils.primary import Moon
 
 
 # MetaModel settings
-rec_file = None  # name of the file on which the solution is serialized
+rec_file = 'test.pkl'  # name of the file on which the solution is serialized
 interp_method = 'cubic'  # interpolation method
 nb_samp = (5, 5)  # number of samples on which the actual solution is computed
 
 # ac: ascent constant, av: ascent variable, as: ascent vertical takeoff
 # dc: descent constant, dv: descent variable, ds: descent vertical landing
-kind = 'ac'
+kind = 'as'
 
 moon = Moon()  # central attracting body
 
@@ -33,7 +33,7 @@ twr = [1.1, 4.0]  # initial thrust/weight ratio [-]
 
 # NLP
 method = 'gauss-lobatto'
-segments = 20
+segments = 200
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
