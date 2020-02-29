@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from rpfm.nlp.nlp_heo_2d import TwoDim3PhasesLLO2HEONLP, TwoDimLLO2ApoNLP
+from rpfm.nlp.nlp_heo_2d import TwoDim3PhasesLLO2HEONLP
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2ApoAnalyzer
 from rpfm.surrogate.meta_models import MetaModel
 

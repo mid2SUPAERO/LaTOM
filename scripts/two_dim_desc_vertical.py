@@ -18,22 +18,22 @@ alt_p = 15e3  # periselene altitude [m]
 alt_switch = 4e3  # switch altitude [m]
 theta = np.pi  # guessed spawn angle [rad]
 tof = (1000, 100)  # guessed time of flight [s]
-t_bounds = None  # time of flight bounds [-]
+t_bounds = (0., 2.)  # time of flight bounds [-]
 fix = 'alt'
 
 # spacecraft
-isp = 310.  # specific impulse [s]
-twr = 0.9  # initial thrust/weight ratio [-]
+isp = 250.  # specific impulse [s]
+twr = 0.5  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = (60, 20)
+segments = (100, 20)
 order = 3
 solver = 'IPOPT'
 
 # additional settings
-check_partials = True # check partial derivatives
+check_partials = True  # check partial derivatives
 run_driver = True  # solve the NLP
 exp_sim = False  # perform explicit simulation
 rec = False  # record the solution

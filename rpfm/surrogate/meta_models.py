@@ -18,9 +18,12 @@ from rpfm.plots.response_surfaces import RespSurf
 
 class MetaModel:
 
-    def __init__(self, interp_method='cubic', rec_file=None, vec_size=1):
+    def __init__(self, distributed=False, extrapolate=False, method='scipy_cubic', training_data_gradients=True,
+                 vec_size=1, rec_file=None):
 
-        self.mm = MetaModelStructuredComp(method=interp_method, training_data_gradients=True, vec_size=vec_size)
+        self.mm = MetaModelStructuredComp(distributed=distributed, extrapolate=extrapolate, method=method,
+                                          training_data_gradients=training_data_gradients, vec_size=vec_size)
+
         self.p = Problem()
         self.p.model.add_subsystem('mm', self.mm, promotes=['Isp', 'twr'])
 
