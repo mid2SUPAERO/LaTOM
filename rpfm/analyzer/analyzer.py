@@ -9,8 +9,38 @@ from time import time
 
 
 class Analyzer:
+    """Analyzer class defines the methods to analize the results of a simulation
+
+    Parameters
+    ----------
+    body : object
+        Instance of `Primary` class describing the central attracting body
+    sc : object
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    phase_name : str
+        Describes the phase name in case of multi-phase trajectories
+    nlp : NLP
+        Instance of `NLP` object describing the type of Non Linear Problem solver used
+    tof : float
+        Value of the time of flight resulting by the simulation [s]
+    tof_exp : float
+        Value of the time of flight of the explicit simulation [s]
+    err : float
+        Value of the error between the optimized simulation results and the explicit simulation results
+    rm_res : float
+        Value of the central body radius [- or m]
+
+    """
 
     def __init__(self, body, sc):
+        """ Initializes the `Analyzer` class variables """
 
         self.body = body
         self.sc = sc
@@ -23,6 +53,14 @@ class Analyzer:
         self.rm_res = self.gm_res = None
 
     def run_driver(self):
+        """ Runs the optimization
+
+        Returns
+        -------
+        failed : int
+            Returns the result of the optimization ``0`` or ``1``
+
+        """
 
         if self.nlp.rec_file is not None:
             self.nlp.p.record_iteration('initial')
@@ -44,10 +82,29 @@ class Analyzer:
         return failed
 
     def get_time_series(self, p, scaled=False):
+        """ Access the time series of the simulation
+
+        Parameters
+        ----------
+        p : Problem
+            Instance of `Problem` class
+        scaled : bool
+            Scales the simulation results
+
+        """
 
         return None, None, None, None
 
     def get_solutions(self, explicit=True, scaled=False):
+        """ Access the simulation solution
+
+        Parameters
+        ----------
+        explicit : bool
+            Computes also the explicit simulation. Default is ``True``
+        scaled : bool
+            Scales the simulation results. Default is ``False``
+        """
 
         tof, t, states, controls = self.get_time_series(self.nlp.p, scaled=scaled)
 

@@ -15,8 +15,41 @@ from rpfm.utils.keplerian_orbit import TwoDimOrb
 
 
 class TwoDimAnalyzer(Analyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional simulation
+
+        Parameters
+        ----------
+        body : Primary
+            Instance of `Primary` class describing the central attracting body
+        sc : Spacecraft
+            Instance of `Spacecraft` class describing the spacecraft characteristics
+
+        Attributes
+        ----------
+        body : Primary
+            Instance of `Primary` class describing the central attracting body
+        sc : Spacecraft
+            Instance of `Spacecraft` class describing the spacecraft characteristics
+        phase_name : str
+            Describes the phase name in case of multi-phase trajectories
+        nlp : NLP
+            Instance of `NLP` object describing the type of Non Linear Problem solver used
+        tof : float
+            Value of the time of flight resulting by the simulation [s]
+        tof_exp : float
+            Value of the time of flight of the explicit simulation [s]
+        err : float
+            Value of the error between the optimized simulation results and the explicit simulation results
+        rm_res : float
+            Value of the central body radius [- or m]
+        states_scalers = ndarray
+            Reference values of the states with which perform the scaling
+        controls_scalers : ndarray
+            Reference values of the controls with which perform the scaling
+    """
 
     def __init__(self, body, sc):
+        """ Initializes the `TwoDimAnalyzer` class variables """
 
         Analyzer.__init__(self, body, sc)
 
@@ -24,6 +57,28 @@ class TwoDimAnalyzer(Analyzer):
         self.controls_scalers = np.array([self.body.g*self.sc.m0, 1.0])
 
     def get_time_series_phase(self, p, phase_name, scaled=False):
+        """ Access the time series of one of the problem phases
+
+        Parameters
+        ----------
+        p : Problem
+            Instance of `Problem` class
+        phase_name : str
+            Name defined for the problem phase
+        scaled : bool
+            Scales the simulation results
+
+        Returns
+        -------
+        tof : float
+            Time of flight resulting from the optimized simulation phase [s]
+        t : ndarray
+            Time of flight time series for the optimized simulation phase [s]
+        states : ndarray
+            States time series for the optimized simulation phase
+        controls : ndarray
+            Controls time series for the optimized simulation phase
+        """
 
         tof = float(p.get_val(phase_name + '.t_duration'))  # non dimensional time of flight [-]
         t = p.get_val(phase_name + '.timeseries.time')  # non dimensional time [-]
@@ -53,10 +108,15 @@ class TwoDimAnalyzer(Analyzer):
         return tof, t, states, controls
 
     def __str__(self):
+       """ Prints info on the TwoDimAnalizer
+       Returns
+       -------
+        s : str
+            Info lines
+       """
+       lines = [self.sc.__str__(), self.nlp.__str__()]
 
-        lines = [self.sc.__str__(), self.nlp.__str__()]
-
-        if self.err is not None:
+       if self.err is not None:
 
             try:
                 lines_err = ['\n{:^50s}'.format('Error:'),
@@ -78,14 +138,53 @@ class TwoDimAnalyzer(Analyzer):
 
                 lines.extend(lines_err)
 
-        s = '\n'.join(lines)
+                s = '\n'.join(lines)
 
-        return s
+                return s
 
 
 class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional single phase simulation
+
+       Parameters
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       alt : float
+            Value of the final orbit altitude [m]
+
+       Attributes
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       phase_name : str
+           Describes the phase name in case of multi-phase trajectories
+       nlp : NLP
+           Instance of `NLP` object describing the type of Non Linear Problem solver used
+       tof : float
+           Value of the time of flight resulting by the simulation [s]
+       tof_exp : float
+           Value of the time of flight of the explicit simulation [s]
+       err : float
+           Value of the error between the optimized simulation results and the explicit simulation results
+       rm_res : float
+           Value of the central body radius [- or m]
+       states_scalers = ndarray
+           Reference values of the states with which perform the scaling
+       controls_scalers : ndarray
+           Reference values of the controls with which perform the scaling
+       alt : float
+            Value of the final orbit altitude [m]
+       phase_name : str
+            Name assigned to the problem phase
+    """
 
     def __init__(self, body, sc, alt):
+        """ Initializes the `TwoDimSinglePhaseAnalyzer` class variables """
 
         TwoDimAnalyzer.__init__(self, body, sc)
 
@@ -93,12 +192,39 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
         self.phase_name = 'powered'
 
     def get_time_series(self, p, scaled=False):
+        """ Access the time series of one of the problem phases
+
+            Parameters
+            ----------
+            p : Problem
+                Instance of `Problem` class
+            scaled : bool
+                Scales the simulation results
+
+            Returns
+            -------
+            tof : float
+                Time of flight resulting from the optimized simulation phase [s]
+            t : ndarray
+                Time of flight time series for the optimized simulation phase [s]
+            states : ndarray
+                States time series for the optimized simulation phase
+            controls : ndarray
+                Controls time series for the optimized simulation phase
+        """
 
         tof, t, states, controls = self.get_time_series_phase(p, self.nlp.phase_name, scaled=scaled)
 
         return tof, t, states, controls
 
     def __str__(self):
+        """ Prints infos on the `TwoDimSinglePhaseAnalyser`
+
+            Returns
+            -------
+            s : str
+            Info on the `TwoDimSinglePhaseAnalyser`
+        """
 
         lines = ['{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1, -1] / self.sc.m0), ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tof, 's'),
@@ -110,9 +236,53 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
 
 
 class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+
+       Parameters
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       alt : float
+            Value of the final orbit altitude [m]
+
+       Attributes
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       phase_name : str
+           Describes the phase name in case of multi-phase trajectories
+       nlp : NLP
+           Instance of `NLP` object describing the type of Non Linear Problem solver used
+       tof : float
+           Value of the time of flight resulting by the simulation [s]
+       tof_exp : float
+           Value of the time of flight of the explicit simulation [s]
+       err : float
+           Value of the error between the optimized simulation results and the explicit simulation results
+       rm_res : float
+           Value of the central body radius [- or m]
+       states_scalers = ndarray
+           Reference values of the states with which perform the scaling
+       controls_scalers : ndarray
+           Reference values of the controls with which perform the scaling
+       alt : float
+            Value of the final orbit altitude [m]
+       phase_name : str
+            Name assigned to the problem phase
+    """
 
     def __str__(self):
+        """ Prints info on the `TwoDimAscAnalyzer`
 
+            Returns
+            -------
+            s : str
+            Info on `TwoDimAscAnalyzer`
+        """
         lines = ['\n{:^50s}'.format('2D Ascent Trajectory:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Final orbit altitude:', self.alt / 1e3, 'km'),
                  TwoDimSinglePhaseAnalyzer.__str__(self)]
@@ -123,9 +293,72 @@ class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
 
 
 class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional ascent with constant thrust
+       simulation
+
+       Parameters
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       alt : float
+            Value of the final orbit altitude [m]
+       theta : float
+            Value for the guessed angle spawn during the trajectory [rad]
+       tof : float
+            Value for the guessed trajectory time of flight [s]
+       t_bounds : float
+            Value for the time of flight bounds [-]
+       method : str
+            NLP transcription method
+       nb_seg : int
+            Number of segments for the transcription
+       order : int
+            Transcription order
+       solver : str
+            NLP solver
+       snopt_opts : dict
+            Sets some SNOPT's options. Default is ``None``
+       rec_file : str
+            Directory path for the solution recording file. Default is ``None``
+       check_partials : bool
+            Checking of partial derivatives. Default is ``False``
+       u_bound : str
+            Sets the bound of the radial velocity. Can be ``lower``, ``upper`` or ``None``. Default is
+            ``lower``
+
+       Attributes
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       phase_name : str
+           Describes the phase name in case of multi-phase trajectories
+       nlp : NLP
+           Instance of `NLP` object describing the type of Non Linear Problem solver used
+       tof : float
+           Value of the time of flight resulting by the simulation [s]
+       tof_exp : float
+           Value of the time of flight of the explicit simulation [s]
+       err : float
+           Value of the error between the optimized simulation results and the explicit simulation results
+       rm_res : float
+           Value of the central body radius [- or m]
+       states_scalers = ndarray
+           Reference values of the states with which perform the scaling
+       controls_scalers : ndarray
+           Reference values of the controls with which perform the scaling
+       alt : float
+            Value of the final orbit altitude [m]
+       phase_name : str
+            Name assigned to the problem phase
+    """
 
     def __init__(self, body, sc, alt, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='lower'):
+        """ Initializes the `TwoDimAscConstAnalyzer` class variables """
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -135,6 +368,8 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
                                      check_partials=check_partials, u_bound=u_bound)
 
     def plot(self):
+        """ Plots the states and controls resulting from the simulation and the ones of the explicit computation in time
+        """
 
         sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
                                  self.states_exp, threshold=None)
@@ -143,9 +378,72 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional ascent with variable thrust
+        simulation
+
+      Parameters
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      alt : float
+           Value of the final orbit altitude [m]
+      theta : float
+           Value for the guessed angle spawn during the trajectory [rad]
+      tof : float
+           Value for the guessed trajectory time of flight [s]
+      t_bounds : float
+           Value for the time of flight bounds [-]
+      method : str
+           NLP transcription method
+      nb_seg : int
+           Number of segments for the transcription
+      order : int
+           Transcription order
+      solver : str
+           NLP solver
+      snopt_opts : dict
+           Sets some SNOPT's options. Default is ``None``
+      rec_file : str
+           Directory path for the solution recording file. Default is ``None``
+      check_partials : bool
+           Checking of partial derivatives. Default is ``False``
+      u_bound : str
+           Sets the bound of the radial velocity. Can be ``lower``, ``upper`` or ``None``. Default is
+           ``lower``
+
+      Attributes
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      phase_name : str
+          Describes the phase name in case of multi-phase trajectories
+      nlp : NLP
+          Instance of `NLP` object describing the type of Non Linear Problem solver used
+      tof : float
+          Value of the time of flight resulting by the simulation [s]
+      tof_exp : float
+          Value of the time of flight of the explicit simulation [s]
+      err : float
+          Value of the error between the optimized simulation results and the explicit simulation results
+      rm_res : float
+          Value of the central body radius [- or m]
+      states_scalers = ndarray
+          Reference values of the states with which perform the scaling
+      controls_scalers : ndarray
+          Reference values of the controls with which perform the scaling
+      alt : float
+           Value of the final orbit altitude [m]
+      phase_name : str
+           Name assigned to the problem phase
+    """
 
     def __init__(self, body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False, u_bound='lower'):
+        """ Initializes the `TwoDimAscVarAnalyzer` class variables """
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -154,7 +452,8 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
                                    check_partials=check_partials, u_bound=u_bound)
 
     def plot(self):
-
+        """ Plots the states and controls resulting from the simulation and the ones of the explicit computation in time
+        """
         sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
                                  self.states_exp)
 
@@ -162,9 +461,82 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional ascent with vertical take off
+       simulation
+
+      Parameters
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      alt : float
+           Value of the final orbit altitude [m]
+      alt_safe : float
+            Value of the minimun safe altitude to avoid geographical constraints [m]
+      slope : float
+            Value of the slope of the constraint on minimum safe altitude [-]
+      theta : float
+           Value for the guessed angle spawn during the trajectory [rad]
+      tof : float
+           Value for the guessed trajectory time of flight [-]
+      t_bounds : float
+           Value for the time of flight bounds [s]
+      method : str
+           NLP transcription method
+      nb_seg : int
+           Number of segments for the transcription
+      order : int
+           Transcription order
+      solver : str
+           NLP solver
+      snopt_opts : dict
+           Sets some SNOPT's options. Default is ``None``
+      rec_file : str
+           Directory path for the solution recording file. Default is ``None``
+      check_partials : bool
+           Checking of partial derivatives. Default is ``False``
+      u_bound : str
+           Sets the bound of the radial velocity. Can be ``lower``, ``upper`` or ``None``. Default is
+           ``lower``
+
+      Attributes
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      phase_name : str
+          Describes the phase name in case of multi-phase trajectories
+      nlp : NLP
+          Instance of `NLP` object describing the type of Non Linear Problem solver used
+      tof : float
+          Value of the time of flight resulting by the simulation [s]
+      tof_exp : float
+          Value of the time of flight of the explicit simulation [s]
+      err : float
+          Value of the error between the optimized simulation results and the explicit simulation results
+      rm_res : float
+          Value of the central body radius [- or m]
+      states_scalers = ndarray
+          Reference values of the states with which perform the scaling
+      controls_scalers : ndarray
+          Reference values of the controls with which perform the scaling
+      alt : float
+           Value of the final orbit altitude [m]
+      phase_name : str
+           Name assigned to the problem phase
+      alt_safe : float
+            Value of the minimun safe altitude to avoid geographical constraints [m]
+      slope : float
+            Value of the slope of the constraint on minimum safe altitude [-]
+      r_safe : float
+            Value of the minimum orbit radius to be compliant with the constraints [m]
+    """
 
     def __init__(self, body, sc, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='lower'):
+        """ Initializes the `TwoDimAscVarAnalyzer` class variables """
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -177,6 +549,15 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
         self.r_safe = None
 
     def get_solutions(self, explicit=True, scaled=False):
+        """ Access the simulation solution
+
+            Parameters
+            ----------
+            explicit : bool
+                Computes also the explicit simulation. Default is ``True``
+            scaled : bool
+                Scales the simulation results. Default is ``False``
+        """
 
         TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
@@ -186,6 +567,14 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
             self.r_safe = self.r_safe*self.body.R
 
     def __str__(self):
+        """ Prints info on the `TwoDimAscVToffAnalyzer`
+
+            Returns
+            -------
+            s : str
+                Info on `TwoDimAscVToffAnalyzer`
+        """
+
         lines = ['\n{:^50s}'.format('2D Ascent Trajectory with Safe Altitude:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Final orbit altitude:', self.alt / 1e3, 'km'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Safe altitude:', self.alt_safe / 1e3, 'km'),
@@ -197,6 +586,8 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
         return s
 
     def plot(self):
+        """ Plots the states and controls resulting from the simulation and the ones of the explicit computation in time
+        """
 
         sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
                                  self.states_exp, r_safe=self.r_safe)
@@ -206,7 +597,52 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
 class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
 
+    """Analyzer class defines the methods to analyze the results of a two dimensional descent simulation
+
+      Parameters
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      alt : float
+           Value of the final orbit altitude [m]
+
+      Attributes
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      phase_name : str
+          Describes the phase name in case of multi-phase trajectories
+      nlp : NLP
+          Instance of `NLP` object describing the type of Non Linear Problem solver used
+      tof : float
+          Value of the time of flight resulting by the simulation [s]
+      tof_exp : float
+          Value of the time of flight of the explicit simulation [s]
+      err : float
+          Value of the error between the optimized simulation results and the explicit simulation results
+      rm_res : float
+          Value of the central body radius [- or m]
+      states_scalers = ndarray
+          Reference values of the states with which perform the scaling
+      controls_scalers : ndarray
+          Reference values of the controls with which perform the scaling
+      alt : float
+           Value of the final orbit altitude [m]
+      phase_name : str
+           Name assigned to the problem phase
+    """
     def __str__(self):
+        """ Prints info on the `TwoDimDescAnalyzer`
+
+            Returns
+            -------
+            s : str
+                Info on `TwoDimDescAnalyzer`
+        """
 
         lines = ['\n{:^50s}'.format('2D Descent Trajectory:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Initial orbit altitude:', self.alt / 1e3, 'km'),
@@ -218,10 +654,75 @@ class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
 
 
 class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional descent simulation
+
+     Parameters
+       ----------
+       body : Primary
+           Instance of `Primary` class describing the central attracting body
+       sc : Spacecraft
+           Instance of `Spacecraft` class describing the spacecraft characteristics
+       alt : float
+            Value of the final orbit altitude [m]
+       alt_p : float
+            Value of the orbit periselene altitude [m]
+       theta : float
+            Value for the guessed angle spawn during the trajectory [rad]
+       tof : float
+            Value for the guessed trajectory time of flight [s]
+       t_bounds : float
+            Value for the time of flight bounds [-]
+       method : str
+            NLP transcription method
+       nb_seg : int
+            Number of segments for the transcription
+       order : int
+            Transcription order
+       solver : str
+            NLP solver
+       snopt_opts : dict
+            Sets some SNOPT's options. Default is ``None``
+       rec_file : str
+            Directory path for the solution recording file. Default is ``None``
+       check_partials : bool
+            Checking of partial derivatives. Default is ``False``
+       u_bound : str
+            Sets the bound of the radial velocity. Can be ``lower``, ``upper`` or ``None``. Default is
+            ``upper``
+
+      Attributes
+      ----------
+      body : Primary
+          Instance of `Primary` class describing the central attracting body
+      sc : Spacecraft
+          Instance of `Spacecraft` class describing the spacecraft characteristics
+      phase_name : str
+          Describes the phase name in case of multi-phase trajectories
+      nlp : NLP
+          Instance of `NLP` object describing the type of Non Linear Problem solver used
+      tof : float
+          Value of the time of flight resulting by the simulation [s]
+      tof_exp : float
+          Value of the time of flight of the explicit simulation [s]
+      err : float
+          Value of the error between the optimized simulation results and the explicit simulation results
+      rm_res : float
+          Value of the central body radius [- or m]
+      states_scalers = ndarray
+          Reference values of the states with which perform the scaling
+      controls_scalers : ndarray
+          Reference values of the controls with which perform the scaling
+      alt : float
+           Value of the final orbit altitude [m]
+      phase_name : str
+           Name assigned to the problem phase
+      alt_p : float
+        Value of the final orbit altitude [m]
+     """
 
     def __init__(self, body, sc, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='upper'):
-
+        """ Initializes the `TwoDimDescConstAnalyzer` class variables """
         TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
         self.alt_p = alt_p
@@ -238,6 +739,13 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
                                       u_bound=u_bound)
 
     def __str__(self):
+        """ Prints info on the `TwoDimDescConstAnalyzer`
+
+            Returns
+            -------
+            s : str
+                Info on `TwoDimDescConstAnalyzer`
+        """
 
         lines = ['\n{:^50s}'.format('2D Descent Trajectory at constant thrust:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Parking orbit altitude:', self.alt / 1e3, 'km'),
@@ -250,6 +758,8 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
         return s
 
     def plot(self):
+        """ Plots the states and controls resulting from the simulation and the ones of the explicit computation in time
+        """
 
         sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
                                  self.states_exp, threshold=None, kind='descent')
