@@ -30,7 +30,7 @@ sc = Spacecraft(isp, twr, g=moon.g)
 method = 'gauss-lobatto'
 segments = (100, 20)
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 
 # additional settings
 check_partials = True  # check partial derivatives

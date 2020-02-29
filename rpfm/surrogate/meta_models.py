@@ -14,6 +14,7 @@ from rpfm.guess.guess_2d import HohmannTransfer, ImpulsiveBurn
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.data.data import dirname
 from rpfm.plots.response_surfaces import RespSurf
+from rpfm.analyzer.analyzer_2d import TwoDimDescTwoPhasesAnalyzer
 
 
 class MetaModel:
@@ -201,11 +202,19 @@ class TwoDimDescVLandMetaModel(MetaModel):
         return m_prop, f
 
 
-if __name__ == '__main__':
+class TwoDimDescTwoPhasesMetaModel(MetaModel):
 
-    from rpfm.utils.primary import Moon
+    @staticmethod
+    def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
 
-    moon = Moon()
-    a = TwoDimAscConstMetaModel()
-    a.sampling(moon, [1.1, 4.0], [250., 500.], 100e3, None, 'gauss-lobatto', 20, 3, 'SNOPT', nb_samp=(5, 10),
-               theta=np.pi/18, tof=500., rec_file='../data/meta_model_test.pkl')
+        tr = TwoDimDescTwoPhasesAnalyzer(body, sc, alt, kwargs['alt_p'], kwargs['alt_switch'], kwargs['theta'],
+                                         kwargs['tof'], t_bounds, method, nb_seg, order, solver, snopt_opts=snopt_opts,
+                                         fix=kwargs['fix'])
+
+        f = tr.run_driver()
+        tr.get_solutions(explicit=False, scaled=False)
+        tr.nlp.cleanup()
+
+        m_prop = 1 - tr.states[-1][-1, -1]/tr.sc.m0
+
+        return m_prop, f
