@@ -12,9 +12,66 @@ from rpfm.guess.guess_2d import TwoDimAscGuess, TwoDimDescGuess
 
 
 class TwoDimNLP(SinglePhaseNLP):
+    """TwoDimNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional trajectory is described in polar coordinates centered at the center of the attracting body.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ode_class : ExplicitComponent
+        Instance of OpenMDAO `ExplicitComponent` describing the Ordinary Differential Equations (ODEs) that drive the
+        system dynamics
+    ode_kwargs : dict
+        Keywords arguments to be passed to `ode_class`
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+
+    Attributes
+    ----------
+    alt : float
+        Orbit altitude [-]
+    alpha_bounds : ndarray
+        Lower and upper bounds on thrust vector direction [rad]
+    r_circ : float
+        Orbit radius [-]
+    v_circ : float
+        Orbital velocity
+    guess : TwoDimGuess
+        Initial guess to be provided before solving the NLP
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ode_class,
                  ode_kwargs, ph_name, snopt_opts=None, rec_file=None):
+        """Initializes TwoDimNLP class. """
 
         SinglePhaseNLP.__init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name,
                                 snopt_opts=snopt_opts, rec_file=rec_file)
@@ -27,6 +84,16 @@ class TwoDimNLP(SinglePhaseNLP):
         self.guess = None
 
     def set_states_options(self, theta, u_bound=None):
+        """Set options on the state variables of the NLP.
+
+        Parameters
+        ----------
+        theta : float
+            Reference value for spawn angle [rad]
+        u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+
+        """
 
         # radius
         self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0, ref0=1.0,
@@ -64,6 +131,14 @@ class TwoDimNLP(SinglePhaseNLP):
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
 
     def set_controls_options(self, throttle=True):
+        """Set options on control variables.
+
+        Parameters
+        ----------
+        throttle : bool, optional
+            ``True`` for variable thrust magnitude, ``False`` otherwise. Default is `'True``
+
+        """
 
         if throttle:
             twr_min = self.sc.T_min / self.sc.m0 / self.body.g
@@ -80,6 +155,18 @@ class TwoDimNLP(SinglePhaseNLP):
         self.phase.add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
 
     def set_initial_guess(self, check_partials=False, fix_final=False, throttle=True):
+        """Set the initial guess for the iterative solution of the NLP.
+
+        Parameters
+        ----------
+        check_partials : bool, optional
+            Check the partial derivatives computed analytically against complex step method. Default is ``False``
+        fix_final : bool, optional
+            ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+        throttle : bool, optional
+            ``True`` for variable thrust magnitude, ``False`` otherwise. Default is `'True``
+
+        """
 
         self.set_initial_guess_interpolation(bcs=np.ones((7, 2)), check_partials=False, throttle=throttle)
         # self.set_time_guess(self.tof)
@@ -103,6 +190,19 @@ class TwoDimNLP(SinglePhaseNLP):
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
     def set_initial_guess_interpolation(self, bcs=np.ones((7, 2)), check_partials=False, throttle=True):
+        """Set the initial guess for the solution of the NLP interpolating the Boundary Conditions (BCs) imposed on the
+        state and control variables.
+
+        Parameters
+        ----------
+        bcs : ndarray, optional
+            Boundary Conditions on state and control variables. Default is all ones
+        check_partials : bool, optional
+            Check the partial derivatives computed analytically against complex step method. Default is ``False``
+        throttle : bool, optional
+            ``True`` for variable thrust magnitude, ``False`` otherwise. Default is `'True``
+
+        """
 
         self.set_time_guess(self.tof)
 
@@ -124,9 +224,57 @@ class TwoDimNLP(SinglePhaseNLP):
 
 
 class TwoDimConstNLP(TwoDimNLP):
+    """TwoDimConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional trajectory is described in polar coordinates centered at the center of the attracting body.
+    The thrust delivered by the spacecraft engines is supposed to have a constant magnitude throughout the whole phase.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    theta : float
+        Guessed spawn angle [rad]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    tof : float
+        Guessed time of flight [-]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of TOF [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, u_bound=None):
+        """Initializes TwoDimConstNLP class. """
 
         ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc}
 
@@ -137,6 +285,20 @@ class TwoDimConstNLP(TwoDimNLP):
         self.setup()
 
     def set_options(self, theta, tof, t_bounds, u_bound=None):
+        """Set options on state and control variables, time and objective function.
+
+        Parameters
+        ----------
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [-]
+        t_bounds : tuple
+            Time of flight bounds expressed as fraction of TOF [-]
+        u_bound : str or None, optional
+                Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+
+        """
 
         self.set_states_options(theta, u_bound=u_bound)
         self.set_controls_options(throttle=False)
@@ -145,9 +307,60 @@ class TwoDimConstNLP(TwoDimNLP):
 
 
 class TwoDimAscConstNLP(TwoDimConstNLP):
+    """TwoDimAscConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional ascent trajectory is described in polar coordinates centered at the center of the
+    attracting body. The thrust delivered by the spacecraft engines is supposed to have a constant magnitude throughout
+    the whole phase.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    theta : float
+        Guessed spawn angle [rad]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    tof : float
+        Guessed time of flight [-]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``lower``
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                  ph_name, snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower'):
+        """Initializes TwoDimAscConstNLP class. """
 
         TwoDimConstNLP.__init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                                 ph_name, snopt_opts=snopt_opts, rec_file=rec_file, u_bound=u_bound)
@@ -159,9 +372,65 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
 
 
 class TwoDimDescConstNLP(TwoDimConstNLP):
+    """TwoDimDescConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional descent trajectory is described in polar coordinates centered at the center of the
+    attracting body. The thrust delivered by the spacecraft engines is supposed to have a constant magnitude throughout
+    the whole phase.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    theta : float
+        Guessed spawn angle [rad]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    tof : float
+        Guessed time of flight [-]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``upper``
+
+    Attributes
+    ----------
+    vp : float
+        Velocity at the periapsis of the Hohmann transfer where the final powered descent is initiated [-]
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, vp, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                  ph_name, snopt_opts=None, rec_file=None, check_partials=False, u_bound='upper'):
+        """Initializes TwoDimDescConstNLP class. """
 
         TwoDimConstNLP.__init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                                 ph_name, snopt_opts=snopt_opts, rec_file=rec_file, u_bound=u_bound)
@@ -175,9 +444,64 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
 
 
 class TwoDimVarNLP(TwoDimNLP):
+    """TwoDimVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional trajectory is described in polar coordinates centered at the center of the attracting body.
+    The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    guess : TwoDimGuess
+        Initial guess for the NLP solution
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+
+    Attributes
+    ----------
+    guess : TwoDimGuess
+        Initial guess for the NLP solution
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, guess,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound=None, fix_final=False):
+        """Initializes TwoDimVarNLP class. """
 
         ode_kwargs = {'GM': 1.0, 'w': sc.w / body.vc}
 
@@ -191,6 +515,18 @@ class TwoDimVarNLP(TwoDimNLP):
         self.set_initial_guess(check_partials=check_partials, fix_final=fix_final)
 
     def set_options(self, theta, t_bounds, u_bound=None):
+        """Set options on state and control variables, time and objective function.
+
+        Parameters
+        ----------
+        theta : float
+            Guessed spawn angle [rad]
+        t_bounds : tuple
+            Time of flight bounds expressed as fraction of `tof` [-]
+        u_bound : str or None, optional
+                Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+
+        """
 
         self.set_states_options(theta, u_bound=u_bound)
         self.set_controls_options(throttle=True)
@@ -199,9 +535,57 @@ class TwoDimVarNLP(TwoDimNLP):
 
 
 class TwoDimAscVarNLP(TwoDimVarNLP):
+    """TwoDimAscVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional ascent trajectory is described in polar coordinates centered at the center of the attracting
+    body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``lower``
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='lower', fix_final=False):
+        """Initializes TwoDimAscVarNLP class. """
 
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                               TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
@@ -209,9 +593,57 @@ class TwoDimAscVarNLP(TwoDimVarNLP):
 
 
 class TwoDimDescVarNLP(TwoDimVarNLP):
+    """TwoDimDescVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional descent trajectory is described in polar coordinates centered at the center of the attracting
+    body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``upper``
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='upper', fix_final=False):
+        """Initializes TwoDimDescVarNLP class. """
 
         TwoDimVarNLP.__init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                               TwoDimDescGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts, rec_file=rec_file,
@@ -222,6 +654,7 @@ class TwoDimVToffNLP(TwoDimVarNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  guess, snopt_opts=None, rec_file=None, check_partials=False, u_bound=None, fix_final=False):
+        """Initializes TwoDimVToffNLP class. """
 
         ode_kwargs = {'GM': 1.0, 'w': sc.w/body.vc, 'R': 1.0, 'alt_safe': alt_safe/body.R, 'slope': slope}
 
@@ -249,6 +682,7 @@ class TwoDimAscVToffNLP(TwoDimVToffNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower', fix_final=False):
+        """Initializes TwoDimAscVToffNLP class. """
 
         TwoDimVToffNLP.__init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order,
                                 solver, ph_name, TwoDimAscGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts,
@@ -259,6 +693,7 @@ class TwoDimDescVLandNLP(TwoDimVToffNLP):
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound='upper', fix_final=True):
+        """Initializes TwoDimDescVLandNLP class. """
 
         TwoDimVToffNLP.__init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order,
                                 solver, ph_name, TwoDimDescGuess(body.GM, body.R, alt, sc), snopt_opts=snopt_opts,
@@ -269,6 +704,7 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
 
     def __init__(self, body, sc, alt, alt_switch, vp, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                  ph_name, snopt_opts=None, rec_file=None, check_partials=False, fix='alt'):
+        """Initializes TwoDimDescTwoPhasesNLP class. """
 
         ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w/body.vc}
 

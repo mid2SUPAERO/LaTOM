@@ -12,6 +12,62 @@ from rpfm.utils.const import rec_excludes
 
 
 class NLP:
+    """NLP class transcribes a continuous-time optimal control problem in trajectory optimization into
+    a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int or tuple
+        Number of segments in which each phase is discretized
+    order : int or tuple
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int or tuple
+        Number of segments in which each phase is discretized
+    order : int or tuple
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    snopt_opts : dict or None
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+    rec_file : str or None
+        Name of the file in which the computed solution is recorded or None
+    p : Problem
+        OpenMDAO `Problem` class instance representing the NLP
+    trajectory : Trajectory
+        Dymos `Trajectory` class instance representing the spacecraft trajectory
+    p_exp : Problem
+        OpenMDAO `Problem` class instance representing the explicitly simulated trajectory
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, method, nb_seg, order, solver, snopt_opts=None, rec_file=None):
         """Initializes NLP class. """
@@ -68,12 +124,14 @@ class NLP:
         self.p_exp = None
 
     def setup(self):
+        """Set up the Jacobian type, linear solver and derivatives type. """
 
         self.p.model.options['assembled_jac_type'] = 'csc'
         self.p.model.linear_solver = DirectSolver()
         self.p.setup(check=True, force_alloc_complex=True, derivatives=True)
 
     def exp_sim(self, rec_file=None):
+        """Explicitly simulate the implicitly obtained optimal solution using Scipy `solve_ivp` method. """
 
         if rec_file is not None:
             self.p_exp = self.trajectory.simulate(atol=1e-12, rtol=1e-12, record_file=rec_file)
@@ -83,12 +141,21 @@ class NLP:
         self.cleanup()
 
     def cleanup(self):
+        """Clean up resources. """
 
         self.trajectory.cleanup()
         self.p.driver.cleanup()
         self.p.cleanup()
 
     def __str__(self):
+        """Prints info on the NLP.
+
+        Returns
+        -------
+        s : str
+            Info on the NLP
+
+        """
 
         lines = ['\n{:^40s}'.format('NLP characteristics:'),
                  '\n{:<25s}{:<15s}'.format('Solver:', self.solver),
@@ -102,6 +169,64 @@ class NLP:
 
 
 class SinglePhaseNLP(NLP):
+    """SinglePhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by
+    a single phase into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ode_class : ExplicitComponent
+        Instance of OpenMDAO `ExplicitComponent` describing the Ordinary Differential Equations (ODEs) that drive the
+        system dynamics
+    ode_kwargs : dict
+        Keywords arguments to be passed to `ode_class`
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+
+    Attributes
+    ----------
+    phase : Phase
+        Dymos `Phase` object representing the unique phase of the `Trajectory` class instance
+    phase_name : str
+        Complete name of the `Phase` instance within OpenMDAO
+    state_nodes : ndarray
+        Indexes corresponding to the state discretization nodes of the discretized phase
+    control_nodes : ndarray
+        Indexes corresponding to the control discretization nodes of the discretized phase
+    t_all : ndarray
+        Time instants corresponding to all discretization nodes [-]
+    t_state : ndarray
+        Time instants corresponding to the state discretization nodes [-]
+    t_control : ndarray
+        Time instants corresponding to the control discretization nodes [-]
+    idx_state_control : ndarray
+        Indexes of the state discretization nodes among the control discretization nodes
+    tof : float
+        Phase time of flight (TOF) [-]
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
                  rec_file=None):
@@ -135,10 +260,21 @@ class SinglePhaseNLP(NLP):
         self.tof = None
 
     def set_objective(self):
+        """Set the NLP objective as the minimization of the opposite of the final spacecraft mass. """
 
         self.phase.add_objective('m', loc='final', scaler=-1.0)
 
     def set_time_options(self, tof, t_bounds):
+        """Set the time options on the phase.
+
+        Parameters
+        ----------
+        tof : float
+            Phase time of flight (TOF) [-]
+        t_bounds : tuple
+            Time of flight lower and upper bounds expressed as a fraction of `tof`
+
+        """
 
         self.tof = tof
 
@@ -150,6 +286,15 @@ class SinglePhaseNLP(NLP):
             self.phase.set_time_options(fix_initial=True, duration_ref=tof/self.body.tc)
 
     def set_time_guess(self, tof):
+        """Compute the time grid on the phase to retrieve the time instants corresponding to states, controls and all
+        discretization nodes.
+
+        Parameters
+        ----------
+        tof : float
+            Phase time of flight (TOF) [-]
+
+        """
 
         # set initial and transfer time
         self.p[self.phase_name + '.t_initial'] = 0.0
@@ -173,6 +318,53 @@ class SinglePhaseNLP(NLP):
 
 
 class MultiPhaseNLP(NLP):
+    """MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by
+    multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int or tuple
+        Number of segments in which each phase is discretized
+    order : int or tuple
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ode_class : tuple
+        Instance of OpenMDAO `ExplicitComponent` describing the Ordinary Differential Equations (ODEs) that drive the
+        system dynamics
+    ode_kwargs : tuple
+        Keywords arguments to be passed to `ode_class`
+    ph_name : tuple
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+
+    Attributes
+    ----------
+    transcription : list
+        List of dymos transcription class instances representing the transcription method, order and segments within
+        each phase
+    phase : list
+        List of dymos `Phase` object representing the different phases of the `Trajectory` class instance
+    phase_name : list
+        List of complete names of the `Phase` instance within OpenMDAO
+
+    References
+    ----------
+    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
+        Feb. 2019, p. 126.
+
+    """
 
     def __init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
                  rec_file=None):
@@ -184,8 +376,6 @@ class MultiPhaseNLP(NLP):
             method = tuple(method for _ in range(len(nb_seg)))
 
         NLP.__init__(self, body, sc, method, nb_seg, order, solver, snopt_opts=snopt_opts, rec_file=rec_file)
-
-        print(self.method)
 
         # Transcription objects list
         self.transcription = []
@@ -212,6 +402,34 @@ class MultiPhaseNLP(NLP):
             self.phase_name.append(''.join(['traj.', ph_name[i]]))
 
     def set_time_phase(self, ti, tof, phase, phase_name):
+        """Compute the time grid within one phase to retrieve the time instants corresponding to the state, control and
+        all discretization nodes.
+
+        Parameters
+        ----------
+        ti : float
+            Initial time [-]
+        tof : float
+            Time of flight (TOF) [-]
+        phase : Phase
+            Current phase
+        phase_name : str
+            Current phase name
+
+        Returns
+        -------
+        state_nodes : ndarray
+            Indexes corresponding to the state discretization nodes
+        control_nodes : ndarray
+            Indexes corresponding to the control discretization nodes
+        t_state : ndarray
+            Time instants on the state discretization nodes [-]
+        t_control : ndarray
+            Time instants on the control discretization nodes [-]
+        t_all : ndarray
+            Time instants on all discretization nodes [-]
+
+        """
 
         # set the initial time and the time of flight initial guesses
         self.p[phase_name + '.t_initial'] = ti
@@ -242,7 +460,6 @@ if __name__ == '__main__':
     from rpfm.utils.spacecraft import Spacecraft
 
     moon = Moon()
-
     nlp = NLP(moon, Spacecraft(450., 2.1, g=moon.g), 'gauss-lobatto', 100, 3, 'IPOPT')
 
     print(nlp)
