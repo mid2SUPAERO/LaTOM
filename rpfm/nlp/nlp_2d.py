@@ -62,11 +62,6 @@ class TwoDimNLP(SinglePhaseNLP):
     guess : TwoDimGuess
         Initial guess to be provided before solving the NLP
 
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
-
     """
 
     def __init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ode_class,
@@ -265,11 +260,6 @@ class TwoDimConstNLP(TwoDimNLP):
     u_bound : str or None, optional
             Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
 
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
-
     """
 
     def __init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver, ph_name,
@@ -351,11 +341,6 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
     u_bound : str or None, optional
             Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``lower``
 
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
-
     """
 
     def __init__(self, body, sc, alt, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
@@ -420,11 +405,6 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
     ----------
     vp : float
         Velocity at the periapsis of the Hohmann transfer where the final powered descent is initiated [-]
-
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
 
     """
 
@@ -491,11 +471,6 @@ class TwoDimVarNLP(TwoDimNLP):
     ----------
     guess : TwoDimGuess
         Initial guess for the NLP solution
-
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
 
     """
 
@@ -576,11 +551,6 @@ class TwoDimAscVarNLP(TwoDimVarNLP):
     fix_final : bool, optional
         ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
 
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
-
     """
 
     def __init__(self, body, sc, alt, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name, snopt_opts=None,
@@ -633,11 +603,6 @@ class TwoDimDescVarNLP(TwoDimVarNLP):
             Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``upper``
     fix_final : bool, optional
         ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
-
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
 
     """
 

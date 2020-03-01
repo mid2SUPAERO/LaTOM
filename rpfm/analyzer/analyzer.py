@@ -9,13 +9,13 @@ from time import time
 
 
 class Analyzer:
-    """Analyzer class defines the methods to analize the results of a simulation
+    """Analyzer class defines the methods to analyze the results of a simulation
 
     Parameters
     ----------
-    body : object
+    body : Primary
         Instance of `Primary` class describing the central attracting body
-    sc : object
+    sc : Spacecraft
         Instance of `Spacecraft` class describing the spacecraft characteristics
 
     Attributes

@@ -221,11 +221,6 @@ class SinglePhaseNLP(NLP):
     tof : float
         Phase time of flight (TOF) [-]
 
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
-
     """
 
     def __init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name, snopt_opts=None,
@@ -358,11 +353,6 @@ class MultiPhaseNLP(NLP):
         List of dymos `Phase` object representing the different phases of the `Trajectory` class instance
     phase_name : list
         List of complete names of the `Phase` instance within OpenMDAO
-
-    References
-    ----------
-    .. [1] Gill, Philip E., et al. User’s Guide for SNOPT Version 7.7: Software for Large-Scale Nonlinear Programming,
-        Feb. 2019, p. 126.
 
     """
 

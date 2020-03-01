@@ -30,19 +30,7 @@ class TwoDimAnalyzer(Analyzer):
             Instance of `Primary` class describing the central attracting body
         sc : Spacecraft
             Instance of `Spacecraft` class describing the spacecraft characteristics
-        phase_name : str
-            Describes the phase name in case of multi-phase trajectories
-        nlp : NLP
-            Instance of `NLP` object describing the type of Non Linear Problem solver used
-        tof : float
-            Value of the time of flight resulting by the simulation [s]
-        tof_exp : float
-            Value of the time of flight of the explicit simulation [s]
-        err : float
-            Value of the error between the optimized simulation results and the explicit simulation results
-        rm_res : float
-            Value of the central body radius [- or m]
-        states_scalers = ndarray
+        states_scalers : ndarray
             Reference values of the states with which perform the scaling
         controls_scalers : ndarray
             Reference values of the controls with which perform the scaling

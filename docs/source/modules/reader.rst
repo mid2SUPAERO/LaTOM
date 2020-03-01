@@ -1,0 +1,9 @@
+Reader Module
+=============
+
+.. toctree::
+
+.. automodule:: rpfm.reader.reader
+.. automodule:: rpfm.reader.reader_2d
+.. automodule:: rpfm.reader.reader_3d
+.. automodule:: rpfm.reader.reader_heo_2d
