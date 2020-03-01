@@ -9,7 +9,7 @@ from time import time
 
 
 class Analyzer:
-    """Analyzer class defines the methods to analyze the results of a simulation
+    """Analyzer class defines the methods to analyze the results of a simulation.
 
     Parameters
     ----------
@@ -40,7 +40,7 @@ class Analyzer:
     """
 
     def __init__(self, body, sc):
-        """ Initializes the `Analyzer` class variables """
+        """Initializes the `Analyzer` class variables. """
 
         self.body = body
         self.sc = sc
@@ -53,7 +53,7 @@ class Analyzer:
         self.rm_res = self.gm_res = None
 
     def run_driver(self):
-        """ Runs the optimization
+        """Runs the optimization.
 
         Returns
         -------
@@ -82,7 +82,7 @@ class Analyzer:
         return failed
 
     def get_time_series(self, p, scaled=False):
-        """ Access the time series of the simulation
+        """Access the time series of the simulation.
 
         Parameters
         ----------
@@ -96,7 +96,7 @@ class Analyzer:
         return None, None, None, None
 
     def get_solutions(self, explicit=True, scaled=False):
-        """ Access the simulation solution
+        """Access the simulation solution.
 
         Parameters
         ----------
@@ -104,6 +104,7 @@ class Analyzer:
             Computes also the explicit simulation. Default is ``True``
         scaled : bool
             Scales the simulation results. Default is ``False``
+            
         """
 
         tof, t, states, controls = self.get_time_series(self.nlp.p, scaled=scaled)

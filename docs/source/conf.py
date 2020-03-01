@@ -45,12 +45,11 @@ extensions = ['sphinx.ext.autodoc',
 
 # Autodoc settings
 autodoc_inherit_docstrings = True
-# utodoc_default_flags = ['members', 'inherited_members', 'show_inheritance']
-
+autodoc_default_flags = ['members', 'inherited-members']
 autodoc_default_options = {
-    'members': True,
+    # 'members': True,
     'member-order': 'bysource',
-    'inherited-members': True,
+    # 'inherited-members': True,
     'show-inheritance': True,
     'undoc-members': True,
     'exclude-members': '__str__'
@@ -88,15 +87,6 @@ exclude_patterns = []
 #
 
 html_theme = 'sphinx_rtd_theme'
-'''
-html_theme_path = ["_themes", ]
-html_theme_options = {
-    'collapse_navigation': False,
-    'display_version': False,
-    'navigation_depth': 3,
-}
-'''
-
 html_show_sourcelink = False
 
 # Add any paths that contain custom static files (such as style sheets) here,
