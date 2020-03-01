@@ -41,7 +41,7 @@ class TwoDimAnalyzer(Analyzer):
     err : float
         Value of the error between the optimized simulation results and the explicit simulation results
     rm_res : float
-        Value of the central body radius [- or m]
+        Value of the central body radius [-] or [m]
     states_scalers : ndarray
         Reference values of the states with which perform the scaling
     controls_scalers : ndarray

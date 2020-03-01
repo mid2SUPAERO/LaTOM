@@ -104,7 +104,7 @@ class Analyzer:
             Computes also the explicit simulation. Default is ``True``
         scaled : bool
             Scales the simulation results. Default is ``False``
-            
+
         """
 
         tof, t, states, controls = self.get_time_series(self.nlp.p, scaled=scaled)
