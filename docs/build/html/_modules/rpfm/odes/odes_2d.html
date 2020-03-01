@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rpfm.odes.odes_2d &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analyzer.html">Analyzers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/guess.html">Initial Guesses Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nlp.html">NLPs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/odes.html">ODEs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/plots.html">Plots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/reader.html">Readers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/surrogate.html">Surrogate Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">Utilities Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>rpfm.odes.odes_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rpfm.odes.odes_2d</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@authors: Alberto FOSSA&#39; Giuliana Elena MICELI</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">openmdao.api</span> <span class="kn">import</span> <span class="n">ExplicitComponent</span>
+<span class="kn">from</span> <span class="nn">dymos</span> <span class="kn">import</span> <span class="n">declare_time</span><span class="p">,</span> <span class="n">declare_state</span><span class="p">,</span> <span class="n">declare_parameter</span>
+
+
+<div class="viewcode-block" id="ODE2dThrust"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dThrust">[docs]</a><span class="nd">@declare_time</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;thetadot&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;rad&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">)</span>
+<span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;rad&#39;</span><span class="p">)</span>
+<span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+<span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ODE2dThrust</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ODE2dThrust.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dThrust.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ODE2dThrust.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dThrust.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+
+        <span class="c1"># inputs (ODE right-hand side)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;orbit radius&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;tangential velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;mass&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;thrust direction&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;rad&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">w</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;exhaust velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+
+        <span class="c1"># outputs (ODE left-hand side)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;thetadot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;angular rate&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;rad/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial acceleration&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s**2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;tangential acceleration&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s**2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;mass rate&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg/s&#39;</span><span class="p">)</span>
+
+        <span class="c1"># partial derivatives of the ODE outputs respect to the ODE inputs</span>
+        <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;thetadot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;thetadot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ODE2dThrust.compute"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dThrust.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span>
+        <span class="n">thrust</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+
+        <span class="n">cos_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="n">sin_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;rdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;thetadot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">r</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">gm</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">v</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">r</span> <span class="o">+</span> <span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_alpha</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">u</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">r</span> <span class="o">+</span> <span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos_alpha</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">w</span></div>
+
+<div class="viewcode-block" id="ODE2dThrust.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dThrust.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span>
+        <span class="n">thrust</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+
+        <span class="n">cos_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="n">sin_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;thetadot&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">v</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;thetadot&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">r</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gm</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">-</span> <span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">r</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_alpha</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos_alpha</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;thrust&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_alpha</span> <span class="o">/</span> <span class="n">m</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">v</span> <span class="o">/</span> <span class="n">r</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">u</span> <span class="o">/</span> <span class="n">r</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos_alpha</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin_alpha</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;vdot&#39;</span><span class="p">,</span> <span class="s1">&#39;thrust&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_alpha</span> <span class="o">/</span> <span class="n">m</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="s1">&#39;thrust&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">w</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">w</span> <span class="o">**</span> <span class="mi">2</span></div></div>
+
+
+<div class="viewcode-block" id="ODE2dConstThrust"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dConstThrust">[docs]</a><span class="k">class</span> <span class="nc">ODE2dConstThrust</span><span class="p">(</span><span class="n">ODE2dThrust</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ODE2dConstThrust.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dConstThrust.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">ODE2dThrust</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ODE2dConstThrust.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dConstThrust.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">ODE2dThrust</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ODE2dVarThrust"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVarThrust">[docs]</a><span class="k">class</span> <span class="nc">ODE2dVarThrust</span><span class="p">(</span><span class="n">ODE2dThrust</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ODE2dVarThrust.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVarThrust.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">ODE2dThrust</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="ODE2dVertical"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVertical">[docs]</a><span class="nd">@declare_time</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">)</span>
+<span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+<span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ODE2dVertical</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ODE2dVertical.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVertical.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ODE2dVertical.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVertical.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;orbit radius&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;mass&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;exhaust velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial acceleration&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s**2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;mass flow rate&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg/s&#39;</span><span class="p">)</span>
+
+        <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ODE2dVertical.compute"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVertical.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span>
+        <span class="n">thrust</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;rdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">gm</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">w</span></div>
+
+<div class="viewcode-block" id="ODE2dVertical.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.ODE2dVertical.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span>
+        <span class="n">thrust</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gm</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;udot&#39;</span><span class="p">,</span> <span class="s1">&#39;thrust&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">m</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="s1">&#39;thrust&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">w</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">w</span> <span class="o">**</span> <span class="mi">2</span></div></div>
+
+
+<div class="viewcode-block" id="SafeAlt"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.SafeAlt">[docs]</a><span class="k">class</span> <span class="nc">SafeAlt</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SafeAlt.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.SafeAlt.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;alt_safe&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SafeAlt.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.SafeAlt.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;orbit radius&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;true anomaly&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;rad&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;r_safe&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;minimum safe radius&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;distance from minimum safe radius&#39;</span><span class="p">)</span>
+
+        <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;r_safe&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SafeAlt.compute"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.SafeAlt.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+
+        <span class="n">r_moon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
+        <span class="n">alt_safe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;alt_safe&#39;</span><span class="p">]</span>
+        <span class="n">slope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span>
+
+        <span class="n">r_safe</span> <span class="o">=</span> <span class="n">r_moon</span> <span class="o">+</span> <span class="n">alt_safe</span><span class="o">*</span><span class="n">r_moon</span><span class="o">*</span><span class="n">theta</span><span class="o">/</span><span class="p">(</span><span class="n">r_moon</span><span class="o">*</span><span class="n">theta</span> <span class="o">+</span> <span class="n">alt_safe</span><span class="o">/</span><span class="n">slope</span><span class="p">)</span>
+
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r_safe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_safe</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">r_safe</span></div>
+
+<div class="viewcode-block" id="SafeAlt.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.SafeAlt.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
+
+        <span class="n">r_moon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
+        <span class="n">alt_safe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;alt_safe&#39;</span><span class="p">]</span>
+        <span class="n">slope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span>
+
+        <span class="n">drsafe_dtheta</span> <span class="o">=</span> <span class="n">alt_safe</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">r_moon</span><span class="o">*</span><span class="n">slope</span><span class="o">/</span><span class="p">(</span><span class="n">alt_safe</span> <span class="o">+</span> <span class="n">slope</span><span class="o">*</span><span class="n">r_moon</span><span class="o">*</span><span class="n">theta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;r_safe&#39;</span><span class="p">,</span> <span class="s1">&#39;theta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">drsafe_dtheta</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">,</span> <span class="s1">&#39;theta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">drsafe_dtheta</span></div></div>
+
+
+<div class="viewcode-block" id="Polar2COE"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2COE">[docs]</a><span class="k">class</span> <span class="nc">Polar2COE</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Polar2COE.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2COE.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Polar2COE.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2COE.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;orbit radius&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;radial velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;tangential velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Polar2RApo"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2RApo">[docs]</a><span class="k">class</span> <span class="nc">Polar2RApo</span><span class="p">(</span><span class="n">Polar2COE</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Polar2RApo.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2RApo.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">Polar2COE</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;ra&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Polar2RApo.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2RApo.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">Polar2COE</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;condition to reach the apolune&#39;</span><span class="p">)</span>
+
+        <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Polar2RApo.compute"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2RApo.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span> <span class="o">-</span> <span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">ra</span><span class="o">*</span><span class="n">ra</span> <span class="o">+</span> <span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">v</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="n">ra</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Polar2RApo.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2RApo.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gm</span> <span class="o">-</span> <span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">*</span> <span class="n">u</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">v</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">ra</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">ra</span> <span class="o">-</span> <span class="n">gm</span><span class="o">*</span><span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="n">r</span><span class="o">**</span><span class="mi">3</span><span class="o">*</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">b</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="n">ra</span><span class="p">)</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">u</span><span class="o">*</span><span class="n">b</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">b</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="mi">3</span></div></div>
+
+
+<div class="viewcode-block" id="Polar2AH"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2AH">[docs]</a><span class="k">class</span> <span class="nc">Polar2AH</span><span class="p">(</span><span class="n">Polar2COE</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Polar2AH.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2AH.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">Polar2COE</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;semimajor axis&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;angular momentum&#39;</span><span class="p">)</span>
+
+        <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Polar2AH.compute"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2AH.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gm</span><span class="o">*</span><span class="n">r</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">gm</span> <span class="o">-</span> <span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">v</span></div>
+
+<div class="viewcode-block" id="Polar2AH.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d.Polar2AH.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
+
+        <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span> <span class="o">-</span> <span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="n">gm</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">d</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">u</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">d</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">v</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">d</span>
+
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">jacobian</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

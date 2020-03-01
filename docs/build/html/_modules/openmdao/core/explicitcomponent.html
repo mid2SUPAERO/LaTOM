@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>openmdao.core.explicitcomponent &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analyzer.html">Analyzers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/guess.html">Initial Guesses Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nlp.html">NLPs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/odes.html">ODEs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/plots.html">Plots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/reader.html">Readers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/surrogate.html">Surrogate Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">Utilities Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>openmdao.core.explicitcomponent</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for openmdao.core.explicitcomponent</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Define the ExplicitComponent class.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">itervalues</span><span class="p">,</span> <span class="n">iteritems</span>
+<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">range</span>
+
+<span class="kn">from</span> <span class="nn">openmdao.core.component</span> <span class="kn">import</span> <span class="n">Component</span><span class="p">,</span> <span class="n">_full_slice</span>
+<span class="kn">from</span> <span class="nn">openmdao.utils.class_util</span> <span class="kn">import</span> <span class="n">overrides_method</span>
+<span class="kn">from</span> <span class="nn">openmdao.utils.general_utils</span> <span class="kn">import</span> <span class="n">ContainsAll</span>
+<span class="kn">from</span> <span class="nn">openmdao.recorders.recording_iteration_stack</span> <span class="kn">import</span> <span class="n">Recording</span>
+
+<span class="n">_inst_functs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;compute_jacvec_product&#39;</span><span class="p">,</span> <span class="s1">&#39;compute_multi_jacvec_product&#39;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">ExplicitComponent</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to inherit from when all output variables are explicit.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _inst_functs : dict</span>
+<span class="sd">        Dictionary of names mapped to bound methods.</span>
+<span class="sd">    _has_compute_partials : bool</span>
+<span class="sd">        If True, the instance overrides compute_partials.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Store some bound methods so we can detect runtime overrides.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        **kwargs : dict of keyword arguments</span>
+<span class="sd">            Keyword arguments that will be mapped into the Component options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inst_functs</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_inst_functs</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_compute_partials</span> <span class="o">=</span> <span class="n">overrides_method</span><span class="p">(</span><span class="s1">&#39;compute_partials&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">ExplicitComponent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">undeclare</span><span class="p">(</span><span class="s1">&#39;assembled_jac_type&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Configure this system to assign children settings and detect if matrix_free.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_jacvec_prod</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;compute_jacvec_product&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">new_multi_jacvec_prod</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;compute_multi_jacvec_product&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">supports_multivecs</span> <span class="o">=</span> <span class="p">(</span><span class="n">overrides_method</span><span class="p">(</span><span class="s1">&#39;compute_multi_jacvec_product&#39;</span><span class="p">,</span>
+                                                    <span class="bp">self</span><span class="p">,</span> <span class="n">ExplicitComponent</span><span class="p">)</span> <span class="ow">or</span>
+                                   <span class="p">(</span><span class="n">new_multi_jacvec_prod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                                    <span class="n">new_multi_jacvec_prod</span> <span class="o">!=</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">_inst_functs</span><span class="p">[</span><span class="s1">&#39;compute_multi_jacvec_product&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matrix_free</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supports_multivecs</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">overrides_method</span><span class="p">(</span><span class="s1">&#39;compute_jacvec_product&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">ExplicitComponent</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="p">(</span><span class="n">new_jacvec_prod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+             <span class="n">new_jacvec_prod</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inst_functs</span><span class="p">[</span><span class="s1">&#39;compute_jacvec_product&#39;</span><span class="p">]))</span>
+
+    <span class="k">def</span> <span class="nf">_get_partials_varlists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get lists of &#39;of&#39; and &#39;wrt&#39; variables that form the partial jacobian.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple(list, list)</span>
+<span class="sd">            &#39;of&#39; and &#39;wrt&#39; variable lists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">of</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_allprocs_prom2abs_list</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+        <span class="n">wrt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_allprocs_prom2abs_list</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">of</span><span class="p">,</span> <span class="n">wrt</span>
+
+    <span class="k">def</span> <span class="nf">_get_partials_var_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get sizes of &#39;of&#39; and &#39;wrt&#39; variables that form the partial jacobian.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple(ndarray, ndarray)</span>
+<span class="sd">            &#39;of&#39; and &#39;wrt&#39; variable sizes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">iproc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span>
+        <span class="n">out_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_sizes</span><span class="p">[</span><span class="s1">&#39;nonlinear&#39;</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">][</span><span class="n">iproc</span><span class="p">]</span>
+        <span class="n">in_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_sizes</span><span class="p">[</span><span class="s1">&#39;nonlinear&#39;</span><span class="p">][</span><span class="s1">&#39;input&#39;</span><span class="p">][</span><span class="n">iproc</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">out_sizes</span><span class="p">,</span> <span class="n">in_sizes</span>
+
+    <span class="k">def</span> <span class="nf">_jacobian_wrt_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrt_matches</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over (name, offset, end, idxs) for each column var in the systems&#39;s jacobian.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wrt_matches : set or None</span>
+<span class="sd">            Only include row vars that are contained in this set.  This will determine what</span>
+<span class="sd">            the actual offsets are, i.e. the offsets will be into a reduced jacobian</span>
+<span class="sd">            containing only the matching columns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">wrt_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wrt_matches</span> <span class="o">=</span> <span class="n">ContainsAll</span><span class="p">()</span>
+        <span class="n">abs2meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_allprocs_abs2meta</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">wrt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_allprocs_abs_names</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">wrt</span> <span class="ow">in</span> <span class="n">wrt_matches</span><span class="p">:</span>
+                <span class="n">end</span> <span class="o">+=</span> <span class="n">abs2meta</span><span class="p">[</span><span class="n">wrt</span><span class="p">][</span><span class="s1">&#39;size&#39;</span><span class="p">]</span>
+                <span class="k">yield</span> <span class="n">wrt</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">_full_slice</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="n">end</span>
+
+    <span class="k">def</span> <span class="nf">_setup_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Call setup_partials in components.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether to call this method in subsystems.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_partials</span><span class="p">()</span>
+
+        <span class="n">abs2meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_abs2meta</span>
+        <span class="n">abs2prom_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_abs2prom</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Note: These declare calls are outside of setup_partials so that users do not have to</span>
+        <span class="c1"># call the super version of setup_partials. This is still in the final setup.</span>
+        <span class="k">for</span> <span class="n">out_abs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_abs_names</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">abs2meta</span><span class="p">[</span><span class="n">out_abs</span><span class="p">]</span>
+            <span class="n">out_name</span> <span class="o">=</span> <span class="n">abs2prom_out</span><span class="p">[</span><span class="n">out_abs</span><span class="p">]</span>
+            <span class="n">arange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">])</span>
+
+            <span class="c1"># No need to FD outputs wrt other outputs</span>
+            <span class="n">abs_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">out_abs</span><span class="p">,</span> <span class="n">out_abs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">abs_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subjacs_info</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;method&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subjacs_info</span><span class="p">[</span><span class="n">abs_key</span><span class="p">]:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subjacs_info</span><span class="p">[</span><span class="n">abs_key</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
+
+            <span class="n">dct</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;rows&#39;</span><span class="p">:</span> <span class="n">arange</span><span class="p">,</span>
+                <span class="s1">&#39;cols&#39;</span><span class="p">:</span> <span class="n">arange</span><span class="p">,</span>
+                <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.</span><span class="p">),</span>
+                <span class="s1">&#39;dependent&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="c1"># ExplicitComponent jacobians have -1 on the diagonal.</span>
+            <span class="k">if</span> <span class="n">arange</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_declare_partials</span><span class="p">(</span><span class="n">out_name</span><span class="p">,</span> <span class="n">out_name</span><span class="p">,</span> <span class="n">dct</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_jacobians</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set and populate jacobian.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            If True, setup jacobians in all descendants. (ignored)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_approx</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_approx_partials_meta</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">res_units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                   <span class="n">lower</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ref0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">res_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an output variable to the component.</span>
+
+<span class="sd">        For ExplicitComponent, res_ref defaults to the value in res unless otherwise specified.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            name of the variable in this component&#39;s namespace.</span>
+<span class="sd">        val : float or list or tuple or ndarray</span>
+<span class="sd">            The initial value of the variable being added in user-defined units. Default is 1.0.</span>
+<span class="sd">        shape : int or tuple or list or None</span>
+<span class="sd">            Shape of this variable, only required if val is not an array.</span>
+<span class="sd">            Default is None.</span>
+<span class="sd">        units : str or None</span>
+<span class="sd">            Units in which the output variables will be provided to the component during execution.</span>
+<span class="sd">            Default is None, which means it has no units.</span>
+<span class="sd">        res_units : str or None</span>
+<span class="sd">            Units in which the residuals of this output will be given to the user when requested.</span>
+<span class="sd">            Default is None, which means it has no units.</span>
+<span class="sd">        desc : str</span>
+<span class="sd">            description of the variable.</span>
+<span class="sd">        lower : float or list or tuple or ndarray or None</span>
+<span class="sd">            lower bound(s) in user-defined units. It can be (1) a float, (2) an array_like</span>
+<span class="sd">            consistent with the shape arg (if given), or (3) an array_like matching the shape of</span>
+<span class="sd">            val, if val is array_like. A value of None means this output has no lower bound.</span>
+<span class="sd">            Default is None.</span>
+<span class="sd">        upper : float or list or tuple or ndarray or None</span>
+<span class="sd">            upper bound(s) in user-defined units. It can be (1) a float, (2) an array_like</span>
+<span class="sd">            consistent with the shape arg (if given), or (3) an array_like matching the shape of</span>
+<span class="sd">            val, if val is array_like. A value of None means this output has no upper bound.</span>
+<span class="sd">            Default is None.</span>
+<span class="sd">        ref : float</span>
+<span class="sd">            Scaling parameter. The value in the user-defined units of this output variable when</span>
+<span class="sd">            the scaled value is 1. Default is 1.</span>
+<span class="sd">        ref0 : float</span>
+<span class="sd">            Scaling parameter. The value in the user-defined units of this output variable when</span>
+<span class="sd">            the scaled value is 0. Default is 0.</span>
+<span class="sd">        res_ref : float</span>
+<span class="sd">            Scaling parameter. The value in the user-defined res_units of this output&#39;s residual</span>
+<span class="sd">            when the scaled value is 1. Default is None, which means residual scaling matches</span>
+<span class="sd">            output scaling.</span>
+<span class="sd">        tags : str or list of strs</span>
+<span class="sd">            User defined tags that can be used to filter what gets listed when calling</span>
+<span class="sd">            list_inputs and list_outputs and also when listing results from case recorders.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            metadata for added variable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">res_ref</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">res_ref</span> <span class="o">=</span> <span class="n">ref</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+                                                         <span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span>
+                                                         <span class="n">res_units</span><span class="o">=</span><span class="n">res_units</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+                                                         <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">upper</span><span class="p">,</span>
+                                                         <span class="n">ref</span><span class="o">=</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref0</span><span class="o">=</span><span class="n">ref0</span><span class="p">,</span> <span class="n">res_ref</span><span class="o">=</span><span class="n">res_ref</span><span class="p">,</span>
+                                                         <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_approx_subjac_keys_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">abs_key</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_subjacs_info</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;method&#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_approx_schemes</span> <span class="ow">and</span> <span class="n">abs_key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="o">.</span><span class="n">_views_flat</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">abs_key</span>
+
+    <span class="k">def</span> <span class="nf">_apply_nonlinear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute residuals. The model is assumed to be in a scaled state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_residuals</span>
+        <span class="k">with</span> <span class="n">Recording</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pathname</span> <span class="o">+</span> <span class="s1">&#39;._apply_nonlinear&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_count</span><span class="p">,</span> <span class="bp">self</span><span class="p">):</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unscaled_context</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">outputs</span><span class="p">],</span> <span class="n">residuals</span><span class="o">=</span><span class="p">[</span><span class="n">residuals</span><span class="p">]):</span>
+                <span class="n">residuals</span><span class="o">.</span><span class="n">set_vec</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+
+                <span class="c1"># Sign of the residual is minus the sign of the output vector.</span>
+                <span class="n">residuals</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_outputs</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_outputs</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="n">residuals</span> <span class="o">+=</span> <span class="n">outputs</span>
+                <span class="n">outputs</span> <span class="o">-=</span> <span class="n">residuals</span>
+
+    <span class="k">def</span> <span class="nf">_solve_nonlinear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute outputs. The model is assumed to be in a scaled state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_solve_nonlinear</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">Recording</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pathname</span> <span class="o">+</span> <span class="s1">&#39;._solve_nonlinear&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_count</span><span class="p">,</span> <span class="bp">self</span><span class="p">):</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unscaled_context</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">],</span> <span class="n">residuals</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_residuals</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_residuals</span><span class="o">.</span><span class="n">set_const</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_outputs</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_outputs</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_apply_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jac</span><span class="p">,</span> <span class="n">vec_names</span><span class="p">,</span> <span class="n">rel_systems</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">scope_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope_in</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute jac-vec product. The model is assumed to be in a scaled state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        jac : Jacobian or None</span>
+<span class="sd">            If None, use local jacobian, else use jac.</span>
+<span class="sd">        vec_names : [str, ...]</span>
+<span class="sd">            list of names of the right-hand-side vectors.</span>
+<span class="sd">        rel_systems : set of str</span>
+<span class="sd">            Set of names of relevant systems based on the current linear solve.</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            &#39;fwd&#39; or &#39;rev&#39;.</span>
+<span class="sd">        scope_out : set or None</span>
+<span class="sd">            Set of absolute output names in the scope of this mat-vec product.</span>
+<span class="sd">            If None, all are in the scope.</span>
+<span class="sd">        scope_in : set or None</span>
+<span class="sd">            Set of absolute input names in the scope of this mat-vec product.</span>
+<span class="sd">            If None, all are in the scope.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian</span> <span class="k">if</span> <span class="n">jac</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">jac</span>
+
+        <span class="k">for</span> <span class="n">vec_name</span> <span class="ow">in</span> <span class="n">vec_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vec_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rel_vec_names</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matvec_context</span><span class="p">(</span><span class="n">vec_name</span><span class="p">,</span> <span class="n">scope_out</span><span class="p">,</span> <span class="n">scope_in</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">vecs</span><span class="p">:</span>
+                <span class="n">d_inputs</span><span class="p">,</span> <span class="n">d_outputs</span><span class="p">,</span> <span class="n">d_residuals</span> <span class="o">=</span> <span class="n">vecs</span>
+
+                <span class="c1"># Jacobian and vectors are all scaled, unitless</span>
+                <span class="n">J</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_inputs</span><span class="p">,</span> <span class="n">d_outputs</span><span class="p">,</span> <span class="n">d_residuals</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+                <span class="c1"># if we&#39;re not matrix free, we can skip the bottom of</span>
+                <span class="c1"># this loop because compute_jacvec_product does nothing.</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix_free</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Jacobian and vectors are all unscaled, dimensional</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unscaled_context</span><span class="p">(</span>
+                        <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">],</span> <span class="n">residuals</span><span class="o">=</span><span class="p">[</span><span class="n">d_residuals</span><span class="p">]):</span>
+
+                    <span class="c1"># set appropriate vectors to read_only to help prevent user error</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fwd&#39;</span><span class="p">:</span>
+                        <span class="n">d_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;rev&#39;</span><span class="p">:</span>
+                        <span class="n">d_residuals</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="n">d_inputs</span><span class="p">,</span> <span class="n">d_residuals</span><span class="p">,</span> <span class="n">mode</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span><span class="p">:</span>
+                            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span><span class="p">)</span>
+
+                        <span class="c1"># We used to negate the residual here, and then re-negate after the hook</span>
+                        <span class="k">if</span> <span class="n">d_inputs</span><span class="o">.</span><span class="n">_ncol</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">supports_multivecs</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">compute_multi_jacvec_product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d_inputs</span><span class="o">.</span><span class="n">_ncol</span><span class="p">):</span>
+                                    <span class="c1"># need to make the multivecs look like regular single vecs</span>
+                                    <span class="c1"># since the component doesn&#39;t know about multivecs.</span>
+                                    <span class="n">d_inputs</span><span class="o">.</span><span class="n">_icol</span> <span class="o">=</span> <span class="n">i</span>
+                                    <span class="n">d_residuals</span><span class="o">.</span><span class="n">_icol</span> <span class="o">=</span> <span class="n">i</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">compute_jacvec_product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                                <span class="n">d_inputs</span><span class="o">.</span><span class="n">_icol</span> <span class="o">=</span> <span class="kc">None</span>
+                                <span class="n">d_residuals</span><span class="o">.</span><span class="n">_icol</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">compute_jacvec_product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                    <span class="k">finally</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">d_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="n">d_residuals</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_solve_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec_names</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">rel_systems</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply inverse jac product. The model is assumed to be in a scaled state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        vec_names : [str, ...]</span>
+<span class="sd">            list of names of the right-hand-side vectors.</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            &#39;fwd&#39; or &#39;rev&#39;.</span>
+<span class="sd">        rel_systems : set of str</span>
+<span class="sd">            Set of names of relevant systems based on the current linear solve.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">vec_name</span> <span class="ow">in</span> <span class="n">vec_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vec_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rel_vec_names</span><span class="p">:</span>
+                <span class="n">d_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vectors</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">][</span><span class="n">vec_name</span><span class="p">]</span>
+                <span class="n">d_residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vectors</span><span class="p">[</span><span class="s1">&#39;residual&#39;</span><span class="p">][</span><span class="n">vec_name</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fwd&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_resid_scaling</span><span class="p">:</span>
+                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unscaled_context</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">d_outputs</span><span class="p">],</span>
+                                                    <span class="n">residuals</span><span class="o">=</span><span class="p">[</span><span class="n">d_residuals</span><span class="p">]):</span>
+                            <span class="n">d_outputs</span><span class="o">.</span><span class="n">set_vec</span><span class="p">(</span><span class="n">d_residuals</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">d_outputs</span><span class="o">.</span><span class="n">set_vec</span><span class="p">(</span><span class="n">d_residuals</span><span class="p">)</span>
+
+                    <span class="c1"># ExplicitComponent jacobian defined with -1 on diagonal.</span>
+                    <span class="n">d_outputs</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># rev</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_resid_scaling</span><span class="p">:</span>
+                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unscaled_context</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">d_outputs</span><span class="p">],</span>
+                                                    <span class="n">residuals</span><span class="o">=</span><span class="p">[</span><span class="n">d_residuals</span><span class="p">]):</span>
+                            <span class="n">d_residuals</span><span class="o">.</span><span class="n">set_vec</span><span class="p">(</span><span class="n">d_outputs</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">d_residuals</span><span class="o">.</span><span class="n">set_vec</span><span class="p">(</span><span class="n">d_outputs</span><span class="p">)</span>
+
+                    <span class="c1"># ExplicitComponent jacobian defined with -1 on diagonal.</span>
+                    <span class="n">d_residuals</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="k">def</span> <span class="nf">_linearize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sub_do_ln</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute jacobian / factorization. The model is assumed to be in a scaled state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        jac : Jacobian or None</span>
+<span class="sd">            Ignored.</span>
+<span class="sd">        sub_do_ln : boolean</span>
+<span class="sd">            Flag indicating if the children should call linearize on their linear solvers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_has_compute_partials</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_approx_schemes</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_first_linearize</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unscaled_context</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span><span class="p">],</span> <span class="n">residuals</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_residuals</span><span class="p">]):</span>
+            <span class="c1"># Computing the approximation before the call to compute_partials allows users to</span>
+            <span class="c1"># override FD&#39;d values.</span>
+            <span class="k">for</span> <span class="n">approximation</span> <span class="ow">in</span> <span class="n">itervalues</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_approx_schemes</span><span class="p">):</span>
+                <span class="n">approximation</span><span class="o">.</span><span class="n">compute_approximations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_jacobian</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_compute_partials</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># We don&#39;t need to set the _system attribute on jac here because jac (if not None)</span>
+                <span class="c1"># shares the _subjacs_info metadata with our _jacobian, and our _jacobian knows</span>
+                <span class="c1"># how to properly convert relative names (used by the component in compute_partials)</span>
+                <span class="c1"># to absolute names (used by all jacobians internally).</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># We used to negate the jacobian here, and then re-negate after the hook.</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discrete_inputs</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">discrete_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">discrete_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute outputs given inputs. The model is assumed to be in an unscaled state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs : Vector</span>
+<span class="sd">            unscaled, dimensional input variables read via inputs[key]</span>
+<span class="sd">        outputs : Vector</span>
+<span class="sd">            unscaled, dimensional output variables read via outputs[key]</span>
+<span class="sd">        discrete_inputs : dict or None</span>
+<span class="sd">            If not None, dict containing discrete input values.</span>
+<span class="sd">        discrete_outputs : dict or None</span>
+<span class="sd">            If not None, dict containing discrete output values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">partials</span><span class="p">,</span> <span class="n">discrete_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute sub-jacobian parts. The model is assumed to be in an unscaled state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs : Vector</span>
+<span class="sd">            unscaled, dimensional input variables read via inputs[key]</span>
+<span class="sd">        partials : Jacobian</span>
+<span class="sd">            sub-jac components written to partials[output_name, input_name]</span>
+<span class="sd">        discrete_inputs : dict or None</span>
+<span class="sd">            If not None, dict containing discrete input values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">compute_jacvec_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">d_inputs</span><span class="p">,</span> <span class="n">d_outputs</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">discrete_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute jac-vector product. The model is assumed to be in an unscaled state.</span>
+
+<span class="sd">        If mode is:</span>
+<span class="sd">            &#39;fwd&#39;: d_inputs \|-&gt; d_outputs</span>
+
+<span class="sd">            &#39;rev&#39;: d_outputs \|-&gt; d_inputs</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs : Vector</span>
+<span class="sd">            unscaled, dimensional input variables read via inputs[key]</span>
+<span class="sd">        d_inputs : Vector</span>
+<span class="sd">            see inputs; product must be computed only if var_name in d_inputs</span>
+<span class="sd">        d_outputs : Vector</span>
+<span class="sd">            see outputs; product must be computed only if var_name in d_outputs</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            either &#39;fwd&#39; or &#39;rev&#39;</span>
+<span class="sd">        discrete_inputs : dict or None</span>
+<span class="sd">            If not None, dict containing discrete input values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

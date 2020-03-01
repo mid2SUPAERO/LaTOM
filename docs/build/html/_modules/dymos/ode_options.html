@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dymos.ode_options &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/analyzer.html">Analyzers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/data.html">Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/guess.html">Initial Guesses Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/nlp.html">NLPs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/odes.html">ODEs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/plots.html">Plots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/reader.html">Readers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/surrogate.html">Surrogate Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/utils.html">Utilities Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>dymos.ode_options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dymos.ode_options</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">string_types</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">openmdao.utils.options_dictionary</span> <span class="kn">import</span> <span class="n">OptionsDictionary</span>
+<span class="kn">from</span> <span class="nn">openmdao.core.component</span> <span class="kn">import</span> <span class="n">_valid_var_name</span>
+
+
+<span class="k">class</span> <span class="nc">_ODETimeOptionsDictionary</span><span class="p">(</span><span class="n">OptionsDictionary</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OptionsDictionary for Time at the ODE level.  Note this does not include things that affect</span>
+<span class="sd">    design variables or defect constraints.  Those options are set at the Phase level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_ODETimeOptionsDictionary</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">read_only</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;targets&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">types</span><span class="o">=</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Target path(s) for the time variable, relative to the top-level system.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;time_phase_targets&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">types</span><span class="o">=</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Target path(s) for the time_phase variable &#39;</span>
+                          <span class="s1">&#39;(the current phase elapsed time), relative to the top-level system.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;t_initial_targets&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">types</span><span class="o">=</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Target path(s) for the t_initial variable relative to the top-level &#39;</span>
+                          <span class="s1">&#39;system.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;t_duration_targets&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">types</span><span class="o">=</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Target path(s) for the t_duration variable relative to the top-level &#39;</span>
+                          <span class="s1">&#39;system.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;units&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="n">string_types</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Units for time.&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_ODEStateOptionsDictionary</span><span class="p">(</span><span class="n">OptionsDictionary</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OptionsDictionary for States at the ODE level.  Note this does not include things that affect</span>
+<span class="sd">    design variables or defect constraints.  Those options are set at the Phase level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_ODEStateOptionsDictionary</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">read_only</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="n">string_types</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The name of the state variable.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;rate_source&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="n">string_types</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The path to the output in the system which is the time-derivative &#39;</span>
+                          <span class="s1">&#39;of the state.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;targets&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">types</span><span class="o">=</span><span class="n">Iterable</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Target paths for the state, relative to the top-level system.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">types</span><span class="o">=</span><span class="nb">tuple</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The shape of the variable (ignoring the time-dimension along &#39;</span>
+                          <span class="s1">&#39;the first axis).&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;units&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="n">string_types</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The units of the parameter.&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_ODEParameterOptionsDictionary</span><span class="p">(</span><span class="n">OptionsDictionary</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OptionsDictionary for parameters at the ODE level.  Note this does not include things that</span>
+<span class="sd">    affect design variables or defect constraints.  Those options are set at the Phase level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_ODEParameterOptionsDictionary</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">read_only</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="n">string_types</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The name of the parameter.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;targets&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">types</span><span class="o">=</span><span class="n">Iterable</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Target paths for the parameter, relative to the top-level system.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">types</span><span class="o">=</span><span class="nb">tuple</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The shape of the variable (ignoring the time-dimension along &#39;</span>
+                          <span class="s1">&#39;the first axis).&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;If True, the value of the shape of the parameter will &#39;</span>
+                          <span class="s1">&#39;be (num_nodes, ...), allowing the variable to be used as either a &#39;</span>
+                          <span class="s1">&#39;static or dynamic control.  This impacts the shape of the partial &#39;</span>
+                          <span class="s1">&#39;derivatives matrix.  Unless a parameter is large and broadcasting a &#39;</span>
+                          <span class="s1">&#39;value to each individual node would be inefficient, users should stick &#39;</span>
+                          <span class="s1">&#39;to the default value of True.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;units&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="n">string_types</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;The units of the parameter.&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">declare_time</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class Decorator used to attach ODE time metadata to an OpenMDAO system.</span>
+
+<span class="sd">    This decorator can be stacked with `declare_state` and `declare_parameter`</span>
+<span class="sd">    to provide all necessary ODE metadata for system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time_phase_targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_initial_targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">t_duration_targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_phase_targets</span> <span class="o">=</span> <span class="n">time_phase_targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_initial_targets</span> <span class="o">=</span> <span class="n">t_initial_targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_duration_targets</span> <span class="o">=</span> <span class="n">t_duration_targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_class</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">system_class</span><span class="p">,</span> <span class="s1">&#39;ode_options&#39;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">system_class</span><span class="p">,</span> <span class="s1">&#39;ode_options&#39;</span><span class="p">,</span> <span class="n">ODEOptions</span><span class="p">())</span>
+
+        <span class="n">system_class</span><span class="o">.</span><span class="n">ode_options</span><span class="o">.</span><span class="n">declare_time</span><span class="p">(</span><span class="n">targets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
+                                              <span class="n">time_phase_targets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_phase_targets</span><span class="p">,</span>
+                                              <span class="n">t_initial_targets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_initial_targets</span><span class="p">,</span>
+                                              <span class="n">t_duration_targets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_duration_targets</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">system_class</span>
+
+
+<span class="k">class</span> <span class="nc">declare_state</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class Decorator used to attach ODE state metadata to an OpenMDAO system.</span>
+
+<span class="sd">    This decorator can be stacked with `declare_time` and `declare_parameter`</span>
+<span class="sd">    to provide all necessary ODE metadata for system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rate_source</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate_source</span> <span class="o">=</span> <span class="n">rate_source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_class</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">system_class</span><span class="p">,</span> <span class="s1">&#39;ode_options&#39;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">system_class</span><span class="p">,</span> <span class="s1">&#39;ode_options&#39;</span><span class="p">,</span> <span class="n">ODEOptions</span><span class="p">())</span>
+
+        <span class="n">system_class</span><span class="o">.</span><span class="n">ode_options</span><span class="o">.</span><span class="n">declare_state</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rate_source</span><span class="p">,</span>
+                                               <span class="n">targets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                                               <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">system_class</span>
+
+
+<span class="k">class</span> <span class="nc">declare_parameter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class Decorator used to attach ODE parameter metadata to an OpenMDAO system.</span>
+
+<span class="sd">    This decorator can be stacked with `declare_time` and `declare_state`</span>
+<span class="sd">    to provide all necessary ODE metadata for system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic</span> <span class="o">=</span> <span class="n">dynamic</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_class</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">system_class</span><span class="p">,</span> <span class="s1">&#39;ode_options&#39;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">system_class</span><span class="p">,</span> <span class="s1">&#39;ode_options&#39;</span><span class="p">,</span> <span class="n">ODEOptions</span><span class="p">())</span>
+
+        <span class="n">system_class</span><span class="o">.</span><span class="n">ode_options</span><span class="o">.</span><span class="n">declare_parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
+                                                   <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
+                                                   <span class="n">dynamic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamic</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">system_class</span>
+
+
+<span class="k">class</span> <span class="nc">ODEOptions</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A container for ODE metadata which allow a System to be used as an ODE Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parameter_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize class attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            Keyword arguments that will be passed to the initialize method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span> <span class="o">=</span> <span class="n">_ODETimeOptionsDictionary</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_states</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_paths</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">time_options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">declare_time</span><span class="p">(</span><span class="o">**</span><span class="n">time_options</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">state_options</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">state_name</span> <span class="ow">in</span> <span class="n">state_options</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">declare_state</span><span class="p">(</span><span class="n">state_name</span><span class="p">,</span> <span class="o">**</span><span class="n">state_options</span><span class="p">[</span><span class="n">state_name</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">parameter_options</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param_name</span> <span class="ow">in</span> <span class="n">parameter_options</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">declare_parameter</span><span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="o">**</span><span class="n">parameter_options</span><span class="p">[</span><span class="n">param_name</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Optional method that calls declare_time, declare_state, and/or declare_dynamic_parameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            Keyword arguments passed in during instantiation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_check_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the targets used for this variable have not already been</span>
+<span class="sd">        used by another variable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the state, parameter, or &#39;time&#39;</span>
+<span class="sd">        targets : Iterable</span>
+<span class="sd">            The targets to which the state, parameter, or &#39;time&#39; are connected.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If thet one or more of the targets for the variable have already been</span>
+<span class="sd">            used by another variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_paths</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> has a path &quot;</span><span class="si">{1}</span><span class="s1">&quot; that has already been &#39;</span>
+                                 <span class="s1">&#39;used as the target path of another &#39;</span>
+                                 <span class="s1">&#39;variable.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+        <span class="c1"># If no issues have been found, extend the existing list of targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">declare_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time_phase_targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">t_initial_targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_duration_targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specify the targets and units of time or the time-like variable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        targets : string_types or Iterable or None</span>
+<span class="sd">            Targets for the time or time-like variable within the ODE, or None if no models</span>
+<span class="sd">            are explicitly time-dependent. Default is None.</span>
+<span class="sd">        units : str or None</span>
+<span class="sd">            Units for the integration variable within the ODE. Default is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="k">elif</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;targets must be of type string_types or Iterable or None&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time_phase_targets</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;time_phase_targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">time_phase_targets</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time_phase_targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;time_phase_targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_phase_targets</span>
+        <span class="k">elif</span> <span class="n">time_phase_targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;time_phase_targets must be of type string_types or Iterable or None&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_initial_targets</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;t_initial_targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t_initial_targets</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_initial_targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;t_initial_targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_initial_targets</span>
+        <span class="k">elif</span> <span class="n">t_initial_targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;t_initial_targets must be of type string_types or Iterable or None&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_duration_targets</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;t_duration_targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t_duration_targets</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_duration_targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;t_duration_targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_duration_targets</span>
+        <span class="k">elif</span> <span class="n">t_duration_targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;t_duration_targets must be of type string_types or Iterable or None&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_targets</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">declare_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rate_source</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an ODE state variable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the state variable as seen by the driver. This variable will</span>
+<span class="sd">            exist as an interface to the ODE.</span>
+<span class="sd">        rate_source : str</span>
+<span class="sd">            The path to the variable within the ODE which represents the derivative of</span>
+<span class="sd">            the state variable w.r.t. the variable of integration.</span>
+<span class="sd">        targets : string_types or Iterable or None</span>
+<span class="sd">            Paths to inputs in the ODE to which the incoming value of the state variable</span>
+<span class="sd">            needs to be connected.</span>
+<span class="sd">        shape : int or tuple or None</span>
+<span class="sd">            The shape of the variable to potentially be provided as a control.</span>
+<span class="sd">        units : str or None</span>
+<span class="sd">            Units of the variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_states</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;State </span><span class="si">{0}</span><span class="s1"> has already been declared.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_valid_var_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{0}</span><span class="s2">&#39; is not a valid OpenMDAO variable name.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="n">_ODEStateOptionsDictionary</span><span class="p">()</span>
+
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;rate_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rate_source</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="k">elif</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;targets must be of type string_types or Iterable or None&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">shape</span><span class="p">,)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;shape must be of type int or Iterable or None&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_targets</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_states</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span>
+
+    <span class="k">def</span> <span class="nf">declare_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Declare an input to the ODE.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the parameter.</span>
+<span class="sd">        targets : string_types or Iterable or None</span>
+<span class="sd">            Paths to inputs in the ODE to which the incoming value of the parameter</span>
+<span class="sd">            needs to be connected.</span>
+<span class="sd">        shape : int or tuple or None</span>
+<span class="sd">            Shape of the parameter.</span>
+<span class="sd">        units : str or None</span>
+<span class="sd">            Units of the parameter.</span>
+<span class="sd">        dynamic : bool</span>
+<span class="sd">            If True, the parameter has a different value at each time step (dynamic parameter);</span>
+<span class="sd">            otherwise, the parameter has the same value at all time steps (static parameter).</span>
+<span class="sd">            A dynamic parameter should have shape (num_nodes, ...) where ... is</span>
+<span class="sd">            defined by the shape argument.  Since the Jacobian shape differs depending on whether</span>
+<span class="sd">            or not it is dynamic, it is generally a good idea to declare parameters as dynamic</span>
+<span class="sd">            unless there is no chance that they will need to be used as dynamic controls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter </span><span class="si">{0}</span><span class="s1"> has already been declared.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_valid_var_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{0}</span><span class="s2">&#39; is not a valid OpenMDAO variable name.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="n">_ODEParameterOptionsDictionary</span><span class="p">()</span>
+
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="k">elif</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;targets must be of type string_types or Iterable or None&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">shape</span><span class="p">,)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;shape must be of type int or Iterable or None&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;dynamic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dynamic</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_targets</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Time Options:</span><span class="se">\n</span><span class="s1">    targets: </span><span class="si">{0}</span><span class="se">\n</span><span class="s1">    units: </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">],</span>
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_time_options</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_states</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">State Options:&#39;</span>
+
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_states</span><span class="p">):</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_states</span><span class="p">[</span><span class="n">state</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">    </span><span class="si">{name}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        rate_source: </span><span class="si">{rate_source}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        targets: </span><span class="si">{targets}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        shape: </span><span class="si">{shape}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        units: </span><span class="si">{units}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;rate_source&#39;</span><span class="p">],</span>
+                                                   <span class="n">targets</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">],</span>
+                                                   <span class="n">shape</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Parameter Options:&#39;</span>
+
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">):</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">    </span><span class="si">{name}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        targets: </span><span class="si">{targets}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        shape: </span><span class="si">{shape}</span><span class="s1">&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        dynamic: True&#39;</span> \
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        units: </span><span class="si">{units}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">param</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;targets&#39;</span><span class="p">],</span>
+                                                   <span class="n">shape</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="k">class</span> <span class="nc">_ForDocs</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is provided as a way to automatically display options dictionaries in the docs,</span>
+<span class="sd">    since these option dictionaries typically don&#39;t exist in instantiated form in the code base.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_options</span> <span class="o">=</span> <span class="n">_ODETimeOptionsDictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_options</span> <span class="o">=</span> <span class="n">_ODEStateOptionsDictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter_options</span> <span class="o">=</span> <span class="n">_ODEParameterOptionsDictionary</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Surrogate Module &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utilities Module" href="utils.html" />
+    <link rel="prev" title="Readers Module" href="reader.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analyzer.html">Analyzers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guess.html">Initial Guesses Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nlp.html">NLPs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="odes.html">ODEs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plots.html">Plots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reader.html">Readers Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Surrogate Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.surrogate.meta_models">OpenMDAO Meta Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.surrogate.surrogate_2d">SMT surrogate models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Surrogate Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="surrogate-module">
+<h1>Surrogate Module<a class="headerlink" href="#surrogate-module" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-rpfm.surrogate.meta_models">
+<span id="openmdao-meta-models"></span><h2>OpenMDAO Meta Models<a class="headerlink" href="#module-rpfm.surrogate.meta_models" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.MetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">MetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.MetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.MetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.MetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.MetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.MetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.MetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.MetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscConstMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscConstMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscConstMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscConstMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscConstMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscConstMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscConstMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscConstMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscConstMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscConstMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscConstMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVarMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscVarMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVarMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVarMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVarMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVarMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVarMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVarMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVarMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVarMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVarMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscVToffMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVToffMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVToffMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescConstMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescConstMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescConstMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescConstMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescConstMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescConstMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescConstMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescConstMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescConstMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescConstMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescConstMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVarMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescVarMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVarMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVarMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVarMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVarMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVarMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVarMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVarMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVarMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVarMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescVLandMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVLandMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVLandMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescTwoPhasesMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescTwoPhasesMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescTwoPhasesMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rpfm.surrogate.meta_models_llo2heo"></span><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEOMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.solve">
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rpfm.surrogate.surrogate_2d">
+<span id="smt-surrogate-models"></span><h2>SMT surrogate models<a class="headerlink" href="#module-rpfm.surrogate.surrogate_2d" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.SurrogateModel">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">SurrogateModel</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.SurrogateModel.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.SurrogateModel.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.SurrogateModel.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.SurrogateModel.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.SurrogateModel.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.SurrogateModel.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.SurrogateModel.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.SurrogateModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscConstSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVarSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscVToffSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVToffSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVToffSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescConstSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVarSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVLandSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVLandSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVLandSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVertSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVertSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.sampling">
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVertSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utilities Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="reader.html" class="btn btn-neutral float-left" title="Readers Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,5 +1,5 @@
-build
-dist
+/build
+/dist
 rpfossamiceli.egg-info
 *.pyc
 *.out

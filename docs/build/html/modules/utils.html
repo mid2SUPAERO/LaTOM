@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Utilities Module &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Surrogate Module" href="surrogate.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analyzer.html">Analyzers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guess.html">Initial Guesses Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nlp.html">NLPs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="odes.html">ODEs Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plots.html">Plots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reader.html">Readers Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="surrogate.html">Surrogate Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.utils.keplerian_orbit">Keplerian orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.utils.spacecraft">Spacecraft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.utils.coc">Change of Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.utils.pickle_utils">Pickle utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rpfm.utils.const">Constants</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Utilities Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="utilities-module">
+<h1>Utilities Module<a class="headerlink" href="#utilities-module" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-rpfm.utils.keplerian_orbit">
+<span id="keplerian-orbit"></span><h2>Keplerian orbit<a class="headerlink" href="#module-rpfm.utils.keplerian_orbit" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.utils.keplerian_orbit.TwoDimOrb">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.keplerian_orbit.</code><code class="sig-name descname">TwoDimOrb</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#TwoDimOrb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.TwoDimOrb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.TwoDimOrb.coe2polar">
+<em class="property">static </em><code class="sig-name descname">coe2polar</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">ta</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#TwoDimOrb.coe2polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.TwoDimOrb.coe2polar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.TwoDimOrb.polar2coe">
+<em class="property">static </em><code class="sig-name descname">polar2coe</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#TwoDimOrb.polar2coe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.TwoDimOrb.polar2coe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.TwoDimOrb.propagate">
+<em class="property">static </em><code class="sig-name descname">propagate</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">a</em>, <em class="sig-param">e</em>, <em class="sig-param">tai</em>, <em class="sig-param">taf</em>, <em class="sig-param">nb</em>, <em class="sig-param">tp=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#TwoDimOrb.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.TwoDimOrb.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.keplerian_orbit.</code><code class="sig-name descname">KepOrb</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">e</em>, <em class="sig-param">i</em>, <em class="sig-param">raan</em>, <em class="sig-param">w</em>, <em class="sig-param">ta</em>, <em class="sig-param">gm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>KepOrb defines a Keplerian Orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+<li><p><strong>ta</strong> (<em>float</em>) – True anomaly [rad]</p></li>
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>eps</strong> (<em>float</em>) – Smallest number such that <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">+</span> <span class="pre">eps</span> <span class="pre">!=</span> <span class="pre">1.0</span></code></p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>W</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+<li><p><strong>ta</strong> (<em>float</em>) – True anomaly [rad]</p></li>
+<li><p><strong>GM</strong> (<em>float</em><em>, </em><em>optional</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – Mean motion [rad/s]</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em>) – Position vector [m]</p></li>
+<li><p><strong>V</strong> (<em>ndarray</em>) – Velocity vector [m/s]</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Specific angular momentum vector [m^2/s]</p></li>
+<li><p><strong>E</strong> (<em>ndarray</em>) – Eccentricity vector [-]</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Specific angular momentum magnitude [m^2/s]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Position vector magnitude [m]</p></li>
+<li><p><strong>vr</strong> (<em>float</em>) – Radial velocity [m/s]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.set_state_vector">
+<code class="sig-name descname">set_state_vector</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.set_state_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.set_state_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the spacecraft state vector and compute the corresponding COE, H, E.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>ndarray</em>) – Position vector [m]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Velocity vector [m/s]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.set_classical_orbital_elements">
+<code class="sig-name descname">set_classical_orbital_elements</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">e</em>, <em class="sig-param">i</em>, <em class="sig-param">raan</em>, <em class="sig-param">w</em>, <em class="sig-param">ta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.set_classical_orbital_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.set_classical_orbital_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the spacecraft COE and compute the corresponding state vector, H, E.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [km]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+<li><p><strong>ta</strong> (<em>float</em>) – True anomaly [rad]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.set_true_anomaly">
+<code class="sig-name descname">set_true_anomaly</code><span class="sig-paren">(</span><em class="sig-param">ta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.set_true_anomaly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.set_true_anomaly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the spacecraft true anomaly and update the corresponding state vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ta</strong> (<em>float</em>) – True anomaly [rad]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_mean_motion">
+<code class="sig-name descname">compute_mean_motion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_mean_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_mean_motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the spacecraft mean motion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_angular_momentum">
+<code class="sig-name descname">compute_angular_momentum</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_angular_momentum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_angular_momentum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the specific angular momentum vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_eccentricity">
+<code class="sig-name descname">compute_eccentricity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_eccentricity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_eccentricity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the spacecraft eccentricity vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_classical_orbital_elements">
+<code class="sig-name descname">compute_classical_orbital_elements</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_classical_orbital_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_classical_orbital_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the spacecraft classical orbital elements, specific angular momentum vector and eccentricity vector
+from its state vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_state_vector">
+<code class="sig-name descname">compute_state_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_state_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_state_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the spacecraft state vector, specific angular momentum vector and eccentricity vector
+from its COE.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_eccentric_anomaly">
+<code class="sig-name descname">compute_eccentric_anomaly</code><span class="sig-paren">(</span><em class="sig-param">ta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_eccentric_anomaly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_eccentric_anomaly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the eccentric anomaly from a given true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ta</strong> (<em>float</em>) – True anomaly [rad]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ea</strong> – Eccentric anomaly [rad]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_true_anomaly">
+<code class="sig-name descname">compute_true_anomaly</code><span class="sig-paren">(</span><em class="sig-param">ea</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_true_anomaly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_true_anomaly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the true anomaly from a given eccentric anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ea</strong> (<em>float</em>) – Eccentric anomaly [rad]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ta</strong> – True anomaly [rad]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.compute_periapsis_passage">
+<code class="sig-name descname">compute_periapsis_passage</code><span class="sig-paren">(</span><em class="sig-param">ta</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.compute_periapsis_passage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.compute_periapsis_passage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time at periapsis passage given the current time and true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>float</em>) – Time [s]</p></li>
+<li><p><strong>ta</strong> (<em>float</em>) – True anomaly [rad]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>tp</strong> – Time at periapsis passage [s]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.propagate">
+<code class="sig-name descname">propagate</code><span class="sig-paren">(</span><em class="sig-param">ta</em>, <em class="sig-param">t_vec</em>, <em class="sig-param">mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Propagate the orbit forward or backward in time solving the Kepler’s time of flight equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ta</strong> (<em>float</em>) – Initial true anomaly [rad]</p></li>
+<li><p><strong>t_vec</strong> (<em>ndarray</em>) – Time vector [s]</p></li>
+<li><p><strong>mode</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">fwd</span></code> for forward propagation or <code class="docutils literal notranslate"><span class="pre">back</span></code> for backward propagation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r_vec</strong> (<em>ndarray</em>) – Position vector time series [m]</p></li>
+<li><p><strong>v_vec</strong> (<em>ndarray</em>) – Velocity vector time series [m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.utils.keplerian_orbit.KepOrb.kepler_eqn">
+<em class="property">static </em><code class="sig-name descname">kepler_eqn</code><span class="sig-paren">(</span><em class="sig-param">ea</em>, <em class="sig-param">e</em>, <em class="sig-param">n</em>, <em class="sig-param">t</em>, <em class="sig-param">tp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#KepOrb.kepler_eqn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.keplerian_orbit.KepOrb.kepler_eqn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kepler’s Time of Flight equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ea</strong> (<em>float</em>) – Eccentric anomaly [rad]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – Mean motion [rad/s]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – Time [s]</p></li>
+<li><p><strong>tp</strong> (<em>float</em>) – Time at periapsis passage [s]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rpfm.utils.spacecraft">
+<span id="spacecraft"></span><h2>Spacecraft<a class="headerlink" href="#module-rpfm.utils.spacecraft" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.utils.spacecraft.Spacecraft">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.spacecraft.</code><code class="sig-name descname">Spacecraft</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em>, <em class="sig-param">throttle_min=0.0</em>, <em class="sig-param">m0=1.0</em>, <em class="sig-param">m_dry=None</em>, <em class="sig-param">g=9.80665</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/spacecraft.html#Spacecraft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.spacecraft.Spacecraft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Spacecraft class defines the spacecraft characteristics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em>) – Thrust over initial weight ratio [-]</p></li>
+<li><p><strong>throttle_min</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum throttle level [-]. Default is 0.0</p></li>
+<li><p><strong>m0</strong> (<em>float</em><em>, </em><em>optional</em>) – Initial mass [kg]. Default is 1.0</p></li>
+<li><p><strong>m_dry</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Dry mass [kg]. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> for which <cite>m_dry</cite> is set equal to <code class="docutils literal notranslate"><span class="pre">m0/100</span></code></p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) – Central body surface gravity [m/s^2]. Default is <cite>g0</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Isp</strong> (<em>float</em>) – Specific impulse [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em>) – Thrust over initial weight ratio [-]</p></li>
+<li><p><strong>m0</strong> (<em>float</em>) – Initial mass [kg]</p></li>
+<li><p><strong>m_dry</strong> (<em>float</em>) – Dry mass [kg]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Exhaust velocity [m/s]</p></li>
+<li><p><strong>T_max</strong> (<em>float</em>) – Maximum thrust [N]</p></li>
+<li><p><strong>T_min</strong> (<em>float</em>) – Minimum thrust [N]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rpfm.utils.coc">
+<span id="change-of-coordinates"></span><h2>Change of Coordinates<a class="headerlink" href="#module-rpfm.utils.coc" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="function">
+<dt id="rpfm.utils.coc.rot1">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">rot1</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#rot1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.rot1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elementary rotation matrix around X axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – Rotation angle [rad]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>r</strong> – 3x3 rotation matrix around X axis</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.rot3">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">rot3</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#rot3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.rot3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elementary rotation matrix around Z axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – Rotation angle [rad]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>r</strong> – 3x3 rotation matrix around Z axis</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.eq2per">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">eq2per</code><span class="sig-paren">(</span><em class="sig-param">raan</em>, <em class="sig-param">i</em>, <em class="sig-param">w</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#eq2per"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.eq2per" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotation matrix from inertial, body-centred equatorial reference frame to perifocal reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>q</strong> – 3x3 rotation matrix from equatorial to perifocal reference frames</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.per2eq">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">per2eq</code><span class="sig-paren">(</span><em class="sig-param">raan</em>, <em class="sig-param">i</em>, <em class="sig-param">w</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#per2eq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.per2eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotation matrix from perifocal reference frame to inertial, body-centred equatorial reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>q</strong> – 3x3 rotation matrix from perifocal to equatorial reference frames</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.coe2sv_vec">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">coe2sv_vec</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">e</em>, <em class="sig-param">i</em>, <em class="sig-param">raan</em>, <em class="sig-param">w</em>, <em class="sig-param">ta</em>, <em class="sig-param">gm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#coe2sv_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.coe2sv_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change of Coordinates from Classical Orbital Elements to State Vector in body-centred inertial reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+<li><p><strong>ta</strong> (<em>ndarray</em>) – True anomalies [rad]</p></li>
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r_vec</strong> (<em>ndarray</em>) – Position vector [m]</p></li>
+<li><p><strong>v_vec</strong> (<em>ndarray</em>) – Velocity vector [m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.polar2per_vec">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">polar2per_vec</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">theta</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#polar2per_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.polar2per_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from polar coordinates to perifocal reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>ndarray</em>) – Radius time series [m]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle time series [rad]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity time series [m/s]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity time series [m/s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>xp</strong> (<em>ndarray</em>) – Position along x axis [m]</p></li>
+<li><p><strong>yp</strong> (<em>ndarray</em>) – Position along y axis [m]</p></li>
+<li><p><strong>vxp</strong> (<em>ndarray</em>) – Velocity component along x axis [m/s]</p></li>
+<li><p><strong>vyp</strong> (<em>ndarray</em>) – Velocity component along y axis [m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.per2eq_vec">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">per2eq_vec</code><span class="sig-paren">(</span><em class="sig-param">xp</em>, <em class="sig-param">yp</em>, <em class="sig-param">vxp</em>, <em class="sig-param">vyp</em>, <em class="sig-param">raan</em>, <em class="sig-param">i</em>, <em class="sig-param">w</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#per2eq_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.per2eq_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from perifocal reference frame to inertial, body-centred equatorial reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xp</strong> (<em>ndarray</em>) – Position along x axis [m]</p></li>
+<li><p><strong>yp</strong> (<em>ndarray</em>) – Position along y axis [m]</p></li>
+<li><p><strong>vxp</strong> (<em>ndarray</em>) – Velocity component along x axis [m/s]</p></li>
+<li><p><strong>vyp</strong> (<em>ndarray</em>) – Velocity component along y axis [m/s]</p></li>
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r_vec</strong> (<em>ndarray</em>) – Position vector [m]</p></li>
+<li><p><strong>v_vec</strong> (<em>ndarray</em>) – Velocity vector [m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.polar2eq_vec">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">polar2eq_vec</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">theta</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em>, <em class="sig-param">raan</em>, <em class="sig-param">i</em>, <em class="sig-param">w</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#polar2eq_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.polar2eq_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from polar coordinates to inertial, body-centred equatorial reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>nd array</em>) – Radius time series [m]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle time series [rad]</p></li>
+<li><p><strong>u</strong> (<em>nd array</em>) – Radial velocity time series [m/s]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity time series [m/s]</p></li>
+<li><p><strong>raan</strong> (<em>float</em>) – Right Ascension of the Ascending Node [rad]</p></li>
+<li><p><strong>i</strong> (<em>float</em>) – Inclination [rad]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Argument of Periapsis [rad]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r_vec</strong> (<em>ndarray</em>) – Position vector [m]</p></li>
+<li><p><strong>v_vec</strong> (<em>ndarray</em>) – Velocity vector [m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.coc.lat_long2cartesian">
+<code class="sig-prename descclassname">rpfm.utils.coc.</code><code class="sig-name descname">lat_long2cartesian</code><span class="sig-paren">(</span><em class="sig-param">lat</em>, <em class="sig-param">long</em>, <em class="sig-param">r</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/coc.html#lat_long2cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.coc.lat_long2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from latitude, longitude to cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat</strong> (<em>float</em>) – Latitude [deg]</p></li>
+<li><p><strong>long</strong> (<em>float</em>) – Longitude [deg]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Planet radius [m]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rpfm.utils.pickle_utils">
+<span id="pickle-utilities"></span><h2>Pickle utilities<a class="headerlink" href="#module-rpfm.utils.pickle_utils" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="function">
+<dt id="rpfm.utils.pickle_utils.save">
+<code class="sig-prename descclassname">rpfm.utils.pickle_utils.</code><code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/pickle_utils.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.pickle_utils.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rpfm.utils.pickle_utils.load">
+<code class="sig-prename descclassname">rpfm.utils.pickle_utils.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/pickle_utils.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.pickle_utils.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-rpfm.utils.const">
+<span id="constants"></span><h2>Constants<a class="headerlink" href="#module-rpfm.utils.const" title="Permalink to this headline">¶</a></h2>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p>Defines useful constants</p>
+<span class="target" id="module-rpfm.utils.cr3bp"></span><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.utils.cr3bp.Cr3bpEM">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.cr3bp.</code><code class="sig-name descname">Cr3bpEM</code><a class="reference internal" href="../_modules/rpfm/utils/cr3bp.html#Cr3bpEM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.cr3bp.Cr3bpEM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<span class="target" id="module-rpfm.utils.primary"></span><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt id="rpfm.utils.primary.Primary">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.primary.</code><code class="sig-name descname">Primary</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">gm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/primary.html#Primary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.primary.Primary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Primary class defines the characteristic quantities for a given primary body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>R</strong> (<em>float</em>) – Radius [m]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>g</strong> (<em>float</em>) – Surface gravity [m/s]</p></li>
+<li><p><strong>tc</strong> (<em>float</em>) – Characteristic time [s]</p></li>
+<li><p><strong>vc</strong> (<em>float</em>) – Characteristic speed [m/s]</p></li>
+<li><p><strong>T_circ</strong> (<em>float</em>) – Orbital period in a circular orbit with radius equal to <cite>R</cite> [s]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.utils.primary.Moon">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.primary.</code><code class="sig-name descname">Moon</code><a class="reference internal" href="../_modules/rpfm/utils/primary.html#Moon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.utils.primary.Moon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.utils.primary.Primary</span></code></a></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="surrogate.html" class="btn btn-neutral float-left" title="Surrogate Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
