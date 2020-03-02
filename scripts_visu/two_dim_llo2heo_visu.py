@@ -9,7 +9,7 @@ from rpfm.utils.primary import Moon
 
 moon = Moon()
 
-path = '/home/alberto/Documents/RpResults/'
+path = '/home/alberto/Documents/ResultsRP/'
 db = path + 's7/llo2heo_ipopt1200.pkl'
 db_exp = path + 's7/llo2heo_ipopt1200_exp.pkl'
 

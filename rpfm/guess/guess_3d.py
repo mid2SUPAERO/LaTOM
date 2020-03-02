@@ -23,7 +23,6 @@ class ThreeDimAscGuess(TwoDimLLOGuess):
         self.controls = np.hstack(self.TwoDimAscGuess.controls[0], self.u)
 
 
-
 class ThreeDimDescGuess(TwoDimLLOGuess):
 
     def __init__(self, gm, r, alt, sc, raan, i, w):

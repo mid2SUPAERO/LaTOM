@@ -4,8 +4,8 @@
 """
 
 import numpy as np
-from scipy.optimize import root
 
+from scipy.optimize import root
 from rpfm.utils.coc import per2eq, coe2sv_vec
 
 
@@ -66,6 +66,11 @@ class TwoDimOrb:
 
         self.h = (gm * self.a * (1 - self.e ** 2)) ** 0.5
         self.n = (gm / self.a ** 3) ** 0.5
+
+        self.E = - gm / 2 / self.a  # specific energy in 2BP [m^2/s^2]
+
+        # cr3bp = Cr3bpEM()
+        # self.J = 3 - cr3bp.mu*(1 + cr3bp.mu) - 2*self.E*cr3bp.T**2/cr3bp.L**2  # Jacobi constant approximation
 
     @staticmethod
     def coe2polar(gm, ta, **kwargs):
@@ -512,8 +517,16 @@ class KepOrb:
 
 if __name__ == '__main__':
 
-    gme = 398600e9
-    re = 6378.14e3
+    from rpfm.utils.primary import Moon
+    from rpfm.utils.cr3bp import Cr3bpEM
 
-    o = TwoDimOrb(gme, rp=200e3, T=86164)
+    moon = Moon()
+    cr3bp = Cr3bpEM()
+    J = 3.049
+
+    gm_adim = moon.GM*cr3bp.T**2/cr3bp.L**3
+    a_adim = gm_adim/(J - 3 + cr3bp.mu*(1 + cr3bp.mu))
+    a_km = a_adim*cr3bp.L/1000
+
+    o = TwoDimOrb(moon.GM, rp=3150e3, ra=65227.39e3)
     print(o)

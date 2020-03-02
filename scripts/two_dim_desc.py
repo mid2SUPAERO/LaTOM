@@ -17,29 +17,29 @@ alt = 100e3  # initial orbit altitude [m]
 alt_p = 15e3  # periselene altitude [m]
 theta = np.pi/2  # guessed spawn angle [rad]
 tof = 1000  # guessed time of flight [s]
-t_bounds = None  # time of flight bounds [-]
+t_bounds = (0., 2.)  # time of flight bounds [-]
 alt_safe = 5e3  # minimum safe altitude [m]
 slope = -10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 375.54  # specific impulse [s]
-twr = 3.18  # initial thrust/weight ratio [-]
+isp = 500.  # specific impulse [s]
+twr = 1.1  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 300
+segments = 200
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
               'Minor feasibility tolerance': 1e-8}
 
 # additional settings
-u_bound = 'upper'  # upper bound on radial velocity
+u_bound = None  # upper bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
-exp_sim = True  # perform explicit simulation
+exp_sim = False  # perform explicit simulation
 rec = False  # record the solution
 
 # record databases
@@ -61,7 +61,8 @@ else:
 
 if run_driver:
 
-    tr.run_driver()
+    f = tr.run_driver()
+    print('Failure: ' + str(f))
 
     if exp_sim:
         tr.nlp.exp_sim()

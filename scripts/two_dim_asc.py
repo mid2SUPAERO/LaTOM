@@ -21,13 +21,13 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = 10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
-twr = 2.1  # initial thrust/weight ratio [-]
+isp = 375.  # specific impulse [s]
+twr = 1.1  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
-method = 'radau-ps'
+method = 'gauss-lobatto'
 segments = 200
 order = 3
 solver = 'SNOPT'

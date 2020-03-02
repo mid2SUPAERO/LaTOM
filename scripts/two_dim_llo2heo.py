@@ -19,17 +19,17 @@ heo_rp = 3150e3  # target HEO periselene radius [m]
 heo_period = 6.5655*86400  # target HEO period [s]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
-twr = 2.1  # initial thrust/weight ratio [-]
+isp = 375.  # specific impulse [s]
+twr = 2.55  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 200
+segments = 20
 order = 3
 solver = 'SNOPT'
-snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
-              'Minor feasibility tolerance': 1e-12}
+snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
+              'Minor feasibility tolerance': 1e-8}
 
 # additional settings
 run_driver = True  # solve the NLP
@@ -54,7 +54,7 @@ elif kind == '3p':
     t_bounds = ((0.2, 1.8), (0.2, 1.8), (0.2, 1.8))
 
     tr = TwoDim3PhasesLLO2HEOAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, t_bounds, method, segments, order, solver,
-                                      snopt_opts=snopt_opts, check_partials=False, rec_file='llo2heo.pkl')
+                                      snopt_opts=snopt_opts, check_partials=False)
 else:
     raise ValueError('Kind must be either full, first, 2p, 3p')
 
