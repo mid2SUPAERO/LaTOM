@@ -49,7 +49,7 @@ Refer to [install.md](resources/install.md) for the installation instructions
 
 ## Documantation
 
-Refer to [docs](docs/build/html/index.html) for the package documentation
+Refer to [https://mid2supaero.github.io/RpFossaMiceli/](https://mid2supaero.github.io/RpFossaMiceli/) for the package documentation
 
 ## References
 
