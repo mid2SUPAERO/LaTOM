@@ -18,7 +18,7 @@ The optimization can be performed in the following cases:
   - constant thrust and constrained vertical take-off
   - variable thrust
   - variable thrust and constrained minimum safe altitude
-  
+
 2. two-dimensional descent trajectories:
   - constant thrust
   - constant thrust and constrained vertical landing
@@ -32,7 +32,7 @@ The optimization can be performed in the following cases:
 
 There are two ways for running a simulation and display the results:
 
-* perform a new optimiation to obtain your own solution starting from custom values for the different trajectory parameters (multiple examples are already included)
+* perform a new optimization to obtain your own solution starting from custom values for the different trajectory parameters (multiple examples are already included)
 
 * load a structure stored in one of the three *data* directories that contains the results already obtained for an optimal transfer trajectory and simply display those results
 
@@ -46,6 +46,10 @@ In either case do the following:
 ## Installation
 
 Refer to [install.md](resources/install.md) for the installation instructions
+
+## Documantation
+
+Refer to [docs](docs/build/html/index.html) for the package documentation
 
 ## References
 
