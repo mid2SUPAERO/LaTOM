@@ -44,7 +44,7 @@ class TwoDimNLP(SinglePhaseNLP):
     ph_name : str
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None
@@ -253,7 +253,7 @@ class TwoDimConstNLP(TwoDimNLP):
     ph_name : str
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None
@@ -332,7 +332,7 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
     ph_name : str
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None
@@ -392,7 +392,7 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
     ph_name : str
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None
@@ -456,7 +456,7 @@ class TwoDimVarNLP(TwoDimNLP):
     guess : TwoDimGuess
         Initial guess for the NLP solution
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None
@@ -540,7 +540,7 @@ class TwoDimAscVarNLP(TwoDimVarNLP):
     ph_name : str
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None
@@ -593,7 +593,7 @@ class TwoDimDescVarNLP(TwoDimVarNLP):
     ph_name : str
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None

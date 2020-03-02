@@ -1,15 +1,28 @@
-Initial Guesses Module
-======================
+Initial Guesses Subpackage
+==========================
 
 .. toctree::
 
-Two dimensional
----------------
+Inheritance Diagram
+-------------------
+
+.. inheritance-diagram:: rpfm.guess.guess_2d rpfm.guess.guess_heo_2d rpfm.guess.guess_3d
+  :parts: 1
+
+Modules List
+------------
+
+.. autopackagesummary:: rpfm.guess
+  :toctree: _autosummary
+
+Documentation
+-------------
 
 .. automodule:: rpfm.guess.guess_2d
-.. automodule:: rpfm.guess.guess_heo_2d
+  :noindex:
 
-Three dimensional
------------------
+.. automodule:: rpfm.guess.guess_heo_2d
+  :noindex:
 
 .. automodule:: rpfm.guess.guess_3d
+  :noindex:

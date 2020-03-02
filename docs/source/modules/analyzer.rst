@@ -1,17 +1,31 @@
-Analyzers Module
-================
+Analyzers Subpackage
+====================
 
 .. toctree::
 
-.. automodule:: rpfm.analyzer.analyzer
+Inheritance Diagram
+-------------------
 
-Two dimensional transfers
--------------------------
+.. inheritance-diagram:: rpfm.analyzer.analyzer rpfm.analyzer.analyzer_2d rpfm.analyzer.analyzer_heo_2d rpfm.analyzer.analyzer_3d
+  :parts: 1
+
+Modules List
+------------
+
+.. autopackagesummary:: rpfm.analyzer
+  :toctree: _autosummary
+
+Documentation
+-------------
+
+.. automodule:: rpfm.analyzer.analyzer
+  :noindex:
 
 .. automodule:: rpfm.analyzer.analyzer_2d
-.. automodule:: rpfm.analyzer.analyzer_heo_2d
+  :noindex:
 
-Three dimensional transfers
----------------------------
+.. automodule:: rpfm.analyzer.analyzer_heo_2d
+  :noindex:
 
 .. automodule:: rpfm.analyzer.analyzer_3d
+  :noindex:

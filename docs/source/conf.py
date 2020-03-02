@@ -30,18 +30,25 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.autosummary',
-              'sphinx.ext.doctest',
-              'sphinx.ext.coverage',
+extensions = ['sphinx.ext.autosummary',
+              'sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',
               'sphinx.ext.graphviz',
               'sphinx.ext.inheritance_diagram',
+              'sphinx_autopackagesummary',
               'sphinx_rtd_theme',
               'recommonmark',
               'sphinx_markdown_tables'
 ]
+
+# Numpy settings
+numpydoc_show_class_members = False
+
+# Autosummary settings
+automodsumm_inherited_members = True
+autosummary_generate = True
+autosummary_imported_members = True
 
 # Autodoc settings
 autodoc_inherit_docstrings = True
@@ -53,7 +60,6 @@ autodoc_default_options = {
     'undoc-members': True,
     'exclude-members': '__str__'
 }
-
 
 source_suffix = ['.rst', '.md']
 
@@ -86,7 +92,6 @@ exclude_patterns = []
 #
 
 html_theme = 'sphinx_rtd_theme'
-# html_theme = 'sphinxdoc'
 html_show_sourcelink = False
 
 # Add any paths that contain custom static files (such as style sheets) here,

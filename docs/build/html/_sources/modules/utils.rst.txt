@@ -1,31 +1,31 @@
-Utilities Module
-================
+Utilities Subpackage
+====================
 
 .. toctree::
 
-Keplerian orbit
----------------
+.. autopackagesummary:: rpfm.utils
+  :toctree: _autosummary
+
+Documentation
+-------------
 
 .. automodule:: rpfm.utils.keplerian_orbit
-
-Spacecraft
-----------
+  :noindex:
 
 .. automodule:: rpfm.utils.spacecraft
-
-Change of Coordinates
----------------------
+  :noindex:
 
 .. automodule:: rpfm.utils.coc
-
-Pickle utilities
-----------------
+  :noindex:
 
 .. automodule:: rpfm.utils.pickle_utils
-
-Constants
----------
+  :noindex:
 
 .. automodule:: rpfm.utils.const
+  :noindex:
+
 .. automodule:: rpfm.utils.cr3bp
+  :noindex:
+
 .. automodule:: rpfm.utils.primary
+  :noindex:

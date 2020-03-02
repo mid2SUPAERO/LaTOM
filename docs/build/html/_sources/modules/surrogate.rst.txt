@@ -1,15 +1,28 @@
-Surrogate Module
-================
+Surrogate Subpackage
+====================
 
 .. toctree::
 
-OpenMDAO Meta Models
---------------------
+Inheritance Diagram
+-------------------
+
+.. inheritance-diagram:: rpfm.surrogate.meta_models rpfm.surrogate.meta_models_llo2heo rpfm.surrogate.surrogate_2d
+  :parts: 1
+
+Modules List
+------------
+
+.. autopackagesummary:: rpfm.surrogate
+  :toctree: _autosummary
+
+Documentation
+-------------
 
 .. automodule:: rpfm.surrogate.meta_models
-.. automodule:: rpfm.surrogate.meta_models_llo2heo
+  :noindex:
 
-SMT surrogate models
---------------------
+.. automodule:: rpfm.surrogate.meta_models_llo2heo
+  :noindex:
 
 .. automodule:: rpfm.surrogate.surrogate_2d
+  :noindex:

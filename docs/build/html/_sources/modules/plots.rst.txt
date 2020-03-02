@@ -1,24 +1,25 @@
-Plots Module
-============
+Plots Subpackage
+================
 
 .. toctree::
 
-Timeseries
-----------
-
-.. automodule:: rpfm.plots.timeseries
-
-Trajectories
+Modules List
 ------------
 
-.. automodule:: rpfm.plots.trajectories
+.. autopackagesummary:: rpfm.plots
+  :toctree: _autosummary
 
-NLP solutions
+Documentation
 -------------
 
-.. automodule:: rpfm.plots.solutions
+.. automodule:: rpfm.plots.timeseries
+  :noindex:
 
-Response surfaces
------------------
+.. automodule:: rpfm.plots.trajectories
+  :noindex:
+
+.. automodule:: rpfm.plots.solutions
+  :noindex:
 
 .. automodule:: rpfm.plots.response_surfaces
+  :noindex:

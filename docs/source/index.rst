@@ -8,6 +8,7 @@ Welcome to Trajectory Optimization for Reusable Lunar Lander's documentation!
 
 .. toctree::
    :caption: Contents:
+   :maxdepth: 1
 
    modules/analyzer
    modules/data
