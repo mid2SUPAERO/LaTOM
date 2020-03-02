@@ -1,0 +1,597 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rpfm.nlp.nlp_heo_2d &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ODEs Subpackage" href="../odes.html" />
+    <link rel="prev" title="rpfm.nlp.nlp_3d" href="rpfm.nlp.nlp_3d.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../nlp.html">NLPs Subpackage</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nlp.html#inheritance-diagram">Inheritance Diagram</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../nlp.html#modules-list">Modules List</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rpfm.nlp.nlp.html">rpfm.nlp.nlp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rpfm.nlp.nlp_2d.html">rpfm.nlp.nlp_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rpfm.nlp.nlp_3d.html">rpfm.nlp.nlp_3d</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rpfm.nlp.nlp_heo_2d</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../nlp.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../nlp.html">NLPs Subpackage</a> &raquo;</li>
+        
+      <li>rpfm.nlp.nlp_heo_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rpfm.nlp.nlp_heo_2d">
+<span id="rpfm-nlp-nlp-heo-2d"></span><h1>rpfm.nlp.nlp_heo_2d<a class="headerlink" href="#module-rpfm.nlp.nlp_heo_2d" title="Permalink to this headline">¶</a></h1>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim2PhasesLLO2HEONLP</span></code></a>(body, sc, alt, rp, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEONLP</span></code></a>(body, sc, alt, rp, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2ApoNLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEONLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2HEONLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em>, <em class="sig-param">fix_final=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2HEONLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp_2d.html#rpfm.nlp.nlp_2d.TwoDimVarNLP" title="rpfm.nlp.nlp_2d.TwoDimVarNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimVarNLP</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options">
+<code class="sig-name descname">set_states_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2HEONLP.set_states_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set options on the state variables of the NLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Reference value for spawn angle [rad]</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.exp_sim">
+<code class="sig-name descname">exp_sim</code><span class="sig-paren">(</span><em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.exp_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly simulate the implicitly obtained optimal solution using Scipy <cite>solve_ivp</cite> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_controls_options">
+<code class="sig-name descname">set_controls_options</code><span class="sig-paren">(</span><em class="sig-param">throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_controls_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set options on control variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_initial_guess">
+<code class="sig-name descname">set_initial_guess</code><span class="sig-paren">(</span><em class="sig-param">check_partials=False</em>, <em class="sig-param">fix_final=False</em>, <em class="sig-param">throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_initial_guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial guess for the iterative solution of the NLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_initial_guess_interpolation">
+<code class="sig-name descname">set_initial_guess_interpolation</code><span class="sig-paren">(</span><em class="sig-param">bcs=array([[1., 1.],        [1., 1.],        [1., 1.],        [1., 1.],        [1., 1.],        [1., 1.],        [1., 1.]]), check_partials=False, throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_initial_guess_interpolation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial guess for the solution of the NLP interpolating the Boundary Conditions (BCs) imposed on the
+state and control variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bcs</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – Boundary Conditions on state and control variables. Default is all ones</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_objective">
+<code class="sig-name descname">set_objective</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_objective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the NLP objective as the minimization of the opposite of the final spacecraft mass.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_options">
+<code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set options on state and control variables, time and objective function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_time_guess">
+<code class="sig-name descname">set_time_guess</code><span class="sig-paren">(</span><em class="sig-param">tof</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_time_guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time grid on the phase to retrieve the time instants corresponding to states, controls and all
+discretization nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_time_options">
+<code class="sig-name descname">set_time_options</code><span class="sig-paren">(</span><em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_time_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time options on the phase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the Jacobian type, linear solver and derivatives type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2ApoNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp_2d.html#rpfm.nlp.nlp_2d.TwoDimNLP" title="rpfm.nlp.nlp_2d.TwoDimNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimNLP</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.exp_sim">
+<code class="sig-name descname">exp_sim</code><span class="sig-paren">(</span><em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.exp_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly simulate the implicitly obtained optimal solution using Scipy <cite>solve_ivp</cite> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_controls_options">
+<code class="sig-name descname">set_controls_options</code><span class="sig-paren">(</span><em class="sig-param">throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_controls_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set options on control variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess">
+<code class="sig-name descname">set_initial_guess</code><span class="sig-paren">(</span><em class="sig-param">check_partials=False</em>, <em class="sig-param">fix_final=False</em>, <em class="sig-param">throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial guess for the iterative solution of the NLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess_interpolation">
+<code class="sig-name descname">set_initial_guess_interpolation</code><span class="sig-paren">(</span><em class="sig-param">bcs=array([[1., 1.],        [1., 1.],        [1., 1.],        [1., 1.],        [1., 1.],        [1., 1.],        [1., 1.]]), check_partials=False, throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess_interpolation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial guess for the solution of the NLP interpolating the Boundary Conditions (BCs) imposed on the
+state and control variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bcs</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – Boundary Conditions on state and control variables. Default is all ones</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_objective">
+<code class="sig-name descname">set_objective</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_objective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the NLP objective as the minimization of the opposite of the final spacecraft mass.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_states_options">
+<code class="sig-name descname">set_states_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_states_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set options on the state variables of the NLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Reference value for spawn angle [rad]</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_time_guess">
+<code class="sig-name descname">set_time_guess</code><span class="sig-paren">(</span><em class="sig-param">tof</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_time_guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time grid on the phase to retrieve the time instants corresponding to states, controls and all
+discretization nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_time_options">
+<code class="sig-name descname">set_time_options</code><span class="sig-paren">(</span><em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_time_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time options on the phase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the Jacobian type, linear solver and derivatives type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDim2PhasesLLO2HEONLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDim2PhasesLLO2HEONLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp.html#rpfm.nlp.nlp.MultiPhaseNLP" title="rpfm.nlp.nlp.MultiPhaseNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp.MultiPhaseNLP</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.set_initial_guess_phase">
+<code class="sig-name descname">set_initial_guess_phase</code><span class="sig-paren">(</span><em class="sig-param">state_nodes</em>, <em class="sig-param">control_nodes</em>, <em class="sig-param">guess</em>, <em class="sig-param">phase_name</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDim2PhasesLLO2HEONLP.set_initial_guess_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.set_initial_guess_phase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.exp_sim">
+<code class="sig-name descname">exp_sim</code><span class="sig-paren">(</span><em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.exp_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly simulate the implicitly obtained optimal solution using Scipy <cite>solve_ivp</cite> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.set_time_phase">
+<code class="sig-name descname">set_time_phase</code><span class="sig-paren">(</span><em class="sig-param">ti</em>, <em class="sig-param">tof</em>, <em class="sig-param">phase</em>, <em class="sig-param">phase_name</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.set_time_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time grid within one phase to retrieve the time instants corresponding to the state, control and
+all discretization nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ti</strong> (<em>float</em>) – Initial time [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight (TOF) [-]</p></li>
+<li><p><strong>phase</strong> (<em>Phase</em>) – Current phase</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Current phase name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>state_nodes</strong> (<em>ndarray</em>) – Indexes corresponding to the state discretization nodes</p></li>
+<li><p><strong>control_nodes</strong> (<em>ndarray</em>) – Indexes corresponding to the control discretization nodes</p></li>
+<li><p><strong>t_state</strong> (<em>ndarray</em>) – Time instants on the state discretization nodes [-]</p></li>
+<li><p><strong>t_control</strong> (<em>ndarray</em>) – Time instants on the control discretization nodes [-]</p></li>
+<li><p><strong>t_all</strong> (<em>ndarray</em>) – Time instants on all discretization nodes [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the Jacobian type, linear solver and derivatives type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEONLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDim3PhasesLLO2HEONLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp.html#rpfm.nlp.nlp.MultiPhaseNLP" title="rpfm.nlp.nlp.MultiPhaseNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp.MultiPhaseNLP</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase">
+<code class="sig-name descname">set_initial_guess_phase</code><span class="sig-paren">(</span><em class="sig-param">state_nodes</em>, <em class="sig-param">control_nodes</em>, <em class="sig-param">phase_name</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.exp_sim">
+<code class="sig-name descname">exp_sim</code><span class="sig-paren">(</span><em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.exp_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly simulate the implicitly obtained optimal solution using Scipy <cite>solve_ivp</cite> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_time_phase">
+<code class="sig-name descname">set_time_phase</code><span class="sig-paren">(</span><em class="sig-param">ti</em>, <em class="sig-param">tof</em>, <em class="sig-param">phase</em>, <em class="sig-param">phase_name</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_time_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time grid within one phase to retrieve the time instants corresponding to the state, control and
+all discretization nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ti</strong> (<em>float</em>) – Initial time [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight (TOF) [-]</p></li>
+<li><p><strong>phase</strong> (<em>Phase</em>) – Current phase</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Current phase name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>state_nodes</strong> (<em>ndarray</em>) – Indexes corresponding to the state discretization nodes</p></li>
+<li><p><strong>control_nodes</strong> (<em>ndarray</em>) – Indexes corresponding to the control discretization nodes</p></li>
+<li><p><strong>t_state</strong> (<em>ndarray</em>) – Time instants on the state discretization nodes [-]</p></li>
+<li><p><strong>t_control</strong> (<em>ndarray</em>) – Time instants on the control discretization nodes [-]</p></li>
+<li><p><strong>t_all</strong> (<em>ndarray</em>) – Time instants on all discretization nodes [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the Jacobian type, linear solver and derivatives type.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../odes.html" class="btn btn-neutral float-right" title="ODEs Subpackage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rpfm.nlp.nlp_3d.html" class="btn btn-neutral float-left" title="rpfm.nlp.nlp_3d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rpfm.plots.solutions &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">Utilities Subpackage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>rpfm.plots.solutions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rpfm.plots.solutions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@authors: Alberto FOSSA&#39; Giuliana Elena MICELI</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">rpfm.plots.timeseries</span> <span class="kn">import</span> <span class="n">TwoDimStatesTimeSeries</span><span class="p">,</span> <span class="n">TwoDimControlsTimeSeries</span>
+<span class="kn">from</span> <span class="nn">rpfm.plots.trajectories</span> <span class="kn">import</span> <span class="n">TwoDimAltProfile</span><span class="p">,</span> <span class="n">TwoDimSurface2LLO</span><span class="p">,</span> <span class="n">TwoDimLLO2NRHO</span>
+
+
+<div class="viewcode-block" id="TwoDimSolPlot"><a class="viewcode-back" href="../../../modules/plots.html#rpfm.plots.solutions.TwoDimSolPlot">[docs]</a><span class="k">class</span> <span class="nc">TwoDimSolPlot</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r_safe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ascent&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">time_exp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">states_exp</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_safe</span> <span class="o">=</span> <span class="n">r_safe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+
+        <span class="k">if</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">thrust</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">thrust</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ascent&#39;</span><span class="p">,</span> <span class="s1">&#39;descent&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;kind must be either ascent or descent&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span> <span class="o">=</span> <span class="n">TwoDimStatesTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span>
+                                                  <span class="n">thrust</span><span class="o">=</span><span class="n">thrust</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">r_safe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">r_safe</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_plot</span> <span class="o">=</span> <span class="n">TwoDimAltProfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span> <span class="n">thrust</span><span class="o">=</span><span class="n">thrust</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+                                         <span class="n">r_safe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">r_safe</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span> <span class="o">=</span> <span class="n">TwoDimControlsTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span> <span class="o">=</span> <span class="n">TwoDimControlsTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+                                                          <span class="n">units</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span> <span class="o">=</span> <span class="n">TwoDimLLO2NRHO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span> <span class="o">=</span> <span class="n">TwoDimSurface2LLO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TwoDimSolPlot.plot"><a class="viewcode-back" href="../../../modules/plots.html#rpfm.plots.solutions.TwoDimSolPlot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimMultiPhaseSolPlot"><a class="viewcode-back" href="../../../modules/plots.html#rpfm.plots.solutions.TwoDimMultiPhaseSolPlot">[docs]</a><span class="k">class</span> <span class="nc">TwoDimMultiPhaseSolPlot</span><span class="p">(</span><span class="n">TwoDimSolPlot</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r_safe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                 <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ascent&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtheta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+        <span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">time_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">states_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">time_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">time_exp</span><span class="p">)</span>
+            <span class="n">states_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">states_exp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dtheta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dtheta</span>
+            <span class="k">if</span> <span class="n">states_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">states_exp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">states_exp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dtheta</span>
+
+        <span class="n">TwoDimSolPlot</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="n">time_exp</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="n">states_exp</span><span class="p">,</span>
+                               <span class="n">r_safe</span><span class="o">=</span><span class="n">r_safe</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TwoDimTwoPhasesSolPlot"><a class="viewcode-back" href="../../../modules/plots.html#rpfm.plots.solutions.TwoDimTwoPhasesSolPlot">[docs]</a><span class="k">class</span> <span class="nc">TwoDimTwoPhasesSolPlot</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ascent&#39;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">time_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">time_exp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">states_exp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">n0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">n1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;ascent&#39;</span><span class="p">:</span>
+            <span class="n">thrust</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">n0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;descent&#39;</span><span class="p">:</span>
+            <span class="n">thrust</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;kind must be either ascent or descent&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span> <span class="o">=</span> <span class="n">TwoDimStatesTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span>
+                                                  <span class="n">thrust</span><span class="o">=</span><span class="n">thrust</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="s1">&#39;attitude-free&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span> <span class="o">=</span> <span class="n">TwoDimControlsTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_plot</span> <span class="o">=</span> <span class="n">TwoDimAltProfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span> <span class="n">thrust</span><span class="o">=</span><span class="n">thrust</span><span class="p">,</span>
+                                         <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="s1">&#39;attitude-free&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span> <span class="o">=</span> <span class="n">TwoDimSurface2LLO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TwoDimTwoPhasesSolPlot.plot"><a class="viewcode-back" href="../../../modules/plots.html#rpfm.plots.solutions.TwoDimTwoPhasesSolPlot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

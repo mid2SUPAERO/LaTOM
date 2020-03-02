@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rpfm.guess.guess_2d &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="rpfm.guess.guess_3d" href="rpfm.guess.guess_3d.html" />
+    <link rel="prev" title="Initial Guesses Subpackage" href="../guess.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data Subpackage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guess.html">Initial Guesses Subpackage</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guess.html#inheritance-diagram">Inheritance Diagram</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guess.html#modules-list">Modules List</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rpfm.guess.guess_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rpfm.guess.guess_3d.html">rpfm.guess.guess_3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rpfm.guess.guess_heo_2d.html">rpfm.guess.guess_heo_2d</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guess.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../guess.html">Initial Guesses Subpackage</a> &raquo;</li>
+        
+      <li>rpfm.guess.guess_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rpfm.guess.guess_2d">
+<span id="rpfm-guess-guess-2d"></span><h1>rpfm.guess.guess_2d<a class="headerlink" href="#module-rpfm.guess.guess_2d" title="Permalink to this headline">¶</a></h1>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.DeorbitBurn" title="rpfm.guess.guess_2d.DeorbitBurn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeorbitBurn</span></code></a>(sc, dv)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.HohmannTransfer" title="rpfm.guess.guess_2d.HohmannTransfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HohmannTransfer</span></code></a>(gm, dep, arr)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.ImpulsiveBurn" title="rpfm.guess.guess_2d.ImpulsiveBurn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImpulsiveBurn</span></code></a>(sc, dv)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.PowConstRadius" title="rpfm.guess.guess_2d.PowConstRadius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PowConstRadius</span></code></a>(gm, r, v0, vf, m0, thrust, isp)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimAscGuess" title="rpfm.guess.guess_2d.TwoDimAscGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscGuess</span></code></a>(gm, r, alt, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimDescGuess" title="rpfm.guess.guess_2d.TwoDimDescGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescGuess</span></code></a>(gm, r, alt, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimGuess" title="rpfm.guess.guess_2d.TwoDimGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimGuess</span></code></a>(gm, r, dep, arr, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimLLOGuess" title="rpfm.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLOGuess</span></code></a>(gm, r, dep, arr, sc)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.ImpulsiveBurn">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">ImpulsiveBurn</code><span class="sig-paren">(</span><em class="sig-param">sc</em>, <em class="sig-param">dv</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#ImpulsiveBurn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.ImpulsiveBurn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.DeorbitBurn">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">DeorbitBurn</code><span class="sig-paren">(</span><em class="sig-param">sc</em>, <em class="sig-param">dv</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#DeorbitBurn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.DeorbitBurn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.guess.guess_2d.ImpulsiveBurn" title="rpfm.guess.guess_2d.ImpulsiveBurn"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.guess.guess_2d.ImpulsiveBurn</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.HohmannTransfer">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">HohmannTransfer</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">dep</em>, <em class="sig-param">arr</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#HohmannTransfer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.HohmannTransfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.HohmannTransfer.compute_trajectory">
+<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">tp</em>, <em class="sig-param">theta0=0.0</em>, <em class="sig-param">m=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#HohmannTransfer.compute_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.HohmannTransfer.compute_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.PowConstRadius">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">PowConstRadius</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">v0</em>, <em class="sig-param">vf</em>, <em class="sig-param">m0</em>, <em class="sig-param">thrust</em>, <em class="sig-param">isp</em>, <em class="sig-param">theta0=0.0</em>, <em class="sig-param">t0=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.PowConstRadius.compute_mass">
+<code class="sig-name descname">compute_mass</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius.compute_mass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius.compute_mass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.PowConstRadius.compute_final_time_states">
+<code class="sig-name descname">compute_final_time_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius.compute_final_time_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius.compute_final_time_states" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.PowConstRadius.compute_trajectory">
+<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">t_eval</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius.compute_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius.compute_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.PowConstRadius.dt_dv">
+<code class="sig-name descname">dt_dv</code><span class="sig-paren">(</span><em class="sig-param">v</em>, <em class="sig-param">t</em>, <em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">m0</em>, <em class="sig-param">t0</em>, <em class="sig-param">thrust</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius.dt_dv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius.dt_dv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.PowConstRadius.dv_dt">
+<code class="sig-name descname">dv_dt</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">v</em>, <em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">m0</em>, <em class="sig-param">t0</em>, <em class="sig-param">thrust</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius.dv_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius.dv_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.PowConstRadius.dx_dt">
+<code class="sig-name descname">dx_dt</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">m0</em>, <em class="sig-param">t0</em>, <em class="sig-param">thrust</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#PowConstRadius.dx_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.PowConstRadius.dx_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.TwoDimGuess">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">TwoDimGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">dep</em>, <em class="sig-param">arr</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#TwoDimGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimGuess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.TwoDimLLOGuess">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">TwoDimLLOGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">dep</em>, <em class="sig-param">arr</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#TwoDimLLOGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimLLOGuess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimGuess" title="rpfm.guess.guess_2d.TwoDimGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.guess.guess_2d.TwoDimGuess</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.TwoDimLLOGuess.compute_trajectory">
+<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#TwoDimLLOGuess.compute_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimLLOGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.TwoDimAscGuess">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">TwoDimAscGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">alt</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#TwoDimAscGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimAscGuess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimLLOGuess" title="rpfm.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.guess.guess_2d.TwoDimLLOGuess</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.TwoDimAscGuess.compute_trajectory">
+<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimAscGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.guess.guess_2d.TwoDimDescGuess">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.guess.guess_2d.</code><code class="sig-name descname">TwoDimDescGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">alt</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/guess/guess_2d.html#TwoDimDescGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimDescGuess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.guess.guess_2d.TwoDimLLOGuess" title="rpfm.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.guess.guess_2d.TwoDimLLOGuess</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.guess.guess_2d.TwoDimDescGuess.compute_trajectory">
+<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.guess.guess_2d.TwoDimDescGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rpfm.guess.guess_3d.html" class="btn btn-neutral float-right" title="rpfm.guess.guess_3d" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../guess.html" class="btn btn-neutral float-left" title="Initial Guesses Subpackage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

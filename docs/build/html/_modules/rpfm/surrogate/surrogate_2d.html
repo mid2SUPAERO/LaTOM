@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rpfm.surrogate.surrogate_2d &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">Utilities Subpackage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>rpfm.surrogate.surrogate_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rpfm.surrogate.surrogate_2d</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@authors: Alberto FOSSA&#39; Giuliana Elena MICELI</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">from</span> <span class="nn">smt.sampling_methods</span> <span class="kn">import</span> <span class="n">LHS</span><span class="p">,</span> <span class="n">FullFactorial</span>
+<span class="kn">from</span> <span class="nn">smt.surrogate_models</span> <span class="kn">import</span> <span class="n">IDW</span><span class="p">,</span> <span class="n">KPLS</span><span class="p">,</span> <span class="n">KPLSK</span><span class="p">,</span> <span class="n">KRG</span><span class="p">,</span> <span class="n">LS</span><span class="p">,</span> <span class="n">QP</span><span class="p">,</span> <span class="n">RBF</span><span class="p">,</span> <span class="n">RMTB</span><span class="p">,</span> <span class="n">RMTC</span>
+
+<span class="kn">from</span> <span class="nn">rpfm.utils.spacecraft</span> <span class="kn">import</span> <span class="n">Spacecraft</span>
+<span class="kn">from</span> <span class="nn">rpfm.nlp.nlp_2d</span> <span class="kn">import</span> <span class="n">TwoDimAscConstNLP</span><span class="p">,</span> <span class="n">TwoDimAscVarNLP</span><span class="p">,</span> <span class="n">TwoDimAscVToffNLP</span><span class="p">,</span> <span class="n">TwoDimDescTwoPhasesNLP</span><span class="p">,</span>\
+    <span class="n">TwoDimDescConstNLP</span><span class="p">,</span> <span class="n">TwoDimDescVarNLP</span><span class="p">,</span> <span class="n">TwoDimDescVLandNLP</span>
+<span class="kn">from</span> <span class="nn">rpfm.guess.guess_2d</span> <span class="kn">import</span> <span class="n">HohmannTransfer</span><span class="p">,</span> <span class="n">DeorbitBurn</span>
+<span class="kn">from</span> <span class="nn">rpfm.plots.response_surfaces</span> <span class="kn">import</span> <span class="n">RespSurf</span>
+
+
+<div class="viewcode-block" id="SurrogateModel"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.SurrogateModel">[docs]</a><span class="k">class</span> <span class="nc">SurrogateModel</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">twr_lim</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">=</span> <span class="n">alt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span> <span class="o">=</span> <span class="n">t_bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span> <span class="o">=</span> <span class="n">nb_seg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">solver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span> <span class="o">=</span> <span class="n">nb_samp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span> <span class="o">=</span> <span class="n">snopt_opts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span> <span class="o">=</span> <span class="n">u_bound</span>
+
+        <span class="c1"># training models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># sampling, evaluation and matrices values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failures</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tof_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_samp</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_samp</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">samp_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof_eval</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">twr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof_mat</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># sampling grid</span>
+        <span class="k">if</span> <span class="n">samp_method</span> <span class="o">==</span> <span class="s1">&#39;lhs&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">samp</span> <span class="o">=</span> <span class="n">LHS</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">samp_method</span> <span class="o">==</span> <span class="s1">&#39;full&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">samp</span> <span class="o">=</span> <span class="n">FullFactorial</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;samp_method must be either lhs or full&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">samp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf_plot</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="SurrogateModel.solve"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.SurrogateModel.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Iteration:&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">run_driver</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Failure:&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nlp</span><span class="o">.</span><span class="n">phase_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">phase_name</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">phase_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phase_name</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">phase_name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.timeseries.states:m&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tof_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.time&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">tc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="n">nlp</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SurrogateModel.train"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.SurrogateModel.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;IDW&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">IDW</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">IDW</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;KPLS&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">KPLS</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">KPLS</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;KPLSK&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">KPLSK</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">KPLSK</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;KRG&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">KRG</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">KRG</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;LS&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">LS</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">LS</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;QP&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">QP</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">QP</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;RBF&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">RBF</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">RBF</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;RMTB&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">RMTB</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">RMTB</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;RMTC&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span> <span class="o">=</span> <span class="n">RMTC</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span> <span class="o">=</span> <span class="n">RMTC</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;train_method must be one between IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span><span class="o">.</span><span class="n">set_training_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_samp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span><span class="o">.</span><span class="n">set_training_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof_samp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span><span class="o">.</span><span class="n">train</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SurrogateModel.evaluate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.SurrogateModel.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;isp&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;twr&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># single values</span>
+
+            <span class="n">isp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;isp&#39;</span><span class="p">]</span>
+            <span class="n">twr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;twr&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">isp</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">isp</span> <span class="o">=</span> <span class="p">[</span><span class="n">isp</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">twr</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">twr</span> <span class="o">=</span> <span class="p">[</span><span class="n">twr</span><span class="p">]</span>
+
+            <span class="n">x_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">isp</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">isp</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">twr</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">twr</span><span class="p">),</span> <span class="mi">1</span><span class="p">))))</span>
+            <span class="n">m_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span><span class="o">.</span><span class="n">predict_values</span><span class="p">(</span><span class="n">x_eval</span><span class="p">)</span>
+            <span class="n">tof_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span><span class="o">.</span><span class="n">predict_values</span><span class="p">(</span><span class="n">x_eval</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">m_eval</span><span class="p">,</span> <span class="n">tof_eval</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># full grid</span>
+
+            <span class="k">if</span> <span class="s1">&#39;nb_eval&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">nb_eval</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nb_eval&#39;</span><span class="p">]</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">samp_eval</span> <span class="o">=</span> <span class="n">FullFactorial</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">samp_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_eval</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">m_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_mass</span><span class="o">.</span><span class="n">predict_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tof_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_tof</span><span class="o">.</span><span class="n">predict_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_eval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">m_eval</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_samp</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tof_eval</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tof_samp</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Surrogate model built with LHS sampling method.&#39;</span>
+                                 <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The two arrays isp, twr or nb_eval must be provided&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">isp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">twr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_eval</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_eval</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">m_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_eval</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tof_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tof_eval</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SurrogateModel.plot"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.SurrogateModel.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf_plot</span> <span class="o">=</span> <span class="n">RespSurf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">twr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof_mat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimAscConstSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscConstSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tof</span> <span class="o">=</span> <span class="n">tof</span>
+
+<div class="viewcode-block" id="TwoDimAscConstSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimAscConstNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="s1">&#39;powered&#39;</span><span class="p">,</span>
+                                    <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimAscVarSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscVarSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span>
+                 <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TwoDimAscVarSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimAscVarNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="s1">&#39;powered&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimAscVToffSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscVToffSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_safe</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span>
+                 <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_safe</span> <span class="o">=</span> <span class="n">alt_safe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slope</span> <span class="o">=</span> <span class="n">slope</span>
+
+<div class="viewcode-block" id="TwoDimAscVToffSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimAscVToffNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt_safe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slope</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="s1">&#39;powered&#39;</span><span class="p">,</span>
+                                    <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimDescConstSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescConstSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_p</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ht</span> <span class="o">=</span> <span class="n">HohmannTransfer</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">R</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">R</span> <span class="o">+</span> <span class="n">alt_p</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_p</span> <span class="o">=</span> <span class="n">alt_p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tof</span> <span class="o">=</span> <span class="n">tof</span>
+
+<div class="viewcode-block" id="TwoDimDescConstSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">deorbit_burn</span> <span class="o">=</span> <span class="n">DeorbitBurn</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">dva</span><span class="p">)</span>
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimDescConstNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">deorbit_burn</span><span class="o">.</span><span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+                                     <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="s1">&#39;powered&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimDescVarSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescVarSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span>
+                 <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TwoDimDescVarSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimDescVarNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="s1">&#39;powered&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimDescVLandSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescVLandSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_safe</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span>
+                 <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_safe</span> <span class="o">=</span> <span class="n">alt_safe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slope</span> <span class="o">=</span> <span class="n">slope</span>
+
+<div class="viewcode-block" id="TwoDimDescVLandSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimDescVLandNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt_safe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slope</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="s1">&#39;powered&#39;</span><span class="p">,</span>
+                                     <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_bound</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TwoDimDescVertSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescVertSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_p</span><span class="p">,</span> <span class="n">alt_switch</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span>
+                 <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">SurrogateModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt_p</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
+                                <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ht</span> <span class="o">=</span> <span class="n">HohmannTransfer</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">R</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">R</span> <span class="o">+</span> <span class="n">alt_p</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt_switch</span> <span class="o">=</span> <span class="n">alt_switch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tof</span> <span class="o">=</span> <span class="n">tof</span>
+
+<div class="viewcode-block" id="TwoDimDescVertSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_samp</span><span class="p">):</span>
+
+            <span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+
+            <span class="n">deorbit_burn</span> <span class="o">=</span> <span class="n">DeorbitBurn</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">dva</span><span class="p">)</span>
+
+            <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDimDescTwoPhasesNLP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">deorbit_burn</span><span class="o">.</span><span class="n">sc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alt_switch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+                                         <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_seg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
+                                         <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="s1">&#39;vertical&#39;</span><span class="p">),</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">snopt_opts</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rpfm.analyzer.analyzer_heo_2d &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Data Subpackage" href="../data.html" />
+    <link rel="prev" title="rpfm.analyzer.analyzer_3d" href="rpfm.analyzer.analyzer_3d.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../analyzer.html">Analyzers Subpackage</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../analyzer.html#inheritance-diagram">Inheritance Diagram</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../analyzer.html#modules-list">Modules List</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rpfm.analyzer.analyzer.html">rpfm.analyzer.analyzer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rpfm.analyzer.analyzer_2d.html">rpfm.analyzer.analyzer_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rpfm.analyzer.analyzer_3d.html">rpfm.analyzer.analyzer_3d</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rpfm.analyzer.analyzer_heo_2d</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../analyzer.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../analyzer.html">Analyzers Subpackage</a> &raquo;</li>
+        
+      <li>rpfm.analyzer.analyzer_heo_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rpfm.analyzer.analyzer_heo_2d">
+<span id="rpfm-analyzer-analyzer-heo-2d"></span><h1>rpfm.analyzer.analyzer_heo_2d<a class="headerlink" href="#module-rpfm.analyzer.analyzer_heo_2d" title="Permalink to this headline">¶</a></h1>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim2PhasesLLO2HEOAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEOAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2ApoAnalyzer</span></code></a>(body, sc, alt, rp, t, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEOAnalyzer</span></code></a>(body, sc, alt, rp, t, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimMultiPhasesLLO2HEOAnalyzer</span></code></a>(body, sc)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.analyzer.analyzer_heo_2d.</code><code class="sig-name descname">TwoDimLLO2HEOAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimLLO2HEOAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.analyzer.analyzer_2d.html#rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimLLO2HEOAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2HEOAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.analyzer.analyzer_heo_2d.</code><code class="sig-name descname">TwoDimLLO2ApoAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimLLO2ApoAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.analyzer.analyzer_2d.html#rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.compute_insertion_burn">
+<code class="sig-name descname">compute_insertion_burn</code><span class="sig-paren">(</span><em class="sig-param">nb=200</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimLLO2ApoAnalyzer.compute_insertion_burn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.compute_insertion_burn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em>, <em class="sig-param">nb=200</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimLLO2ApoAnalyzer.get_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimLLO2ApoAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimLLO2ApoAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.analyzer.analyzer_heo_2d.</code><code class="sig-name descname">TwoDimMultiPhasesLLO2HEOAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimMultiPhasesLLO2HEOAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="rpfm.analyzer.analyzer_2d.html#rpfm.analyzer.analyzer_2d.TwoDimAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.analyzer.analyzer_2d.TwoDimAnalyzer</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDimMultiPhasesLLO2HEOAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.analyzer.analyzer_heo_2d.</code><code class="sig-name descname">TwoDim2PhasesLLO2HEOAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim2PhasesLLO2HEOAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim2PhasesLLO2HEOAnalyzer.get_time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.compute_coasting_arc">
+<code class="sig-name descname">compute_coasting_arc</code><span class="sig-paren">(</span><em class="sig-param">nb=200</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim2PhasesLLO2HEOAnalyzer.compute_coasting_arc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.compute_coasting_arc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em>, <em class="sig-param">nb=200</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim2PhasesLLO2HEOAnalyzer.get_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim2PhasesLLO2HEOAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.analyzer.analyzer_heo_2d.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEOAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim3PhasesLLO2HEOAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer" title="rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.analyzer.analyzer_heo_2d.TwoDimMultiPhasesLLO2HEOAnalyzer</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim3PhasesLLO2HEOAnalyzer.get_time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/analyzer/analyzer_heo_2d.html#TwoDim3PhasesLLO2HEOAnalyzer.get_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_heo_2d.TwoDim3PhasesLLO2HEOAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../data.html" class="btn btn-neutral float-right" title="Data Subpackage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rpfm.analyzer.analyzer_3d.html" class="btn btn-neutral float-left" title="rpfm.analyzer.analyzer_3d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
