@@ -9,6 +9,9 @@ from rpfm.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSur
     TwoDimDescVertSurrogate, TwoDimDescConstSurrogate, TwoDimDescVarSurrogate, TwoDimDescVLandSurrogate
 
 from rpfm.utils.primary import Moon
+from rpfm.utils.pickle_utils import save
+
+fid = 'file_name.pkl'
 
 # trajectory
 kind = 'dv'
@@ -73,4 +76,5 @@ if samp_method != 'full':
 else:
     sm.evaluate()
 
+save(sm, fid)
 sm.plot()
