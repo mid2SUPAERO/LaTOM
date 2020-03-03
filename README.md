@@ -8,8 +8,9 @@ Giuliana Elena MICELI
 
 ## Installation
 
-Refer to [install.md](docs/installation/install.md) for the installation instructions
-Refer to [environment.md](docs/installation/environment.md) to properly setup the OpenMDAO/dymos environment
+Refer to [install.md](docs/source/installation/install.md) for the installation instructions
+
+Refer to [environment.md](docs/source/installation/environment.md) to properly setup the OpenMDAO/dymos environment
 
 ## Documentation
 
