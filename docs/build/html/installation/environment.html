@@ -1,0 +1,1176 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OpenMDAO/dymos - Personal Workstation &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Package Installation" href="install.html" />
+    <link rel="prev" title="Installation" href="installation_index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation_index.html">Installation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenMDAO/dymos - Personal Workstation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dependencies-to-be-installed">Dependencies to be installed</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-packages">Python packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#additional-software">Additional software</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optional-licensed-software">Optional licensed software</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-procedure">Installation procedure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-mpi-blas-and-lapack-libraries">1. Installation of MPI, BLAS and Lapack libraries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-the-gnu-compiler-and-other-system-packages">1.1 Installation of the GNU compiler and other system packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-mpi-libraries">1.2 Installation of MPI libraries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-blas-and-lapack-libraries">1.3 Installation of BLAS and Lapack libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#compilation-from-source-of-ipopt">2. Compilation from source of IPOPT</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hsl-2011-subroutines">2.1 HSL 2011 subroutines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#download-the-required-source-code">2.2 Download the required source code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-and-installation">2.3 Configuration and installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#verify-your-ipopt-installation">2.4 Verify your IPOPT installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#common-troubleshooting">2.5 Common troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-the-anaconda-platform">3. Installation of the Anaconda platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creation-of-a-dedicated-conda-environment">4. Creation of a dedicated conda environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-openmdao-dymos-and-relative-dependencies">5. Installation of OpenMDAO, dymos and relative dependencies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-numpy-scipy-matplotlib-spyder-swig">5.1 Installation of Numpy, Scipy, Matplotlib, Spyder, Swig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-mpi4py">5.2 Installation of mpi4py</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-openmdao-and-dymos">5.3 Installation of OpenMDAO and dymos</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#compilation-from-source-of-pyipopt">6. Compilation from source of pyipopt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">6.1 Download the required source code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipopt-installation-path">6.2 IPOPT installation path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipopt-libraries-included-in-your-installation">6.3 IPOPT libraries included in your installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation">6.4 Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#compilation-from-source-of-pyoptsparse-snopt-optional">7. Compilation from source of pyOptSparse (SNOPT optional)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">7.1 Download the required source code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">7.2 Installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipopt-wrapping">7.3 IPOPT wrapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">7.4 Common troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#openmdao-dymos-pando-rainman">OpenMDAO/dymos - PANDO/RAINMAN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Dependencies to be installed</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Python packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Additional software</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Optional licensed software</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Installation procedure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-loading">1. Module loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">2. Compilation from source of IPOPT</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id11">2.1 HSL 2011 subroutines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">2.2 Download the required source code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">2.3 Configuration and installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">2.4 Verify your IPOPT installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">3. Creation of a dedicated conda environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">4. Installation of OpenMDAO, dymos and relative dependencies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-numpy-scipy-matplotlib-and-swig">4.1 Installation of Numpy, Scipy, Matplotlib and Swig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">4.2 Installation of mpi4py</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">4.3 Installation of OpenMDAO and dymos</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">5. Compilation from source of pyipopt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id20">5.1 Download the required source code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">5.2 IPOPT installation path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id22">5.3 IPOPT libraries included in your installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id23">5.4 Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">6. Compilation from source of pyOptSparse (SNOPT optional)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id25">6.1 Download the required source code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">6.2 Installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id27">6.3 IPOPT wrapping</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#useful-links">Useful Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">Package Dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="installation_index.html">Installation</a> &raquo;</li>
+        
+      <li>OpenMDAO/dymos - Personal Workstation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="openmdao-dymos-personal-workstation">
+<h1>OpenMDAO/dymos - Personal Workstation<a class="headerlink" href="#openmdao-dymos-personal-workstation" title="Permalink to this headline">¶</a></h1>
+<p>&#64;author: Alberto FOSSA’</p>
+<p>This <em>step-by-step</em> guide will help you to setup an <a class="reference external" href="https://www.anaconda.com/">Anaconda</a> environment ready to perform Multidisciplinary Design Optimization (MDO) and Trajectory Optimization using the Python-based packages <a class="reference external" href="https://openmdao.org/">OpenMDAO</a> and <a class="reference external" href="https://openmdao.github.io/dymos/">dymos</a>.</p>
+<div class="section" id="dependencies-to-be-installed">
+<h2>Dependencies to be installed<a class="headerlink" href="#dependencies-to-be-installed" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-packages">
+<h3>Python packages<a class="headerlink" href="#python-packages" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Python 3.7.3 +</p></li>
+<li><p>numpy 1.16.4 +</p></li>
+<li><p>scipy 1.2.1 +</p></li>
+<li><p>matplotlib 3.1.0 +</p></li>
+<li><p>swig 3.0.12 +</p></li>
+<li><p>openmdao 2.9.0 +</p></li>
+<li><p><strong>dymos 0.13.0 (do not install the latest release)</strong></p></li>
+<li><p>pyoptsparse (SNOPT optional)</p></li>
+<li><p>pyipopt</p></li>
+</ul>
+</div>
+<div class="section" id="additional-software">
+<h3>Additional software<a class="headerlink" href="#additional-software" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://coin-or.github.io/Ipopt/index.html">IPOPT</a> (Interior Point Optimizer) 3.12 +</p></li>
+</ul>
+</div>
+<div class="section" id="optional-licensed-software">
+<h3>Optional licensed software<a class="headerlink" href="#optional-licensed-software" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.hsl.rl.ac.uk/ipopt/">HSL 2001 subroutines</a> (free for academic purposes upon request, one working day delay)</p></li>
+<li><p><a class="reference external" href="http://www.sbsi-sol-optimize.com/asp/sol_snopt.htm">SNOPT</a> Sparse Non-linear Optimizer</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>system with 64-bit Linux OS (tested on Ubuntu 18.04 LTS and RHEL 7)</p></li>
+<li><p>temporary root access using <code class="docutils literal notranslate"><span class="pre">sudo</span></code> (step 1 only)</p></li>
+</ul>
+</div>
+<div class="section" id="installation-procedure">
+<h2>Installation procedure<a class="headerlink" href="#installation-procedure" title="Permalink to this headline">¶</a></h2>
+<p>The setup of the whole environment is split in the following steps:</p>
+<ol class="simple">
+<li><p>Installation of the MPI, BLAS and Lapack libraries through the OS package manager</p></li>
+<li><p>Compilation from source of the large-scale non-linear optimizer <a class="reference external" href="https://coin-or.github.io/Ipopt/index.html">IPOPT</a></p></li>
+<li><p>Installation of the <a class="reference external" href="https://www.anaconda.com/">Anaconda</a> platform</p></li>
+<li><p>Creation of a dedicated <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment</p></li>
+<li><p>Installation of <a class="reference external" href="https://openmdao.org/">OpenMDAO</a> and <a class="reference external" href="https://openmdao.github.io/dymos/">dymos</a> packages with all their dependencies in the dedicated environment</p></li>
+<li><p>Compilation from source of the <a class="reference external" href="https://github.com/xuy/pyipopt">pyipopt</a> package and linkage with the compiled IPOPT library</p></li>
+<li><p>Compilation from source of the <a class="reference external" href="http://mdolab.engin.umich.edu/docs/packages/pyoptsparse/doc/index.html">pyOptSparse</a> package (SNOPT optional) and linkage with pyipopt</p></li>
+</ol>
+</div>
+<div class="section" id="installation-of-mpi-blas-and-lapack-libraries">
+<h2>1. Installation of MPI, BLAS and Lapack libraries<a class="headerlink" href="#installation-of-mpi-blas-and-lapack-libraries" title="Permalink to this headline">¶</a></h2>
+<p>The MPI libraries are needed to run your optimization problems in parallel, thus reducing the CPU time to perform your studies. On the other side, BLAS and Lapack are two libraries to perform linear algebra calculations used internally by IPOPT and SNOPT.</p>
+<p>All the instructions included in this chapter are valid for Debian-based OS that use the <code class="docutils literal notranslate"><span class="pre">apt</span></code> package manager and were successfully tested on Ubuntu 18.04 LTS. If your machine comes with a different OS you should look for similar commands suitable for its specific package manager.</p>
+<div class="section" id="installation-of-the-gnu-compiler-and-other-system-packages">
+<h3>1.1 Installation of the GNU compiler and other system packages<a class="headerlink" href="#installation-of-the-gnu-compiler-and-other-system-packages" title="Permalink to this headline">¶</a></h3>
+<p>The GNU compilers and the other packages mentioned here are usually already installed in your machine. You should carefully check for each of them and perform the installation of the missed ones if any.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install gcc g++ gfortran make git patch wget
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-mpi-libraries">
+<h3>1.2 Installation of MPI libraries<a class="headerlink" href="#installation-of-mpi-libraries" title="Permalink to this headline">¶</a></h3>
+<p>Both the binaries and the development files are required and they can be installed with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install openmpi-bin libopenmpi-dev
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-blas-and-lapack-libraries">
+<h3>1.3 Installation of BLAS and Lapack libraries<a class="headerlink" href="#installation-of-blas-and-lapack-libraries" title="Permalink to this headline">¶</a></h3>
+<p>Once more, both the binaries and the development files are required and can be installed issuing the command below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install libblas-dev libblas3 liblapack-dev liblapack3 libopenblas-dev libopenblas-base
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="compilation-from-source-of-ipopt">
+<h2>2. Compilation from source of IPOPT<a class="headerlink" href="#compilation-from-source-of-ipopt" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hsl-2011-subroutines">
+<h3>2.1 HSL 2011 subroutines<a class="headerlink" href="#hsl-2011-subroutines" title="Permalink to this headline">¶</a></h3>
+<p>As pointed out in the requirements, if you use IPOPT for academic purposes you are strongly recommended to obtain the HSL 2011 subroutines since they perform much more better than the other options. The full suite has to be requested as follows:</p>
+<ul class="simple">
+<li><p>go on the <a class="reference external" href="http://www.hsl.rl.ac.uk/ipopt/">HSL for IPOPT</a> webpage</p></li>
+<li><p>under <strong>Coin-HSL Full (Stable)</strong> click on <strong>Source</strong></p></li>
+<li><p>In the request page select <strong>Personal Academic License</strong>, then fill and submit the form</p></li>
+<li><p>Within one working day you should receive an email with a link to download the source code as a compressed archive</p></li>
+</ul>
+</div>
+<div class="section" id="download-the-required-source-code">
+<h3>2.2 Download the required source code<a class="headerlink" href="#download-the-required-source-code" title="Permalink to this headline">¶</a></h3>
+<p>Once you have obtained the HSL subroutines or you decide to use a different linear solver you can proceed downloading the IPOPT source code and perform the installation. Open a new terminal window and type the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone --recursive -b stable/3.12 https://github.com/coin-or/Ipopt.git CoinIpopt
+</pre></div>
+</div>
+<p>This will directly download the latest stable release in the directory <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt</span></code>.</p>
+<p>When the download is complete, enter the new directory to download the different dependencies as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd CoinIpopt
+$ cd ThirdParty/ASL
+$ ./get.ASL
+</pre></div>
+</div>
+<p>To obtain the source code of the ASL libraries and interface IPOPT with the AMPL modelling language.</p>
+<p>Then proceed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../Metis
+$ ./get.Metis
+</pre></div>
+</div>
+<p>To download the matrix ordering algorithm Metis.</p>
+<p>If you have obtained the HSL source code unpack the archive, move and rename the corresponding directory such that it becomes <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt/ThirdParty/HSL/coinhsl</span></code>.</p>
+<blockquote>
+<div><p>If you haven’t requested the HSL subroutines you have to download the Mumps linear solver to replace the ones provided by the former libraries.
+To do so, enter the directory <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt/ThirdParty/Mumps</span></code> and issue the following command: <code class="docutils literal notranslate"><span class="pre">./get.Mumps</span></code>.</p>
+</div></blockquote>
+<p>At this point you have obtained all the required source code and you can proceed with the configuration and installation steps.</p>
+</div>
+<div class="section" id="configuration-and-installation">
+<h3>2.3 Configuration and installation<a class="headerlink" href="#configuration-and-installation" title="Permalink to this headline">¶</a></h3>
+<p>Move back to the directory <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt</span></code> and create a separate folder where the compiled code will be placed. Then enter the newly created directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir build
+$ cd build
+</pre></div>
+</div>
+<p>After that run the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script adding the proper compilers flags to enable parallel computation at runtime and disable the <strong>linear solver loader</strong> option that will prevent you to link IPOPT with the pyipopt package. For that purpose issue the following command, all on the same line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ../configure ADD_CFLAGS=-fopenmp ADD_FFLAGS=-fopenmp ADD_CXXFLAGS=-fopenmp --disable-linear-solver-loader
+</pre></div>
+</div>
+<p>If the last output is <code class="docutils literal notranslate"><span class="pre">Main</span> <span class="pre">configuration</span> <span class="pre">of</span> <span class="pre">Ipopt</span> <span class="pre">successful</span></code> you can proceed building the code. In your terminal window type the followings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+$ make test
+</pre></div>
+</div>
+<p>This will build the code and perform a series of test on different examples. If all of them are successful you can complete the installation procedure with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="verify-your-ipopt-installation">
+<h3>2.4 Verify your IPOPT installation<a class="headerlink" href="#verify-your-ipopt-installation" title="Permalink to this headline">¶</a></h3>
+<p>At this stage you can verify if the IPOPT binaries were correctly built entering the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory and checking the presence of the executable <code class="docutils literal notranslate"><span class="pre">ipopt</span></code>. From your <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt/build</span></code> directory type the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd bin
+$ ./ipopt
+</pre></div>
+</div>
+<p>You should get an output similar to this one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>No stub!
+usage: ipopt [options] stub [-AMPL] [&lt;assignment&gt; ...]
+
+Options:
+    --  {end of options}
+	-=  {show name= possibilities}
+	-?  {show usage}
+	-bf {read boundsfile f}
+	-e  {suppress echoing of assignments}
+	-of {write .sol file to file f}
+	-s  {write .sol file (without -AMPL)}
+	-v  {just show version}
+</pre></div>
+</div>
+<p>You can also run a simple example included in the source code to verify the convergence of the algorithm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../../Ipopt/test
+$ ../../build/bin/ipopt mytoy.nl
+</pre></div>
+</div>
+<p>The last two output lines should be similar to these ones:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EXIT</span><span class="p">:</span> <span class="n">Optimal</span> <span class="n">Solution</span> <span class="n">Found</span><span class="o">.</span>
+<span class="n">Ipopt</span> <span class="mf">3.12</span><span class="o">.</span><span class="mi">13</span><span class="p">:</span> <span class="n">Optimal</span> <span class="n">Solution</span> <span class="n">Found</span>
+</pre></div>
+</div>
+<p>Once you have successfully installed IPOPT you can jump to the next chapter to setup your <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment.</p>
+</div>
+<div class="section" id="common-troubleshooting">
+<h3>2.5 Common troubleshooting<a class="headerlink" href="#common-troubleshooting" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>If the configuration step fails to locate your BLAS and Lapack libraries, you can download their source code inside your <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt</span></code> directory and let IPOPT to compile them at the same time. For that purpose, after obtaining the Metis source code with the <code class="docutils literal notranslate"><span class="pre">./get.Metis</span></code> command type the following:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../Blas
+$ ./get.Blas
+$ cd ../Lapack
+$ ./get.Lapack
+</pre></div>
+</div>
+<blockquote>
+<div><p>This will download a local copy of the BLAS and Lapack libraries and IPOPT will use them. You can now proceed adding the source code for the linear solver of your choice and perform the configuration and installation steps as described above.
+For other issues please refer to the <a class="reference external" href="https://coin-or.github.io/Ipopt/INSTALL.html">official IPOPT documentation</a> available online.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="installation-of-the-anaconda-platform">
+<h2>3. Installation of the Anaconda platform<a class="headerlink" href="#installation-of-the-anaconda-platform" title="Permalink to this headline">¶</a></h2>
+<p>If you already have Anaconda installed on your system, you can directly jump to the next chapter. Otherwise follow the instructions below to install and setup the platform.</p>
+<p>First, download the <strong>Anaconda Distribution Linux Installer</strong> with <strong>Python 3.7</strong> from the <a class="reference external" href="https://www.anaconda.com/distribution/">official Anaconda website</a>.
+Once the download is complete enter the corresponding folder and type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bash Anaconda-latest-Linux-x86_64.sh
+</pre></div>
+</div>
+<p>Follow the prompts on the installer screen and accept the default configurations. This will install Anaconda in your <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> folder and does not require root permissions.
+Once the installation is complete, you will be asked to initialize <code class="docutils literal notranslate"><span class="pre">conda</span></code>. Answer <code class="docutils literal notranslate"><span class="pre">yes</span></code> and wait for the initialization to be performed. Finally, close and re-open your terminal for changes to take effect.
+At this point you may notice that the <code class="docutils literal notranslate"><span class="pre">conda</span></code> <code class="docutils literal notranslate"><span class="pre">base</span></code>environment is automatically activated every time a new terminal window is opened. The prompt line should look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(base) $
+</pre></div>
+</div>
+<p>To deactivate <code class="docutils literal notranslate"><span class="pre">conda</span></code>, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(base) $ conda deactivate
+</pre></div>
+</div>
+<p>And to reactivate:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda activate
+</pre></div>
+</div>
+<p>To prevent <code class="docutils literal notranslate"><span class="pre">conda</span></code> from automatically activating the <code class="docutils literal notranslate"><span class="pre">base</span></code> environment issue the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(base) $ conda config --set auto_activate_base False
+</pre></div>
+</div>
+<p>You can now move on the next chapter and create your dedicated <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment.</p>
+</div>
+<div class="section" id="creation-of-a-dedicated-conda-environment">
+<h2>4. Creation of a dedicated conda environment<a class="headerlink" href="#creation-of-a-dedicated-conda-environment" title="Permalink to this headline">¶</a></h2>
+<p>To create a new <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment open a terminal window and issue the following commands replacing <code class="docutils literal notranslate"><span class="pre">myenv</span></code> with the desired environment name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda activate
+(base) $ conda create --name myenv python=3.7
+</pre></div>
+</div>
+<p>This will create a new <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment with Python 3.7 and other basics packages such as <code class="docutils literal notranslate"><span class="pre">pip</span></code> already included.
+The new environment can be activated and deactivated with the same commands seen for the <code class="docutils literal notranslate"><span class="pre">base</span></code> environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda activate myenv
+(myenv) $ conda deactivate myenv
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-openmdao-dymos-and-relative-dependencies">
+<h2>5. Installation of OpenMDAO, dymos and relative dependencies<a class="headerlink" href="#installation-of-openmdao-dymos-and-relative-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Assuming you have created a dedicated <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment named <code class="docutils literal notranslate"><span class="pre">myenv</span></code>, you can proceed with the installation of OpenMDAO, dymos and their required dependencies. First of all, open a terminal window and activate your environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda activate myenv
+</pre></div>
+</div>
+<p>Then follow the steps below to download and install the different packages.</p>
+<div class="section" id="installation-of-numpy-scipy-matplotlib-spyder-swig">
+<h3>5.1 Installation of Numpy, Scipy, Matplotlib, Spyder, Swig<a class="headerlink" href="#installation-of-numpy-scipy-matplotlib-spyder-swig" title="Permalink to this headline">¶</a></h3>
+<p>Numpy and Scipy are two Python packages to perform mathematical operations on large set of arrays, while  Matplotlib is a widely-used library to visualize your results. Finally, Spyder is an easy-to-use interactive Python IDE and Swig a package to wrap C and C++ code within Python. With your environment active issue the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ conda install numpy scipy matplotlib spyder swig
+</pre></div>
+</div>
+<p>And answer <code class="docutils literal notranslate"><span class="pre">yes</span></code> when prompted.</p>
+</div>
+<div class="section" id="installation-of-mpi4py">
+<h3>5.2 Installation of mpi4py<a class="headerlink" href="#installation-of-mpi4py" title="Permalink to this headline">¶</a></h3>
+<p>mpi4py provides a Python wrapper for the MPI libraries. The last version of this package is not yet released on the official conda channels and has to be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ pip install mpi4py
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-openmdao-and-dymos">
+<h3>5.3 Installation of OpenMDAO and dymos<a class="headerlink" href="#installation-of-openmdao-and-dymos" title="Permalink to this headline">¶</a></h3>
+<p>As in the previous case, these packages have to be downloaded and installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> since they are not deployed on the official conda channels. They can be obtained issuing the followings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ pip install openmdao
+(myenv) $ pip install git+https://github.com/OpenMDAO/dymos.git
+</pre></div>
+</div>
+<p>This will install the latest release of both packages. To obtain a specific version of dymos, in this case <code class="docutils literal notranslate"><span class="pre">v0.13.0</span></code>, after installing OpenMDAO issue the commands below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ git clone https://github.com/OpenMDAO/dymos.git --branch v0.13.0
+(myenv) $ cd dymos
+(myenv) $ python setup.py install
+</pre></div>
+</div>
+<p>You can now launch Spyder and start your own projects, but you will not be able to link IPOPT and SNOPT with your OpenMDAO installation since the lasts require pyipopt and pyOptSparse to be properly compiled as described in the following chapters.</p>
+</div>
+</div>
+<div class="section" id="compilation-from-source-of-pyipopt">
+<h2>6. Compilation from source of pyipopt<a class="headerlink" href="#compilation-from-source-of-pyipopt" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/xuy/pyipopt">pyipopt</a> package provides a Python wrapper for your IPOPT installation allowing OpenMDAO to call the NLP solver while performing the user-defined MDO. This package can be installed following the instructions provided in this section.</p>
+<div class="section" id="id1">
+<h3>6.1 Download the required source code<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>With your environment active, move to a convenient directory and clone the source code from its GitHub repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ git clone https://github.com/xuy/pyipopt.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="ipopt-installation-path">
+<h3>6.2 IPOPT installation path<a class="headerlink" href="#ipopt-installation-path" title="Permalink to this headline">¶</a></h3>
+<p>Once the download is completed enter the corresponding folder and edit the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script to reflect the configuration of your system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd pyipopt
+(myenv) $ spyder setup.py &amp;
+</pre></div>
+</div>
+<p>With the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script open in your Spyder IDE, launch a new terminal window and enter the directory where IPOPT was compiled. After that retrieve its absolute path with the command <code class="docutils literal notranslate"><span class="pre">pwd</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd CoinIpopt/build
+$ pwd
+</pre></div>
+</div>
+<p>You should obtain the following output where <code class="docutils literal notranslate"><span class="pre">username</span></code> is your actual username:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">CoinIpopt</span><span class="o">/</span><span class="n">build</span>
+</pre></div>
+</div>
+<p>At this point copy the output string and move back to Spyder to customize the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script.</p>
+<p>To tell pyipopt where to catch your IPOPT installation replace the three lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IPOPT_DIR</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/&#39;</span>
+<span class="n">IPOPT_LIB</span> <span class="o">=</span> <span class="n">get_ipopt_lib</span><span class="p">()</span>
+<span class="n">IPOPT_INC</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">IPOPT_DIR</span><span class="p">,</span> <span class="s1">&#39;include/coin/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IPOPT_DIR</span> <span class="o">=</span> <span class="s1">&#39;/home/username/CoinIpopt/build/&#39;</span>
+<span class="n">IPOPT_LIB</span> <span class="o">=</span> <span class="s1">&#39;/home/username/CoinIpopt/build/lib&#39;</span>
+<span class="n">IPOPT_INC</span> <span class="o">=</span> <span class="s1">&#39;/home/username/CoinIpopt/build/include/coin/&#39;</span>
+</pre></div>
+</div>
+<p>Where the strings between <code class="docutils literal notranslate"><span class="pre">''</span></code> have to reflect the output of <code class="docutils literal notranslate"><span class="pre">pwd</span></code> copied before.</p>
+</div>
+<div class="section" id="ipopt-libraries-included-in-your-installation">
+<h3>6.3 IPOPT libraries included in your installation<a class="headerlink" href="#ipopt-libraries-included-in-your-installation" title="Permalink to this headline">¶</a></h3>
+<p>To specify which libraries you included during the IPOPT installation modify the corresponding arguments passed to the <code class="docutils literal notranslate"><span class="pre">Extension</span></code> class:</p>
+<ol class="simple">
+<li><p>IPOPT compiled with system-wide BLAS and Lapack libraries (<strong>without</strong> running the scripts <code class="docutils literal notranslate"><span class="pre">get.Blas</span></code> and <code class="docutils literal notranslate"><span class="pre">get.Lapack</span></code> as described under <strong>Common troubleshooting</strong>) and the HSL subroutines:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyipopt_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+        <span class="s1">&#39;pyipoptcore&#39;</span><span class="p">,</span>
+        <span class="n">FILES</span><span class="p">,</span>
+        <span class="n">extra_link_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-Wl,--rpath&#39;</span><span class="p">,</span><span class="s1">&#39;-Wl,&#39;</span><span class="o">+</span> <span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">library_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">libraries</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;ipopt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinhsl&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmetis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dl&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">numpy_include</span><span class="p">,</span> <span class="n">IPOPT_INC</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>IPOPT compiled running the scripts <code class="docutils literal notranslate"><span class="pre">get.Blas</span></code> and <code class="docutils literal notranslate"><span class="pre">get.Lapack</span></code> to build a local copy of the BLAS and Lapack libraries and the HSL subroutines:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyipopt_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+        <span class="s1">&#39;pyipoptcore&#39;</span><span class="p">,</span>
+        <span class="n">FILES</span><span class="p">,</span>
+        <span class="n">extra_link_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-Wl,--rpath&#39;</span><span class="p">,</span><span class="s1">&#39;-Wl,&#39;</span><span class="o">+</span> <span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">library_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">libraries</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;ipopt&#39;</span><span class="p">,</span> <span class="s1">&#39;coinblas&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinhsl&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmetis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinlapack&#39;</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">numpy_include</span><span class="p">,</span> <span class="n">IPOPT_INC</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>IPOPT compiled with system-wide BLAS and Lapack libraries (<strong>without</strong> running the scripts <code class="docutils literal notranslate"><span class="pre">get.Blas</span></code> and <code class="docutils literal notranslate"><span class="pre">get.Lapack</span></code> as described under <strong>Common troubleshooting</strong>) and the Mumps linear solver (running the script <code class="docutils literal notranslate"><span class="pre">get.Mumps</span></code>):</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyipopt_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+        <span class="s1">&#39;pyipoptcore&#39;</span><span class="p">,</span>
+        <span class="n">FILES</span><span class="p">,</span>
+        <span class="n">extra_link_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-Wl,--rpath&#39;</span><span class="p">,</span><span class="s1">&#39;-Wl,&#39;</span><span class="o">+</span> <span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">library_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">libraries</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;ipopt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmumps&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmetis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dl&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">numpy_include</span><span class="p">,</span> <span class="n">IPOPT_INC</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>IPOPT compiled running the scripts <code class="docutils literal notranslate"><span class="pre">get.Blas</span></code> and <code class="docutils literal notranslate"><span class="pre">get.Lapack</span></code> to build a local copy of the BLAS and Lapack libraries and the Mumps linear solver (running the script <code class="docutils literal notranslate"><span class="pre">get.Mumps</span></code>):</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyipopt_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+        <span class="s1">&#39;pyipoptcore&#39;</span><span class="p">,</span>
+        <span class="n">FILES</span><span class="p">,</span>
+        <span class="n">extra_link_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-Wl,--rpath&#39;</span><span class="p">,</span><span class="s1">&#39;-Wl,&#39;</span><span class="o">+</span> <span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">library_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">libraries</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;ipopt&#39;</span><span class="p">,</span> <span class="s1">&#39;coinblas&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmumps&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmetis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinlapack&#39;</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">numpy_include</span><span class="p">,</span> <span class="n">IPOPT_INC</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that in each case the line <code class="docutils literal notranslate"><span class="pre">extra_link_args=['-Wl,--rpath','-Wl,'+</span> <span class="pre">IPOPT_LIB]</span></code> has to be uncommented. Then save your changes and close Spyder.</p>
+</div>
+<div class="section" id="installation">
+<h3>6.4 Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>From the terminal window with <code class="docutils literal notranslate"><span class="pre">myenv</span></code> activated and inside the pyipopt directory issue the following command to install the package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ python setup.py install --user
+</pre></div>
+</div>
+<p>This will install the package under <code class="docutils literal notranslate"><span class="pre">~/.local/lib/python3.7/site-packages/pyipopt</span></code> where you should find the  file <code class="docutils literal notranslate"><span class="pre">pyipoptcore.cpython-37m-x86_64-linux-gnu.so</span></code>. If it is not the case, pyipot was not able to properly link your IPOPT installation and the entire procedure has to be repeated after identifying the issues responsible for the failure.</p>
+</div>
+</div>
+<div class="section" id="compilation-from-source-of-pyoptsparse-snopt-optional">
+<h2>7. Compilation from source of pyOptSparse (SNOPT optional)<a class="headerlink" href="#compilation-from-source-of-pyoptsparse-snopt-optional" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://mdolab.engin.umich.edu/docs/packages/pyoptsparse/doc/index.html">pyOptSparse</a> provides a convenient interface between OpenMDAO and a wide suite of optimizers with enhanced MPI capabilities. It is required to wrap both IPOPT and SNOPT using the <code class="docutils literal notranslate"><span class="pre">pyOptSparseDriver</span></code> class.</p>
+<div class="section" id="id2">
+<h3>7.1 Download the required source code<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>To obtain the source code, open a terminal window and activate your environment, than clone the source code from its <a class="reference external" href="https://github.com/mdolab/pyoptsparse">official GitHub repository</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ git clone https://github.com/mdolab/pyoptsparse.git
+</pre></div>
+</div>
+<p>If you have purchased a license for SNOPT and obtained the source code copy all the <code class="docutils literal notranslate"><span class="pre">.f</span></code> files except <code class="docutils literal notranslate"><span class="pre">snopth.f</span></code> into the folder <code class="docutils literal notranslate"><span class="pre">pyoptsparse/pySNOPT/source</span></code>. If not, simply move to the next installation instructions.</p>
+</div>
+<div class="section" id="id3">
+<h3>7.2 Installation<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>To install the package come back to the terminal window, enter the root directory <code class="docutils literal notranslate"><span class="pre">pyoptsparse</span></code> cloned before and run the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd pyoptsparse
+(myenv) $ python setup.py install --user
+</pre></div>
+</div>
+<p>This will install pyOptSparse under <code class="docutils literal notranslate"><span class="pre">~/.local/lib/python3.7/site-packages/pyoptsparse</span></code>.</p>
+</div>
+<div class="section" id="ipopt-wrapping">
+<h3>7.3 IPOPT wrapping<a class="headerlink" href="#ipopt-wrapping" title="Permalink to this headline">¶</a></h3>
+<p>At this point the package is unable to wrap the non-linear solver IPOPT and you have to modify the <code class="docutils literal notranslate"><span class="pre">pyIPOPT.py</span></code> script to tell where the library <code class="docutils literal notranslate"><span class="pre">pyipoptcore.cpython-37m-x86_64-linux-gnu.so</span></code> is located and which linear solvers are available in your IPOPT installation.</p>
+<p>Firstly, enter the directory in which <code class="docutils literal notranslate"><span class="pre">pyIPOPT.py</span></code> is located and open it in your Spyder IDE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd
+(myenv) $ cd .local/lib/python3.7/site-packages/pyoptsparse/pyIPOPT
+(myenv) $ spyder pyIPOPT.py &amp;
+</pre></div>
+</div>
+<p>Secondly, replace the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pyipoptcore</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">pyipopt</span> <span class="kn">import</span> <span class="n">pyipoptcore</span>
+</pre></div>
+</div>
+<p>Thirdly, scroll the <code class="docutils literal notranslate"><span class="pre">def_opts</span></code> dictionary inside the <code class="docutils literal notranslate"><span class="pre">IPOPT</span></code> class until you find the following lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Linear Solver.</span>
+    <span class="s1">&#39;linear_solver&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;ma27&quot;</span><span class="p">],</span>
+    <span class="s1">&#39;linear_system_scaling&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">],</span>  <span class="c1"># Had been &quot;mc19&quot;, but not always available.</span>
+    <span class="s1">&#39;linear_scaling_on_demand&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">],</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>If you have compiled IPOPT with the HSL subroutines, you can try the different solvers included in your IPOPT installation replacing <code class="docutils literal notranslate"><span class="pre">&quot;ma27&quot;</span></code> with either <code class="docutils literal notranslate"><span class="pre">&quot;ma57&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ma86&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;ma97&quot;</span></code> to determine which is the best for your problem. Moreover, replace <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">&quot;mc19&quot;</span></code> to use the corresponding scaling routines.</p></li>
+<li><p>If you select the linear solver <code class="docutils literal notranslate"><span class="pre">&quot;ma57&quot;</span></code>, scroll the dictionary until you reach the MA57 specific options and uncomment the line <code class="docutils literal notranslate"><span class="pre">'ma57_automatic_scaling'</span> <span class="pre">:</span> <span class="pre">[str,</span> <span class="pre">&quot;yes&quot;]</span></code> to allow the solver to use automatic scaling.</p></li>
+<li><p>If you compiled IPOPT with the Mumps linear solver, simply replace <code class="docutils literal notranslate"><span class="pre">&quot;ma27&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">&quot;mumps&quot;</span></code> and let the linear system scaling set to <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>.</p></li>
+</ol>
+<p>You can then modify all the other default settings included in the <code class="docutils literal notranslate"><span class="pre">def_opts</span></code> dictionary after carefully reading the corresponding <a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">official documentation</a>. Finally save your changes and close the file.</p>
+<p>At this point the environment setup is complete and you should be able to perform your MDO analysis and trajectory optimization using the OpenMDAO and dymos libraries.</p>
+</div>
+<div class="section" id="id4">
+<h3>7.4 Common troubleshooting<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>If you are compiling pyOptSparse with SNOPT, the installation could fail if the <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> compiler is not able to locate the BLAS and Lapack libraries installed system-wide. In this case you can explicitly tell where these libraries are located as follows:</p>
+</div></blockquote>
+<blockquote>
+<div><p>Open a new terminal window and identify where BLAS and Lapack are installed:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ locate libblas.so
+</pre></div>
+</div>
+<blockquote>
+<div><p>One of the output should be similar to the following line:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">libblas</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>Similarly, for Lapack:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ locate liblapack.so
+/usr/lib/x86_64-linux-gnu/liblapack.so
+</pre></div>
+</div>
+<blockquote>
+<div><p>Copy the absolute path of the two directories in which <code class="docutils literal notranslate"><span class="pre">libblas.so</span></code> and <code class="docutils literal notranslate"><span class="pre">liblapack.so</span></code> are located and re-run the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script adding the following flags:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">config_fc</span> <span class="o">--</span><span class="n">fcompiler</span><span class="o">=</span><span class="n">gnu95</span> <span class="o">--</span><span class="n">f77flags</span><span class="o">=</span><span class="s1">&#39;-L/usr/lib/x86_64-linux-gnu&#39;</span> <span class="o">--</span><span class="n">f90flags</span><span class="o">=</span><span class="s1">&#39;-L/usr/lib/x86_64-linux-gnu&#39;</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>Then come back to the regular installation instructions to modify the <code class="docutils literal notranslate"><span class="pre">pyIPOPT.py</span></code> script.</p>
+</div></blockquote>
+</div>
+</div>
+</div>
+<div class="section" id="openmdao-dymos-pando-rainman">
+<h1>OpenMDAO/dymos - PANDO/RAINMAN<a class="headerlink" href="#openmdao-dymos-pando-rainman" title="Permalink to this headline">¶</a></h1>
+<p>&#64;author: Alberto FOSSA’</p>
+<p>This <em>step-by-step</em> guide will help you to setup an <a class="reference external" href="https://www.anaconda.com/">Anaconda</a> environment ready to perform Multidisciplinary Design Optimization (MDO) and Trajectory Optimization using the Python-based libraries <a class="reference external" href="https://openmdao.org/">OpenMDAO</a> and <a class="reference external" href="https://openmdao.github.io/dymos/">dymos</a> on the ISAE supercomputers PANDO/RAINMAN.</p>
+<div class="section" id="id5">
+<h2>Dependencies to be installed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>Python packages<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Python 3.7.3 +</p></li>
+<li><p>numpy 1.16.4 +</p></li>
+<li><p>scipy 1.2.1 +</p></li>
+<li><p>matplotlib 3.1.0 +</p></li>
+<li><p>swig 3.0.12 +</p></li>
+<li><p>openmdao 2.9.0 +</p></li>
+<li><p><strong>dymos 0.13.0 (do not install the latest release)</strong></p></li>
+<li><p>pyoptsparse (SNOPT optional)</p></li>
+<li><p>pyipopt</p></li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h3>Additional software<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://coin-or.github.io/Ipopt/index.html">IPOPT</a> (Interior Point Optimizer) 3.12 +</p></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h3>Optional licensed software<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.hsl.rl.ac.uk/ipopt/">HSL 2001 subroutines</a> (free for academic purposes upon request, one working day delay)</p></li>
+<li><p><a class="reference external" href="http://www.sbsi-sol-optimize.com/asp/sol_snopt.htm">SNOPT</a> (Sparse Non-linear Optimizer)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id9">
+<h2>Installation procedure<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>The setup of the whole environment is split in the following steps:</p>
+<ol class="simple">
+<li><p>Module loading</p></li>
+<li><p>Compilation from source of the large-scale non-linear optimizer <a class="reference external" href="https://coin-or.github.io/Ipopt/index.html">IPOPT</a></p></li>
+<li><p>Creation of a dedicated <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment</p></li>
+<li><p>Installation of <a class="reference external" href="https://openmdao.org/">OpenMDAO</a> and <a class="reference external" href="https://openmdao.github.io/dymos/">dymos</a> packages with all their dependencies in the dedicated environment</p></li>
+<li><p>Compilation from source of the <a class="reference external" href="https://github.com/xuy/pyipopt">pyipopt</a> package and linkage with the compiled IPOPT library</p></li>
+<li><p>Compilation from source of the <a class="reference external" href="http://mdolab.engin.umich.edu/docs/packages/pyoptsparse/doc/index.html">pyOptSparse</a> package (SNOPT optional) and linkage with pyipopt</p></li>
+</ol>
+</div>
+<div class="section" id="module-loading">
+<h2>1. Module loading<a class="headerlink" href="#module-loading" title="Permalink to this headline">¶</a></h2>
+<p>Before proceeding with the environment setup, different module already installed on PANDO/RAINMAN have to be loaded and made available in the current session. These modules comprises the <a class="reference external" href="https://software.intel.com/en-us/compilers">Intel compilers</a> suite, the <a class="reference external" href="https://software.intel.com/en-us/mpi-library">Intel MPI library</a>, the <a class="reference external" href="https://software.intel.com/en-us/mkl">Intel Math Kernel Library (MKL)</a> and the <a class="reference external" href="https://www.anaconda.com/">Anaconda</a> platform with Python 3.7.
+To do so, once you are connected to the supercomputer through <code class="docutils literal notranslate"><span class="pre">ssh</span></code> issue the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ module load intel/2019.1.144
+$ module load openmpi/4.0.0-intel19.1
+$ module load mkl/2019.1.144
+$ module load python/3.7
+</pre></div>
+</div>
+<p>A comprehensive summary of all the available modules can be seen typing the command <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">av</span></code>, while the ones currently loaded are displayed issuing <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">list</span></code>.
+All the installation steps described below require those modules to be loaded, so if you interrupt your session and come back later you have to reissue the commands listed above.</p>
+</div>
+<div class="section" id="id10">
+<h2>2. Compilation from source of IPOPT<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id11">
+<h3>2.1 HSL 2011 subroutines<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>As pointed out in the requirements, if you use IPOPT for academic purposes you are strongly recommended to obtain the HSL 2011 subroutines since they perform much more better than the other options. The full suite has to be requested as follows:</p>
+<ul class="simple">
+<li><p>go on the <a class="reference external" href="http://www.hsl.rl.ac.uk/ipopt/">HSL for IPOPT</a> webpage</p></li>
+<li><p>under <strong>Coin-HSL Full (Stable)</strong> click on <strong>Source</strong></p></li>
+<li><p>In the request page select <strong>Personal Academic License</strong>, then fill and submit the form</p></li>
+<li><p>Within one working day you should receive an email with a link to download the source code as a compressed archive</p></li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h3>2.2 Download the required source code<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>Once you have obtained the HSL subroutines or you decide to use a different linear solver you can proceed downloading the IPOPT source code and perform the installation.
+Firstly, to avoid conflicts with the ISAE proxy configure the network settings exporting the corresponding environment variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export http_proxy=http://proxy.isae.fr:3128
+$ export https_proxy=http://proxy.isae.fr:3128
+</pre></div>
+</div>
+<p>Then download the latest stable release of the IPOPT source code as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone --recursive -b stable/3.12 https://github.com/coin-or/Ipopt.git CoinIpopt
+</pre></div>
+</div>
+<p>This command will place all the files in the folder <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt</span></code>. When the download is complete, enter the new directory to download the different dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd CoinIpopt
+$ cd ThirdParty/ASL
+$ ./get.ASL
+</pre></div>
+</div>
+<p>To obtain the source code of the ASL libraries and interface IPOPT with the AMPL modelling language.</p>
+<p>Then proceed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../Metis
+$ ./get.Metis
+</pre></div>
+</div>
+<p>To download the matrix ordering algorithm Metis.</p>
+<p>If you have obtained the HSL source code unpack the archive, move and rename the corresponding directory such that it becomes <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt/ThirdParty/HSL/coinhsl</span></code>.</p>
+<blockquote>
+<div><p>If you haven’t requested the HSL subroutines you have to download the Mumps linear solver to replace the ones provided by the former libraries.
+To do so, enter the directory <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt/ThirdParty/Mumps</span></code> and issue the following command: <code class="docutils literal notranslate"><span class="pre">./get.Mumps</span></code>.</p>
+</div></blockquote>
+<p>At this point you have obtained all the required source code and you can proceed with the configuration and installation steps.</p>
+</div>
+<div class="section" id="id13">
+<h3>2.3 Configuration and installation<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p>Move back to the directory <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt</span></code> and create a separate folder where the compiled code will be placed. Then enter the newly created directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir build
+$ cd build
+</pre></div>
+</div>
+<p>After that run the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script adding the proper compilers flags to link your installation with the Intel MKL, enable parallel computation at runtime and disable the <strong>linear solver loader</strong> option that will prevent you to link IPOPT with the pyipopt package. For that purpose issue the following command, all on the same line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ../configure CC=icc CXX=icpc F77=ifort F90=ifort --with-blas=&#39;-liomp5 -lpthread -lm -ldl&#39; --with-lapack=&#39;-liomp5 -lpthread -lm -ldl&#39; CFLAGS=&#39;-mkl=parallel -qopenmp&#39; CXXFLAGS=&#39;-mkl=parallel -qopenmp&#39; FFLAGS=&#39;-mkl=parallel -qopenmp&#39; --disable-linear-solver-loader
+</pre></div>
+</div>
+<p>If the last output is <code class="docutils literal notranslate"><span class="pre">Main</span> <span class="pre">configuration</span> <span class="pre">of</span> <span class="pre">Ipopt</span> <span class="pre">successful</span></code> you can proceed building the code. In your terminal window type the followings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+$ make test
+</pre></div>
+</div>
+<p>This will build the code and perform a series of test on different examples. If all of them are successful you can complete the installation procedure with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="id14">
+<h3>2.4 Verify your IPOPT installation<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<p>At this stage you can verify if the IPOPT binaries were correctly built entering the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory and checking the presence of the executable <code class="docutils literal notranslate"><span class="pre">ipopt</span></code>. From your <code class="docutils literal notranslate"><span class="pre">~/CoinIpopt/build</span></code> directory type the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd bin
+$ ./ipopt
+</pre></div>
+</div>
+<p>You should get an output similar to this one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>No stub!
+usage: ipopt [options] stub [-AMPL] [&lt;assignment&gt; ...]
+
+Options:
+    --  {end of options}
+	-=  {show name= possibilities}
+	-?  {show usage}
+	-bf {read boundsfile f}
+	-e  {suppress echoing of assignments}
+	-of {write .sol file to file f}
+	-s  {write .sol file (without -AMPL)}
+	-v  {just show version}
+</pre></div>
+</div>
+<p>You can also run a simple example included in the source code to verify the convergence of the algorithm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../../Ipopt/test
+$ ../../build/bin/ipopt mytoy.nl
+</pre></div>
+</div>
+<p>The last two output lines should be similar to these ones:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EXIT</span><span class="p">:</span> <span class="n">Optimal</span> <span class="n">Solution</span> <span class="n">Found</span><span class="o">.</span>
+<span class="n">Ipopt</span> <span class="mf">3.12</span><span class="o">.</span><span class="mi">13</span><span class="p">:</span> <span class="n">Optimal</span> <span class="n">Solution</span> <span class="n">Found</span>
+</pre></div>
+</div>
+<p>Once you have successfully installed IPOPT you can jump to the next chapter to setup your <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment.</p>
+</div>
+</div>
+<div class="section" id="id15">
+<h2>3. Creation of a dedicated conda environment<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<p>To create a new <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment issue the following commands replacing <code class="docutils literal notranslate"><span class="pre">myenv</span></code> with the desired environment name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name myenv python=3.7
+</pre></div>
+</div>
+<p>This will create a new <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment with Python 3.7 and other basics packages such as <code class="docutils literal notranslate"><span class="pre">pip</span></code> already included.
+The new environment can be activated and deactivated with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source activate myenv
+(myenv) $ source deactivate myenv
+</pre></div>
+</div>
+</div>
+<div class="section" id="id16">
+<h2>4. Installation of OpenMDAO, dymos and relative dependencies<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<p>Assuming you have created a dedicated <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment named <code class="docutils literal notranslate"><span class="pre">myenv</span></code>, you can proceed with the installation of OpenMDAO, dymos and their required dependencies. First of all, activate your environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source activate myenv
+</pre></div>
+</div>
+<p>Then follow the steps below to download and install the different packages.</p>
+<div class="section" id="installation-of-numpy-scipy-matplotlib-and-swig">
+<h3>4.1 Installation of Numpy, Scipy, Matplotlib and Swig<a class="headerlink" href="#installation-of-numpy-scipy-matplotlib-and-swig" title="Permalink to this headline">¶</a></h3>
+<p>Numpy and Scipy are two Python packages to perform mathematical operations on large set of arrays, while  Matplotlib is a widely-used library to visualize your results. Finally, Swig is a package to wrap C and C++ code within Python. With your environment active issue the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ conda install numpy scipy matplotlib swig
+</pre></div>
+</div>
+<p>And answer <code class="docutils literal notranslate"><span class="pre">yes</span></code> when prompted.</p>
+</div>
+<div class="section" id="id17">
+<h3>4.2 Installation of mpi4py<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<p>mpi4py provides a Python wrapper for the MPI libraries. Instead of downloading the pre-compiled wheels, better performances at runtime are achieved compiling its source code against the Intel MKL libraries available on PANDO/RAINMAN using the <code class="docutils literal notranslate"><span class="pre">pip</span></code> package manager.
+Firstly, tell <code class="docutils literal notranslate"><span class="pre">pip</span></code> to use the loaded Intel compilers instead of the default GNU compilers exporting the corresponding environment variables with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ export CC=icc
+(myenv) $ export MPICC=mpiicc
+</pre></div>
+</div>
+<p>Then install mpi4py through the Python package manager:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ pip install mpi4py
+</pre></div>
+</div>
+</div>
+<div class="section" id="id18">
+<h3>4.3 Installation of OpenMDAO and dymos<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<p>As in the previous case, these packages have to be downloaded and installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> since they are not deployed on the official conda channels. They can be obtained issuing the followings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ pip install openmdao
+(myenv) $ pip install git+https://github.com/OpenMDAO/dymos.git
+</pre></div>
+</div>
+<p>This will install the latest release of both packages. To obtain a specific version of dymos, in this case <code class="docutils literal notranslate"><span class="pre">v0.13.0</span></code>, after installing OpenMDAO issue the commands below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ git clone https://github.com/OpenMDAO/dymos.git --branch v0.13.0
+(myenv) $ cd dymos
+(myenv) $ python setup.py install
+</pre></div>
+</div>
+<p>You can now work on your own projects, but you will not be able to link IPOPT and SNOPT with your OpenMDAO installation since the lasts require pyipopt and pyOptSparse to be properly compiled as described in the following chapters.</p>
+</div>
+</div>
+<div class="section" id="id19">
+<h2>5. Compilation from source of pyipopt<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/xuy/pyipopt">pyipopt</a> package provides a Python wrapper for your IPOPT installation allowing OpenMDAO to call the NLP solver while performing the user-defined MDO. This package can be installed following the instructions provided in this section.</p>
+<div class="section" id="id20">
+<h3>5.1 Download the required source code<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<p>With your environment active, move to a convenient directory and clone the source code from its GitHub repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ git clone https://github.com/xuy/pyipopt.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="id21">
+<h3>5.2 IPOPT installation path<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<p>Once the download is completed enter the directory where IPOPT was compiled and retrieve its absolute path with the command <code class="docutils literal notranslate"><span class="pre">pwd</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd
+(myenv) $ cd CoinIpopt/build
+(myenv) $ pwd
+</pre></div>
+</div>
+<p>You should obtain the following output where <code class="docutils literal notranslate"><span class="pre">username</span></code> is your actual user name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">department</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">CoinIpopt</span><span class="o">/</span><span class="n">build</span>
+</pre></div>
+</div>
+<p>Then enter the <code class="docutils literal notranslate"><span class="pre">pyipopt</span></code> folder and edit the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script to reflect the configuration of your system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd
+(myenv) $ cd pyipopt
+(myenv) $ vim setup.py
+</pre></div>
+</div>
+<p>To tell pyipopt where to catch your IPOPT installation replace the three lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IPOPT_DIR</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/&#39;</span>
+<span class="n">IPOPT_LIB</span> <span class="o">=</span> <span class="n">get_ipopt_lib</span><span class="p">()</span>
+<span class="n">IPOPT_INC</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">IPOPT_DIR</span><span class="p">,</span> <span class="s1">&#39;include/coin/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IPOPT_DIR</span> <span class="o">=</span> <span class="s1">&#39;/home/department/username/CoinIpopt/build/&#39;</span>
+<span class="n">IPOPT_LIB</span> <span class="o">=</span> <span class="s1">&#39;/home/department/username/CoinIpopt/build/lib&#39;</span>
+<span class="n">IPOPT_INC</span> <span class="o">=</span> <span class="s1">&#39;/home/department/username/CoinIpopt/build/include/coin/&#39;</span>
+</pre></div>
+</div>
+<p>Where the strings between <code class="docutils literal notranslate"><span class="pre">''</span></code> have to reflect the output of <code class="docutils literal notranslate"><span class="pre">pwd</span></code> obtained before.</p>
+</div>
+<div class="section" id="id22">
+<h3>5.3 IPOPT libraries included in your installation<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<p>To specify which libraries you included during the IPOPT installation modify the corresponding arguments passed to the <code class="docutils literal notranslate"><span class="pre">Extension</span></code> class:</p>
+<ol class="simple">
+<li><p>IPOPT compiled with the HSL subroutines:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyipopt_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+        <span class="s1">&#39;pyipoptcore&#39;</span><span class="p">,</span>
+        <span class="n">FILES</span><span class="p">,</span>
+        <span class="n">extra_link_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-Wl,--rpath&#39;</span><span class="p">,</span><span class="s1">&#39;-Wl,&#39;</span><span class="o">+</span> <span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">library_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">libraries</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;ipopt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinhsl&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmetis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dl&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">numpy_include</span><span class="p">,</span> <span class="n">IPOPT_INC</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>IPOPT compiled with the Mumps linear solver (running the script <code class="docutils literal notranslate"><span class="pre">get.Mumps</span></code>):</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyipopt_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+        <span class="s1">&#39;pyipoptcore&#39;</span><span class="p">,</span>
+        <span class="n">FILES</span><span class="p">,</span>
+        <span class="n">extra_link_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-Wl,--rpath&#39;</span><span class="p">,</span><span class="s1">&#39;-Wl,&#39;</span><span class="o">+</span> <span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">library_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">IPOPT_LIB</span><span class="p">],</span>
+        <span class="n">libraries</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;ipopt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmumps&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;coinmetis&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dl&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">numpy_include</span><span class="p">,</span> <span class="n">IPOPT_INC</span><span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that in both cases the line <code class="docutils literal notranslate"><span class="pre">extra_link_args=['-Wl,--rpath','-Wl,'+</span> <span class="pre">IPOPT_LIB]</span></code> has to be uncommented. Then save your changes and close <code class="docutils literal notranslate"><span class="pre">vim</span></code>.</p>
+</div>
+<div class="section" id="id23">
+<h3>5.4 Installation<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<p>From the terminal window with <code class="docutils literal notranslate"><span class="pre">myenv</span></code> activated and inside the pyipopt directory issue the following command to install the package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ python setup.py install --user
+</pre></div>
+</div>
+<p>This will install the package under <code class="docutils literal notranslate"><span class="pre">~/.local/lib/python3.7/site-packages/pyipopt</span></code> where you should find the  file <code class="docutils literal notranslate"><span class="pre">pyipoptcore.cpython-37m-x86_64-linux-gnu.so</span></code>. If it is not the case, pyipot was not able to properly link your IPOPT installation and the entire procedure has to be repeated after identifying the issues responsible for the failure.</p>
+</div>
+</div>
+<div class="section" id="id24">
+<h2>6. Compilation from source of pyOptSparse (SNOPT optional)<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://mdolab.engin.umich.edu/docs/packages/pyoptsparse/doc/index.html">pyOptSparse</a> provides a convenient interface between OpenMDAO and a wide suite of optimizers with enhanced MPI capabilities. It is required to wrap both IPOPT and SNOPT using the <code class="docutils literal notranslate"><span class="pre">pyOptSparseDriver</span></code> class.</p>
+<div class="section" id="id25">
+<h3>6.1 Download the required source code<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<p>The pyOptSparse source code is obtained cloning its <a class="reference external" href="https://github.com/mdolab/pyoptsparse">official GitHub repository</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ git clone https://github.com/mdolab/pyoptsparse.git
+</pre></div>
+</div>
+<p>If you have purchased a license for SNOPT and obtained the source code copy all the <code class="docutils literal notranslate"><span class="pre">.f</span></code> files except <code class="docutils literal notranslate"><span class="pre">snopth.f</span></code> into the folder <code class="docutils literal notranslate"><span class="pre">pyoptsparse/pySNOPT/source</span></code>. If not, simply move to the next installation instructions.</p>
+</div>
+<div class="section" id="id26">
+<h3>6.2 Installation<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<p>Firstly, tell the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script to use the loaded Intel compilers instead of the default GNU compilers exporting the corresponding environment variables with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ export CC=icc
+(myenv) $ export MPICC=mpiicc
+</pre></div>
+</div>
+<p>Then enter the root directory <code class="docutils literal notranslate"><span class="pre">pyoptsparse</span></code> cloned before and run the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> adding the proper compilers flags to dynamically link the SNOPT source code with the Intel MKL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd pyoptsparse
+(myenv) $ python setup.py config_fc --fcompiler=intelem --f77flags=&#39;-Wl,--no-as-needed -mkl=parallel -liomp5 -lpthread -lm -ldl -qopenmp&#39; --f90flags=&#39;-Wl,--no-as-needed -mkl=parallel -liomp5 -lpthread -lm -ldl -qopenmp&#39; install --user
+</pre></div>
+</div>
+<p>This will install pyOptSparse under <code class="docutils literal notranslate"><span class="pre">~/.local/lib/python3.7/site-packages/pyoptsparse</span></code>.</p>
+</div>
+<div class="section" id="id27">
+<h3>6.3 IPOPT wrapping<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<p>At this point the package is unable to wrap the nonlinear solver IPOPT and you have to modify the <code class="docutils literal notranslate"><span class="pre">pyIPOPT.py</span></code> script to tell where the library <code class="docutils literal notranslate"><span class="pre">pyipoptcore.cpython-37m-x86_64-linux-gnu.so</span></code> is located and which linear solvers are available in your IPOPT installation.</p>
+<p>Firstly, enter the directory in which <code class="docutils literal notranslate"><span class="pre">pyIPOPT.py</span></code> is located and open it in <code class="docutils literal notranslate"><span class="pre">vim</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(myenv) $ cd
+(myenv) $ cd .local/lib/python3.7/site-packages/pyoptsparse/pyIPOPT
+(myenv) $ vim pyIPOPT.py
+</pre></div>
+</div>
+<p>Secondly, replace the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pyipoptcore</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">pyipopt</span> <span class="kn">import</span> <span class="n">pyipoptcore</span>
+</pre></div>
+</div>
+<p>Thirdly, scroll the <code class="docutils literal notranslate"><span class="pre">def_opts</span></code> dictionary inside the <code class="docutils literal notranslate"><span class="pre">IPOPT</span></code> class until you find the following lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Linear Solver.</span>
+    <span class="s1">&#39;linear_solver&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;ma27&quot;</span><span class="p">],</span>
+    <span class="s1">&#39;linear_system_scaling&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">],</span>  <span class="c1"># Had been &quot;mc19&quot;, but not always available.</span>
+    <span class="s1">&#39;linear_scaling_on_demand&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">],</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>If you have compiled IPOPT with the HSL subroutines, you can try the different solvers included in your IPOPT installation replacing <code class="docutils literal notranslate"><span class="pre">&quot;ma27&quot;</span></code> with either <code class="docutils literal notranslate"><span class="pre">&quot;ma57&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ma86&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;ma97&quot;</span></code> to determine which is the best for your problem. Moreover, replace <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">&quot;mc19&quot;</span></code> to use the corresponding scaling routines.</p></li>
+<li><p>If you select the linear solver <code class="docutils literal notranslate"><span class="pre">&quot;ma57&quot;</span></code>, scroll the dictionary until you reach the MA57 specific options and uncomment the line <code class="docutils literal notranslate"><span class="pre">'ma57_automatic_scaling'</span> <span class="pre">:</span> <span class="pre">[str,</span> <span class="pre">&quot;yes&quot;]</span></code> to allow the solver to use automatic scaling.</p></li>
+<li><p>If you compiled IPOPT with the Mumps linear solver, simply replace <code class="docutils literal notranslate"><span class="pre">&quot;ma27&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">&quot;mumps&quot;</span></code> and let the linear system scaling set to <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>.</p></li>
+</ol>
+<p>You can then modify all the other default settings included in the <code class="docutils literal notranslate"><span class="pre">def_opts</span></code> dictionary after carefully reading the corresponding <a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">official documentation</a>. Finally save your changes and close the file.</p>
+<p>At this point the environment setup is complete and you should be able to perform your MDO analysis and trajectory optimization using the OpenMDAO and dymos libraries.</p>
+</div>
+</div>
+<div class="section" id="useful-links">
+<h2>Useful Links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.anaconda.com/">Anaconda homepage</a></p></li>
+<li><p><a class="reference external" href="https://openmdao.github.io/dymos/">dymos documentation</a></p></li>
+<li><p><a class="reference external" href="https://github.com/OpenMDAO/dymos">dymos GitHub repository</a></p></li>
+<li><p><a class="reference external" href="http://www.hsl.rl.ac.uk/ipopt/">HSL for IPOPT</a></p></li>
+<li><p><a class="reference external" href="https://software.intel.com/en-us/compilers">Intel Compilers</a></p></li>
+<li><p><a class="reference external" href="https://software.intel.com/en-us/mkl">Intel Math Kernel Library (MKL)</a></p></li>
+<li><p><a class="reference external" href="https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor">Intel MKL Link Line Advisor</a></p></li>
+<li><p><a class="reference external" href="https://software.intel.com/en-us/mpi-library">Intel MPI library</a></p></li>
+<li><p><a class="reference external" href="https://coin-or.github.io/Ipopt/index.html">IPOPT homepage</a></p></li>
+<li><p><a class="reference external" href="https://coin-or.github.io/Ipopt/INSTALL.html">IPOPT installation instructions</a></p></li>
+<li><p><a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">IPOPT options</a></p></li>
+<li><p><a class="reference external" href="https://openmdao.org/">OpenMDAO homepage</a></p></li>
+<li><p><a class="reference external" href="https://github.com/OpenMDAO/OpenMDAO">OpenMDAO GitHub repository</a></p></li>
+<li><p><a class="reference external" href="https://github.com/xuy/pyipopt">pyipopt GitHub repository</a></p></li>
+<li><p><a class="reference external" href="http://mdolab.engin.umich.edu/docs/packages/pyoptsparse/doc/index.html">pyOptSparse documentation</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mdolab/pyoptsparse">pyOptSparse GitHub repository</a></p></li>
+<li><p><a class="reference external" href="http://www.sbsi-sol-optimize.com/asp/sol_snopt.htm">SNOPT license</a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="Package Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation_index.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -19,6 +19,7 @@ Welcome to Trajectory Optimization for Reusable Lunar Lander's documentation!
    modules/reader
    modules/surrogate
    modules/utils
+   installation/installation_index
 
 
 Indices and tables

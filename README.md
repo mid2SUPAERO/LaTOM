@@ -1,11 +1,19 @@
-# MAE Research Project
 # Optimal control of trajectory of a reusable launcher in OpenMDAO/dymos
 
-## Students
+## Authors
 
 Alberto FOSSA'
 
 Giuliana Elena MICELI
+
+## Installation
+
+Refer to [install.md](docs/installation/install.md) for the installation instructions
+Refer to [environment.md](docs/installation/environment.md) to properly setup the OpenMDAO/dymos environment
+
+## Documentation
+
+Refer to [https://mid2supaero.github.io/RpFossaMiceli/](https://mid2supaero.github.io/RpFossaMiceli/) for the package documentation
 
 ## Contents
 
@@ -42,14 +50,6 @@ In either case do the following:
 2. read the list that describes the different possibilities and choose the appropriate value for the variable *ch*
 3. optionally define your own parameters to perform a new optimization
 4. run the script and wait for the results to be displayed
-
-## Installation
-
-Refer to [install.md](resources/install.md) for the installation instructions
-
-## Documantation
-
-Refer to [https://mid2supaero.github.io/RpFossaMiceli/](https://mid2supaero.github.io/RpFossaMiceli/) for the package documentation
 
 ## References
 

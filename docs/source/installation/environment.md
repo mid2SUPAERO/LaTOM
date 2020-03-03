@@ -1,10 +1,8 @@
-﻿# OpenMDAO/dymos Installations Guides
-
-# Personal Workstation
+# OpenMDAO/dymos - Personal Workstation
 
 @author: Alberto FOSSA'
 
-This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environment ready to perform Multidisciplinary Design Optimization (MDO) and Trajectory Optimization using the Python-based libraries [OpenMDAO][openmdao] and [dymos][dymos].
+This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environment ready to perform Multidisciplinary Design Optimization (MDO) and Trajectory Optimization using the Python-based packages [OpenMDAO][openmdao] and [dymos][dymos].
 
 ## Dependencies to be installed
 
@@ -14,23 +12,24 @@ This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environ
 * numpy 1.16.4 +
 * scipy 1.2.1 +
 * matplotlib 3.1.0 +
-* openmdao 2.8.0 +
+* swig 3.0.12 +
+* openmdao 2.9.0 +
 * **dymos 0.13.0 (do not install the latest release)**
 * pyoptsparse (SNOPT optional)
 * pyipopt
 
 #### Additional software
 
-* IPOPT 3.12
+* [IPOPT][ipopt] (Interior Point Optimizer) 3.12 +
 
-#### Optional licensed packages
+#### Optional licensed software
 
-* [HSL 2001 subroutines][hsl_ipopt], free for academic purposes upon request (one working day delay)
-* [SNOPT][snopt] sparse nonlinear optimizer
+* [HSL 2001 subroutines][hsl_ipopt] (free for academic purposes upon request, one working day delay)
+* [SNOPT][snopt] Sparse Non-linear Optimizer
 
 ## Requirements
 
-* system with 64-bit Linux OS (Ubuntu 18.04 LTS recommended)
+* system with 64-bit Linux OS (tested on Ubuntu 18.04 LTS and RHEL 7)
 * temporary root access using `sudo` (step 1 only)
 
 ## Installation procedure
@@ -38,12 +37,12 @@ This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environ
 The setup of the whole environment is split in the following steps:
 
 1. Installation of the MPI, BLAS and Lapack libraries through the OS package manager
-2. Compilation from source of the large-scale nonlinear optimizer [IPOPT][ipopt]
+2. Compilation from source of the large-scale non-linear optimizer [IPOPT][ipopt]
 3. Installation of the [Anaconda][anaconda] platform
 4. Creation of a dedicated `conda` environment
 5. Installation of [OpenMDAO][openmdao] and [dymos][dymos] packages with all their dependencies in the dedicated environment
 6. Compilation from source of the [pyipopt][pyipopt] package and linkage with the compiled IPOPT library
-7. Compilation from source of the [pyOptSparse][pyoptsparse] package (SNOPT optional) and linkage with pyipopt 
+7. Compilation from source of the [pyOptSparse][pyoptsparse] package (SNOPT optional) and linkage with pyipopt
 
 ## 1. Installation of MPI, BLAS and Lapack libraries
 
@@ -205,7 +204,7 @@ $ ./get.Lapack
 ```
 
 > This will download a local copy of the BLAS and Lapack libraries and IPOPT will use them. You can now proceed adding the source code for the linear solver of your choice and perform the configuration and installation steps as described above.
-For other issues please refer to the [official IPOPT documentation][ipopt_install] availabe online.
+For other issues please refer to the [official IPOPT documentation][ipopt_install] available online.
 
 ## 3. Installation of the Anaconda platform
 
@@ -479,7 +478,7 @@ This will install pyOptSparse under `~/.local/lib/python3.7/site-packages/pyopts
 
 #### 7.3 IPOPT wrapping
 
-At this point the package is unable to wrap the nonlinear solver IPOPT and you have to modify the `pyIPOPT.py` script to tell where the library `pyipoptcore.cpython-37m-x86_64-linux-gnu.so` is located and which linear solvers are available in your IPOPT installation.
+At this point the package is unable to wrap the non-linear solver IPOPT and you have to modify the `pyIPOPT.py` script to tell where the library `pyipoptcore.cpython-37m-x86_64-linux-gnu.so` is located and which linear solvers are available in your IPOPT installation.
 
 Firstly, enter the directory in which `pyIPOPT.py` is located and open it in your Spyder IDE:
 
@@ -549,7 +548,7 @@ python setup.py config_fc --fcompiler=gnu95 --f77flags='-L/usr/lib/x86_64-linux-
 
 > Then come back to the regular installation instructions to modify the `pyIPOPT.py` script.
 
-# ISAE supercomputers PANDO/RAINMAN
+# OpenMDAO/dymos - PANDO/RAINMAN
 
 @author: Alberto FOSSA'
 
@@ -563,30 +562,31 @@ This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environ
 * numpy 1.16.4 +
 * scipy 1.2.1 +
 * matplotlib 3.1.0 +
-* openmdao 2.8.0 +
+* swig 3.0.12 +
+* openmdao 2.9.0 +
 * **dymos 0.13.0 (do not install the latest release)**
 * pyoptsparse (SNOPT optional)
 * pyipopt
 
 #### Additional software
 
-* IPOPT 3.12
+* [IPOPT][ipopt] (Interior Point Optimizer) 3.12 +
 
-#### Optional licensed packages
+#### Optional licensed software
 
-* [HSL 2001 subroutines][hsl_ipopt], free for academic purposes upon request (one working day delay)
-* [SNOPT][snopt] sparse nonlinear optimizer
+* [HSL 2001 subroutines][hsl_ipopt] (free for academic purposes upon request, one working day delay)
+* [SNOPT][snopt] (Sparse Non-linear Optimizer)
 
 ## Installation procedure
 
 The setup of the whole environment is split in the following steps:
 
 1. Module loading
-2. Compilation from source of the large-scale nonlinear optimizer [IPOPT][ipopt]
+2. Compilation from source of the large-scale non-linear optimizer [IPOPT][ipopt]
 3. Creation of a dedicated `conda` environment
 4. Installation of [OpenMDAO][openmdao] and [dymos][dymos] packages with all their dependencies in the dedicated environment
 5. Compilation from source of the [pyipopt][pyipopt] package and linkage with the compiled IPOPT library
-6. Compilation from source of the [pyOptSparse][pyoptsparse] package (SNOPT optional) and linkage with pyipopt 
+6. Compilation from source of the [pyOptSparse][pyoptsparse] package (SNOPT optional) and linkage with pyipopt
 
 ## 1. Module loading
 
@@ -638,7 +638,7 @@ $ cd ThirdParty/ASL
 $ ./get.ASL
 ```
 
-To obtain the source code of the ASL libraries and interface IPOPT with the AMPL modeling language.
+To obtain the source code of the ASL libraries and interface IPOPT with the AMPL modelling language.
 
 Then proceed with:
 
@@ -764,7 +764,7 @@ And answer `yes` when prompted.
 
 #### 4.2 Installation of mpi4py
 
-mpi4py provides a Python wrapper for the MPI libraries. Instead of downloading the precompiled wheels, better performances at runtime are achieved compiling its source code against the Intel MKL libraries available on PANDO/RAINMAN using the `pip` package manager.
+mpi4py provides a Python wrapper for the MPI libraries. Instead of downloading the pre-compiled wheels, better performances at runtime are achieved compiling its source code against the Intel MKL libraries available on PANDO/RAINMAN using the `pip` package manager.
 Firstly, tell `pip` to use the loaded Intel compilers instead of the default GNU compilers exporting the corresponding environment variables with the following commands:
 
 ```
