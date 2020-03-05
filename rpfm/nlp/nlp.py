@@ -265,7 +265,7 @@ class SinglePhaseNLP(NLP):
         Parameters
         ----------
         tof : float
-            Phase time of flight (TOF) [-]
+            Phase time of flight (TOF) [s]
         t_bounds : tuple
             Time of flight lower and upper bounds expressed as a fraction of `tof`
 
@@ -287,7 +287,7 @@ class SinglePhaseNLP(NLP):
         Parameters
         ----------
         tof : float
-            Phase time of flight (TOF) [-]
+            Phase time of flight (TOF) [s]
 
         """
 

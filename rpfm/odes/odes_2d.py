@@ -303,6 +303,12 @@ class Polar2RApo(Polar2COE):
 
         ar = np.arange(self.options['num_nodes'])
 
+        """
+        self.declare_partials(of='c', wrt='r', method='cs')
+        self.declare_partials(of='c', wrt='u', method='cs')
+        self.declare_partials(of='c', wrt='v', method='cs')
+        """
+
         self.declare_partials(of='c', wrt='r', rows=ar, cols=ar)
         self.declare_partials(of='c', wrt='u', rows=ar, cols=ar)
         self.declare_partials(of='c', wrt='v', rows=ar, cols=ar)
@@ -316,8 +322,9 @@ class Polar2RApo(Polar2COE):
         v = inputs['v']
 
         a = 2*gm - r*(u*u + v*v)
-
         outputs['c'] = a*(a*ra*ra + r*(r*r*v*v - 2*gm*ra))
+
+        # outputs['c'] = ra - (r*(gm + ((r*v*v-gm)**2 + (r*u*v)**2)**0.5))/(2*gm - r*(u**2 + v**2))
 
     def compute_partials(self, inputs, jacobian):
 

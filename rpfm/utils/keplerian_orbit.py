@@ -69,9 +69,6 @@ class TwoDimOrb:
 
         self.E = - gm / 2 / self.a  # specific energy in 2BP [m^2/s^2]
 
-        # cr3bp = Cr3bpEM()
-        # self.J = 3 - cr3bp.mu*(1 + cr3bp.mu) - 2*self.E*cr3bp.T**2/cr3bp.L**2  # Jacobi constant approximation
-
     @staticmethod
     def coe2polar(gm, ta, **kwargs):
 

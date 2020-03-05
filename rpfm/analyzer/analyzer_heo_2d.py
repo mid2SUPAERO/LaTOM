@@ -70,16 +70,16 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         states_end = self.states[-1]
         a, e, h, ta = TwoDimOrb.polar2coe(self.gm_res, states_end[0], states_end[2], states_end[3])
 
-        # coasting orbit
+        # coasting orbit in dimensional units
         if np.isclose(self.gm_res, 1.0):
             self.transfer = TwoDimOrb(self.body.GM, a=a*self.body.R, e=e)
         else:
             self.transfer = TwoDimOrb(self.body.GM, a=a, e=e)
 
-        # finite dV at departure
+        # finite dV at departure [m/s]
         self.dv = self.sc.Isp * g0 * np.log(self.sc.m0/states_end[-1])
 
-        # impulsive dV at arrival
+        # impulsive dV at arrival [m/s]
         sc = deepcopy(self.sc)
         sc.m0 = states_end[-1]
         self.insertion_burn = ImpulsiveBurn(sc, self.nlp.guess.ht.arrOrb.va - self.transfer.va)

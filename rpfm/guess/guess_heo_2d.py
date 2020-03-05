@@ -52,10 +52,15 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
         t_ht = self.t[self.t > self.pow.tf]
 
         self.pow.compute_trajectory(t_pow)
-        self.ht.compute_trajectory(t_ht, self.pow.tf, theta0=self.pow.thetaf, m=self.pow.mf)
 
-        self.states = np.vstack((self.pow.states, self.ht.states))
-        self.controls = np.vstack((self.pow.controls, self.ht.controls))
+        if len(t_ht) > 0:
+            self.ht.compute_trajectory(t_ht, self.pow.tf, theta0=self.pow.thetaf, m=self.pow.mf)
+
+            self.states = np.vstack((self.pow.states, self.ht.states))
+            self.controls = np.vstack((self.pow.controls, self.ht.controls))
+        else:
+            self.states = self.pow.states
+            self.controls = self.pow.controls
 
         if fix_final:
             self.states[:, 1] = self.states[:, 1] - self.pow.thetaf  # final true anomaly equal to pi
@@ -213,13 +218,13 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
     from rpfm.plots.solutions import TwoDimSolPlot
 
-    case = '3p'
+    case = 'ascent'
     moon = Moon()
     h = 100e3
     r_p = 3150e3
     T = 6.5655*86400
     sat = Spacecraft(450, 2.1, g=moon.g)
-    nb = (100, 100, 50)
+    nb = (100, 0)
 
     if case == 'ascent':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
@@ -244,7 +249,7 @@ if __name__ == '__main__':
     else:
         raise ValueError('case must be equal to ascent or descent')
 
-    tr.compute_trajectory(t_eval=t_all, fix_final=False)
+    tr.compute_trajectory(t_eval=t_all, fix_final=True, throttle=False)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

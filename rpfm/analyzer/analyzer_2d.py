@@ -54,6 +54,10 @@ class TwoDimAnalyzer(Analyzer):
 
         Analyzer.__init__(self, body, sc)
 
+        # reference values:
+        # radius: equatorial radius of the central attracting body (Moon)
+        # velocity: velocity on a circular orbit at zero altitude
+        # thrust magnitude: initial spacecraft weight on the Moon surface
         self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, 1.0])
         self.controls_scalers = np.array([self.body.g*self.sc.m0, 1.0])
 
@@ -72,9 +76,9 @@ class TwoDimAnalyzer(Analyzer):
         Returns
         -------
         tof : float
-            Time of flight resulting from the optimized simulation phase [s]
+            Time of flight resulting from the optimized simulation phase [-] or [s]
         t : ndarray
-            Time of flight time series for the optimized simulation phase [s]
+            Time of flight time series for the optimized simulation phase [-] or [s]
         states : ndarray
             States time series for the optimized simulation phase
         controls : ndarray
@@ -188,7 +192,7 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
     """
 
     def __init__(self, body, sc, alt):
-        """Initializes the `TwoDimSinglePhaseAnalyzer` class variables. """
+        """Initializes the `TwoDimSinglePhaseAnalyzer` class attributes. """
 
         TwoDimAnalyzer.__init__(self, body, sc)
 

@@ -24,7 +24,7 @@ class TwoDimNLP(SinglePhaseNLP):
     sc : Spacecraft
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     alpha_bounds : tuple
         Lower and upper bounds on thrust vector direction [rad]
     method : str
@@ -52,13 +52,13 @@ class TwoDimNLP(SinglePhaseNLP):
     Attributes
     ----------
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     alpha_bounds : ndarray
         Lower and upper bounds on thrust vector direction [rad]
     r_circ : float
-        Orbit radius [-]
+        Orbit radius [m]
     v_circ : float
-        Orbital velocity
+        Orbital velocity [m/s]
     guess : TwoDimGuess
         Initial guess to be provided before solving the NLP
 
