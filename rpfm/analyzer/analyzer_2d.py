@@ -305,8 +305,7 @@ class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
 
 
 class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional ascent with constant thrust
-    simulation.
+    """Analyzer class defines the methods to analyze the results of a two dim. ascent with constant thrust simulation.
 
     Parameters
     ----------
@@ -393,8 +392,7 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional ascent with variable thrust
-    simulation.
+    """Analyzer class defines the methods to analyze the results of a two dim. ascent with variable thrust simulation.
 
     Parameters
     ----------
@@ -480,8 +478,7 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional ascent with vertical take off
-    simulation.
+    """Analyzer class defines the methods to analyze the results of a two dim. ascent with vertical take off simulation.
 
     Parameters
     ----------
@@ -879,8 +876,7 @@ class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
 
 
 class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional descent with vertical landing
-    simulation.
+    """Analyzer class defines the methods to analyze the results of a two dim. descent with vertical landing simulation.
 
     Parameters
     ----------

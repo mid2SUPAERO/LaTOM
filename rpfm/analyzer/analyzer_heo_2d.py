@@ -16,9 +16,72 @@ from rpfm.utils.const import g0
 
 
 class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional LLO to HEO simulation.
+
+     It gives the results of an optimal trajectory from a Low Lunar Orbit of choosen altitude to an High Elliptical
+     Orbit which can represent a transposition of an Halo orbit in 2D.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+        alt : float
+    alt : float
+        Value of the initial LLO altitude [m]
+    rp : float
+        Value for the target HEO periselene radius [m]
+    t : float
+        Value for the guessed trajectory time of flight [s]
+    t_bounds : float
+        Value for the time of flight bounds [-]
+    method : str
+        NLP transcription method
+    nb_seg : int
+        Number of segments for the transcription
+    order : int
+        Transcription order
+    solver : str
+        NLP solver
+    snopt_opts : dict
+        Sets some SNOPT's options. Default is ``None``
+    rec_file : str
+        Directory path for the solution recording file. Default is ``None``
+    check_partials : bool
+        Checking of partial derivatives. Default is ``False``
+    u_bound : str
+        Sets the bound of the radial velocity. Can be ``lower``, ``upper`` or ``None``. Default is
+        ``lower``
+
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    phase_name : str
+        Describes the phase name in case of multi-phase trajectories
+    nlp : NLP
+        Instance of `NLP` object describing the type of Non Linear Problem solver used
+    tof : float
+        Value of the time of flight resulting by the simulation [s]
+    tof_exp : float
+        Value of the time of flight of the explicit simulation [s]
+    err : float
+        Value of the error between the optimized simulation results and the explicit simulation results
+    rm_res : float
+        Value of the central body radius [-] or [m]
+    states_scalers : ndarray
+        Reference values of the states with which perform the scaling
+    controls_scalers : ndarray
+        Reference values of the controls with which perform the scaling
+
+    """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False, u_bound='lower'):
+        """Initializes the `TwoDimLLO2HEOAnalyzer` class variables. """
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -27,12 +90,23 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
                                     check_partials=check_partials, u_bound=u_bound)
 
     def plot(self):
+        """Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+           time. The semi-major axis and the eccentricity of the HEO are also displayed.
+        """
 
         sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp, self.states_exp,
                                  a=self.nlp.guess.ht.arrOrb.a*(self.rm_res/self.body.R), e=self.nlp.guess.ht.arrOrb.e)
         sol_plot.plot()
 
     def __str__(self):
+        """Prints info on the `TwoDimLLO2HEOAnalyzer`.
+
+        Returns
+        -------
+        s : str
+            Info on `TwoDimLLO2HEOAnalyzer`
+
+        """
 
         if np.isclose(self.gm_res, 1.0):
             tof = self.tof*self.body.tc/86400
@@ -52,9 +126,78 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional LLO to HEO.
+
+     In this simulation the injection is performed with a final instantaneous non-optimal burn.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    alt : float
+        Value of the final orbit altitude [m]
+    rp : float
+        Value for the target HEO periselene radius [m]
+    t : float
+        Value for the guessed trajectory time of flight [s]
+    t_bounds : float
+        Value for the time of flight bounds [-]
+    method : str
+        NLP transcription method
+    nb_seg : int
+        Number of segments for the transcription
+    order : int
+        Transcription order
+    solver : str
+        NLP solver
+    snopt_opts : dict
+        Sets some SNOPT's options. Default is ``None``
+    rec_file : str
+        Directory path for the solution recording file. Default is ``None``
+    check_partials : bool
+        Checking of partial derivatives. Default is ``False``
+
+
+
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    phase_name : str
+        Describes the phase name in case of multi-phase trajectories
+    nlp : NLP
+        Instance of `NLP` object describing the type of Non Linear Problem solver used
+    tof : float
+        Value of the time of flight resulting by the simulation [s]
+    tof_exp : float
+        Value of the time of flight of the explicit simulation [s]
+    err : float
+        Value of the error between the optimized simulation results and the explicit simulation results
+    rm_res : float
+        Value of the central body radius [- or m]
+    states_scalers = ndarray
+        Reference values of the states with which perform the scaling
+    controls_scalers : ndarray
+        Reference values of the controls with which perform the scaling
+    alt : float
+        Value of the final orbit altitude [m]
+    phase_name : str
+        Name assigned to the problem phase
+    transfer : HohmannTransfer
+        Instance of `HohmannTransfer` computing the keplerian parameters of the transfer orbit
+    insertion_burn : ImpulsiveBurn
+        Instance of `ImpulsiveBurn` defining the delta v required for an impulsive burn
+    dv : float
+        Delta v required for a manoeuvre [m/s]
+    """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False):
+        """Initializes the `TwoDimLLO2ApoAnalyzer` class variables. """
 
         TwoDimAscAnalyzer.__init__(self, body, sc, alt)
 
@@ -65,6 +208,13 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         self.transfer = self.insertion_burn = self.dv = None
 
     def compute_insertion_burn(self, nb=200):
+        """
+
+        Parameters
+        ----------
+        nb : int
+
+        """
 
         # states and COEs at the end of the departure burn
         states_end = self.states[-1]
@@ -108,12 +258,27 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
             self.states_exp[:, 1] = self.states_exp[:, 1] + dtheta
 
     def get_solutions(self, explicit=True, scaled=False, nb=200):
+        """Access the simulation solution.
+
+            Parameters
+            ----------
+            explicit : bool
+                Computes also the explicit simulation. Default is ``True``
+            scaled : bool
+                Scales the simulation results. Default is ``False``
+            nb : int
+                Number of points where the coasting arch is computed
+        """
 
         TwoDimAscAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
         self.compute_insertion_burn(nb=nb)
 
     def plot(self):
+        """Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+           time. The semi-major axis and the eccentricity of the HEO are also displayed.
+
+        """
 
         states_plot = TwoDimStatesTimeSeries(self.rm_res, self.time[0], self.states[0], self.time_exp, self.states_exp)
 
@@ -131,6 +296,13 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         sol_plot.plot()
 
     def __str__(self):
+        """Prints info on the `TwoDimLLO2ApoAnalyzer`.
+
+        Returns
+        -------
+        s : str
+            Info on `TwoDimLLO2ApoAnalyzer`
+        """
 
         if np.isclose(self.gm_res, 1.0):
             time_scaler = self.body.tc
@@ -161,8 +333,45 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional multi phases LLO to HEO simulation
+
+        Parameters
+        ----------
+        body : Primary
+            Instance of `Primary` class describing the central attracting body
+        sc : Spacecraft
+            Instance of `Spacecraft` class describing the spacecraft characteristics
+
+        Attributes
+        ----------
+        body : Primary
+            Instance of `Primary` class describing the central attracting body
+        sc : Spacecraft
+            Instance of `Spacecraft` class describing the spacecraft characteristics
+        phase_name : str
+            Describes the phase name in case of multi-phase trajectories
+        nlp : NLP
+            Instance of `NLP` object describing the type of Non Linear Problem solver used
+        tof : float
+            Value of the time of flight resulting by the simulation [s]
+        tof_exp : float
+            Value of the time of flight of the explicit simulation [s]
+        err : float
+            Value of the error between the optimized simulation results and the explicit simulation results
+        rm_res : float
+            Value of the central body radius [-] or [m]
+        states_scalers : ndarray
+            Reference values of the states with which perform the scaling
+        controls_scalers : ndarray
+            Reference values of the controls with which perform the scaling
+        transfer : HohmannTransfer
+            Instance of `HohmannTransfer` computing the keplerian parameters of the transfer orbit
+        dv : float
+            Delta v required for a manoeuvre [m/s]
+        """
 
     def __init__(self, body, sc):
+        """Initializes the `TwoDimMultiPhasesLLO2HEOAnalyzer` class variables. """
 
         TwoDimAnalyzer.__init__(self, body, sc)
 
@@ -170,6 +379,9 @@ class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
         self.dv = []
 
     def plot(self):
+        """Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+            time. The semi-major axis and the eccentricity of the HEO are also displayed.
+        """
 
         coe_inj = TwoDimOrb.polar2coe(self.gm_res, self.states[-1][-1, 0], self.states[-1][-1, 2],
                                       self.states[-1][-1, 3])
@@ -183,6 +395,7 @@ class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
 
 class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
+
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False):
@@ -242,9 +455,70 @@ class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
 
 
 class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional 3 phases LLO to HEO simulation.
+
+         It gives the results of an optimal trajectory from a Low Lunar Orbit of chosen altitude to an High Elliptical
+         Orbit which can represent a transposition of an Halo orbit in 2D. The trajectory is modeled as the successison
+         of three different phases: a first powered phase for departure, a coasting arch and a final powered phase for
+         the injection.
+
+        Parameters
+        ----------
+        body : Primary
+            Instance of `Primary` class describing the central attracting body
+        sc : Spacecraft
+            Instance of `Spacecraft` class describing the spacecraft characteristics
+            alt : float
+        alt : float
+            Value of the initial LLO altitude [m]
+        rp : float
+            Value for the target HEO periselene radius [m]
+        t : float
+            Value for the guessed trajectory time of flight [s]
+        t_bounds : float
+            Value for the time of flight bounds [-]
+        method : str
+            NLP transcription method
+        nb_seg : int
+            Number of segments for the transcription
+        order : int
+            Transcription order
+        solver : str
+            NLP solver
+        snopt_opts : dict
+            Sets some SNOPT's options. Default is ``None``
+        rec_file : str
+            Directory path for the solution recording file. Default is ``None``
+        check_partials : bool
+            Checking of partial derivatives. Default is ``False``
+
+        Attributes
+        ----------
+        body : Primary
+            Instance of `Primary` class describing the central attracting body
+        sc : Spacecraft
+            Instance of `Spacecraft` class describing the spacecraft characteristics
+        phase_name : str
+            Describes the phase name in case of multi-phase trajectories. Can be ``dep``, ``coast`` or ``arr``.
+        nlp : NLP
+            Instance of `NLP` object describing the type of Non Linear Problem solver used
+        tof : float
+            Value of the time of flight resulting by the simulation [s]
+        tof_exp : float
+            Value of the time of flight of the explicit simulation [s]
+        err : float
+            Value of the error between the optimized simulation results and the explicit simulation results
+        rm_res : float
+            Value of the central body radius [-] or [m]
+        states_scalers : ndarray
+            Reference values of the states with which perform the scaling
+        controls_scalers : ndarray
+            Reference values of the controls with which perform the scaling
+    """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False):
+        """Initializes the `TwoDim3PhasesLLO2HEOAnalyzer` class variables. """
 
         TwoDimMultiPhasesLLO2HEOAnalyzer.__init__(self, body, sc)
 
@@ -255,7 +529,27 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
                                            check_partials=check_partials)
 
     def get_time_series(self, p, scaled=False):
+        """Access the time series of the problem.
 
+        Parameters
+        ----------
+        p : Problem
+            Instance of `Problem` class
+        scaled : bool
+            Scales the simulation results
+
+        Returns
+        -------
+        tof : float
+            Time of flight resulting from the optimized simulation phase [-] or [s]
+        t : ndarray
+            Time of flight time series for the optimized simulation phase [-] or [s]
+        states : ndarray
+            States time series for the optimized simulation phase
+        controls : ndarray
+            Controls time series for the optimized simulation phase
+
+        """
         tof = []
         t = []
         states = []
@@ -272,6 +566,16 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
         return tof, t, states, controls
 
     def get_solutions(self, explicit=True, scaled=False):
+        """Access the simulation solution.
+
+        Parameters
+        ----------
+        explicit : bool
+            Computes also the explicit simulation. Default is ``True``
+        scaled : bool
+            Scales the simulation results. Default is ``False``
+
+        """
 
         TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
@@ -282,6 +586,14 @@ class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
             self.dv.append(self.sc.Isp*g0*np.log(self.states[i][0, -1]/self.states[i][-1, -1]))
 
     def __str__(self):
+        """Prints info on the `TwoDim3PhasesLLO2HEOAnalyzer`.
+
+        Returns
+        -------
+        s : str
+            Info on `TwoDim3PhasesLLO2HEOAnalyzer`
+
+        """
 
         if np.isclose(self.gm_res, 1.0):
             time_scaler = self.body.tc

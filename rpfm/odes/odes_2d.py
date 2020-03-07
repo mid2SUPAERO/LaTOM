@@ -18,15 +18,44 @@ from dymos import declare_time, declare_state, declare_parameter
 @declare_parameter('alpha', targets=['alpha'], units='rad')
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
-class ODE2dThrust(ExplicitComponent):
 
+class ODE2dThrust(ExplicitComponent):
+    """ ODE2dThrust class defines the equations of motion for a two dim. powered trajectory.
+
+    Other Parameters
+    ----------------
+    time : float
+        Represents the time variable of the system [s]
+    r : float
+        Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+    theta : float
+        Angle spawn from the starting point of the orbit to the final one [rad]
+    u : float
+        Radial velocity of a point along the trajectory [m/s]
+    v : float
+        Tangential velocity of a point along the trajectory [m/s]
+    m : float
+        Mass of the space vehicle that performs the trajectory [kg]
+    alpha : float
+        Angle defining the thrust direction [rad]
+    thrust : float
+        Value of the applied thrust force [N]
+    w : float
+        Value of the exhaust velocity [m/s]
+    num_nodes : int
+        Number of nodes where to compute the equations
+    GM : float
+        Gravitational constant [m/s^2]
+    """
     def initialize(self):
+        """Initializes the `ODE2dThrust` class variables. """
 
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
         self.options.declare('w', types=float)
 
     def setup(self):
+        """ Setup of ODE2dThrust parameters. Declaration of input, output and partials variables."""
 
         nn = self.options['num_nodes']
         w = self.options['w']
@@ -72,6 +101,7 @@ class ODE2dThrust(ExplicitComponent):
         self.declare_partials(of='mdot', wrt='w', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
+        """ Compute the output variables """
 
         gm = self.options['GM']
 
@@ -93,6 +123,7 @@ class ODE2dThrust(ExplicitComponent):
         outputs['mdot'] = -thrust / w
 
     def compute_partials(self, inputs, jacobian):
+        """ Compute the partial derivatives variables """
 
         gm = self.options['GM']
 
@@ -128,21 +159,80 @@ class ODE2dThrust(ExplicitComponent):
 
 
 class ODE2dConstThrust(ODE2dThrust):
+    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with constant thrust.
+
+    Other Parameters
+    ----------------
+    time : float
+        Represents the time variable of the system [s]
+    r : float
+        Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+    theta : float
+        Angle spawn from the starting point of the orbit to the final one [rad]
+    u : float
+        Radial velocity of a point along the trajectory [m/s]
+    v : float
+        Tangential velocity of a point along the trajectory [m/s]
+    m : float
+        Mass of the space vehicle that performs the trajectory [kg]
+    alpha : float
+        Angle defining the thrust direction [rad]
+    thrust : float
+        Value of the applied thrust force [N]
+    w : float
+        Value of the exhaust velocity [m/s]
+    num_nodes : int
+        Number of nodes where to compute the equations
+    GM : float
+        Gravitational constant [m/s^2]
+    T : float
+       Value of the constant thrust force [N]
+    """
 
     def initialize(self):
+        """Initializes the `ODE2dConstThrust` class variables. """
 
         ODE2dThrust.initialize(self)
         self.options.declare('T', types=float)
 
     def setup(self):
+        """ Setup of ODE2dConstThrust parameters. Declaration of input, output and partials variables."""
 
         ODE2dThrust.setup(self)
         self.add_input('thrust', val=self.options['T']*np.ones(self.options['num_nodes']), desc='thrust', units='N')
 
 
 class ODE2dVarThrust(ODE2dThrust):
+    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with variable thrust.
+
+    Other Parameters
+    ----------------
+    time : float
+        Represents the time variable of the system [s]
+    r : float
+        Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+    theta : float
+        Angle spawn from the starting point of the orbit to the final one [rad]
+    u : float
+        Radial velocity of a point along the trajectory [m/s]
+    v : float
+        Tangential velocity of a point along the trajectory [m/s]
+    m : float
+        Mass of the space vehicle that performs the trajectory [kg]
+    alpha : float
+        Angle defining the thrust direction [rad]
+    thrust : float
+        Value of the applied thrust force [N]
+    w : float
+        Value of the exhaust velocity [m/s]
+    num_nodes : int
+        Number of nodes where to compute the equations
+    GM : float
+        Gravitational constant [m/s^2]
+    """
 
     def setup(self):
+        """ Setup of `ODE2dVarThrust` parameters. Declaration of input, output and partials variables."""
 
         ODE2dThrust.setup(self)
         self.add_input('thrust', val=np.zeros(self.options['num_nodes']), desc='thrust', units='N')
@@ -154,8 +244,32 @@ class ODE2dVarThrust(ODE2dThrust):
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dVertical(ExplicitComponent):
+    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with variable thrust.
+
+    Other Parameters
+    ----------------
+    time : float
+        Represents the time variable of the system [s]
+    r : float
+        Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+    u : float
+        Radial velocity of a point along the trajectory [m/s]
+    m : float
+        Mass of the space vehicle that performs the trajectory [kg]
+    thrust : float
+        Value of the applied thrust force [N]
+    w : float
+        Value of the exhaust velocity [m/s]
+    num_nodes : int
+        Number of nodes where to compute the equations
+    GM : float
+        Gravitational constant [m/s^2]
+    T : float
+       Value of the constant thrust force [N]
+    """
 
     def initialize(self):
+        """Initializes the `ODE2dVertical` class variables. """
 
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
@@ -163,6 +277,7 @@ class ODE2dVertical(ExplicitComponent):
         self.options.declare('w', types=float)
 
     def setup(self):
+        """ Setup of `ODE2dVertical` parameters. Declaration of input, output and partials variables."""
 
         nn = self.options['num_nodes']
 
@@ -189,7 +304,7 @@ class ODE2dVertical(ExplicitComponent):
         self.declare_partials(of='mdot', wrt='w', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
-
+        """ Compute the output variables"""
         gm = self.options['GM']
 
         r = inputs['r']
@@ -203,6 +318,7 @@ class ODE2dVertical(ExplicitComponent):
         outputs['mdot'] = -thrust / w
 
     def compute_partials(self, inputs, jacobian):
+        """ Compute the partial derivative variables"""
 
         gm = self.options['GM']
 
@@ -220,15 +336,30 @@ class ODE2dVertical(ExplicitComponent):
 
 
 class SafeAlt(ExplicitComponent):
+    """ SafeAlt class defines the curve representing geographical constraints on the central body surface
+
+        Other Parameters
+        ----------------
+        num_nodes : int
+            Number of nodes where to compute the equations
+        R : float
+            Moon radius [m]
+        alt_safe : float
+            Altitude of the curve representing the geographical constraint [m]
+        slope : float
+            Slope of the curves defining a geographical constraint
+
+    """
 
     def initialize(self):
-
+        """ Initializes the `SafeAlt` class variables """
         self.options.declare('num_nodes', types=int)
         self.options.declare('R', types=float)
         self.options.declare('alt_safe', types=float)
         self.options.declare('slope', types=float)
 
     def setup(self):
+        """ Setup of `SafeAlt` parameters. Declaration of input, output and partials variables."""
 
         nn = self.options['num_nodes']
 
@@ -245,7 +376,7 @@ class SafeAlt(ExplicitComponent):
         self.declare_partials(of='dist_safe', wrt='theta', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
-
+        """ Compute the output variables"""
         r_moon = self.options['R']
         alt_safe = self.options['alt_safe']
         slope = self.options['slope']
@@ -259,7 +390,7 @@ class SafeAlt(ExplicitComponent):
         outputs['dist_safe'] = r - r_safe
 
     def compute_partials(self, inputs, jacobian):
-
+        """ Compute the partial derivative variables"""
         r_moon = self.options['R']
         alt_safe = self.options['alt_safe']
         slope = self.options['slope']
@@ -273,14 +404,24 @@ class SafeAlt(ExplicitComponent):
 
 
 class Polar2COE(ExplicitComponent):
+    """ Polar2COE class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates
+
+    Other Parameters
+    ----------------
+    num_nodes : int
+            Number of nodes where to compute the equations
+    GM : float
+        Gravitational constant [m/s^2]
+
+    """
 
     def initialize(self):
-
+        """ Initializes the `Polar2COE` class variables """
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
 
     def setup(self):
-
+        """ Setup of `Polar2COE` parameters. Declaration of input, output and partials variables."""
         nn = self.options['num_nodes']
 
         self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
@@ -289,14 +430,21 @@ class Polar2COE(ExplicitComponent):
 
 
 class Polar2RApo(Polar2COE):
+    """ Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates
+
+    Other Parameters
+    ----------------
+    ra : float
+        Value of the apoapsis radius [m]
+    """
 
     def initialize(self):
-
+        """ Initializes the `Polar2RApo` class variables """
         Polar2COE.initialize(self)
         self.options.declare('ra', types=float)
 
     def setup(self):
-
+        """ Setup of `Polar2RApo` parameters. Declaration of input, output and partials variables."""
         Polar2COE.setup(self)
 
         self.add_output('c', val=np.zeros(self.options['num_nodes']), desc='condition to reach the apolune')
@@ -314,7 +462,7 @@ class Polar2RApo(Polar2COE):
         self.declare_partials(of='c', wrt='v', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
-
+        """ Compute the output variables"""
         gm = self.options['GM']
         ra = self.options['ra']
         r = inputs['r']
@@ -327,7 +475,7 @@ class Polar2RApo(Polar2COE):
         # outputs['c'] = ra - (r*(gm + ((r*v*v-gm)**2 + (r*u*v)**2)**0.5))/(2*gm - r*(u**2 + v**2))
 
     def compute_partials(self, inputs, jacobian):
-
+        """ Compute the partial derivative variables"""
         gm = self.options['GM']
         ra = self.options['ra']
         r = inputs['r']
@@ -343,8 +491,20 @@ class Polar2RApo(Polar2COE):
 
 
 class Polar2AH(Polar2COE):
+    """ Polar2COE class defines the set of equations to derive the a and h from Polar coordinates
+
+    The method computes the semi-major axis a and the angular momentum h starting from the polar coordinates.
+
+    Other Parameters
+    ----------------
+    num_nodes : int
+            Number of nodes where to compute the equations
+    GM : float
+        Gravitational constant [m/s^2]
+    """
 
     def setup(self):
+        """ Setup of `Polar2AH` parameters. Declaration of input, output and partials variables."""
 
         Polar2COE.setup(self)
 
@@ -363,6 +523,7 @@ class Polar2AH(Polar2COE):
         self.declare_partials(of='h', wrt='v', cols=ar, rows=ar)
 
     def compute(self, inputs, outputs):
+        """ Compute the output variables"""
 
         gm = self.options['GM']
 
@@ -374,7 +535,7 @@ class Polar2AH(Polar2COE):
         outputs['h'] = r*v
 
     def compute_partials(self, inputs, jacobian):
-
+        """ Compute the partial derivative variables"""
         gm = self.options['GM']
 
         r = inputs['r']
