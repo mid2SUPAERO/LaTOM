@@ -15,7 +15,7 @@ class TwoDimHEOGuess(TwoDimGuess):
 
     def __init__(self, gm, r, dep, arr, sc):
 
-        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
+        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)  # set central body, spacecraft, Hohmann transfer
 
         self.pow = None
 
@@ -53,7 +53,7 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
 
         self.pow.compute_trajectory(t_pow)
 
-        if len(t_ht) > 0:
+        if np.size(t_ht) > 0:
             self.ht.compute_trajectory(t_ht, self.pow.tf, theta0=self.pow.thetaf, m=self.pow.mf)
 
             self.states = np.vstack((self.pow.states, self.ht.states))
@@ -102,9 +102,9 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
 
         TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
 
-        self.m_ht = self.sc.m0*np.exp(-self.ht.dva/self.sc.Isp/g0)
-
-        self.pow = PowConstRadius(gm, arr.a, self.ht.transfer.vp, arr.vp, self.m_ht, sc.T_max, sc.Isp, t0=self.ht.tof)
+        self.deorbit_burn = ImpulsiveBurn(sc, self.ht.dva)
+        self.pow = PowConstRadius(gm, arr.a, self.ht.transfer.vp, arr.vp, self.deorbit_burn.mf, sc.T_max, sc.Isp,
+                                  t0=self.ht.tof)
         self.pow.compute_final_time_states()
 
         self.tf = self.pow.tf
@@ -116,13 +116,16 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         t_ht = self.t[self.t < self.ht.tof]
         t_pow = self.t[self.t >= self.ht.tof]
 
-        self.ht.compute_states(t_ht, 0.0, theta0=np.pi, m=self.m_ht)
+        self.ht.compute_trajectory(t_ht, 0.0, theta0=np.pi, m=self.deorbit_burn.mf)
+        # self.ht.states[:, 1] = self.ht.states[:, 1] - np.pi  # adjust true anomaly
+
         self.pow.compute_trajectory(t_pow)
+        self.pow.states[:, 1] = self.pow.states[:, 1] + self.ht.states[-1, 1]  # adjust true anomaly
 
         self.states = np.vstack((self.ht.states, self.pow.states))
         self.controls = np.vstack((self.ht.controls, self.pow.controls))
 
-        # departure burn on initial LLO
+        # departure burn on initial HEO
         self.states[0, 3] = self.ht.depOrb.va
         self.states[0, 4] = self.sc.m0
         self.controls[0, 0] = self.sc.T_max
@@ -135,7 +138,8 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', self.tf/86400, 'days'),
                  '\n{:^50s}'.format('Deorbit burn:'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.ht.dva, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (self.sc.m0 - self.m_ht)/self.sc.m0, ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
+                                                 (self.sc.m0 - self.deorbit_burn.mf)/self.sc.m0, ''),
                  '\n{:^50s}'.format('Injection burn:'),
                  self.pow.__str__()]
 
@@ -224,7 +228,7 @@ if __name__ == '__main__':
     r_p = 3150e3
     T = 6.5655*86400
     sat = Spacecraft(450, 2.1, g=moon.g)
-    nb = (100, 0)
+    nb = (20, 200)
 
     if case == 'ascent':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
@@ -249,7 +253,7 @@ if __name__ == '__main__':
     else:
         raise ValueError('case must be equal to ascent or descent')
 
-    tr.compute_trajectory(t_eval=t_all, fix_final=True, throttle=False)
+    tr.compute_trajectory(t_eval=t_all, fix_final=True, throttle=True)
 
     p = TwoDimSolPlot(tr.R, tr.t, tr.states, tr.controls, kind=case, a=a, e=e)
     p.plot()

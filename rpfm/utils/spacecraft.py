@@ -47,8 +47,11 @@ class Spacecraft:
         """Init Spacecraft class. """
 
         self.Isp = isp
-        self.twr = twr
         self.m0 = m0
+        self.throttle_min = throttle_min
+        self.g = g
+
+        self.twr = self.T_max = self.T_min = 0.0
 
         if m_dry is not None:
             self.m_dry = float(m_dry)
@@ -56,8 +59,13 @@ class Spacecraft:
             self.m_dry = self.m0/100
 
         self.w = isp*g0
-        self.T_max = self.twr*self.m0*g
-        self.T_min = self.T_max*throttle_min
+        self.update_twr(twr)
+
+    def update_twr(self, twr):
+
+        self.twr = twr
+        self.T_max = self.twr * self.m0 * self.g
+        self.T_min = self.T_max * self.throttle_min
 
     def __str__(self):
         """Prints the Spacecraft object attributes. """
@@ -81,5 +89,5 @@ if __name__ == '__main__':
     from rpfm.utils.primary import Moon
 
     moon = Moon()
-    sc = Spacecraft(450., 2., throttle_min=0.0, g=moon.g)
+    sc = Spacecraft(450., 2., throttle_min=0.1, g=moon.g)
     print(sc)

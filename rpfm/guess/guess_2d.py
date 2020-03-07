@@ -3,6 +3,7 @@
 
 """
 
+import warnings
 import numpy as np
 from copy import deepcopy
 
@@ -20,14 +21,23 @@ class ImpulsiveBurn:
         self.sc = deepcopy(sc)
         self.dv = dv
 
-        self.mf = self.sc.m0*np.exp(-self.dv/self.sc.Isp/g0)
+        self.mf = self.tsiolkovsky_mf(self.sc.m0, dv, self.sc.Isp)
         self.dm = sc.m0 - self.mf
+
+    @staticmethod
+    def tsiolkovsky_mf(m0, dv, isp):
+        return m0 * np.exp(-dv/isp/g0)
+
+    @staticmethod
+    def tsiolkovsky_dv(m0, mf, isp):
+        return isp*g0*np.log(m0/mf)
 
 
 class DeorbitBurn(ImpulsiveBurn):
 
     def __init__(self, sc, dv):
 
+        warnings.warn('deprecated, use ImpulsiveBurn instead', FutureWarning)
         ImpulsiveBurn.__init__(self, sc, dv)
 
 

@@ -62,9 +62,57 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                                     solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
                                     check_partials=check_partials)
 
-        self.transfer = self.insertion_burn = self.dv = None
+        self.transfer = self.insertion_burn = self.dv_dep = None
+        self.m_prop_list = []
+        self.energy_list = []
+        self.guess = self.nlp.guess
 
-    def compute_insertion_burn(self, nb=200):
+    def compute_energy_mprop(self, r, u, v, m0):
+
+        en = TwoDimOrb.energy(self.body.GM, r, u, v)  # energy on ballistic arc [m^2/s^2]
+        va = (2 * (en + self.body.GM / self.nlp.guess.ht.arrOrb.ra)) ** 0.5  # ballistic arc apoapsis velocity [m/s]
+        dva = self.guess.ht.arrOrb.va - va  # apoapsis dv [m/s]
+        m_prop = self.sc.m0 - ImpulsiveBurn.tsiolkovsky_mf(m0, dva, self.sc.Isp)  # total propellant mass [kg]
+
+        return en, m_prop
+
+    def run_continuation(self, twr_list, rec_file=None):
+
+        nlp = self.nlp
+        failed = nlp.p.run_driver()
+        nlp.cleanup()
+
+        if not failed:
+
+            tof, states, alpha = self.get_tof_states_alpha(nlp.p, nlp.phase_name)
+            params = {'ra': self.guess.ht.arrOrb.ra, 'rp': self.guess.ht.depOrb.rp, 'vp': self.guess.ht.transfer.vp,
+                      'thetaf': self.guess.pow.thetaf, 'tof': tof, 'states': states, 'alpha': alpha}
+            en, m_prop = self.compute_energy_mprop(states[-1, 0], states[-1, 2], states[-1, 3], states[-1, -1])
+            self.energy_list.append(en)
+            self.m_prop_list.append(m_prop)
+
+            for twr in twr_list[1:]:
+                self.sc.update_twr(twr)
+                nlp = TwoDimLLO2ApoNLP(self.body, self.sc, self.alt, None, None, (-np.pi / 2, np.pi / 2), None,
+                                       self.nlp.method, self.nlp.nb_seg, self.nlp.order, self.nlp.solver,
+                                       self.phase_name, snopt_opts=self.nlp.snopt_opts, params=params)
+
+                failed = nlp.p.run_driver()
+                nlp.cleanup()
+                if failed:
+                    break
+
+                params['tof'], params['states'], params['alpha'] = self.get_tof_states_alpha(nlp.p, nlp.phase_name)
+                en, m_prop = self.compute_energy_mprop(params['states'][-1, 0], params['states'][-1, 2],
+                                                       params['states'][-1, 3], params['states'][-1, -1])
+                self.energy_list.append(en)
+                self.m_prop_list.append(m_prop)
+
+        self.nlp = nlp
+        if rec_file is not None:
+            self.nlp.p.record_iteration('final')
+
+    def compute_solution(self, nb=200):
 
         # states and COEs at the end of the departure burn
         states_end = self.states[-1]
@@ -77,20 +125,24 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
             self.transfer = TwoDimOrb(self.body.GM, a=a, e=e)
 
         # finite dV at departure [m/s]
-        self.dv = self.sc.Isp * g0 * np.log(self.sc.m0/states_end[-1])
+        self.dv_dep = ImpulsiveBurn.tsiolkovsky_dv(self.sc.m0, states_end[-1], self.sc.Isp)
 
         # impulsive dV at arrival [m/s]
         sc = deepcopy(self.sc)
         sc.m0 = states_end[-1]
-        self.insertion_burn = ImpulsiveBurn(sc, self.nlp.guess.ht.arrOrb.va - self.transfer.va)
+        self.insertion_burn = ImpulsiveBurn(sc, self.guess.ht.arrOrb.va - self.transfer.va)
 
         # transfer orbit
         t, states = TwoDimOrb.propagate(self.gm_res, a, e, ta, np.pi, nb)
 
         # adjust time
-        t_end = self.time[-1]
-        self.tof = [self.tof, t[-1, 0] - t[0, 0]]
-        self.time = [self.time, t_end[-1] + t]
+        t_pow_end = self.time[-1]
+        t_coast_start = t[0, 0]
+        t_coast_end = t[-1, 0]
+        tof_coast = t_coast_end - t_coast_start
+
+        self.tof = [self.tof, tof_coast]
+        self.time = [self.time, (t - t_coast_start) + t_pow_end[-1]]
 
         # add mass
         m = np.vstack((states_end[-1]*np.ones((len(t) - 1, 1)), [self.insertion_burn.mf]))
@@ -111,7 +163,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
         TwoDimAscAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
 
-        self.compute_insertion_burn(nb=nb)
+        self.compute_solution(nb=nb)
 
     def plot(self):
 
@@ -123,8 +175,8 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
             controls_plot = TwoDimControlsTimeSeries(self.time[0], self.controls[0], threshold=None)
 
         sol_plot = TwoDimMultiPhaseSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp,
-                                           self.states_exp, a=self.nlp.guess.ht.arrOrb.a*(self.rm_res/self.body.R),
-                                           e=self.nlp.guess.ht.arrOrb.e)
+                                           self.states_exp, a=self.guess.ht.arrOrb.a*(self.rm_res/self.body.R),
+                                           e=self.guess.ht.arrOrb.e)
 
         states_plot.plot()
         controls_plot.plot()
@@ -146,8 +198,8 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                                                    1 - self.insertion_burn.mf/self.sc.m0, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', sum(self.tof)*time_scaler/86400, 'days'),
                  '\n{:^50s}'.format('Departure burn:'),
-                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.nlp.guess.pow.dv_inf, 'm/s'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv, 'm/s'),
+                 '\n{:<25s}{:>20.6f}{:>5s}'.format('Impulsive dV:', self.guess.pow.dv_inf, 'm/s'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Finite dV:', self.dv_dep, 'm/s'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Burn time:', self.tof[0]*time_scaler, 's'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', 1 - self.states[0][-1, -1]/self.sc.m0, ''),
                  '\n{:^50s}'.format('Injection burn:'),

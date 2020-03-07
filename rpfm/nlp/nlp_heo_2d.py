@@ -41,24 +41,35 @@ class TwoDimLLO2HEONLP(TwoDimVarNLP):
 class TwoDimLLO2ApoNLP(TwoDimNLP):
 
     def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, check_partials=False):
+                 snopt_opts=None, rec_file=None, check_partials=False, params=None):
 
-        guess = TwoDimLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
-        ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': guess.ht.arrOrb.ra/body.R}
+        if params is None:
+            guess = TwoDimLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
+            ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': guess.ht.arrOrb.ra / body.R}
+        else:
+            guess = None
+            ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': params['ra'] / body.R}
 
         TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dLLO2Apo,
                            ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
 
         self.guess = guess
 
+        if params is None:
+            self.set_options(self.guess.ht.depOrb.rp, self.guess.ht.transfer.vp, self.guess.pow.thetaf,
+                             self.guess.pow.tf, t_bounds=t_bounds)
+            self.set_initial_guess(check_partials=check_partials)
+        else:
+            self.set_options(params['rp'], params['vp'], params['thetaf'], params['tof'], t_bounds=t_bounds)
+            self.set_continuation_guess(params['tof'], params['states'], params['alpha'], check_partials=check_partials)
+
+    def set_options(self, rp, vp, thetaf, tof, t_bounds=None):
+
         # states options
-        self.phase.set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0,
-                                     ref=self.guess.ht.depOrb.rp/self.body.R)
-        self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=self.guess.pow.thetaf)
-        self.phase.set_state_options('u', fix_initial=True, fix_final=False, ref0=0.0,
-                                     ref=self.guess.ht.transfer.vp/self.body.vc)
-        self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0,
-                                     ref=self.guess.ht.transfer.vp/self.body.vc)
+        self.phase.set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0, ref=rp/self.body.R)
+        self.phase.set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0, ref=thetaf)
+        self.phase.set_state_options('u', fix_initial=True, fix_final=False, ref0=0.0, ref=vp/self.body.vc)
+        self.phase.set_state_options('v', fix_initial=True, fix_final=False, lower=0.0, ref=vp/self.body.vc)
         self.phase.set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
                                      ref0=self.sc.m_dry, ref=self.sc.m0)
 
@@ -72,7 +83,7 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         self.phase.add_design_parameter('thrust', opt=False, val=self.sc.twr)
 
         # time options
-        self.set_time_options(self.guess.pow.tf, t_bounds)
+        self.set_time_options(tof, t_bounds)
 
         # constraint on injection
         self.phase.add_boundary_constraint('c', loc='final', equals=0.0, shape=(1,))
@@ -83,8 +94,25 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         # NLP setup
         self.setup()
 
-        # initial guess
-        TwoDimNLP.set_initial_guess(self, check_partials=check_partials, throttle=False)
+    def set_initial_guess(self, check_partials=False, fix_final=False, throttle=False):
+        TwoDimNLP.set_initial_guess(self, check_partials=check_partials, fix_final=fix_final, throttle=throttle)
+
+    def set_continuation_guess(self, tof, states, alpha, check_partials=False):
+
+        self.p[self.phase_name + '.t_initial'] = 0.0
+        self.p[self.phase_name + '.t_duration'] = tof/self.body.tc
+
+        self.p[self.phase_name + '.states:r'] = np.reshape(states[:, 0]/self.body.R, (np.size(states[:, 0]), 1))
+        self.p[self.phase_name + '.states:theta'] = np.reshape(states[:, 1], (np.size(states[:, 0]), 1))
+        self.p[self.phase_name + '.states:u'] = np.reshape(states[:, 2]/self.body.vc, (np.size(states[:, 0]), 1))
+        self.p[self.phase_name + '.states:v'] = np.reshape(states[:, 3]/self.body.vc, (np.size(states[:, 0]), 1))
+        self.p[self.phase_name + '.states:m'] = np.reshape(states[:, 4], (np.size(states[:, 0]), 1))
+        self.p[self.phase_name + '.controls:alpha'] = alpha
+
+        self.p.run_model()
+
+        if check_partials:
+            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
 
 class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):

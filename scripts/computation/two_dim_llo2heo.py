@@ -19,7 +19,7 @@ heo_rp = 3150e3  # target HEO periselene radius [m]
 heo_period = 6.5655*86400  # target HEO period [s]
 
 # spacecraft
-isp = 250.  # specific impulse [s]
+isp = 400.  # specific impulse [s]
 twr = 0.05  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 

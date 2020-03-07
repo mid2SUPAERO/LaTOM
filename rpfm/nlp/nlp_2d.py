@@ -68,6 +68,7 @@ class TwoDimNLP(SinglePhaseNLP):
                  ode_kwargs, ph_name, snopt_opts=None, rec_file=None):
         """Initializes TwoDimNLP class. """
 
+        # set central body, spacecraft and transcription
         SinglePhaseNLP.__init__(self, body, sc, method, nb_seg, order, solver, ode_class, ode_kwargs, ph_name,
                                 snopt_opts=snopt_opts, rec_file=rec_file)
 
@@ -164,7 +165,6 @@ class TwoDimNLP(SinglePhaseNLP):
         """
 
         self.set_initial_guess_interpolation(bcs=np.ones((7, 2)), check_partials=False, throttle=throttle)
-        # self.set_time_guess(self.tof)
 
         self.guess.compute_trajectory(t_eval=self.t_all*self.body.tc, fix_final=fix_final, throttle=throttle)
 
