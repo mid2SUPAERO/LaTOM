@@ -105,6 +105,11 @@ class TwoDimOrb:
         return a, e, h, ta
 
     @staticmethod
+    def energy(gm, r, u, v):
+
+        return (u**2 + v**2)*0.5 - gm/r
+
+    @staticmethod
     def propagate(gm, a, e, tai, taf, nb, tp=0.0):
 
         ta = np.reshape(np.linspace(tai, taf, nb), (nb, 1))  # true anomaly [rad]

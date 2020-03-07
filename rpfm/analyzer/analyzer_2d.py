@@ -113,6 +113,25 @@ class TwoDimAnalyzer(Analyzer):
 
         return tof, t, states, controls
 
+    def get_tof_states_alpha(self, p, phase_name, scaled=False):
+
+        tof = float(p.get_val(phase_name + '.t_duration'))  # non dimensional time of flight [-]
+
+        # non dimensional states [-]
+        states = p.get_val(phase_name + '.states:' + states_2d[0])
+        for k in states_2d[1:]:
+            s = p.get_val(phase_name + '.states:' + k)
+            states = np.append(states, s, axis=1)
+
+        # thrust direction [rad]
+        alpha = p.get_val(phase_name + '.controls:alpha')
+
+        if not scaled:
+            tof = tof*self.body.tc  # dimensional time of flight [s]
+            states = states*self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
+
+        return tof, states, alpha
+
     def __str__(self):
         """Prints info on the TwoDimAnalyzer.
 

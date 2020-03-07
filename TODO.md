@@ -2,6 +2,7 @@
 
 ## Results
 
+* Implement continuation for LLO to HEO transfers
 * Recompute MetaModel for LLO to HEO transfers with thrust/weight ratio down to 0
 * Fix MetaModel for ascent and descent trajectories with vertical take-off and landing
 * Complete three-dimensional transfers
