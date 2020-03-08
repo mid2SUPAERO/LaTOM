@@ -5,6 +5,7 @@
 
 import numpy as np
 from copy import deepcopy
+from time import time
 
 from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
 from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP, TwoDim2PhasesLLO2HEONLP
@@ -14,6 +15,7 @@ from rpfm.plots.continuation import MassEnergyContinuation, TwoDimTrajectoryCont
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.utils.spacecraft import ImpulsiveBurn
 from rpfm.utils.const import g0
+from rpfm.utils.pickle_utils import save
 
 
 class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
@@ -326,7 +328,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
             time_scaler = 1.0
 
         lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
-                 self.nlp.guess.__str__(),
+                 self.guess.__str__(),
                  '\n{:^50s}'.format('Optimal coasting phase:'),
                  self.transfer.__str__(),
                  '\n{:^50s}'.format('Optimal powered phases:'),
@@ -483,59 +485,52 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
         Parameters
         ----------
         rec_file : str or None, optional
-            Directory path for the file in which the last solution is recorded or ``None``. Default is ``None``
+            Directory path for the file in which the solutions are recorded or ``None``. Default is ``None``
 
         """
 
-        # first solution
-        nlp = self.nlp
-        failed = nlp.p.run_driver()
-        nlp.cleanup()
+        nlp = None
+        params = {'ra_heo': self.guess.ht.arrOrb.ra, 'rp_llo': self.guess.ht.depOrb.rp,
+                  'vp_hoh': self.guess.ht.transfer.vp, 'thetaf_pow': self.guess.pow.thetaf}
 
-        if not failed:
+        for i in range(np.size(self.twr_list)):
 
-            tof_disc, states_disc, controls_disc = self.get_discretization_phase(nlp.p, nlp.phase_name)
-            self.sol_list[str(self.twr_list[0])] = self.get_solution_dictionary(nlp.p)
-
-            params = {'ra_heo': self.guess.ht.arrOrb.ra, 'rp_llo': self.guess.ht.depOrb.rp,
-                      'vp_hoh': self.guess.ht.transfer.vp, 'thetaf_pow': self.guess.pow.thetaf,
-                      'tof': tof_disc, 'states': states_disc, 'controls': controls_disc}
-
-            en, m_prop = self.compute_energy_mprop(states_disc[-1, 0], states_disc[-1, 2], states_disc[-1, 3],
-                                                   states_disc[-1, -1])
-            self.energy_list[0] = en
-            self.m_prop_list[0] = m_prop
-
-            # subsequent solutions
-            for i in range(1, np.size(self.twr_list)):
-
+            if i == 0:  # first solution
+                nlp = self.nlp
+            else:  # subsequent solutions
                 self.sc.update_twr(self.twr_list[i])
-                print(self.sc)
-
                 nlp = TwoDimLLO2ApoNLP(self.body, self.sc, self.alt, None, None, (-np.pi / 2, np.pi / 2), None,
                                        self.nlp.method, self.nlp.nb_seg, self.nlp.order, self.nlp.solver,
                                        self.phase_name, snopt_opts=self.nlp.snopt_opts, params=params)
 
-                failed = nlp.p.run_driver()
-                nlp.cleanup()
+            # solve NLP
+            print(f"\nIteration {i}\nThrust/weight ratio: {self.twr_list[i]:.6f}\n")
+            t0 = time()
+            failed = nlp.p.run_driver()
+            tf = time()
+            nlp.cleanup()
+            print(f"\nTime to solve the NLP problem: {(tf - t0):.6f} s\n")
 
-                if failed:
-                    break
+            if failed:
+                break
 
-                params['tof'], params['states'], params['controls'] =\
-                    self.get_discretization_phase(nlp.p, nlp.phase_name)
+            # extract NLP solution
+            params['tof'], params['states'], params['controls'] = self.get_discretization_phase(nlp.p, nlp.phase_name)
+            self.sol_list[self.twr_list[i]] = self.get_solution_dictionary(nlp.p)
 
-                self.sol_list[str(self.twr_list[i])] = self.get_solution_dictionary(nlp.p)
+            # compute the specific energy of the spacecraft at the end of the powered phase and the total required
+            # propellant mass including the final insertion burn
+            states_end = params['states'][-1]
+            en, m_prop = self.compute_energy_mprop(states_end[0], states_end[2], states_end[3], states_end[-1])
 
-                en, m_prop = self.compute_energy_mprop(params['states'][-1, 0], params['states'][-1, 2],
-                                                       params['states'][-1, 3], params['states'][-1, -1])
-                self.energy_list[i] = en
-                self.m_prop_list[i] = m_prop
+            self.energy_list[i] = en
+            self.m_prop_list[i] = m_prop
 
         self.nlp = nlp
 
         if rec_file is not None:
-            self.nlp.p.record_iteration('final')
+            d = {'twr': self.twr_list, 'm_prop': self.m_prop_list, 'energy': self.energy_list, 'sol': self.sol_list}
+            save(d, rec_file)
 
     def plot(self):
 

@@ -25,7 +25,7 @@ class TwoDimNLP(SinglePhaseNLP):
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
         Orbit altitude [m]
-    alpha_bounds : tuple
+    alpha_bounds : iterable
         Lower and upper bounds on thrust vector direction [rad]
     method : str
         Transcription method used to discretize the continuous time trajectory into a finite set of nodes,

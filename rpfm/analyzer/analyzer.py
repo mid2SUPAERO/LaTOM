@@ -66,13 +66,9 @@ class Analyzer:
             self.nlp.p.record_iteration('initial')
 
         t0 = time()
-
         failed = self.nlp.p.run_driver()
-
         tf = time()
-        dt = tf - t0
-
-        print('\nTime to solve the NLP problem:', dt, 's\n')
+        print(f"\nTime to solve the NLP problem: {(tf - t0):.6f} s\n")
 
         if self.nlp.rec_file is not None:
             self.nlp.p.record_iteration('final')
