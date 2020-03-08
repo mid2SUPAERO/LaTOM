@@ -223,13 +223,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">record_iteration</span><span class="p">(</span><span class="s1">&#39;initial&#39;</span><span class="p">)</span>
 
         <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-
         <span class="n">failed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">run_driver</span><span class="p">()</span>
-
         <span class="n">tf</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-        <span class="n">dt</span> <span class="o">=</span> <span class="n">tf</span> <span class="o">-</span> <span class="n">t0</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Time to solve the NLP problem:&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="s1">&#39;s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Time to solve the NLP problem: {(tf - t0):.6f} s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">rec_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">record_iteration</span><span class="p">(</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
@@ -251,6 +247,28 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Analyzer.get_solution_dictionary"><a class="viewcode-back" href="../../../modules/analyzer.html#rpfm.analyzer.analyzer.Analyzer.get_solution_dictionary">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p : Problem</span>
+<span class="sd">            Instance of `Problem` class</span>
+<span class="sd">        scaled : bool</span>
+<span class="sd">            Scales the simulation results</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sol : dict</span>
+<span class="sd">            Dictionary containing the NLP solution</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tof</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_series</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="n">scaled</span><span class="p">)</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;tof&#39;</span><span class="p">:</span> <span class="n">tof</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s1">&#39;states&#39;</span><span class="p">:</span> <span class="n">states</span><span class="p">,</span> <span class="s1">&#39;controls&#39;</span><span class="p">:</span> <span class="n">controls</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">sol</span></div>
 
 <div class="viewcode-block" id="Analyzer.get_solutions"><a class="viewcode-back" href="../../../modules/analyzer.html#rpfm.analyzer.analyzer.Analyzer.get_solutions">[docs]</a>    <span class="k">def</span> <span class="nf">get_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explicit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Access the simulation solution.</span>

@@ -103,6 +103,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/installation_index.html">Installation</a></li>
 </ul>
 
             
@@ -213,6 +214,11 @@
 <dl class="method">
 <dt>
 <em class="property">static </em><code class="sig-name descname">polar2coe</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#TwoDimOrb.polar2coe"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">polar2energy</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/keplerian_orbit.html#TwoDimOrb.polar2energy"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -459,6 +465,143 @@ from its COE.</p>
 </ul>
 </dd>
 </dl>
+<dl class="method">
+<dt>
+<code class="sig-name descname">update_twr</code><span class="sig-paren">(</span><em class="sig-param">twr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/spacecraft.html#Spacecraft.update_twr"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.spacecraft.</code><code class="sig-name descname">ImpulsiveBurn</code><span class="sig-paren">(</span><em class="sig-param">sc</em>, <em class="sig-param">dv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/spacecraft.html#ImpulsiveBurn"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>ImpulsiveBurn class describes an impulsive burn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sc</strong> (<a class="reference internal" href="_autosummary/rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instant of <cite>Spacecraft</cite> class</p></li>
+<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity corresponding to the impulsive burn [m/s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>sc</strong> (<a class="reference internal" href="_autosummary/rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instant of <cite>Spacecraft</cite> class</p></li>
+<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity corresponding to the impulsive burn [m/s]</p></li>
+<li><p><strong>mf</strong> (<em>float</em>) – Spacecraft final mass after the impulsive burn [kg]</p></li>
+<li><p><strong>dm</strong> (<em>float</em>) – Propellant mass required for the impulsive burn [kg]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">tsiolkovsky_mf</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">dv</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/spacecraft.html#ImpulsiveBurn.tsiolkovsky_mf"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Computes the final spacecraft mass for a given velocity change using the Tsiolkovsky rocket equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m0</strong> (<em>float</em>) – Initial spacecraft mass [kg]</p></li>
+<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity [m/s]</p></li>
+<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse of the spacecraft rocket engine [s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mf</strong> – Final spacecraft mass [kg]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">tsiolkovsky_dv</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">mf</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/spacecraft.html#ImpulsiveBurn.tsiolkovsky_dv"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Computes the velocity change for a given initial and final spacecraft masses using the Tsiolkovsky rocket
+equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m0</strong> (<em>float</em>) – Initial spacecraft mass [kg]</p></li>
+<li><p><strong>mf</strong> (<em>float</em>) – Final spacecraft mass [kg]</p></li>
+<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse of the spacecraft rocket engine [s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dv</strong> – Change in velocity [m/s]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.utils.spacecraft.</code><code class="sig-name descname">DeorbitBurn</code><span class="sig-paren">(</span><em class="sig-param">sc</em>, <em class="sig-param">dv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/utils/spacecraft.html#DeorbitBurn"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.ImpulsiveBurn" title="rpfm.utils.spacecraft.ImpulsiveBurn"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.utils.spacecraft.ImpulsiveBurn</span></code></a></p>
+<p>DeorbitBurn class describes an impulsive burn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sc</strong> (<a class="reference internal" href="_autosummary/rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instant of <cite>Spacecraft</cite> class</p></li>
+<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity corresponding to the impulsive burn [m/s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>sc</strong> (<a class="reference internal" href="_autosummary/rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instant of <cite>Spacecraft</cite> class</p></li>
+<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity corresponding to the impulsive burn [m/s]</p></li>
+<li><p><strong>mf</strong> (<em>float</em>) – Spacecraft final mass after the impulsive burn [kg]</p></li>
+<li><p><strong>dm</strong> (<em>float</em>) – Propellant mass required for the impulsive burn [kg]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">tsiolkovsky_dv</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">mf</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span></dt>
+<dd><p>Computes the velocity change for a given initial and final spacecraft masses using the Tsiolkovsky rocket
+equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m0</strong> (<em>float</em>) – Initial spacecraft mass [kg]</p></li>
+<li><p><strong>mf</strong> (<em>float</em>) – Final spacecraft mass [kg]</p></li>
+<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse of the spacecraft rocket engine [s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dv</strong> – Change in velocity [m/s]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">tsiolkovsky_mf</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">dv</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span></dt>
+<dd><p>Computes the final spacecraft mass for a given velocity change using the Tsiolkovsky rocket equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m0</strong> (<em>float</em>) – Initial spacecraft mass [kg]</p></li>
+<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity [m/s]</p></li>
+<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse of the spacecraft rocket engine [s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mf</strong> – Final spacecraft mass [kg]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>

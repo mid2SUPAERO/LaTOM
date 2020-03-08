@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
 </ul>
 
             
@@ -178,10 +179,10 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo" title="rpfm.odes.odes_2d_group.ODE2dLLO2Apo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2Apo</span></code></a>(**kwargs)</p></td>
-<td><p></p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.odes.odes_2d_group.ODE2dLLO2HEO" title="rpfm.odes.odes_2d_group.ODE2dLLO2HEO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2HEO</span></code></a>(**kwargs)</p></td>
-<td><p></p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.odes.odes_2d_group.ODE2dVToff" title="rpfm.odes.odes_2d_group.ODE2dVToff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVToff</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
@@ -195,27 +196,33 @@
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dVToff.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dVToff.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dVToff.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform any one-time initialization run at instantiation.</p>
+<dd><p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take off.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [rad]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectry [m/s]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [rad]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>R</strong> (<em>float</em>) – Moon radius [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Altitude of the curve representing the geographical constraint [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the curves defining a geographical constraint</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dVToff.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dVToff.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dVToff.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build this group.</p>
-<p>This method should be overidden by your Group’s method. The reason for using this
-method to add subsystem is to save memory and setup time when using your Group
-while running under MPI.  This avoids the creation of systems that will not be
-used in the current process.</p>
-<p>You may call ‘add_subsystem’ to add systems to this group. You may also issue connections,
-and set the linear and nonlinear solvers for this group level. You cannot safely change
-anything on children systems; use the ‘configure’ method instead.</p>
-<dl class="simple">
-<dt>Available attributes:</dt><dd><p>name
-pathname
-comm
-options</p>
-</dd>
-</dl>
+<dd><p>Setup of <cite>ODE2dVToff</cite> parameters. Declaration of subsystem, input and output</p>
 </dd></dl>
 
 <dl class="method">
@@ -1031,30 +1038,36 @@ if a specific coloring is passed in.</p></li>
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2Apo">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.odes.odes_2d_group.</code><code class="sig-name descname">ODE2dLLO2Apo</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2Apo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.group.Group</span></code></p>
+<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with insertion at apoapsis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [rad]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectry [m/s]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [rad]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [N]</p></li>
+<li><p><strong>ra</strong> (<em>float</em>) – Value of the apoapsis radius [m]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2Apo.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2Apo.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform any one-time initialization run at instantiation.</p>
+<dd><p>Initializes the <cite>ODE2dLLO2Apo</cite> class variables</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2Apo.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2Apo.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build this group.</p>
-<p>This method should be overidden by your Group’s method. The reason for using this
-method to add subsystem is to save memory and setup time when using your Group
-while running under MPI.  This avoids the creation of systems that will not be
-used in the current process.</p>
-<p>You may call ‘add_subsystem’ to add systems to this group. You may also issue connections,
-and set the linear and nonlinear solvers for this group level. You cannot safely change
-anything on children systems; use the ‘configure’ method instead.</p>
-<dl class="simple">
-<dt>Available attributes:</dt><dd><p>name
-pathname
-comm
-options</p>
-</dd>
-</dl>
+<dd><p>Setup of <cite>ODE2dLLO2Apo</cite> parameters. Declaration of subsystem, input and output</p>
 </dd></dl>
 
 <dl class="method">
@@ -1870,30 +1883,35 @@ if a specific coloring is passed in.</p></li>
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2HEO">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.odes.odes_2d_group.</code><code class="sig-name descname">ODE2dLLO2HEO</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2HEO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2HEO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.group.Group</span></code></p>
+<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [rad]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectry [m/s]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [rad]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [N]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2HEO.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2HEO.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2HEO.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform any one-time initialization run at instantiation.</p>
+<dd><p>Initializes the <cite>ODE2dLLO2HEO</cite> class variables</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2HEO.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2HEO.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2HEO.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build this group.</p>
-<p>This method should be overidden by your Group’s method. The reason for using this
-method to add subsystem is to save memory and setup time when using your Group
-while running under MPI.  This avoids the creation of systems that will not be
-used in the current process.</p>
-<p>You may call ‘add_subsystem’ to add systems to this group. You may also issue connections,
-and set the linear and nonlinear solvers for this group level. You cannot safely change
-anything on children systems; use the ‘configure’ method instead.</p>
-<dl class="simple">
-<dt>Available attributes:</dt><dd><p>name
-pathname
-comm
-options</p>
-</dd>
-</dl>
+<dd><p>Setup of <cite>ODE2dLLO2HEO</cite> parameters. Declaration of subsystem, input and output</p>
 </dd></dl>
 
 <dl class="method">

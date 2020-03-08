@@ -177,6 +177,40 @@
 <span class="k">class</span> <span class="nc">ODE2dVToff</span><span class="p">(</span><span class="n">Group</span><span class="p">):</span>
 
 <div class="viewcode-block" id="ODE2dVToff.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d_group.ODE2dVToff.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take off.</span>
+
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        time : float</span>
+<span class="sd">            Represents the time variable of the system [s]</span>
+<span class="sd">        r : float</span>
+<span class="sd">            Represents a position along the trajectory. The distance is measured from the center of the central body [m]</span>
+<span class="sd">        theta : float</span>
+<span class="sd">            Angle spawn from the starting point of the orbit to the final one [rad]</span>
+<span class="sd">        u : float</span>
+<span class="sd">            Radial velocity of a point along the trajectory [m/s]</span>
+<span class="sd">        v : float</span>
+<span class="sd">            Tangential velocity of a point along the trajectry [m/s]</span>
+<span class="sd">        m : float</span>
+<span class="sd">            Mass of the space vehicle that performs the trajectory [kg]</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">            Angle defining the thrust direction [rad]</span>
+<span class="sd">        thrust : float</span>
+<span class="sd">            Value of the applied thrust force [N]</span>
+<span class="sd">        w : float</span>
+<span class="sd">            Value of the exhaust velocity [m/s]</span>
+<span class="sd">        num_nodes : int</span>
+<span class="sd">            Number of nodes where to compute the equations</span>
+<span class="sd">        GM : float</span>
+<span class="sd">            Gravitational constant [m/s^2]</span>
+<span class="sd">        R : float</span>
+<span class="sd">            Moon radius [m]</span>
+<span class="sd">        alt_safe : float</span>
+<span class="sd">            Altitude of the curve representing the geographical constraint [m]</span>
+<span class="sd">        slope : float</span>
+<span class="sd">            Slope of the curves defining a geographical constraint</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
@@ -187,7 +221,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dVToff.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d_group.ODE2dVToff.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot; Setup of `ODE2dVToff` parameters. Declaration of subsystem, input and output&quot;&quot;&quot;</span>
         <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_subsystem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;odes&#39;</span><span class="p">,</span> <span class="n">subsys</span><span class="o">=</span><span class="n">ODE2dVarThrust</span><span class="p">(</span><span class="n">num_nodes</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">GM</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">],</span> <span class="n">w</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]),</span>
@@ -211,9 +245,40 @@
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">ODE2dLLO2Apo</span><span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with insertion at apoapsis.</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    time : float</span>
+<span class="sd">        Represents the time variable of the system [s]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Represents a position along the trajectory. The distance is measured from the center of the central body [m]</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Angle spawn from the starting point of the orbit to the final one [rad]</span>
+<span class="sd">    u : float</span>
+<span class="sd">        Radial velocity of a point along the trajectory [m/s]</span>
+<span class="sd">    v : float</span>
+<span class="sd">        Tangential velocity of a point along the trajectry [m/s]</span>
+<span class="sd">    m : float</span>
+<span class="sd">        Mass of the space vehicle that performs the trajectory [kg]</span>
+<span class="sd">    alpha : float</span>
+<span class="sd">        Angle defining the thrust direction [rad]</span>
+<span class="sd">    thrust : float</span>
+<span class="sd">        Value of the applied thrust force [N]</span>
+<span class="sd">    w : float</span>
+<span class="sd">        Value of the exhaust velocity [m/s]</span>
+<span class="sd">    num_nodes : int</span>
+<span class="sd">        Number of nodes where to compute the equations</span>
+<span class="sd">    GM : float</span>
+<span class="sd">        Gravitational constant [m/s^2]</span>
+<span class="sd">    T : float</span>
+<span class="sd">       Value of the constant thrust force [N]</span>
+<span class="sd">    ra : float</span>
+<span class="sd">        Value of the apoapsis radius [m]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ODE2dLLO2Apo.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d_group.ODE2dLLO2Apo.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot; Initializes the `ODE2dLLO2Apo` class variables &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -221,7 +286,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;ra&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dLLO2Apo.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d_group.ODE2dLLO2Apo.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot; Setup of `ODE2dLLO2Apo` parameters. Declaration of subsystem, input and output&quot;&quot;&quot;</span>
         <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_subsystem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;odes&#39;</span><span class="p">,</span> <span class="n">subsys</span><span class="o">=</span><span class="n">ODE2dConstThrust</span><span class="p">(</span><span class="n">num_nodes</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">GM</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">],</span>
@@ -244,16 +309,45 @@
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">ODE2dLLO2HEO</span><span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; ODE2dThrust class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    time : float</span>
+<span class="sd">        Represents the time variable of the system [s]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Represents a position along the trajectory. The distance is measured from the center of the central body [m]</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Angle spawn from the starting point of the orbit to the final one [rad]</span>
+<span class="sd">    u : float</span>
+<span class="sd">        Radial velocity of a point along the trajectory [m/s]</span>
+<span class="sd">    v : float</span>
+<span class="sd">        Tangential velocity of a point along the trajectry [m/s]</span>
+<span class="sd">    m : float</span>
+<span class="sd">        Mass of the space vehicle that performs the trajectory [kg]</span>
+<span class="sd">    alpha : float</span>
+<span class="sd">        Angle defining the thrust direction [rad]</span>
+<span class="sd">    thrust : float</span>
+<span class="sd">        Value of the applied thrust force [N]</span>
+<span class="sd">    w : float</span>
+<span class="sd">        Value of the exhaust velocity [m/s]</span>
+<span class="sd">    num_nodes : int</span>
+<span class="sd">        Number of nodes where to compute the equations</span>
+<span class="sd">    GM : float</span>
+<span class="sd">        Gravitational constant [m/s^2]</span>
+<span class="sd">    T : float</span>
+<span class="sd">       Value of the constant thrust force [N]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ODE2dLLO2HEO.initialize"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d_group.ODE2dLLO2HEO.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot; Initializes the `ODE2dLLO2HEO` class variables &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dLLO2HEO.setup"><a class="viewcode-back" href="../../../modules/odes.html#rpfm.odes.odes_2d_group.ODE2dLLO2HEO.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot; Setup of `ODE2dLLO2HEO` parameters. Declaration of subsystem, input and output&quot;&quot;&quot;</span>
         <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_subsystem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;odes&#39;</span><span class="p">,</span> <span class="n">subsys</span><span class="o">=</span><span class="n">ODE2dConstThrust</span><span class="p">(</span><span class="n">num_nodes</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">GM</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">],</span>

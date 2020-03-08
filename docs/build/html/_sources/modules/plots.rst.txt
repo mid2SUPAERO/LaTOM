@@ -21,5 +21,8 @@ Documentation
 .. automodule:: rpfm.plots.solutions
   :noindex:
 
+.. automodule:: rpfm.plots.continuation
+  :noindex:
+
 .. automodule:: rpfm.plots.response_surfaces
   :noindex:

@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../odes.html">ODEs Subpackage</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../plots.html">Plots Subpackage</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../plots.html#modules-list">Modules List</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rpfm.plots.continuation.html">rpfm.plots.continuation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rpfm.plots.response_surfaces.html">rpfm.plots.response_surfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rpfm.plots.solutions.html">rpfm.plots.solutions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rpfm.plots.timeseries.html">rpfm.plots.timeseries</a></li>
@@ -103,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
 </ul>
 
             
@@ -183,10 +185,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO" title="rpfm.plots.trajectories.TwoDimLLO2NRHO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2NRHO</span></code></a>(r_moon, a_nrho, e_nrho, states)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.plots.trajectories.TwoDimSurface2LLO" title="rpfm.plots.trajectories.TwoDimSurface2LLO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSurface2LLO</span></code></a>(r_moon, states[, kind])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.plots.trajectories.TwoDimSurface2LLO" title="rpfm.plots.trajectories.TwoDimSurface2LLO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSurface2LLO</span></code></a>(r_moon, states[, kind, nb])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.plots.trajectories.TwoDimTrajectory" title="rpfm.plots.trajectories.TwoDimTrajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimTrajectory</span></code></a>(r_moon, r_llo, states[, kind])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.plots.trajectories.TwoDimTrajectory" title="rpfm.plots.trajectories.TwoDimTrajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimTrajectory</span></code></a>(r_moon, r_llo, states[, …])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -204,8 +206,23 @@
 
 <dl class="class">
 <dt id="rpfm.plots.trajectories.TwoDimTrajectory">
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimTrajectory</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimTrajectory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimTrajectory</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimTrajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimTrajectory.get_scalers">
+<em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.get_scalers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimTrajectory.get_scalers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimTrajectory.polar2cartesian">
+<em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.polar2cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimTrajectory.polar2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimTrajectory.set_axes_decorators">
+<em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.set_axes_decorators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimTrajectory.set_axes_decorators" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="rpfm.plots.trajectories.TwoDimTrajectory.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimTrajectory.plot" title="Permalink to this definition">¶</a></dt>
@@ -215,22 +232,52 @@
 
 <dl class="class">
 <dt id="rpfm.plots.trajectories.TwoDimSurface2LLO">
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimSurface2LLO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimSurface2LLO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimSurface2LLO" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimSurface2LLO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimSurface2LLO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimSurface2LLO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rpfm.plots.trajectories.TwoDimTrajectory" title="rpfm.plots.trajectories.TwoDimTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.plots.trajectories.TwoDimTrajectory</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimSurface2LLO.get_scalers">
+<em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimSurface2LLO.get_scalers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="rpfm.plots.trajectories.TwoDimSurface2LLO.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimSurface2LLO.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimSurface2LLO.polar2cartesian">
+<em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimSurface2LLO.polar2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimSurface2LLO.set_axes_decorators">
+<em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimSurface2LLO.set_axes_decorators" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="rpfm.plots.trajectories.TwoDimLLO2NRHO">
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimLLO2NRHO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">a_nrho</em>, <em class="sig-param">e_nrho</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimLLO2NRHO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimLLO2NRHO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">a_nrho</em>, <em class="sig-param">e_nrho</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/trajectories.html#TwoDimLLO2NRHO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rpfm.plots.trajectories.TwoDimTrajectory" title="rpfm.plots.trajectories.TwoDimTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.plots.trajectories.TwoDimTrajectory</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimLLO2NRHO.get_scalers">
+<em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO.get_scalers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="rpfm.plots.trajectories.TwoDimLLO2NRHO.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimLLO2NRHO.polar2cartesian">
+<em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO.polar2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.plots.trajectories.TwoDimLLO2NRHO.set_axes_decorators">
+<em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.plots.trajectories.TwoDimLLO2NRHO.set_axes_decorators" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

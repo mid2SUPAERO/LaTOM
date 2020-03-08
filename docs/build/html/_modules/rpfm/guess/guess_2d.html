@@ -160,6 +160,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
@@ -168,24 +169,6 @@
 
 <span class="kn">from</span> <span class="nn">rpfm.utils.keplerian_orbit</span> <span class="kn">import</span> <span class="n">KepOrb</span><span class="p">,</span> <span class="n">TwoDimOrb</span>
 <span class="kn">from</span> <span class="nn">rpfm.utils.const</span> <span class="kn">import</span> <span class="n">g0</span>
-
-
-<div class="viewcode-block" id="ImpulsiveBurn"><a class="viewcode-back" href="../../../modules/guess.html#rpfm.guess.guess_2d.ImpulsiveBurn">[docs]</a><span class="k">class</span> <span class="nc">ImpulsiveBurn</span><span class="p">:</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">sc</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dv</span> <span class="o">=</span> <span class="n">dv</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">mf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">m0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">dv</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="o">/</span><span class="n">g0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dm</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">m0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mf</span></div>
-
-
-<div class="viewcode-block" id="DeorbitBurn"><a class="viewcode-back" href="../../../modules/guess.html#rpfm.guess.guess_2d.DeorbitBurn">[docs]</a><span class="k">class</span> <span class="nc">DeorbitBurn</span><span class="p">(</span><span class="n">ImpulsiveBurn</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
-
-        <span class="n">ImpulsiveBurn</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HohmannTransfer"><a class="viewcode-back" href="../../../modules/guess.html#rpfm.guess.guess_2d.HohmannTransfer">[docs]</a><span class="k">class</span> <span class="nc">HohmannTransfer</span><span class="p">:</span>

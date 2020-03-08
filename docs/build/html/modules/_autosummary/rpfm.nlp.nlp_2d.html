@@ -104,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
 </ul>
 
             
@@ -225,8 +226,8 @@ optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
 <li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
-<li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>iterable</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
 allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
 <li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which each phase is discretized</p></li>
@@ -243,10 +244,10 @@ Default is None</p></li>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
 <li><p><strong>alpha_bounds</strong> (<em>ndarray</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
-<li><p><strong>r_circ</strong> (<em>float</em>) – Orbit radius [-]</p></li>
-<li><p><strong>v_circ</strong> (<em>float</em>) – Orbital velocity</p></li>
+<li><p><strong>r_circ</strong> (<em>float</em>) – Orbit radius [m]</p></li>
+<li><p><strong>v_circ</strong> (<em>float</em>) – Orbital velocity [m/s]</p></li>
 <li><p><strong>guess</strong> (<a class="reference internal" href="rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.TwoDimGuess" title="rpfm.guess.guess_2d.TwoDimGuess"><em>TwoDimGuess</em></a>) – Initial guess to be provided before solving the NLP</p></li>
 </ul>
 </dd>
@@ -332,7 +333,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -344,7 +345,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -487,7 +488,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -499,7 +500,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -644,7 +645,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -656,7 +657,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -804,7 +805,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -816,7 +817,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -962,7 +963,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -974,7 +975,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -1116,7 +1117,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1128,7 +1129,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -1270,7 +1271,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1282,7 +1283,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -1397,7 +1398,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1409,7 +1410,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -1524,7 +1525,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1536,7 +1537,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -1651,7 +1652,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1663,7 +1664,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>

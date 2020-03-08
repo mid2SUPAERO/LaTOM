@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rpfm.plots.response_surfaces" href="_autosummary/rpfm.plots.response_surfaces.html" />
+    <link rel="next" title="rpfm.plots.continuation" href="_autosummary/rpfm.plots.continuation.html" />
     <link rel="prev" title="rpfm.odes.odes_3d" href="_autosummary/rpfm.odes.odes_3d.html" /> 
 </head>
 
@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="odes.html">ODEs Subpackage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Plots Subpackage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#modules-list">Modules List</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.plots.continuation.html">rpfm.plots.continuation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.plots.response_surfaces.html">rpfm.plots.response_surfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.plots.solutions.html">rpfm.plots.solutions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.plots.timeseries.html">rpfm.plots.timeseries</a></li>
@@ -103,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="reader.html">Readers Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="surrogate.html">Surrogate Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/installation_index.html">Installation</a></li>
 </ul>
 
             
@@ -177,16 +179,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.response_surfaces.html#module-rpfm.plots.response_surfaces" title="rpfm.plots.response_surfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.response_surfaces</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.continuation.html#module-rpfm.plots.continuation" title="rpfm.plots.continuation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.continuation</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.solutions.html#module-rpfm.plots.solutions" title="rpfm.plots.solutions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.solutions</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.response_surfaces.html#module-rpfm.plots.response_surfaces" title="rpfm.plots.response_surfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.response_surfaces</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.timeseries.html#module-rpfm.plots.timeseries" title="rpfm.plots.timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.timeseries</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.solutions.html#module-rpfm.plots.solutions" title="rpfm.plots.solutions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.solutions</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.trajectories.html#module-rpfm.plots.trajectories" title="rpfm.plots.trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.trajectories</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.timeseries.html#module-rpfm.plots.timeseries" title="rpfm.plots.timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.timeseries</span></code></a></p></td>
+<td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.plots.trajectories.html#module-rpfm.plots.trajectories" title="rpfm.plots.trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.plots.trajectories</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
 </tbody>
@@ -231,8 +236,23 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimTrajectory</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimTrajectory</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.get_scalers"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.polar2cartesian"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.set_axes_decorators"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt>
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimTrajectory.plot"><span class="viewcode-link">[source]</span></a></dt>
@@ -242,22 +262,52 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimSurface2LLO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimSurface2LLO"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimSurface2LLO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimSurface2LLO"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.plots.trajectories.html#rpfm.plots.trajectories.TwoDimTrajectory" title="rpfm.plots.trajectories.TwoDimTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.plots.trajectories.TwoDimTrajectory</span></code></a></p>
 <dl class="method">
 <dt>
+<em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimLLO2NRHO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">a_nrho</em>, <em class="sig-param">e_nrho</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimLLO2NRHO"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.trajectories.</code><code class="sig-name descname">TwoDimLLO2NRHO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">a_nrho</em>, <em class="sig-param">e_nrho</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/trajectories.html#TwoDimLLO2NRHO"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.plots.trajectories.html#rpfm.plots.trajectories.TwoDimTrajectory" title="rpfm.plots.trajectories.TwoDimTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.plots.trajectories.TwoDimTrajectory</span></code></a></p>
 <dl class="method">
 <dt>
+<em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -299,6 +349,73 @@
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="class">
 <dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.continuation.</code><code class="sig-name descname">MassEnergyContinuation</code><span class="sig-paren">(</span><em class="sig-param">twr</em>, <em class="sig-param">m_prop_frac</em>, <em class="sig-param">en</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/continuation.html#MassEnergyContinuation"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plots the propellant fraction and spacecraft specific energy as function of the thrust/weight ratio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>twr</strong> (<em>ndarray</em>) – List of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_prop_frac</strong> (<em>ndarray</em>) – List of propellant fractions [-]</p></li>
+<li><p><strong>en</strong> (<em>ndarray</em>) – List of spacecraft specific energies [m^2/s^2]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>twr</strong> (<em>ndarray</em>) – List of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_prop_frac</strong> (<em>ndarray</em>) – List of propellant fractions [-]</p></li>
+<li><p><strong>energy</strong> (<em>ndarray</em>) – List of spacecraft specific energies [m^2/s^2]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/continuation.html#MassEnergyContinuation.plot"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Plots the propellant fraction and spacecraft specific energy as function of the thrust/weight ratio.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.continuation.</code><code class="sig-name descname">TwoDimTrajectoryContinuation</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">sol</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/continuation.html#TwoDimTrajectoryContinuation"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
+thrust/weight ratios.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_moon</strong> (<em>float</em>) – Moon radius [m] or [-]</p></li>
+<li><p><strong>r_llo</strong> (<em>float</em>) – Initial Low Lunar Orbit radius [m] o [-]</p></li>
+<li><p><strong>sol</strong> (<em>dict</em>) – Dictionary that maps each thrust/weight ratio to the corresponding optimal trajectory</p></li>
+<li><p><strong>nb</strong> (<em>float</em><em>, </em><em>optional</em>) – Number of points in which the Moon surface and the initial orbits are discretized. Default is <code class="docutils literal notranslate"><span class="pre">2000</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>scaler</strong> (<em>float</em>) – scaler for lengths</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Unit of measurement for lengths</p></li>
+<li><p><strong>x_moon</strong> (<em>ndarray</em>) – x coordinates for the Moon surface [km] or [-]</p></li>
+<li><p><strong>y_moon</strong> (<em>ndarray</em>) – y coordinates for the Moon surface [km] or [-]</p></li>
+<li><p><strong>x_llo</strong> (<em>ndarray</em>) – x coordinates for the initial orbit [km] or [-]</p></li>
+<li><p><strong>y_llo</strong> (<em>ndarray</em>) – y coordinates for the initial orbit [km] or [-]</p></li>
+<li><p><strong>x</strong> (<em>dict</em>) – x coordinates for the ascent trajectories [km] or [-]</p></li>
+<li><p><strong>y</strong> (<em>dict</em>) – y coordinates for the ascent trajectories [km] or [-]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/continuation.html#TwoDimTrajectoryContinuation.plot"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
+thrust/weight ratios.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<dl class="class">
+<dt>
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.response_surfaces.</code><code class="sig-name descname">RespSurf</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em>, <em class="sig-param">m</em>, <em class="sig-param">tof=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/response_surfaces.html#RespSurf"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
@@ -319,7 +436,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="_autosummary/rpfm.plots.response_surfaces.html" class="btn btn-neutral float-right" title="rpfm.plots.response_surfaces" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="_autosummary/rpfm.plots.continuation.html" class="btn btn-neutral float-right" title="rpfm.plots.continuation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="_autosummary/rpfm.odes.odes_3d.html" class="btn btn-neutral float-left" title="rpfm.odes.odes_3d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

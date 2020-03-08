@@ -223,11 +223,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="o">-</span> <span class="n">gm</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="c1"># specific energy in 2BP [m^2/s^2]</span>
-
-        <span class="c1"># cr3bp = Cr3bpEM()</span>
-        <span class="c1"># self.J = 3 - cr3bp.mu*(1 + cr3bp.mu) - 2*self.E*cr3bp.T**2/cr3bp.L**2  # Jacobi constant approximation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="o">-</span> <span class="n">gm</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="c1"># specific energy in 2BP [m^2/s^2]</span>
 
 <div class="viewcode-block" id="TwoDimOrb.coe2polar"><a class="viewcode-back" href="../../../modules/utils.html#rpfm.utils.keplerian_orbit.TwoDimOrb.coe2polar">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">coe2polar</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -263,6 +259,11 @@
         <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">u</span><span class="o">*</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">v</span> <span class="o">-</span> <span class="n">gm</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">ta</span></div>
+
+<div class="viewcode-block" id="TwoDimOrb.polar2energy"><a class="viewcode-back" href="../../../modules/utils.html#rpfm.utils.keplerian_orbit.TwoDimOrb.polar2energy">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">polar2energy</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">gm</span><span class="o">/</span><span class="n">r</span></div>
 
 <div class="viewcode-block" id="TwoDimOrb.propagate"><a class="viewcode-back" href="../../../modules/utils.html#rpfm.utils.keplerian_orbit.TwoDimOrb.propagate">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">tai</span><span class="p">,</span> <span class="n">taf</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">tp</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>

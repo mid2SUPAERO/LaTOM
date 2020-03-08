@@ -181,8 +181,8 @@
 <span class="sd">    sc : Spacecraft</span>
 <span class="sd">        Instance of `Spacecraft` class representing the spacecraft</span>
 <span class="sd">    alt : float</span>
-<span class="sd">        Orbit altitude [-]</span>
-<span class="sd">    alpha_bounds : tuple</span>
+<span class="sd">        Orbit altitude [m]</span>
+<span class="sd">    alpha_bounds : iterable</span>
 <span class="sd">        Lower and upper bounds on thrust vector direction [rad]</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
@@ -209,13 +209,13 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    alt : float</span>
-<span class="sd">        Orbit altitude [-]</span>
+<span class="sd">        Orbit altitude [m]</span>
 <span class="sd">    alpha_bounds : ndarray</span>
 <span class="sd">        Lower and upper bounds on thrust vector direction [rad]</span>
 <span class="sd">    r_circ : float</span>
-<span class="sd">        Orbit radius [-]</span>
+<span class="sd">        Orbit radius [m]</span>
 <span class="sd">    v_circ : float</span>
-<span class="sd">        Orbital velocity</span>
+<span class="sd">        Orbital velocity [m/s]</span>
 <span class="sd">    guess : TwoDimGuess</span>
 <span class="sd">        Initial guess to be provided before solving the NLP</span>
 
@@ -225,6 +225,7 @@
                  <span class="n">ode_kwargs</span><span class="p">,</span> <span class="n">ph_name</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes TwoDimNLP class. &quot;&quot;&quot;</span>
 
+        <span class="c1"># set central body, spacecraft and transcription</span>
         <span class="n">SinglePhaseNLP</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">ode_class</span><span class="p">,</span> <span class="n">ode_kwargs</span><span class="p">,</span> <span class="n">ph_name</span><span class="p">,</span>
                                 <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">)</span>
 
@@ -321,7 +322,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_initial_guess_interpolation</span><span class="p">(</span><span class="n">bcs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">check_partials</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">throttle</span><span class="o">=</span><span class="n">throttle</span><span class="p">)</span>
-        <span class="c1"># self.set_time_guess(self.tof)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">t_eval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_all</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">tc</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="n">fix_final</span><span class="p">,</span> <span class="n">throttle</span><span class="o">=</span><span class="n">throttle</span><span class="p">)</span>
 

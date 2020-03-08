@@ -7,10 +7,10 @@ import numpy as np
 
 from openmdao.api import Problem, MetaModelStructuredComp
 from rpfm.utils.pickle_utils import load, save
-from rpfm.utils.spacecraft import Spacecraft
+from rpfm.utils.spacecraft import Spacecraft, ImpulsiveBurn
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
     TwoDimDescVarNLP, TwoDimDescVLandNLP
-from rpfm.guess.guess_2d import HohmannTransfer, ImpulsiveBurn
+from rpfm.guess.guess_2d import HohmannTransfer
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.data.data import dirname
 from rpfm.plots.response_surfaces import RespSurf

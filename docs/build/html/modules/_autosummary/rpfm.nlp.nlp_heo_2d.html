@@ -104,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
 </ul>
 
             
@@ -292,7 +293,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -304,7 +305,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>
@@ -321,8 +322,33 @@ discretization nodes.</p>
 
 <dl class="class">
 <dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP">
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2ApoNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2ApoNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">params=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp_2d.html#rpfm.nlp.nlp_2d.TwoDimNLP" title="rpfm.nlp.nlp_2d.TwoDimNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimNLP</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options">
+<code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">rp</em>, <em class="sig-param">vp</em>, <em class="sig-param">thetaf</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess">
+<code class="sig-name descname">set_initial_guess</code><span class="sig-paren">(</span><em class="sig-param">check_partials=False</em>, <em class="sig-param">fix_final=False</em>, <em class="sig-param">throttle=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_initial_guess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial guess for the iterative solution of the NLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_continuation_guess">
+<code class="sig-name descname">set_continuation_guess</code><span class="sig-paren">(</span><em class="sig-param">tof</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_continuation_guess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_continuation_guess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.cleanup">
 <code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.cleanup" title="Permalink to this definition">¶</a></dt>
@@ -342,21 +368,6 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess">
-<code class="sig-name descname">set_initial_guess</code><span class="sig-paren">(</span><em class="sig-param">check_partials=False</em>, <em class="sig-param">fix_final=False</em>, <em class="sig-param">throttle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the initial guess for the iterative solution of the NLP.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -404,7 +415,7 @@ state and control variables.</p>
 discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p>
+<dd class="field-odd"><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -416,7 +427,7 @@ discretization nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Phase time of flight (TOF) [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight lower and upper bounds expressed as a fraction of <cite>tof</cite></p></li>
 </ul>
 </dd>

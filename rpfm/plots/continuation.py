@@ -59,8 +59,43 @@ class MassEnergyContinuation:
 
 
 class TwoDimTrajectoryContinuation:
+    """Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
+    thrust/weight ratios.
+
+    Parameters
+    ----------
+    r_moon : float
+        Moon radius [m] or [-]
+    r_llo : float
+        Initial Low Lunar Orbit radius [m] o [-]
+    sol : dict
+        Dictionary that maps each thrust/weight ratio to the corresponding optimal trajectory
+    nb : float, optional
+        Number of points in which the Moon surface and the initial orbits are discretized. Default is ``2000``
+
+    Attributes
+    ----------
+    scaler : float
+        scaler for lengths
+    units : str
+        Unit of measurement for lengths
+    x_moon : ndarray
+        x coordinates for the Moon surface [km] or [-]
+    y_moon : ndarray
+        y coordinates for the Moon surface [km] or [-]
+    x_llo : ndarray
+        x coordinates for the initial orbit [km] or [-]
+    y_llo : ndarray
+        y coordinates for the initial orbit [km] or [-]
+    x : dict
+        x coordinates for the ascent trajectories [km] or [-]
+    y : dict
+        y coordinates for the ascent trajectories [km] or [-]
+
+    """
 
     def __init__(self, r_moon, r_llo, sol, nb=2000):
+        """Initializes `TwoDimTrajectoryContinuation` class. """
 
         self.scaler, self.units = TwoDimTrajectory.get_scalers(r_moon)
 
@@ -75,6 +110,10 @@ class TwoDimTrajectoryContinuation:
                                                                         angle=sol[twr]['states'][:, 1])
 
     def plot(self):
+        """Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
+        thrust/weight ratios.
+
+        """
 
         fig, ax = plt.subplots(constrained_layout=True)
 
