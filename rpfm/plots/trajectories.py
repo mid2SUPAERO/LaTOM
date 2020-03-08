@@ -73,36 +73,59 @@ class TwoDimAltProfile:
 
 class TwoDimTrajectory:
 
-    def __init__(self, r_moon, r_llo, states, kind='ascent'):
+    def __init__(self, r_moon, r_llo, states, kind='ascent', nb=2000):
 
-        if not np.isclose(r_moon, 1.0):
-            self.scaler = 1e3
-            self.units = 'km'
-        else:
-            self.scaler = 1.0
-            self.units = '-'
+        self.scaler, self.units = self.get_scalers(r_moon)
+
+        self.x_moon, self.y_moon = self.polar2cartesian(r_moon, self.scaler, nb=nb)  # Moon surface in xy plane
+        self.x_llo, self.y_llo = self.polar2cartesian(r_llo, self.scaler, nb=nb)  # LLO in xy plane
+        self.x, self.y = self.polar2cartesian(states[:, 0], scaler=self.scaler, angle=states[:, 1])  # Trajectory
 
         self.kind = kind
-        self.ang = np.linspace(0.0, 2 * np.pi, 2000)
 
-        # Moon
-        self.x_moon = r_moon/self.scaler*np.cos(self.ang)
-        self.y_moon = r_moon/self.scaler*np.sin(self.ang)
+    @staticmethod
+    def get_scalers(r):
 
-        # trajectory
-        self.x = states[:, 0]/self.scaler*np.cos(states[:, 1])
-        self.y = states[:, 0]/self.scaler*np.sin(states[:, 1])
+        if not np.isclose(r, 1.0):
+            scaler = 1e3
+            units = 'km'
+        else:
+            scaler = 1.0
+            units = '-'
 
-        # LLO
-        self.x_llo = r_llo/self.scaler*np.cos(self.ang)
-        self.y_llo = r_llo/self.scaler*np.sin(self.ang)
+        return scaler, units
+
+    @staticmethod
+    def polar2cartesian(r, scaler=1., **kwargs):
+
+        if 'nb' in kwargs:
+            angle = np.linspace(0.0, 2 * np.pi, kwargs['nb'])
+        elif 'angle' in kwargs:
+            angle = kwargs['angle']
+        else:
+            raise ValueError('nb or angle array must be provided')
+
+        x = r*np.cos(angle)/scaler
+        y = r*np.sin(angle)/scaler
+
+        return x, y
+
+    @staticmethod
+    def set_axes_decorators(ax, title, units):
+
+        ax.set_aspect('equal')
+        ax.grid()
+
+        ax.tick_params(axis='x', rotation=60)
+
+        ax.set_xlabel(''.join(['x (', units, ')']))
+        ax.set_ylabel(''.join(['y (', units, ')']))
+        ax.set_title(title)
+        ax.legend(bbox_to_anchor=(1, 1), loc=2)
 
     def plot(self):
 
         fig, ax = plt.subplots(constrained_layout=True)
-
-        label = ' '.join([self.kind, 'trajectory'])
-        title = ' '.join(['Optimal', label])
 
         ax.plot(self.x_moon, self.y_moon, label='Moon surface')
 
@@ -112,22 +135,15 @@ class TwoDimTrajectory:
         else:
             ax.plot(self.x_llo, self.y_llo, label='target orbit')
 
+        label = ' '.join([self.kind, 'trajectory'])
         ax.plot(self.x, self.y, label=label)
 
-        ax.set_aspect('equal')
-        ax.grid()
-
-        ax.tick_params(axis='x', rotation=60)
-
-        ax.set_xlabel(''.join(['x (', self.units, ')']))
-        ax.set_ylabel(''.join(['y (', self.units, ')']))
-        ax.set_title(title)
-        ax.legend(bbox_to_anchor=(1, 1), loc=2)
+        self.set_axes_decorators(ax, ' '.join(['Optimal', label]), self.units)
 
 
 class TwoDimSurface2LLO(TwoDimTrajectory):
 
-    def __init__(self, r_moon, states, kind='ascent'):
+    def __init__(self, r_moon, states, kind='ascent', nb=2000):
 
         # kind
         if kind == 'ascent':
@@ -137,12 +153,12 @@ class TwoDimSurface2LLO(TwoDimTrajectory):
         else:
             raise ValueError('kind must be either ascent or descent')
 
-        TwoDimTrajectory.__init__(self, r_moon, r_llo, states, kind=kind)
+        TwoDimTrajectory.__init__(self, r_moon, r_llo, states, kind=kind, nb=nb)
 
 
 class TwoDimLLO2NRHO(TwoDimTrajectory):
 
-    def __init__(self, r_moon, a_nrho, e_nrho, states, kind='ascent'):
+    def __init__(self, r_moon, a_nrho, e_nrho, states, kind='ascent', nb=2000):
 
         # kind
         if kind == 'ascent':
@@ -152,10 +168,11 @@ class TwoDimLLO2NRHO(TwoDimTrajectory):
         else:
             raise ValueError('kind must be either ascent or descent')
 
-        TwoDimTrajectory.__init__(self, r_moon, r_llo, states, kind=kind)
+        TwoDimTrajectory.__init__(self, r_moon, r_llo, states, kind=kind, nb=nb)
 
         # NRHO
-        r_nrho = a_nrho*(1 - e_nrho**2)/(1 + e_nrho*np.cos(self.ang))
-        self.x_nrho = r_nrho/self.scaler*np.cos(self.ang)
-        self.y_nrho = r_nrho/self.scaler*np.sin(self.ang)
+        angle = np.linspace(0.0, 2 * np.pi, nb)
+        r_nrho = a_nrho*(1 - e_nrho**2)/(1 + e_nrho*np.cos(angle))
+        self.x_nrho = r_nrho/self.scaler*np.cos(angle)
+        self.y_nrho = r_nrho/self.scaler*np.sin(angle)
 

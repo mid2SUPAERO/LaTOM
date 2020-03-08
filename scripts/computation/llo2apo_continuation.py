@@ -17,8 +17,8 @@ heo_period = 6.5655 * 86400  # target HEO period [s]
 
 # spacecraft
 isp = 400.  # specific impulse [s]
-twr0 = 3.  # initial thrust/weight ratio [-]
-twr_list = np.arange(twr0, 2., -0.2)
+twr0 = 4.  # initial thrust/weight ratio [-]
+twr_list = np.arange(twr0, 0.5, -0.5)
 sc = Spacecraft(isp, twr0, g=moon.g)
 
 # NLP
@@ -47,4 +47,4 @@ tr.get_solutions(explicit=exp_sim, scaled=False)
 
 print(tr)
 
-# tr.plot()
+tr.plot()

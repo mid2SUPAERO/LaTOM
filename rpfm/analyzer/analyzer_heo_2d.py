@@ -10,6 +10,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
 from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP, TwoDim2PhasesLLO2HEONLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimMultiPhaseSolPlot
 from rpfm.plots.timeseries import TwoDimStatesTimeSeries, TwoDimControlsTimeSeries
+from rpfm.plots.continuation import MassEnergyContinuation, TwoDimTrajectoryContinuation
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 from rpfm.utils.spacecraft import ImpulsiveBurn
 from rpfm.utils.const import g0
@@ -535,6 +536,16 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
 
         if rec_file is not None:
             self.nlp.p.record_iteration('final')
+
+    def plot(self):
+
+        TwoDimLLO2ApoAnalyzer.plot(self)
+
+        mass_energy_continuation = MassEnergyContinuation(self.twr_list, self.m_prop_list/self.sc.m0, self.energy_list)
+        trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
+
+        mass_energy_continuation.plot()
+        trajectory_continuation.plot()
 
 
 class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
