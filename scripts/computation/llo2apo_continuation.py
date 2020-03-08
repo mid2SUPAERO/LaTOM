@@ -17,21 +17,21 @@ heo_period = 6.5655 * 86400  # target HEO period [s]
 
 # spacecraft
 isp = 400.  # specific impulse [s]
-twr0 = 2.  # initial thrust/weight ratio [-]
-twr_list = np.arange(twr0, 1.5, -0.2)
+twr0 = 1.  # initial thrust/weight ratio [-]
+twr_list = np.arange(twr0, 1., -0.5)
 sc = Spacecraft(isp, twr0, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 30
+segments = 40
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
 
 # additional settings
 run_driver = True  # solve the NLP
-exp_sim = True  # perform explicit simulation
+exp_sim = False  # perform explicit simulation
 
 tr = TwoDimLLO2ApoContinuationAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, None, twr_list, method, segments, order,
                                        solver, snopt_opts=snopt_opts, check_partials=False)
@@ -47,4 +47,5 @@ tr.get_solutions(explicit=exp_sim, scaled=False)
 
 print(tr)
 
+# tr.save('filename')
 tr.plot()

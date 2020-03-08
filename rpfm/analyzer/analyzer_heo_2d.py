@@ -485,7 +485,8 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
         Parameters
         ----------
         rec_file : str or None, optional
-            Directory path for the file in which the solutions are recorded or ``None``. Default is ``None``
+            Directory path for the file in which the thrust/weight ratios, propellant masses, specific energies and
+            solutions are recorded or ``None``. Default is ``None``
 
         """
 
@@ -534,13 +535,13 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
 
     def plot(self):
 
-        TwoDimLLO2ApoAnalyzer.plot(self)
-
         mass_energy_continuation = MassEnergyContinuation(self.twr_list, self.m_prop_list/self.sc.m0, self.energy_list)
         trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
 
         mass_energy_continuation.plot()
         trajectory_continuation.plot()
+
+        TwoDimLLO2ApoAnalyzer.plot(self)
 
 
 class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):

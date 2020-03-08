@@ -6,6 +6,7 @@
 import numpy as np
 
 from time import time
+from rpfm.utils.pickle_utils import save
 
 
 class Analyzer:
@@ -156,3 +157,16 @@ class Analyzer:
         else:
             self.rm_res = self.body.R
             self.gm_res = self.body.GM
+
+    def save(self, rec_file):
+        """Pickle the whole `Analyzer` class.
+
+        Parameters
+        ----------
+        rec_file : str
+            Directory path to the file where the `Analyzer` is serialized
+
+        """
+
+        self.nlp = None
+        save(self, rec_file)
