@@ -3,6 +3,9 @@
 
 """
 
+import numpy as np
+
+from warnings import warn
 from rpfm.utils.const import g0
 
 
@@ -56,9 +59,9 @@ class Spacecraft:
         if m_dry is not None:
             self.m_dry = float(m_dry)
         else:
-            self.m_dry = self.m0/100
+            self.m_dry = self.m0 / 100
 
-        self.w = isp*g0
+        self.w = isp * g0
         self.update_twr(twr)
 
     def update_twr(self, twr):
@@ -68,7 +71,7 @@ class Spacecraft:
         self.T_min = self.T_max * self.throttle_min
 
     def __str__(self):
-        """Prints the Spacecraft object attributes. """
+        """Prints the Spacecraft class attributes. """
 
         lines = ['\n{:^40s}'.format('Spacecraft characteristics:'),
                  '\n{:<20s}{:>15.3f}{:>5s}'.format('Initial mass:', self.m0, 'kg'),
@@ -84,10 +87,114 @@ class Spacecraft:
         return s
 
 
-if __name__ == '__main__':
+class ImpulsiveBurn:
+    """ImpulsiveBurn class describes an impulsive burn.
 
+    Parameters
+    ----------
+    sc : Spacecraft
+        Instant of `Spacecraft` class
+    dv : float
+        Change in velocity corresponding to the impulsive burn [m/s]
+
+    Attributes
+    ----------
+    sc : Spacecraft
+        Instant of `Spacecraft` class
+    dv : float
+        Change in velocity corresponding to the impulsive burn [m/s]
+    mf : float
+        Spacecraft final mass after the impulsive burn [kg]
+    dm : float
+        Propellant mass required for the impulsive burn [kg]
+
+    """
+
+    def __init__(self, sc, dv):
+        """Initializes `ImpulsiveBurn` class. """
+
+        self.sc = sc
+        self.dv = dv
+
+        self.mf = self.tsiolkovsky_mf(self.sc.m0, dv, self.sc.Isp)
+        self.dm = self.sc.m0 - self.mf
+
+    @staticmethod
+    def tsiolkovsky_mf(m0, dv, isp):
+        """Computes the final spacecraft mass for a given velocity change using the Tsiolkovsky rocket equation.
+
+        Parameters
+        ----------
+        m0 : float
+            Initial spacecraft mass [kg]
+        dv : float
+            Change in velocity [m/s]
+        isp : float
+            Specific impulse of the spacecraft rocket engine [s]
+
+        Returns
+        -------
+        mf : float
+            Final spacecraft mass [kg]
+
+        """
+
+        mf = m0 * np.exp(-abs(dv) / isp / g0)
+
+        return mf
+
+    @staticmethod
+    def tsiolkovsky_dv(m0, mf, isp):
+        """Computes the velocity change for a given initial and final spacecraft masses using the Tsiolkovsky rocket
+        equation.
+
+        Parameters
+        ----------
+        m0 : float
+            Initial spacecraft mass [kg]
+        mf : float
+            Final spacecraft mass [kg]
+        isp : float
+            Specific impulse of the spacecraft rocket engine [s]
+
+        Returns
+        -------
+        dv : float
+            Change in velocity [m/s]
+
+        """
+
+        dv = isp * g0 * np.log(m0 / mf)
+
+        return dv
+
+    def __str__(self):
+        """Prints the ImpulsiveBurn class attributes. """
+
+        lines = [self.sc.__str__(),
+                 '\n{:^40s}'.format('Impulsive Burn:'),
+                 '\n{:<20s}{:>15.3f}{:>5s}'.format('Velocity change:', self.dv, 'm/s'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Propellant mass:', self.dm, 'kg'),
+                 '{:<20s}{:>15.3f}{:>5s}'.format('Final mass:', self.mf, 'kg')]
+
+        s = '\n'.join(lines)
+
+        return s
+
+
+class DeorbitBurn(ImpulsiveBurn):
+
+    def __init__(self, sc, dv):
+        warn('deprecated, use ImpulsiveBurn instead', FutureWarning)
+        ImpulsiveBurn.__init__(self, sc, dv)
+
+
+if __name__ == '__main__':
     from rpfm.utils.primary import Moon
 
     moon = Moon()
-    sc = Spacecraft(450., 2., throttle_min=0.1, g=moon.g)
-    print(sc)
+    sat = Spacecraft(450., 2., throttle_min=0.1, g=moon.g)
+    print(sat)
+
+    burn = ImpulsiveBurn(sat, 100)
+    print(burn)

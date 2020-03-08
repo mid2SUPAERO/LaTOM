@@ -95,6 +95,28 @@ class Analyzer:
 
         return None, None, None, None
 
+    def get_solution_dictionary(self, p, scaled=False):
+        """
+
+        Parameters
+        ----------
+        p : Problem
+            Instance of `Problem` class
+        scaled : bool
+            Scales the simulation results
+
+        Returns
+        -------
+        sol : dict
+            Dictionary containing the NLP solution
+
+        """
+
+        tof, t, states, controls = self.get_time_series(p, scaled=scaled)
+        sol = {'tof': tof, 't': t, 'states': states, 'controls': controls}
+
+        return sol
+
     def get_solutions(self, explicit=True, scaled=False):
         """Access the simulation solution.
 

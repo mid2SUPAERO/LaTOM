@@ -66,8 +66,7 @@ class TwoDimOrb:
 
         self.h = (gm * self.a * (1 - self.e ** 2)) ** 0.5
         self.n = (gm / self.a ** 3) ** 0.5
-
-        self.E = - gm / 2 / self.a  # specific energy in 2BP [m^2/s^2]
+        self.energy = - gm / 2 / self.a  # specific energy in 2BP [m^2/s^2]
 
     @staticmethod
     def coe2polar(gm, ta, **kwargs):
@@ -105,7 +104,7 @@ class TwoDimOrb:
         return a, e, h, ta
 
     @staticmethod
-    def energy(gm, r, u, v):
+    def polar2energy(gm, r, u, v):
 
         return (u**2 + v**2)*0.5 - gm/r
 

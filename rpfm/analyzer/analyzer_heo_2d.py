@@ -11,15 +11,16 @@ from rpfm.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3Phase
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimMultiPhaseSolPlot
 from rpfm.plots.timeseries import TwoDimStatesTimeSeries, TwoDimControlsTimeSeries
 from rpfm.utils.keplerian_orbit import TwoDimOrb
-from rpfm.guess.guess_2d import ImpulsiveBurn
+from rpfm.utils.spacecraft import ImpulsiveBurn
 from rpfm.utils.const import g0
 
 
 class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional LLO to HEO simulation.
+    """TwoDimLLO2HEOAnalyzer class defines the methods to analyze the results of a two dimensional simulation from a
+    Low Lunar Orbit to an Highly Elliptical Orbit.
 
-     It gives the results of an optimal trajectory from a Low Lunar Orbit of choosen altitude to an High Elliptical
-     Orbit which can represent a transposition of an Halo orbit in 2D.
+     The Highly Elliptical Orbit is chosen as first planar approximation of a three-dimensional Near Rectilinear Halo
+     Orbit. The transfer is modelled as a single phase trajectory performed at variable thrust.
 
     Parameters
     ----------
@@ -91,7 +92,8 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
 
     def plot(self):
         """Plots the states and controls resulting from the simulation and the ones from the explicit computation in
-           time. The semi-major axis and the eccentricity of the HEO are also displayed.
+        time. The semi-major axis and the eccentricity of the HEO are also displayed.
+
         """
 
         sol_plot = TwoDimSolPlot(self.rm_res, self.time, self.states, self.controls, self.time_exp, self.states_exp,
@@ -126,9 +128,14 @@ class TwoDimLLO2HEOAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional LLO to HEO.
+    """TwoDimLLO2HEOAnalyzer class defines the methods to analyze the results of a two dimensional simulation from a
+    Low Lunar Orbit to an Highly Elliptical Orbit.
 
-     In this simulation the injection is performed with a final instantaneous non-optimal burn.
+    The Highly Elliptical Orbit is chosen as first planar approximation of a three-dimensional Near Rectilinear Halo
+    Orbit. The optimal control problem is solved for a single phase trajectory performed at constant thrust that
+    injects the spacecraft from the Low Lunar Orbit to an intermediate transfer trajectory whose aposelene radius
+    coincides with the one of the target Highly Elliptical Orbit. The final insertion manoeuvre is then modelled as
+    an ideal impulsive burn due to its limited dV magnitude.
 
     Parameters
     ----------
@@ -141,7 +148,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
     rp : float
         Value for the target HEO periselene radius [m]
     t : float
-        Value for the guessed trajectory time of flight [s]
+        Value for the target HEO period [s]
     t_bounds : float
         Value for the time of flight bounds [-]
     method : str
@@ -158,8 +165,6 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         Directory path for the solution recording file. Default is ``None``
     check_partials : bool
         Checking of partial derivatives. Default is ``False``
-
-
 
     Attributes
     ----------
@@ -191,8 +196,9 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         Instance of `HohmannTransfer` computing the keplerian parameters of the transfer orbit
     insertion_burn : ImpulsiveBurn
         Instance of `ImpulsiveBurn` defining the delta v required for an impulsive burn
-    dv : float
+    dv_dep : float
         Delta v required for a manoeuvre [m/s]
+
     """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
@@ -206,56 +212,18 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                                     check_partials=check_partials)
 
         self.transfer = self.insertion_burn = self.dv_dep = None
-        self.m_prop_list = []
-        self.energy_list = []
         self.guess = self.nlp.guess
 
-    def compute_energy_mprop(self, r, u, v, m0):
-
-        en = TwoDimOrb.energy(self.body.GM, r, u, v)  # energy on ballistic arc [m^2/s^2]
-        va = (2 * (en + self.body.GM / self.nlp.guess.ht.arrOrb.ra)) ** 0.5  # ballistic arc apoapsis velocity [m/s]
-        dva = self.guess.ht.arrOrb.va - va  # apoapsis dv [m/s]
-        m_prop = self.sc.m0 - ImpulsiveBurn.tsiolkovsky_mf(m0, dva, self.sc.Isp)  # total propellant mass [kg]
-
-        return en, m_prop
-
-    def run_continuation(self, twr_list, rec_file=None):
-
-        nlp = self.nlp
-        failed = nlp.p.run_driver()
-        nlp.cleanup()
-
-        if not failed:
-
-            tof, states, alpha = self.get_tof_states_alpha(nlp.p, nlp.phase_name)
-            params = {'ra': self.guess.ht.arrOrb.ra, 'rp': self.guess.ht.depOrb.rp, 'vp': self.guess.ht.transfer.vp,
-                      'thetaf': self.guess.pow.thetaf, 'tof': tof, 'states': states, 'alpha': alpha}
-            en, m_prop = self.compute_energy_mprop(states[-1, 0], states[-1, 2], states[-1, 3], states[-1, -1])
-            self.energy_list.append(en)
-            self.m_prop_list.append(m_prop)
-
-            for twr in twr_list[1:]:
-                self.sc.update_twr(twr)
-                nlp = TwoDimLLO2ApoNLP(self.body, self.sc, self.alt, None, None, (-np.pi / 2, np.pi / 2), None,
-                                       self.nlp.method, self.nlp.nb_seg, self.nlp.order, self.nlp.solver,
-                                       self.phase_name, snopt_opts=self.nlp.snopt_opts, params=params)
-
-                failed = nlp.p.run_driver()
-                nlp.cleanup()
-                if failed:
-                    break
-
-                params['tof'], params['states'], params['alpha'] = self.get_tof_states_alpha(nlp.p, nlp.phase_name)
-                en, m_prop = self.compute_energy_mprop(params['states'][-1, 0], params['states'][-1, 2],
-                                                       params['states'][-1, 3], params['states'][-1, -1])
-                self.energy_list.append(en)
-                self.m_prop_list.append(m_prop)
-
-        self.nlp = nlp
-        if rec_file is not None:
-            self.nlp.p.record_iteration('final')
-
     def compute_solution(self, nb=200):
+        """Retrieves the optimization results and computes the spacecraft states along the ballistic arc as well as the
+        final insertion burn.
+
+        Parameters
+        ----------
+        nb : int, optional
+            Number of points in which the spacecraft states along the ballistic arc are computed. Default is ``200``
+
+        """
 
         # states and COEs at the end of the departure burn
         states_end = self.states[-1]
@@ -275,7 +243,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         sc.m0 = states_end[-1]
         self.insertion_burn = ImpulsiveBurn(sc, self.guess.ht.arrOrb.va - self.transfer.va)
 
-        # transfer orbit
+        # time and states along transfer orbit
         t, states = TwoDimOrb.propagate(self.gm_res, a, e, ta, np.pi, nb)
 
         # adjust time
@@ -305,14 +273,15 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
     def get_solutions(self, explicit=True, scaled=False, nb=200):
         """Access the simulation solution.
 
-            Parameters
-            ----------
-            explicit : bool
-                Computes also the explicit simulation. Default is ``True``
-            scaled : bool
-                Scales the simulation results. Default is ``False``
-            nb : int
-                Number of points where the coasting arch is computed
+        Parameters
+        ----------
+        explicit : bool
+            Computes also the explicit simulation. Default is ``True``
+        scaled : bool
+            Scales the simulation results. Default is ``False``
+        nb : int
+            Number of points where the coasting arch is computed
+
         """
 
         TwoDimAscAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
@@ -321,7 +290,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
     def plot(self):
         """Plots the states and controls resulting from the simulation and the ones from the explicit computation in
-           time. The semi-major axis and the eccentricity of the HEO are also displayed.
+        time. The semi-major axis and the eccentricity of the HEO are also displayed.
 
         """
 
@@ -347,6 +316,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         -------
         s : str
             Info on `TwoDimLLO2ApoAnalyzer`
+
         """
 
         if np.isclose(self.gm_res, 1.0):
@@ -356,9 +326,9 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
 
         lines = ['\n{:^50s}'.format('2D Transfer trajectory from LLO to HEO:'),
                  self.nlp.guess.__str__(),
-                 '\n{:^50s}'.format('Coasting orbit:'),
+                 '\n{:^50s}'.format('Optimal coasting phase:'),
                  self.transfer.__str__(),
-                 '\n{:^50s}'.format('Optimal transfer:'),
+                 '\n{:^50s}'.format('Optimal powered phases:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:',
                                                    1 - self.insertion_burn.mf/self.sc.m0, ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', sum(self.tof)*time_scaler/86400, 'days'),
@@ -377,43 +347,234 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         return s
 
 
-class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional multi phases LLO to HEO simulation
+class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
+    """TwoDimLLO2ApoContinuationAnalyzer class defines the methods to analyze the results of a two dimensional
+    simulation from a Low Lunar Orbit to an Highly Elliptical Orbit using a continuation method over several
+    thrust/weight ratios.
+
+    The Highly Elliptical Orbit is chosen as first planar approximation of a three-dimensional Near Rectilinear Halo
+    Orbit. The optimal control problem is solved for a single phase trajectory performed at constant thrust that
+    injects the spacecraft from the Low Lunar Orbit to an intermediate transfer trajectory whose aposelene radius
+    coincides with the one of the target Highly Elliptical Orbit. The final insertion manoeuvre is then modelled as
+    an ideal impulsive burn due to its limited dV magnitude.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    alt : float
+        Value of the final orbit altitude [m]
+    rp : float
+        Value for the target HEO periselene radius [m]
+    t : float
+        Value for the target HEO period [s]
+    t_bounds : float
+        Value for the time of flight bounds [-]
+    twr_list : iterable
+        List of thrust/weight ratios over which the continuation of the solutions is performed [-]
+    method : str
+        NLP transcription method
+    nb_seg : int
+        Number of segments for the transcription
+    order : int
+        Transcription order
+    solver : str
+        NLP solver
+    snopt_opts : dict
+        Sets some SNOPT's options. Default is ``None``
+    check_partials : bool
+        Checking of partial derivatives. Default is ``False``
+
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    phase_name : str
+        Describes the phase name in case of multi-phase trajectories
+    nlp : NLP
+        Instance of `NLP` object describing the type of Non Linear Problem solver used
+    tof : float
+        Value of the time of flight resulting by the simulation [s]
+    tof_exp : float
+        Value of the time of flight of the explicit simulation [s]
+    err : float
+        Value of the error between the optimized simulation results and the explicit simulation results
+    rm_res : float
+        Value of the central body radius [- or m]
+    states_scalers : ndarray
+        Reference values of the states with which perform the scaling
+    controls_scalers : ndarray
+        Reference values of the controls with which perform the scaling
+    alt : float
+        Value of the final orbit altitude [m]
+    phase_name : str
+        Name assigned to the problem phase
+    transfer : HohmannTransfer
+        Instance of `HohmannTransfer` computing the keplerian parameters of the transfer orbit
+    insertion_burn : ImpulsiveBurn
+        Instance of `ImpulsiveBurn` defining the delta v required for an impulsive burn
+    dv_dep : float
+        Delta v required for a manoeuvre [m/s]
+    twr_list : ndarray
+        List of thrust/weight ratios over which the continuation is performed [-]
+    m_prop_list : ndarray
+        List of propellant masses corresponding to `twr_list` [kg]
+    energy_list : ndarray
+        List of specific energies of the spacecraft along the ballistic arc corresponding to `twr_list` [m^2/s^2]
+    sol_list : dict
+        Dictionary of optimal solutions corresponding to `twr_list`
+
+    """
+
+    def __init__(self, body, sc, alt, rp, t, t_bounds, twr_list, method, nb_seg, order, solver, snopt_opts=None,
+                 check_partials=False):
+        """Initializes the `TwoDimLLO2ApoContinuationAnalyzer` class variables. """
+
+        TwoDimLLO2ApoAnalyzer.__init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver,
+                                       snopt_opts=snopt_opts, rec_file=None, check_partials=check_partials)
+
+        self.twr_list = np.asarray(twr_list)
+        self.m_prop_list = np.zeros(np.shape(self.twr_list))
+        self.energy_list = np.zeros(np.shape(self.twr_list))
+        self.sol_list = {}
+
+    def compute_energy_mprop(self, r, u, v, m_coast):
+        """Computes the specific energy of the spacecraft on the ballistic arc and the total propellant mass including
+        the final insertion burn.
 
         Parameters
         ----------
-        body : Primary
-            Instance of `Primary` class describing the central attracting body
-        sc : Spacecraft
-            Instance of `Spacecraft` class describing the spacecraft characteristics
+        r : float
+            Radius at the end of the first powered phase [m]
+        u : float
+            Radial velocity at the end of the first powered phase [m/s]
+        v : float
+            Tangential velocity at the end of the first powered phase [m/s]
+        m_coast : float
+            Spacecraft mass on the ballistic arc [kg]
 
-        Attributes
-        ----------
-        body : Primary
-            Instance of `Primary` class describing the central attracting body
-        sc : Spacecraft
-            Instance of `Spacecraft` class describing the spacecraft characteristics
-        phase_name : str
-            Describes the phase name in case of multi-phase trajectories
-        nlp : NLP
-            Instance of `NLP` object describing the type of Non Linear Problem solver used
-        tof : float
-            Value of the time of flight resulting by the simulation [s]
-        tof_exp : float
-            Value of the time of flight of the explicit simulation [s]
-        err : float
-            Value of the error between the optimized simulation results and the explicit simulation results
-        rm_res : float
-            Value of the central body radius [-] or [m]
-        states_scalers : ndarray
-            Reference values of the states with which perform the scaling
-        controls_scalers : ndarray
-            Reference values of the controls with which perform the scaling
-        transfer : HohmannTransfer
-            Instance of `HohmannTransfer` computing the keplerian parameters of the transfer orbit
-        dv : float
-            Delta v required for a manoeuvre [m/s]
+        Returns
+        -------
+        en : float
+            Specific energy of the spacecraft on the ballistic arc [m/s]
+        m_prop : float
+            Total propellant mass including the final insertion burn [kg]
+
         """
+
+        en = TwoDimOrb.polar2energy(self.body.GM, r, u, v)  # specific energy on ballistic arc [m^2/s^2]
+        va = (2 * (en + self.body.GM / self.nlp.guess.ht.arrOrb.ra)) ** 0.5  # ballistic arc apoapsis velocity [m/s]
+        dva = self.guess.ht.arrOrb.va - va  # apoapsis dv [m/s]
+        m_prop = self.sc.m0 - ImpulsiveBurn.tsiolkovsky_mf(m_coast, dva, self.sc.Isp)  # total propellant mass [kg]
+
+        return en, m_prop
+
+    def run_continuation(self, rec_file=None):
+        """Iterative solution of all optimal control problems corresponding to the different thrust/weight ratios in
+        `twr_list` using a continuation method in which the solution of the problem ``i`` is set as initial guess for
+        the problem ``i + 1``. The first solution is computed using the initial guess provided by `TwoDimLLO2HEOGuess`
+        class.
+
+        Parameters
+        ----------
+        rec_file : str or None, optional
+            Directory path for the file in which the last solution is recorded or ``None``. Default is ``None``
+
+        """
+
+        # first solution
+        nlp = self.nlp
+        failed = nlp.p.run_driver()
+        nlp.cleanup()
+
+        if not failed:
+
+            tof_disc, states_disc, controls_disc = self.get_discretization_phase(nlp.p, nlp.phase_name)
+            self.sol_list[str(self.twr_list[0])] = self.get_solution_dictionary(nlp.p)
+
+            params = {'ra_heo': self.guess.ht.arrOrb.ra, 'rp_llo': self.guess.ht.depOrb.rp,
+                      'vp_hoh': self.guess.ht.transfer.vp, 'thetaf_pow': self.guess.pow.thetaf,
+                      'tof': tof_disc, 'states': states_disc, 'controls': controls_disc}
+
+            en, m_prop = self.compute_energy_mprop(states_disc[-1, 0], states_disc[-1, 2], states_disc[-1, 3],
+                                                   states_disc[-1, -1])
+            self.energy_list[0] = en
+            self.m_prop_list[0] = m_prop
+
+            # subsequent solutions
+            for i in range(1, np.size(self.twr_list)):
+
+                self.sc.update_twr(self.twr_list[i])
+                print(self.sc)
+
+                nlp = TwoDimLLO2ApoNLP(self.body, self.sc, self.alt, None, None, (-np.pi / 2, np.pi / 2), None,
+                                       self.nlp.method, self.nlp.nb_seg, self.nlp.order, self.nlp.solver,
+                                       self.phase_name, snopt_opts=self.nlp.snopt_opts, params=params)
+
+                failed = nlp.p.run_driver()
+                nlp.cleanup()
+
+                if failed:
+                    break
+
+                params['tof'], params['states'], params['controls'] =\
+                    self.get_discretization_phase(nlp.p, nlp.phase_name)
+
+                self.sol_list[str(self.twr_list[i])] = self.get_solution_dictionary(nlp.p)
+
+                en, m_prop = self.compute_energy_mprop(params['states'][-1, 0], params['states'][-1, 2],
+                                                       params['states'][-1, 3], params['states'][-1, -1])
+                self.energy_list[i] = en
+                self.m_prop_list[i] = m_prop
+
+        self.nlp = nlp
+
+        if rec_file is not None:
+            self.nlp.p.record_iteration('final')
+
+
+class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
+    """Analyzer class defines the methods to analyze the results of a two dimensional multi phases LLO to HEO simulation
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    phase_name : str
+        Describes the phase name in case of multi-phase trajectories
+    nlp : NLP
+        Instance of `NLP` object describing the type of Non Linear Problem solver used
+    tof : float
+        Value of the time of flight resulting by the simulation [s]
+    tof_exp : float
+        Value of the time of flight of the explicit simulation [s]
+    err : float
+        Value of the error between the optimized simulation results and the explicit simulation results
+    rm_res : float
+        Value of the central body radius [-] or [m]
+    states_scalers : ndarray
+        Reference values of the states with which perform the scaling
+    controls_scalers : ndarray
+        Reference values of the controls with which perform the scaling
+    transfer : HohmannTransfer
+        Instance of `HohmannTransfer` computing the keplerian parameters of the transfer orbit
+    dv : float
+        Delta v required for a manoeuvre [m/s]
+
+    """
 
     def __init__(self, body, sc):
         """Initializes the `TwoDimMultiPhasesLLO2HEOAnalyzer` class variables. """
@@ -440,7 +601,6 @@ class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
 
 
 class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
-
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
                  check_partials=False):
@@ -502,63 +662,64 @@ class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
 class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
     """Analyzer class defines the methods to analyze the results of a two dimensional 3 phases LLO to HEO simulation.
 
-         It gives the results of an optimal trajectory from a Low Lunar Orbit of chosen altitude to an High Elliptical
-         Orbit which can represent a transposition of an Halo orbit in 2D. The trajectory is modeled as the successison
-         of three different phases: a first powered phase for departure, a coasting arch and a final powered phase for
-         the injection.
+     It gives the results of an optimal trajectory from a Low Lunar Orbit of chosen altitude to an High Elliptical
+     Orbit which can represent a transposition of an Halo orbit in 2D. The trajectory is modeled as the succession
+     of three different phases: a first powered phase for departure, a coasting arch and a final powered phase for
+     the injection.
 
-        Parameters
-        ----------
-        body : Primary
-            Instance of `Primary` class describing the central attracting body
-        sc : Spacecraft
-            Instance of `Spacecraft` class describing the spacecraft characteristics
-            alt : float
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
         alt : float
-            Value of the initial LLO altitude [m]
-        rp : float
-            Value for the target HEO periselene radius [m]
-        t : float
-            Value for the guessed trajectory time of flight [s]
-        t_bounds : float
-            Value for the time of flight bounds [-]
-        method : str
-            NLP transcription method
-        nb_seg : int
-            Number of segments for the transcription
-        order : int
-            Transcription order
-        solver : str
-            NLP solver
-        snopt_opts : dict
-            Sets some SNOPT's options. Default is ``None``
-        rec_file : str
-            Directory path for the solution recording file. Default is ``None``
-        check_partials : bool
-            Checking of partial derivatives. Default is ``False``
+    alt : float
+        Value of the initial LLO altitude [m]
+    rp : float
+        Value for the target HEO periselene radius [m]
+    t : float
+        Value for the guessed trajectory time of flight [s]
+    t_bounds : float
+        Value for the time of flight bounds [-]
+    method : str
+        NLP transcription method
+    nb_seg : int
+        Number of segments for the transcription
+    order : int
+        Transcription order
+    solver : str
+        NLP solver
+    snopt_opts : dict
+        Sets some SNOPT's options. Default is ``None``
+    rec_file : str
+        Directory path for the solution recording file. Default is ``None``
+    check_partials : bool
+        Checking of partial derivatives. Default is ``False``
 
-        Attributes
-        ----------
-        body : Primary
-            Instance of `Primary` class describing the central attracting body
-        sc : Spacecraft
-            Instance of `Spacecraft` class describing the spacecraft characteristics
-        phase_name : str
-            Describes the phase name in case of multi-phase trajectories. Can be ``dep``, ``coast`` or ``arr``.
-        nlp : NLP
-            Instance of `NLP` object describing the type of Non Linear Problem solver used
-        tof : float
-            Value of the time of flight resulting by the simulation [s]
-        tof_exp : float
-            Value of the time of flight of the explicit simulation [s]
-        err : float
-            Value of the error between the optimized simulation results and the explicit simulation results
-        rm_res : float
-            Value of the central body radius [-] or [m]
-        states_scalers : ndarray
-            Reference values of the states with which perform the scaling
-        controls_scalers : ndarray
-            Reference values of the controls with which perform the scaling
+    Attributes
+    ----------
+    body : Primary
+        Instance of `Primary` class describing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class describing the spacecraft characteristics
+    phase_name : str
+        Describes the phase name in case of multi-phase trajectories. Can be ``dep``, ``coast`` or ``arr``.
+    nlp : NLP
+        Instance of `NLP` object describing the type of Non Linear Problem solver used
+    tof : float
+        Value of the time of flight resulting by the simulation [s]
+    tof_exp : float
+        Value of the time of flight of the explicit simulation [s]
+    err : float
+        Value of the error between the optimized simulation results and the explicit simulation results
+    rm_res : float
+        Value of the central body radius [-] or [m]
+    states_scalers : ndarray
+        Reference values of the states with which perform the scaling
+    controls_scalers : ndarray
+        Reference values of the controls with which perform the scaling
+
     """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,

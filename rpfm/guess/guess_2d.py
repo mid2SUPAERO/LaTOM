@@ -14,33 +14,6 @@ from rpfm.utils.keplerian_orbit import KepOrb, TwoDimOrb
 from rpfm.utils.const import g0
 
 
-class ImpulsiveBurn:
-
-    def __init__(self, sc, dv):
-
-        self.sc = deepcopy(sc)
-        self.dv = dv
-
-        self.mf = self.tsiolkovsky_mf(self.sc.m0, dv, self.sc.Isp)
-        self.dm = sc.m0 - self.mf
-
-    @staticmethod
-    def tsiolkovsky_mf(m0, dv, isp):
-        return m0 * np.exp(-dv/isp/g0)
-
-    @staticmethod
-    def tsiolkovsky_dv(m0, mf, isp):
-        return isp*g0*np.log(m0/mf)
-
-
-class DeorbitBurn(ImpulsiveBurn):
-
-    def __init__(self, sc, dv):
-
-        warnings.warn('deprecated, use ImpulsiveBurn instead', FutureWarning)
-        ImpulsiveBurn.__init__(self, sc, dv)
-
-
 class HohmannTransfer:
 
     def __init__(self, gm, dep, arr):

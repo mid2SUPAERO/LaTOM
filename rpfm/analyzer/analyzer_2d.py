@@ -10,12 +10,13 @@ from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNL
     TwoDimDescTwoPhasesNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
 from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
-from rpfm.guess.guess_2d import HohmannTransfer, ImpulsiveBurn
+from rpfm.guess.guess_2d import HohmannTransfer
+from rpfm.utils.spacecraft import ImpulsiveBurn
 from rpfm.utils.keplerian_orbit import TwoDimOrb
 
 
 class TwoDimAnalyzer(Analyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional simulation.
+    """TwoDimAnalyzer class defines the methods to analyze the results of a two dimensional simulation.
 
     Parameters
     ----------
@@ -70,8 +71,8 @@ class TwoDimAnalyzer(Analyzer):
             Instance of `Problem` class
         phase_name : str
             Name defined for the problem phase
-        scaled : bool
-            Scales the simulation results
+        scaled : bool, optional
+            If ``True`` scales the simulation results. Default is ``False``
 
         Returns
         -------
@@ -113,7 +114,29 @@ class TwoDimAnalyzer(Analyzer):
 
         return tof, t, states, controls
 
-    def get_tof_states_alpha(self, p, phase_name, scaled=False):
+    def get_discretization_phase(self, p, phase_name, scaled=False):
+        """Access the time of flight, the states on the states discretization nodes and the controls on the control
+        discretization nodes for a given `Problem` and `Phase`.
+
+        Parameters
+        ----------
+        p : Problem
+            Instance of `Problem` class
+        phase_name : str
+            Name defined for the problem phase
+        scaled : bool, optional
+            If ``True`` scales the simulation results. Default is ``False``
+
+        Returns
+        -------
+        tof : float
+            Time of flight resulting from the optimized simulation phase [-] or [s]
+        states : ndarray
+            States values on the state discretization nodes for the optimized simulation phase
+        controls : ndarray
+            Controls values on the controls discretization nodes for the optimized simulation phase
+
+        """
 
         tof = float(p.get_val(phase_name + '.t_duration'))  # non dimensional time of flight [-]
 
@@ -123,14 +146,22 @@ class TwoDimAnalyzer(Analyzer):
             s = p.get_val(phase_name + '.states:' + k)
             states = np.append(states, s, axis=1)
 
-        # thrust direction [rad]
-        alpha = p.get_val(phase_name + '.controls:alpha')
+        alpha = p.get_val(phase_name + '.controls:alpha')  # thrust direction [rad]
+
+        try:
+            thrust = p.get_val(phase_name + '.controls:thrust')  # non dimensional thrust [-]
+        except KeyError:
+            thrust = p.get_val(phase_name + '.design_parameters:thrust')
+            thrust = thrust*np.ones((len(alpha), 1))  # non dimensional thrust [-]
+
+        controls = np.hstack((thrust, alpha))
 
         if not scaled:
             tof = tof*self.body.tc  # dimensional time of flight [s]
             states = states*self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
+            controls = controls * self.controls_scalers  # dimensional controls [N, rad]
 
-        return tof, states, alpha
+        return tof, states, controls
 
     def __str__(self):
         """Prints info on the TwoDimAnalyzer.
@@ -170,7 +201,8 @@ class TwoDimAnalyzer(Analyzer):
 
 
 class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional single phase simulation.
+    """TwoDimSinglePhaseAnalyzer class defines the methods to analyze the results of a two dimensional single phase
+    simulation.
 
     Parameters
     ----------
@@ -265,7 +297,8 @@ class TwoDimSinglePhaseAnalyzer(TwoDimAnalyzer):
 
 
 class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional ascent simulation.
+    """TwoDimAscAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+    from the Moon surface to a given Low Lunar Orbit.
 
     Parameters
     ----------
@@ -324,7 +357,8 @@ class TwoDimAscAnalyzer(TwoDimSinglePhaseAnalyzer):
 
 
 class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dim. ascent with constant thrust simulation.
+    """TwoDimAscConstAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+    from the Moon surface to a given Low Lunar Orbit performed at constant thrust.
 
     Parameters
     ----------
@@ -411,7 +445,8 @@ class TwoDimAscConstAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dim. ascent with variable thrust simulation.
+    """TwoDimAscVarAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+    from the Moon surface to a given Low Lunar Orbit performed at variable thrust.
 
     Parameters
     ----------
@@ -497,7 +532,8 @@ class TwoDimAscVarAnalyzer(TwoDimAscAnalyzer):
 
 
 class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dim. ascent with vertical take off simulation.
+    """TwoDimAscVToffAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+    from the Moon surface to a given Low Lunar Orbit performed at variable thrust with vertical take-off.
 
     Parameters
     ----------
@@ -636,7 +672,8 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
 
 
 class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional descent simulation.
+    """TwoDimDescAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+    from a given Low Lunar Orbit to the Moon surface.
 
     Parameters
     ----------
@@ -695,7 +732,8 @@ class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
 
 
 class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional descent simulation.
+    """TwoDimDescConstAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+    from a given Low Lunar Orbit to the Moon surface performed at constant thrust.
 
     Parameters
     ----------
@@ -765,6 +803,7 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
     def __init__(self, body, sc, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, snopt_opts=None,
                  rec_file=None, check_partials=False, u_bound='upper'):
         """Initializes the `TwoDimDescConstAnalyzer` class variables. """
+
         TwoDimDescAnalyzer.__init__(self, body, sc, alt)
 
         self.alt_p = alt_p
@@ -813,7 +852,8 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
 
 
 class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional descent simulation.
+    """TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+    from a given Low Lunar Orbit to the Moon surface performed at variable thrust.
 
     Parameters
     ----------
@@ -895,7 +935,8 @@ class TwoDimDescVarAnalyzer(TwoDimDescAnalyzer):
 
 
 class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dim. descent with vertical landing simulation.
+    """TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+    from a given Low Lunar Orbit to the Moon surface performed at variable thrust with vertical landing.
 
     Parameters
     ----------
@@ -1059,7 +1100,13 @@ class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
 
 
 class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
-    """Analyzer class defines the methods to analyze the results of a two dimensional descent composed by two phases.
+    """TwoDimDescTwoPhasesAnalyzer class defines the methods to analyze the results of a two dimensional descent
+    simulation from a given Low Lunar Orbit to the Moon surface composed by two subsequent phases.
+
+    Firstly, the spacecraft is injected in a ballistic arc (Hohmann transfer) to move from the initial Low Lunar Orbit
+    to a lower altitude. Starting from the periselene of the Hohmann transfer, the spacecraft performs a powered
+    descent at constant thrust and free attitude (first phase) until the final vertical descent (second phase) is
+    triggered at a given altitude or time-to-go.
 
     Parameters
     ----------

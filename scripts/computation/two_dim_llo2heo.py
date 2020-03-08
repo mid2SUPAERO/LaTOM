@@ -20,14 +20,14 @@ heo_period = 6.5655*86400  # target HEO period [s]
 
 # spacecraft
 isp = 400.  # specific impulse [s]
-twr = 0.05  # initial thrust/weight ratio [-]
+twr = 2.2  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 100
+segments = 40
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
 

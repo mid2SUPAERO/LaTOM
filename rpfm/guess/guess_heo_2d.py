@@ -4,11 +4,11 @@
 """
 
 import numpy as np
-from copy import deepcopy
 
-from rpfm.utils.const import g0
+from copy import deepcopy
 from rpfm.utils.keplerian_orbit import TwoDimOrb
-from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius, ImpulsiveBurn, TwoDimLLOGuess
+from rpfm.guess.guess_2d import TwoDimGuess, PowConstRadius, TwoDimLLOGuess
+from rpfm.utils.spacecraft import ImpulsiveBurn
 
 
 class TwoDimHEOGuess(TwoDimGuess):

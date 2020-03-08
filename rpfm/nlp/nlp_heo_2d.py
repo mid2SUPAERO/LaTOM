@@ -48,7 +48,7 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
             ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': guess.ht.arrOrb.ra / body.R}
         else:
             guess = None
-            ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': params['ra'] / body.R}
+            ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc, 'ra': params['ra_heo'] / body.R}
 
         TwoDimNLP.__init__(self, body, sc, alt, alpha_bounds, method, nb_seg, order, solver, ODE2dLLO2Apo,
                            ode_kwargs, ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
@@ -60,8 +60,10 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
                              self.guess.pow.tf, t_bounds=t_bounds)
             self.set_initial_guess(check_partials=check_partials)
         else:
-            self.set_options(params['rp'], params['vp'], params['thetaf'], params['tof'], t_bounds=t_bounds)
-            self.set_continuation_guess(params['tof'], params['states'], params['alpha'], check_partials=check_partials)
+            self.set_options(params['rp_llo'], params['vp_hoh'], params['thetaf_pow'], params['tof'],
+                             t_bounds=t_bounds)
+            self.set_continuation_guess(params['tof'], params['states'], params['controls'],
+                                        check_partials=check_partials)
 
     def set_options(self, rp, vp, thetaf, tof, t_bounds=None):
 
@@ -97,7 +99,7 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
     def set_initial_guess(self, check_partials=False, fix_final=False, throttle=False):
         TwoDimNLP.set_initial_guess(self, check_partials=check_partials, fix_final=fix_final, throttle=throttle)
 
-    def set_continuation_guess(self, tof, states, alpha, check_partials=False):
+    def set_continuation_guess(self, tof, states, controls, check_partials=False):
 
         self.p[self.phase_name + '.t_initial'] = 0.0
         self.p[self.phase_name + '.t_duration'] = tof/self.body.tc
@@ -107,7 +109,7 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         self.p[self.phase_name + '.states:u'] = np.reshape(states[:, 2]/self.body.vc, (np.size(states[:, 0]), 1))
         self.p[self.phase_name + '.states:v'] = np.reshape(states[:, 3]/self.body.vc, (np.size(states[:, 0]), 1))
         self.p[self.phase_name + '.states:m'] = np.reshape(states[:, 4], (np.size(states[:, 0]), 1))
-        self.p[self.phase_name + '.controls:alpha'] = alpha
+        self.p[self.phase_name + '.controls:alpha'] = np.reshape(controls[:, 1], (np.size(controls[:, 1]), 1))
 
         self.p.run_model()
 
