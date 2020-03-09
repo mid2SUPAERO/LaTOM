@@ -5,7 +5,7 @@ from rpfm.utils.primary import Moon
 from rpfm.data.data import dirname
 
 # load saved data
-filename = 'llo2apo_cont_i2e-3.pkl'
+filename = 'test_cont_log3.pkl'
 abspath = '/'.join([dirname, 'continuation', filename])
 tr = load(abspath)
 
@@ -33,13 +33,13 @@ nb_spirals = dtheta/np.pi/2
 
 # print
 print(f"Moon radius: 1.0\nGravitational parameter: 1.0")
-print(f"LLO radius: {r_llo:.12f}")
-print(f"HEO periapsis radius: {rp_heo:.12f}\nHEO apoapsis radius: {ra_heo:.12f}")
-print(f"Thrust/weight ratio: {twr:.12f}\nExhaust velocity: {ve:.12f}")
-print(f"\nTime of flight: {tof:.12f} or {tof_days:.12f} days")
-print(f"Number of spirals: {nb_spirals:.12f}")
-print(f"Propellant fraction (excluding insertion): {(1 - tr.states[0][-1, -1]):.12f}")
-print(f"Propellant fraction (total): {(1 - tr.states[-1][-1, -1]):.12f}")
+print(f"LLO radius: {r_llo:.16f}")
+print(f"HEO periapsis radius: {rp_heo:.16f}\nHEO apoapsis radius: {ra_heo:.16f}")
+print(f"Thrust/weight ratio: {twr:.16f}\nExhaust velocity: {ve:.16f}")
+print(f"\nTime of flight: {tof:.16f} or {tof_days:.16f} days")
+print(f"Number of spirals: {nb_spirals:.16f}")
+print(f"Propellant fraction (excluding insertion): {(1 - tr.states[0][-1, -1]):.16f}")
+print(f"Propellant fraction (total): {(1 - tr.states[-1][-1, -1]):.16f}")
 
 print(tr)
-tr.plot()
+# tr.plot()

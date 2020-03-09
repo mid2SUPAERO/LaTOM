@@ -72,6 +72,8 @@ class TwoDimTrajectoryContinuation:
         Dictionary that maps each thrust/weight ratio to the corresponding optimal trajectory
     nb : float, optional
         Number of points in which the Moon surface and the initial orbits are discretized. Default is ``2000``
+    log_scale : bool, optional
+        ``True`` if `twr_list` is provided in logarithmic scale, ``False`` otherwise. Default is ``False``
 
     Attributes
     ----------
@@ -94,10 +96,11 @@ class TwoDimTrajectoryContinuation:
 
     """
 
-    def __init__(self, r_moon, r_llo, sol, nb=2000):
+    def __init__(self, r_moon, r_llo, sol, nb=2000, log_scale=False):
         """Initializes `TwoDimTrajectoryContinuation` class. """
 
         self.scaler, self.units = TwoDimTrajectory.get_scalers(r_moon)
+        self.log_scale = log_scale
 
         self.x_moon, self.y_moon = TwoDimTrajectory.polar2cartesian(r_moon, scaler=self.scaler, nb=nb)
         self.x_llo, self.y_llo = TwoDimTrajectory.polar2cartesian(r_llo, scaler=self.scaler, nb=nb)
@@ -120,12 +123,11 @@ class TwoDimTrajectoryContinuation:
         ax.plot(self.x_moon, self.y_moon, label='Moon surface')
         ax.plot(self.x_llo, self.y_llo, label='departure orbit')
 
-        for twr in self.x.keys():
-            if isinstance(twr, float):
-                ax.plot(self.x[twr], self.y[twr], label=f"twr {twr:.4f}")
-            elif isinstance(twr, str):
-                ax.plot(self.x[twr], self.y[twr], label=('twr ' + twr))
-            else:
-                ax.plot(self.x[twr], self.y[twr])
+        if self.log_scale:
+            for twr in self.x.keys():
+                ax.plot(self.x[twr], self.y[twr], label=('log(twr): ' + str(twr)))
+        else:
+            for twr in self.x.keys():
+                ax.plot(self.x[twr], self.y[twr], label=('twr: ' + str(twr)))
 
         TwoDimTrajectory.set_axes_decorators(ax, 'Ascent trajectories for different thrust/weight ratios', self.units)

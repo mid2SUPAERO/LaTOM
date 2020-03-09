@@ -389,6 +389,8 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
         Sets some SNOPT's options. Default is ``None``
     check_partials : bool, optional
         Checking of partial derivatives. Default is ``False``
+    log_scale : bool, optional
+        ``True`` if `twr_list` is provided in logarithmic scale, ``False`` otherwise. Default is ``False``
     significant_figures : int, optional
         Significant figures to be considered while casting the list of thrust/weight ratios. Default is ``4``
 
@@ -436,13 +438,18 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
     """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, twr_list, method, nb_seg, order, solver, snopt_opts=None,
-                 check_partials=False, significant_figures=4):
+                 check_partials=False, log_scale=False, significant_figures=4):
         """Initializes the `TwoDimLLO2ApoContinuationAnalyzer` class variables. """
 
         TwoDimLLO2ApoAnalyzer.__init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver,
                                        snopt_opts=snopt_opts, rec_file=None, check_partials=check_partials)
 
-        self.twr_list = np.around(np.asarray(twr_list), significant_figures)
+        if log_scale:
+            self.log_twr_list = np.around(np.asarray(twr_list), significant_figures)
+            self.twr_list = np.exp(self.log_twr_list)
+        else:
+            self.log_twr_list = None
+            self.twr_list = np.around(np.asarray(twr_list), significant_figures)
         self.m_prop_list = np.zeros(np.shape(self.twr_list))
         self.energy_list = np.zeros(np.shape(self.twr_list))
         self.sol_list = {}
@@ -496,6 +503,7 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
         params = {'ra_heo': self.guess.ht.arrOrb.ra, 'rp_llo': self.guess.ht.depOrb.rp,
                   'vp_hoh': self.guess.ht.transfer.vp, 'thetaf_pow': self.guess.pow.thetaf}
 
+        t0_loop = time()
         for i in range(np.size(self.twr_list)):
 
             if i == 0:  # first solution
@@ -507,27 +515,35 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
                                        self.phase_name, snopt_opts=self.nlp.snopt_opts, params=params)
 
             # solve NLP
-            print(f"\nIteration {i}\nThrust/weight ratio: {self.twr_list[i]:.6f}\n")
-            t0 = time()
+            print(f"\nIteration {i}\nThrust/weight ratio: {self.sc.twr:.6f}\n")
+            t0_iter = time()
             failed = nlp.p.run_driver()
-            tf = time()
+            tf_iter = time()
             nlp.cleanup()
-            print(f"\nTime to solve the NLP problem: {(tf - t0):.6f} s\n")
+            print(f"\nTime to solve the NLP problem: {(tf_iter - t0_iter):.6f} s\n")
 
             if failed:
                 break
 
-            # extract NLP solution
+            # extract and store the NLP solution
             params['tof'], params['states'], params['controls'] = self.get_discretization_phase(nlp.p, nlp.phase_name)
-            self.sol_list[str(self.twr_list[i])] = self.get_solution_dictionary(nlp.p)
+            if self.log_twr_list is None:
+                k = str(self.twr_list[i])
+            else:
+                k = str(self.log_twr_list[i])
+            self.sol_list[k] = self.get_solution_dictionary(nlp.p)
 
             # compute the specific energy of the spacecraft at the end of the powered phase and the total required
             # propellant mass including the final insertion burn
             states_end = params['states'][-1]
             en, m_prop = self.compute_energy_mprop(states_end[0], states_end[2], states_end[3], states_end[-1])
 
+            # store the spacecraft energy and propellant mass
             self.energy_list[i] = en
             self.m_prop_list[i] = m_prop
+
+        tf_loop = time()
+        print(f"\nTotal time for continuation loop: {(tf_loop - t0_loop):.6f} s\n")
 
         self.nlp = nlp
 
@@ -538,7 +554,12 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
     def plot(self):
 
         mass_energy_continuation = MassEnergyContinuation(self.twr_list, self.m_prop_list/self.sc.m0, self.energy_list)
-        trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
+
+        if self.log_twr_list is None:
+            trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
+        else:
+            trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list,
+                                                                   log_scale=True)
 
         mass_energy_continuation.plot()
         trajectory_continuation.plot()
