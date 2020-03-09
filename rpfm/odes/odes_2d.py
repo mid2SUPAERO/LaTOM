@@ -404,7 +404,7 @@ class SafeAlt(ExplicitComponent):
 
 
 class Polar2COE(ExplicitComponent):
-    """ Polar2COE class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates
+    """Polar2COE class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.
 
     Other Parameters
     ----------------
@@ -416,12 +416,12 @@ class Polar2COE(ExplicitComponent):
     """
 
     def initialize(self):
-        """ Initializes the `Polar2COE` class variables """
+        """Initializes the `Polar2COE` class variables. """
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
 
     def setup(self):
-        """ Setup of `Polar2COE` parameters. Declaration of input, output and partials variables."""
+        """Setup of `Polar2COE` parameters. Declaration of input, output and partials variables. """
         nn = self.options['num_nodes']
 
         self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
@@ -430,7 +430,7 @@ class Polar2COE(ExplicitComponent):
 
 
 class Polar2RApo(Polar2COE):
-    """ Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates
+    """Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.
 
     Other Parameters
     ----------------
@@ -439,12 +439,14 @@ class Polar2RApo(Polar2COE):
     """
 
     def initialize(self):
-        """ Initializes the `Polar2RApo` class variables """
+        """Initializes the `Polar2RApo` class variables. """
+
         Polar2COE.initialize(self)
         self.options.declare('ra', types=float)
 
     def setup(self):
-        """ Setup of `Polar2RApo` parameters. Declaration of input, output and partials variables."""
+        """Setup of `Polar2RApo` parameters. Declaration of input, output and partials variables. """
+
         Polar2COE.setup(self)
 
         self.add_output('c', val=np.zeros(self.options['num_nodes']), desc='condition to reach the apolune')
@@ -462,7 +464,8 @@ class Polar2RApo(Polar2COE):
         self.declare_partials(of='c', wrt='v', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
-        """ Compute the output variables"""
+        """Compute the output variables. """
+
         gm = self.options['GM']
         ra = self.options['ra']
         r = inputs['r']
@@ -475,7 +478,8 @@ class Polar2RApo(Polar2COE):
         # outputs['c'] = ra - (r*(gm + ((r*v*v-gm)**2 + (r*u*v)**2)**0.5))/(2*gm - r*(u**2 + v**2))
 
     def compute_partials(self, inputs, jacobian):
-        """ Compute the partial derivative variables"""
+        """Compute the partial derivative variables. """
+
         gm = self.options['GM']
         ra = self.options['ra']
         r = inputs['r']
@@ -490,10 +494,11 @@ class Polar2RApo(Polar2COE):
         jacobian['c', 'v'] = - 2*r*v*b + 2*a*v*r**3
 
 
-class Polar2AH(Polar2COE):
-    """ Polar2COE class defines the set of equations to derive the a and h from Polar coordinates
+class Polar2AEH(Polar2COE):
+    """Polar2AEH class defines the set of equations to derive the a and h from Polar coordinates.
 
-    The method computes the semi-major axis a and the angular momentum h starting from the polar coordinates.
+    The method computes the semi-major axis a, the specific energy and the angular momentum h starting from the polar
+    coordinates r, u, v.
 
     Other Parameters
     ----------------
@@ -504,13 +509,14 @@ class Polar2AH(Polar2COE):
     """
 
     def setup(self):
-        """ Setup of `Polar2AH` parameters. Declaration of input, output and partials variables."""
+        """Setup of `Polar2AH` parameters. Declaration of input, output and partials variables. """
 
         Polar2COE.setup(self)
 
         nn = self.options['num_nodes']
 
         self.add_output('a', val=np.zeros(nn), desc='semimajor axis')
+        self.add_output('eps', val=np.zeros(nn), desc='specific energy')
         self.add_output('h', val=np.zeros(nn), desc='angular momentum')
 
         ar = np.arange(self.options['num_nodes'])
@@ -519,11 +525,15 @@ class Polar2AH(Polar2COE):
         self.declare_partials(of='a', wrt='u', cols=ar, rows=ar)
         self.declare_partials(of='a', wrt='v', cols=ar, rows=ar)
 
+        self.declare_partials(of='eps', wrt='r', cols=ar, rows=ar)
+        self.declare_partials(of='eps', wrt='u', cols=ar, rows=ar)
+        self.declare_partials(of='eps', wrt='v', cols=ar, rows=ar)
+
         self.declare_partials(of='h', wrt='r', cols=ar, rows=ar)
         self.declare_partials(of='h', wrt='v', cols=ar, rows=ar)
 
     def compute(self, inputs, outputs):
-        """ Compute the output variables"""
+        """Compute the output variables. """
 
         gm = self.options['GM']
 
@@ -532,10 +542,12 @@ class Polar2AH(Polar2COE):
         v = inputs['v']
 
         outputs['a'] = gm*r/(2*gm - r*(u*u + v*v))
+        outputs['eps'] = (u*u + v*v)*0.5 - gm/r
         outputs['h'] = r*v
 
     def compute_partials(self, inputs, jacobian):
-        """ Compute the partial derivative variables"""
+        """Compute the partial derivative variables. """
+
         gm = self.options['GM']
 
         r = inputs['r']
@@ -547,6 +559,10 @@ class Polar2AH(Polar2COE):
         jacobian['a', 'r'] = 2*gm*gm/d/d
         jacobian['a', 'u'] = 2*gm*r*r*u/d/d
         jacobian['a', 'v'] = 2*gm*r*r*v/d/d
+
+        jacobian['eps', 'r'] = gm/r/r
+        jacobian['eps', 'u'] = u
+        jacobian['eps', 'v'] = v
 
         jacobian['h', 'r'] = v
         jacobian['h', 'v'] = r

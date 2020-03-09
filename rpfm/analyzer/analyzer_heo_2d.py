@@ -215,7 +215,7 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
                                     check_partials=check_partials)
 
         self.transfer = self.insertion_burn = self.dv_dep = None
-        self.guess = self.nlp.guess
+        self.guess = self.nlp.guess  # save the initial initial guess at analyzer level
 
     def compute_solution(self, nb=200):
         """Retrieves the optimization results and computes the spacecraft states along the ballistic arc as well as the
@@ -250,13 +250,13 @@ class TwoDimLLO2ApoAnalyzer(TwoDimAscAnalyzer):
         t, states = TwoDimOrb.propagate(self.gm_res, a, e, ta, np.pi, nb)
 
         # adjust time
-        t_pow_end = self.time[-1]
+        t_pow_end = self.time[-1, -1]
         t_coast_start = t[0, 0]
         t_coast_end = t[-1, 0]
         tof_coast = t_coast_end - t_coast_start
 
         self.tof = [self.tof, tof_coast]
-        self.time = [self.time, (t - t_coast_start) + t_pow_end[-1]]
+        self.time = [self.time, (t - t_coast_start) + t_pow_end]
 
         # add mass
         m = np.vstack((states_end[-1]*np.ones((len(t) - 1, 1)), [self.insertion_burn.mf]))

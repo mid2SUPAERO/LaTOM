@@ -6,7 +6,8 @@
 from openmdao.api import Group
 
 from dymos import declare_time, declare_state, declare_parameter
-from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2RApo, Polar2AH
+from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2RApo, Polar2AEH
+
 
 @declare_time(units='s')
 @declare_state('r', rate_source='rdot', targets=['r'], units='m')
@@ -20,7 +21,7 @@ from rpfm.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2R
 class ODE2dVToff(Group):
 
     def initialize(self):
-        """ ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take off.
+        """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take-off.
 
         Other Parameters
         ----------------
@@ -64,7 +65,8 @@ class ODE2dVToff(Group):
         self.options.declare('slope', types=float)
 
     def setup(self):
-        """ Setup of `ODE2dVToff` parameters. Declaration of subsystem, input and output"""
+        """Setup of `ODE2dVToff` parameters. Declaration of subsystem, input and output. """
+
         nn = self.options['num_nodes']
 
         self.add_subsystem(name='odes', subsys=ODE2dVarThrust(num_nodes=nn, GM=self.options['GM'], w=self.options['w']),
@@ -88,7 +90,7 @@ class ODE2dVToff(Group):
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2Apo(Group):
-    """ ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with insertion at apoapsis.
+    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with insertion at apoapsis.
 
     Other Parameters
     ----------------
@@ -121,7 +123,8 @@ class ODE2dLLO2Apo(Group):
     """
 
     def initialize(self):
-        """ Initializes the `ODE2dLLO2Apo` class variables """
+        """Initializes the `ODE2dLLO2Apo` class variables. """
+
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
         self.options.declare('T', types=float)
@@ -129,7 +132,8 @@ class ODE2dLLO2Apo(Group):
         self.options.declare('ra', types=float)
 
     def setup(self):
-        """ Setup of `ODE2dLLO2Apo` parameters. Declaration of subsystem, input and output"""
+        """Setup of `ODE2dLLO2Apo` parameters. Declaration of subsystem, input and output. """
+
         nn = self.options['num_nodes']
 
         self.add_subsystem(name='odes', subsys=ODE2dConstThrust(num_nodes=nn, GM=self.options['GM'],
@@ -152,7 +156,7 @@ class ODE2dLLO2Apo(Group):
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2HEO(Group):
-    """ ODE2dThrust class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.
+    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.
 
     Other Parameters
     ----------------
@@ -180,17 +184,20 @@ class ODE2dLLO2HEO(Group):
         Gravitational constant [m/s^2]
     T : float
        Value of the constant thrust force [N]
+
     """
 
     def initialize(self):
-        """ Initializes the `ODE2dLLO2HEO` class variables """
+        """Initializes the `ODE2dLLO2HEO` class variables. """
+
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
         self.options.declare('T', types=float)
         self.options.declare('w', types=float)
 
     def setup(self):
-        """ Setup of `ODE2dLLO2HEO` parameters. Declaration of subsystem, input and output"""
+        """Setup of `ODE2dLLO2HEO` parameters. Declaration of subsystem, input and output. """
+
         nn = self.options['num_nodes']
 
         self.add_subsystem(name='odes', subsys=ODE2dConstThrust(num_nodes=nn, GM=self.options['GM'],
@@ -198,6 +205,6 @@ class ODE2dLLO2HEO(Group):
                            promotes_inputs=['r', 'u', 'v', 'm', 'alpha', 'thrust', 'w'],
                            promotes_outputs=['rdot', 'thetadot', 'udot', 'vdot', 'mdot'])
 
-        self.add_subsystem(name='polar2coe',
-                           subsys=Polar2AH(num_nodes=nn, GM=self.options['GM']),
-                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'h'])
+        self.add_subsystem(name='polar2aeh',
+                           subsys=Polar2AEH(num_nodes=nn, GM=self.options['GM']),
+                           promotes_inputs=['r', 'u', 'v'], promotes_outputs=['a', 'eps', 'h'])

@@ -8,7 +8,7 @@ import numpy as np
 from rpfm.analyzer.analyzer import Analyzer
 from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP, \
     TwoDimDescTwoPhasesNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
-from rpfm.plots.solutions import TwoDimSolPlot, TwoDimTwoPhasesSolPlot
+from rpfm.plots.solutions import TwoDimSolPlot, TwoDimDescTwoPhasesSolPlot
 from rpfm.utils.const import states_2d
 from rpfm.guess.guess_2d import HohmannTransfer
 from rpfm.utils.spacecraft import ImpulsiveBurn
@@ -60,7 +60,7 @@ class TwoDimAnalyzer(Analyzer):
         # velocity: velocity on a circular orbit at zero altitude
         # thrust magnitude: initial spacecraft weight on the Moon surface
         self.states_scalers = np.array([self.body.R, 1.0, self.body.vc, self.body.vc, 1.0])
-        self.controls_scalers = np.array([self.body.g*self.sc.m0, 1.0])
+        self.controls_scalers = np.array([self.body.g * self.sc.m0, 1.0])
 
     def get_time_series_phase(self, p, phase_name, scaled=False):
         """Access the time series of one of the problem phases.
@@ -102,15 +102,15 @@ class TwoDimAnalyzer(Analyzer):
             thrust = p.get_val(phase_name + '.timeseries.controls:thrust')  # non dimensional thrust [-]
         except KeyError:
             thrust = p.get_val(phase_name + '.design_parameters:thrust')
-            thrust = thrust*np.ones((len(alpha), 1))  # non dimensional thrust [-]
+            thrust = thrust * np.ones((len(alpha), 1))  # non dimensional thrust [-]
 
         controls = np.hstack((thrust, alpha))
 
         if not scaled:
-            tof = tof*self.body.tc  # dimensional time of flight [s]
-            t = t*self.body.tc  # dimensional time [s]
-            states = states*self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
-            controls = controls*self.controls_scalers  # dimensional controls [N, rad]
+            tof = tof * self.body.tc  # dimensional time of flight [s]
+            t = t * self.body.tc  # dimensional time [s]
+            states = states * self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
+            controls = controls * self.controls_scalers  # dimensional controls [N, rad]
 
         return tof, t, states, controls
 
@@ -152,13 +152,13 @@ class TwoDimAnalyzer(Analyzer):
             thrust = p.get_val(phase_name + '.controls:thrust')  # non dimensional thrust [-]
         except KeyError:
             thrust = p.get_val(phase_name + '.design_parameters:thrust')
-            thrust = thrust*np.ones((len(alpha), 1))  # non dimensional thrust [-]
+            thrust = thrust * np.ones((len(alpha), 1))  # non dimensional thrust [-]
 
         controls = np.hstack((thrust, alpha))
 
         if not scaled:
-            tof = tof*self.body.tc  # dimensional time of flight [s]
-            states = states*self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
+            tof = tof * self.body.tc  # dimensional time of flight [s]
+            states = states * self.states_scalers  # dimensional states [m, rad, m/s, m/s, kg]
             controls = controls * self.controls_scalers  # dimensional controls [N, rad]
 
         return tof, states, controls
@@ -187,10 +187,10 @@ class TwoDimAnalyzer(Analyzer):
 
             except TypeError:
                 lines_err = ['\n{:^50s}'.format('Error:'),
-                             '\n{:<25s}{:>50s}{:>5s}'.format('Radius:', str(self.err[:, 0]/1e3), 'km'),
-                             '{:<25s}{:>50s}{:>5s}'.format('Angle:', str(self.err[:, 1]*np.pi/180), 'deg'),
-                             '{:<25s}{:>50s}{:>5s}'.format('Radial velocity:', str(self.err[:, 2]/1e3), 'km/s'),
-                             '{:<25s}{:>50s}{:>5s}'.format('Tangential velocity:', str(self.err[:, 3]/1e3), 'km/s'),
+                             '\n{:<25s}{:>50s}{:>5s}'.format('Radius:', str(self.err[:, 0] / 1e3), 'km'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Angle:', str(self.err[:, 1] * np.pi / 180), 'deg'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Radial velocity:', str(self.err[:, 2] / 1e3), 'km/s'),
+                             '{:<25s}{:>50s}{:>5s}'.format('Tangential velocity:', str(self.err[:, 3] / 1e3), 'km/s'),
                              '{:<25s}{:>50s}{:>5s}'.format('Mass:', str(self.err[:, 4]), 'kg')]
 
             lines.extend(lines_err)
@@ -637,7 +637,7 @@ class TwoDimAscVToffAnalyzer(TwoDimAscVarAnalyzer):
         self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')
 
         if not scaled:
-            self.r_safe = self.r_safe*self.body.R
+            self.r_safe = self.r_safe * self.body.R
 
     def __str__(self):
         """Prints info on the `TwoDimAscVToffAnalyzer`.
@@ -712,6 +712,7 @@ class TwoDimDescAnalyzer(TwoDimSinglePhaseAnalyzer):
         Name assigned to the problem phase
 
     """
+
     def __str__(self):
         """Prints info on the `TwoDimDescAnalyzer`.
 
@@ -814,7 +815,7 @@ class TwoDimDescConstAnalyzer(TwoDimDescAnalyzer):
         self.ht = HohmannTransfer(body.GM, dep, arr)
         self.deorbit_burn = ImpulsiveBurn(sc, self.ht.dva)
 
-        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.transfer.vp, theta, (0.0, 1.5*np.pi),
+        self.nlp = TwoDimDescConstNLP(body, self.deorbit_burn.sc, alt_p, self.ht.transfer.vp, theta, (0.0, 1.5 * np.pi),
                                       tof, t_bounds, method, nb_seg, order, solver, self.phase_name,
                                       snopt_opts=snopt_opts, rec_file=rec_file, check_partials=check_partials,
                                       u_bound=u_bound)
@@ -1065,7 +1066,7 @@ class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
         self.r_safe = self.nlp.p.get_val(self.nlp.phase_name + '.timeseries.r_safe')
 
         if not scaled:
-            self.r_safe = self.r_safe*self.body.R
+            self.r_safe = self.r_safe * self.body.R
 
     def __str__(self):
         """Prints info on the `TwoDimDescVLandAnalyzer`.
@@ -1273,9 +1274,10 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
         lines = ['\n{:^50s}'.format('2D Descent Trajectory with vertical touch-down:'),
                  '\n{:<25s}{:>20.6f}{:>5s}'.format('Parking orbit altitude:', self.alt / 1e3, 'km'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Periapsis altitude:', self.alt_p / 1e3, 'km'),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Switch altitude:', (self.states[0][-1, 0] - self.body.R)/1e3, 'km'),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Switch altitude:', (self.states[0][-1, 0] - self.body.R) / 1e3, 'km'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Deorbit burn fraction:', self.deorbit_burn.dm / self.sc.m0, ''),
-                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1][-1, -1]/self.sc.m0), ''),
+                 '{:<25s}{:>20.6f}{:>5s}'.format('Propellant fraction:', (1 - self.states[-1][-1, -1] / self.sc.m0),
+                                                 ''),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Time of flight:', sum(self.tof), 's'),
                  '{:<25s}{:>20.6f}{:>5s}'.format('Switch time:', self.tof[0], 's'),
                  TwoDimAnalyzer.__str__(self)]
@@ -1290,7 +1292,7 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
 
         """
 
-        sol_plot = TwoDimTwoPhasesSolPlot(self.rm_res, self.time, self.states, self.controls,
-                                          time_exp=self.time_exp, states_exp=self.states_exp, kind='descent')
+        sol_plot = TwoDimDescTwoPhasesSolPlot(self.rm_res, self.time, self.states, self.controls,
+                                              time_exp=self.time_exp, states_exp=self.states_exp, kind='descent')
 
         sol_plot.plot()

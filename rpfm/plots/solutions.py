@@ -85,7 +85,7 @@ class TwoDimMultiPhaseSolPlot(TwoDimSolPlot):
                                r_safe=r_safe, threshold=threshold, kind=kind, a=a, e=e)
 
 
-class TwoDimTwoPhasesSolPlot:
+class TwoDimDescTwoPhasesSolPlot:
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, kind='ascent'):
 
