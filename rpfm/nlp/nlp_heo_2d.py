@@ -61,8 +61,7 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
                              self.guess.pow.tf, t_bounds=t_bounds)
             self.set_initial_guess(check_partials=check_partials)
         else:
-            thetaf = params['states'][-1, 1]  # spawn angle for previous solution [rad] params['thetaf_pow']
-            self.set_options(params['rp_llo'], params['vp_hoh'], thetaf, params['tof'],
+            self.set_options(params['rp_llo'], params['vp_hoh'], params['thetaf_pow'], params['tof'],
                              t_bounds=t_bounds)
             self.set_continuation_guess(params['tof'], params['states'], params['controls'],
                                         check_partials=check_partials)

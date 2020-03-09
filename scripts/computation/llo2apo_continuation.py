@@ -8,6 +8,10 @@ import numpy as np
 from rpfm.utils.primary import Moon
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2ApoContinuationAnalyzer
+from rpfm.data.data import dirname
+
+# file ID
+fid = 'test_continuation2.pkl'
 
 # trajectory
 moon = Moon()
@@ -17,8 +21,8 @@ heo_period = 6.5655 * 86400  # target HEO period [s]
 
 # spacecraft
 isp = 400.  # specific impulse [s]
-twr0 = 1.  # initial thrust/weight ratio [-]
-twr_list = np.arange(twr0, 0.05, -0.1)
+twr0 = 0.1  # initial thrust/weight ratio [-]
+twr_list = np.arange(twr0, 0.01, -0.01)
 sc = Spacecraft(isp, twr0, g=moon.g)
 
 # NLP
@@ -31,7 +35,7 @@ snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance'
 
 # additional settings
 run_driver = True  # solve the NLP
-exp_sim = False  # perform explicit simulation
+exp_sim = True  # perform explicit simulation
 
 tr = TwoDimLLO2ApoContinuationAnalyzer(moon, sc, llo_alt, heo_rp, heo_period, None, twr_list, method, segments, order,
                                        solver, snopt_opts=snopt_opts, check_partials=False)
@@ -47,5 +51,5 @@ tr.get_solutions(explicit=exp_sim, scaled=False)
 
 print(tr)
 
-# tr.save('filename')
+tr.save('/'.join([dirname, 'continuation', fid]))
 tr.plot()

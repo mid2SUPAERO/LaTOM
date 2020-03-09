@@ -121,6 +121,11 @@ class TwoDimTrajectoryContinuation:
         ax.plot(self.x_llo, self.y_llo, label='departure orbit')
 
         for twr in self.x.keys():
-            ax.plot(self.x[twr], self.y[twr], label=f"twr {twr:.4f}")
+            if isinstance(twr, float):
+                ax.plot(self.x[twr], self.y[twr], label=f"twr {twr:.4f}")
+            elif isinstance(twr, str):
+                ax.plot(self.x[twr], self.y[twr], label=('twr ' + twr))
+            else:
+                ax.plot(self.x[twr], self.y[twr])
 
         TwoDimTrajectory.set_axes_decorators(ax, 'Ascent trajectories for different thrust/weight ratios', self.units)

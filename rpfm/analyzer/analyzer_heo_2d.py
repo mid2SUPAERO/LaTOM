@@ -385,10 +385,12 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
         Transcription order
     solver : str
         NLP solver
-    snopt_opts : dict
+    snopt_opts : dict, optional
         Sets some SNOPT's options. Default is ``None``
-    check_partials : bool
+    check_partials : bool, optional
         Checking of partial derivatives. Default is ``False``
+    significant_figures : int, optional
+        Significant figures to be considered while casting the list of thrust/weight ratios. Default is ``4``
 
     Attributes
     ----------
@@ -434,13 +436,13 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
     """
 
     def __init__(self, body, sc, alt, rp, t, t_bounds, twr_list, method, nb_seg, order, solver, snopt_opts=None,
-                 check_partials=False):
+                 check_partials=False, significant_figures=4):
         """Initializes the `TwoDimLLO2ApoContinuationAnalyzer` class variables. """
 
         TwoDimLLO2ApoAnalyzer.__init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver,
                                        snopt_opts=snopt_opts, rec_file=None, check_partials=check_partials)
 
-        self.twr_list = np.asarray(twr_list)
+        self.twr_list = np.around(np.asarray(twr_list), significant_figures)
         self.m_prop_list = np.zeros(np.shape(self.twr_list))
         self.energy_list = np.zeros(np.shape(self.twr_list))
         self.sol_list = {}
@@ -517,7 +519,7 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
 
             # extract NLP solution
             params['tof'], params['states'], params['controls'] = self.get_discretization_phase(nlp.p, nlp.phase_name)
-            self.sol_list[self.twr_list[i]] = self.get_solution_dictionary(nlp.p)
+            self.sol_list[str(self.twr_list[i])] = self.get_solution_dictionary(nlp.p)
 
             # compute the specific energy of the spacecraft at the end of the powered phase and the total required
             # propellant mass including the final insertion burn

@@ -30,7 +30,7 @@ class MetaModel:
 
         if rec_file is not None:
 
-            rec_file = dirname + '/' + rec_file
+            rec_file = dirname + '/metamodels/' + rec_file
             d = load(rec_file)
 
             self.twr = d['twr']
@@ -90,7 +90,7 @@ class MetaModel:
 
         if rec_file is not None:
 
-            rec_file = dirname + '/' + rec_file
+            rec_file = dirname + '/metamodels/' + rec_file
             d = {'Isp': self.Isp, 'twr': self.twr, 'm_prop': self.m_prop, 'failures': self.failures}
             save(d, rec_file)
 
