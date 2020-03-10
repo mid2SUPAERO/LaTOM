@@ -4,7 +4,8 @@ from rpfm.utils.pickle_utils import load
 from rpfm.data.data import dirname
 from rpfm.surrogate.meta_models_llo2heo import TwoDimLLO2ApoContinuationMetaModel
 
-isp = np.linspace(250., 495., 50)
+isp = np.linspace(250., 500., 51)
+isp2 = np.linspace(250., 500., 26)
 twr_log = np.linspace(-3, 1.9, 50)
 twr = np.exp(twr_log)
 delta = np.hstack(([0.], (twr[1:] - twr[:-1])))

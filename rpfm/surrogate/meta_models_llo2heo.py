@@ -61,13 +61,6 @@ class TwoDimLLO2ApoContinuationMetaModel(MetaModel):
         self.compute_grid(twr_lim, isp_lim, nb_samp)
         twr_flip = np.flip(self.twr)
 
-        print('Isp:')
-        print(self.Isp)
-        print('twr:')
-        print(self.twr)
-        print('flipped:')
-        print(twr_flip)
-
         for j in range(nb_samp[1]):  # loop over specific impulses
 
             print(f"\nMajor Iteration {j}\nSpecific impulse: {self.Isp[j]:.6f} s\n")
