@@ -6,6 +6,7 @@
 * Recompute MetaModel for LLO to HEO transfers with thrust/weight ratio down to 0
 * Fix MetaModel for ascent and descent trajectories with vertical take-off and landing
 * Complete three-dimensional transfers
+* thrust/weight ratio in logarithmic scale for continuation: `np.arange(1.9, -3.1, -0.1)`
 
 ## Documentation
 

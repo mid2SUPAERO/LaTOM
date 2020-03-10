@@ -551,15 +551,26 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
             d = {'twr': self.twr_list, 'm_prop': self.m_prop_list, 'energy': self.energy_list, 'sol': self.sol_list}
             save(d, rec_file)
 
-    def plot(self, **kwargs):
+    def plot(self, labels=None):
+        """Plots the propellant fraction and spacecraft energy wrt thrust/weight ratio, the initial powered phases for
+        different thrust/weight ratios and the last solution (smallest thrust/weight ratio) as for
+        `TwoDimLLO2ApoAnalyzer`.
+
+        Parameters
+        ----------
+        labels : iterable or None, optional
+            List of labels for the different trajectories displayed by `TwoDimTrajectoryContinuation` class or ``None``.
+            Default is ``None``
+
+        """
 
         mass_energy_continuation = MassEnergyContinuation(self.twr_list, self.m_prop_list/self.sc.m0, self.energy_list)
 
-        if 'labels' in kwargs:
-            trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list,
-                                                                   labels=kwargs['labels'])
-        else:
+        if labels is None:
             trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
+        else:
+            trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list,
+                                                                   labels=self.twr_list)
 
         mass_energy_continuation.plot()
         trajectory_continuation.plot()

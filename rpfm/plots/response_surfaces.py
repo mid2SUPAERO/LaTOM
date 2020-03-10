@@ -11,31 +11,20 @@ from copy import deepcopy
 
 class RespSurf:
 
-    def __init__(self, isp, twr, m, tof=None):
+    def __init__(self, isp, twr, param, title, nb_lines=50, log_scale=False):
 
-        self.Isp = isp
-        self.twr = twr
-        self.m = deepcopy(m)
-
-        if tof is not None:
-            self.tof = deepcopy(tof)
+        if log_scale:
+            twr = np.exp(twr)
+        [self.twr, self.isp] = np.meshgrid(twr, isp)
+        self.param = deepcopy(param)
+        self.title = title
+        self.nb_lines = nb_lines
 
     def plot(self):
 
-        [twr, isp] = np.meshgrid(self.twr, self.Isp)
-
         fig, ax = plt.subplots()
-        cs = ax.contour(twr, isp, self.m, 25)
+        cs = ax.contour(self.twr, self.isp, self.param, self.nb_lines)
         ax.clabel(cs)
         ax.set_xlabel('Thrust/initial weight ratio')
         ax.set_ylabel('Isp (s)')
-        ax.set_title('Final/initial mass ratio')
-
-        if hasattr(self, 'tof'):
-
-            fig, ax = plt.subplots()
-            cs = ax.contour(twr, isp, self.tof, 50)
-            ax.clabel(cs)
-            ax.set_xlabel('Thrust/initial weight ratio')
-            ax.set_ylabel('Isp (s)')
-            ax.set_title('Time of flight')
+        ax.set_title(self.title)

@@ -109,17 +109,12 @@ class TwoDimTrajectoryContinuation:
         for twr in sol.keys():
             self.x[twr], self.y[twr] = TwoDimTrajectory.polar2cartesian(sol[twr]['states'][:, 0], scaler=self.scaler,
                                                                         angle=sol[twr]['states'][:, 1])
-        self.set_labels(sol, labels=labels)
-
-    def set_labels(self, sol, labels=None):
-
-        keys = np.asarray(list(sol.keys()))
-        print(keys)
-
+        keys = list(sol.keys())
         if labels is None:
-            self.labels = dict(zip(keys, [None]*np.size(keys)))
-        elif labels == 'linear':
-            self.labels = dict(zip(keys, keys))
+            self.labels = dict(zip(keys, [None]*len(keys)))
+        else:
+            labels = np.array([s1 + s2 for s1, s2 in zip(['twr ']*np.size(labels), np.around(labels, 4).astype(str))])
+            self.labels = dict(zip(keys, labels))
 
     def plot(self):
         """Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
@@ -127,7 +122,7 @@ class TwoDimTrajectoryContinuation:
 
         """
 
-        fig, ax = plt.subplots(constrained_layout=True)
+        fig, ax = plt.subplots(constrained_layout=False)
 
         ax.plot(self.x_moon, self.y_moon, label='Moon surface')
         ax.plot(self.x_llo, self.y_llo, label='departure orbit')

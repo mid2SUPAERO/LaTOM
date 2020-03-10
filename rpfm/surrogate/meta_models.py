@@ -4,6 +4,7 @@
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from openmdao.api import Problem, MetaModelStructuredComp
 from rpfm.utils.pickle_utils import load, save
@@ -27,31 +28,31 @@ class MetaModel:
 
         self.p = Problem()
         self.p.model.add_subsystem('mm', self.mm, promotes=['Isp', 'twr'])
+        self.twr = self.Isp = self.m_prop = self.failures = self.d = None
 
         if rec_file is not None:
-
-            rec_file = dirname + '/metamodels/' + rec_file
-            d = load(rec_file)
-
-            self.twr = d['twr']
-            self.Isp = d['Isp']
-            self.m_prop = d['m_prop']
-            self.failures = d['failures']
-
-            self.mm.add_input('twr', training_data=self.twr)
-            self.mm.add_input('Isp', training_data=self.Isp)
-            self.mm.add_output('m_prop', training_data=self.m_prop)
-
-            self.p.setup()
-            self.p.final_setup()
+            self.load(rec_file)
+            self.setup()
 
     @staticmethod
-    def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
+    def abs_path(rec_file):
 
-        return None, None
+        return dirname + '/metamodels/' + rec_file
 
-    def sampling(self, body, twr_lim, isp_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, snopt_opts=None,
-                 u_bound=None, rec_file=None, **kwargs):
+    def load(self, rec_file):
+
+        self.d = load(self.abs_path(rec_file))
+        self.twr = self.d['twr']
+        self.Isp = self.d['Isp']
+        self.m_prop = self.d['m_prop']
+        self.failures = self.d['failures']
+
+    def save(self, rec_file):
+
+        d = {'Isp': self.Isp, 'twr': self.twr, 'm_prop': self.m_prop, 'failures': self.failures}
+        save(d, self.abs_path(rec_file))
+
+    def compute_grid(self, twr_lim, isp_lim, nb_samp):
 
         self.twr = np.linspace(twr_lim[0], twr_lim[1], nb_samp[0])
         self.Isp = np.linspace(isp_lim[0], isp_lim[1], nb_samp[1])
@@ -59,13 +60,28 @@ class MetaModel:
         self.m_prop = np.zeros(nb_samp)
         self.failures = np.zeros(nb_samp)
 
+    def setup(self):
+
+        self.mm.add_input('twr', training_data=self.twr)
+        self.mm.add_input('Isp', training_data=self.Isp)
+        self.mm.add_output('m_prop', training_data=self.m_prop)
+
+        self.p.setup()
+        self.p.final_setup()
+
+    def sampling(self, body, twr_lim, isp_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, snopt_opts=None,
+                 u_bound=None, rec_file=None, **kwargs):
+
+        self.compute_grid(twr_lim, isp_lim, nb_samp)
+
         count = 1
 
-        for i in range(nb_samp[0]):
-            for j in range(nb_samp[1]):
+        for i in range(nb_samp[0]):  # loop over thrust/weight ratios
+            for j in range(nb_samp[1]):  # loop over specific impulses
 
-                print('\nIteration number: ' + str(count))
-                print('Isp: ' + str(self.Isp[j]) + ' s\ttwr: ' + str(self.twr[i]) + '\n')
+                print(f"\nMajor Iteration {j}"
+                      f"\nSpecific impulse: {self.Isp[j]:.6f} s"
+                      f"\nThrust/weight ratio: {self.twr[i]:.6f}\n")
 
                 sc = Spacecraft(self.Isp[j], self.twr[i], g=body.g)
 
@@ -81,23 +97,22 @@ class MetaModel:
 
                 count += 1
 
-        self.mm.add_input('twr', training_data=self.twr)
-        self.mm.add_input('Isp', training_data=self.Isp)
-        self.mm.add_output('m_prop', training_data=self.m_prop)
-
-        self.p.setup()
-        self.p.final_setup()
+        self.setup()
 
         if rec_file is not None:
+            self.save(rec_file)
 
-            rec_file = dirname + '/metamodels/' + rec_file
-            d = {'Isp': self.Isp, 'twr': self.twr, 'm_prop': self.m_prop, 'failures': self.failures}
-            save(d, rec_file)
+    @staticmethod
+    def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
 
-    def plot(self):
+        return None, None
 
-        resp_surf = RespSurf(self.Isp, self.twr, (1.-self.m_prop.T))
-        resp_surf.plot()
+    def plot(self, nb_lines=50, log_scale=False):
+
+        mf = RespSurf(self.Isp, self.twr, (1 - self.m_prop.T), 'Final/initial mass ratio', nb_lines=nb_lines,
+                      log_scale=log_scale)
+        mf.plot()
+        plt.show()
 
 
 class TwoDimAscConstMetaModel(MetaModel):
