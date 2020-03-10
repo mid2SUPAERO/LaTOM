@@ -12,3 +12,11 @@ print(np.around(twr_log, 4), '\n')
 
 for i in range(np.size(twr)):
     print(f"\t{twr[i]:.4f}\t{delta[i]:.4f}\t{twr_log[i]:.4f}")
+
+keys = np.around(twr_log, 4).astype(str)
+values = np.around(twr, 4).astype(str)
+
+labels = dict(zip(keys, values))
+labels2 = dict(zip(keys, [None]*np.size(keys)))
+
+keys + 'er'

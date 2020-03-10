@@ -72,8 +72,6 @@ class TwoDimTrajectoryContinuation:
         Dictionary that maps each thrust/weight ratio to the corresponding optimal trajectory
     nb : float, optional
         Number of points in which the Moon surface and the initial orbits are discretized. Default is ``2000``
-    log_scale : bool, optional
-        ``True`` if `twr_list` is provided in logarithmic scale, ``False`` otherwise. Default is ``False``
 
     Attributes
     ----------
@@ -96,21 +94,32 @@ class TwoDimTrajectoryContinuation:
 
     """
 
-    def __init__(self, r_moon, r_llo, sol, nb=2000, log_scale=False):
+    def __init__(self, r_moon, r_llo, sol, nb=2000, labels=None):
         """Initializes `TwoDimTrajectoryContinuation` class. """
 
         self.scaler, self.units = TwoDimTrajectory.get_scalers(r_moon)
-        self.log_scale = log_scale
 
         self.x_moon, self.y_moon = TwoDimTrajectory.polar2cartesian(r_moon, scaler=self.scaler, nb=nb)
         self.x_llo, self.y_llo = TwoDimTrajectory.polar2cartesian(r_llo, scaler=self.scaler, nb=nb)
 
         self.x = {}
         self.y = {}
+        self.labels = {}
 
         for twr in sol.keys():
             self.x[twr], self.y[twr] = TwoDimTrajectory.polar2cartesian(sol[twr]['states'][:, 0], scaler=self.scaler,
                                                                         angle=sol[twr]['states'][:, 1])
+        self.set_labels(sol, labels=labels)
+
+    def set_labels(self, sol, labels=None):
+
+        keys = np.asarray(list(sol.keys()))
+        print(keys)
+
+        if labels is None:
+            self.labels = dict(zip(keys, [None]*np.size(keys)))
+        elif labels == 'linear':
+            self.labels = dict(zip(keys, keys))
 
     def plot(self):
         """Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
@@ -123,11 +132,7 @@ class TwoDimTrajectoryContinuation:
         ax.plot(self.x_moon, self.y_moon, label='Moon surface')
         ax.plot(self.x_llo, self.y_llo, label='departure orbit')
 
-        if self.log_scale:
-            for twr in self.x.keys():
-                ax.plot(self.x[twr], self.y[twr], label=('log(twr): ' + str(twr)))
-        else:
-            for twr in self.x.keys():
-                ax.plot(self.x[twr], self.y[twr], label=('twr: ' + str(twr)))
+        for twr in self.x.keys():
+            ax.plot(self.x[twr], self.y[twr], label=self.labels[twr])
 
         TwoDimTrajectory.set_axes_decorators(ax, 'Ascent trajectories for different thrust/weight ratios', self.units)

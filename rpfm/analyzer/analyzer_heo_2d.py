@@ -447,9 +447,12 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
         if log_scale:
             self.log_twr_list = np.around(np.asarray(twr_list), significant_figures)
             self.twr_list = np.exp(self.log_twr_list)
+            self.sol_keys = self.log_twr_list.astype(str)
         else:
             self.log_twr_list = None
             self.twr_list = np.around(np.asarray(twr_list), significant_figures)
+            self.sol_keys = self.twr_list.astype(str)
+
         self.m_prop_list = np.zeros(np.shape(self.twr_list))
         self.energy_list = np.zeros(np.shape(self.twr_list))
         self.sol_list = {}
@@ -523,15 +526,12 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
             print(f"\nTime to solve the NLP problem: {(tf_iter - t0_iter):.6f} s\n")
 
             if failed:
+                print('\nNLP solution failed! Exiting loop\n')
                 break
 
             # extract and store the NLP solution
             params['tof'], params['states'], params['controls'] = self.get_discretization_phase(nlp.p, nlp.phase_name)
-            if self.log_twr_list is None:
-                k = str(self.twr_list[i])
-            else:
-                k = str(self.log_twr_list[i])
-            self.sol_list[k] = self.get_solution_dictionary(nlp.p)
+            self.sol_list[self.sol_keys[i]] = self.get_solution_dictionary(nlp.p)
 
             # compute the specific energy of the spacecraft at the end of the powered phase and the total required
             # propellant mass including the final insertion burn
@@ -551,15 +551,15 @@ class TwoDimLLO2ApoContinuationAnalyzer(TwoDimLLO2ApoAnalyzer):
             d = {'twr': self.twr_list, 'm_prop': self.m_prop_list, 'energy': self.energy_list, 'sol': self.sol_list}
             save(d, rec_file)
 
-    def plot(self):
+    def plot(self, **kwargs):
 
         mass_energy_continuation = MassEnergyContinuation(self.twr_list, self.m_prop_list/self.sc.m0, self.energy_list)
 
-        if self.log_twr_list is None:
-            trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
-        else:
+        if 'labels' in kwargs:
             trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list,
-                                                                   log_scale=True)
+                                                                   labels=kwargs['labels'])
+        else:
+            trajectory_continuation = TwoDimTrajectoryContinuation(self.body.R, self.body.R + self.alt, self.sol_list)
 
         mass_energy_continuation.plot()
         trajectory_continuation.plot()

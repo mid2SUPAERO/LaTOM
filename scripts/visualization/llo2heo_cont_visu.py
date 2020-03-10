@@ -5,7 +5,7 @@ from rpfm.utils.primary import Moon
 from rpfm.data.data import dirname
 
 # load saved data
-filename = 'test_cont_log3.pkl'
+filename = 'test_cont_log400.pkl'
 abspath = '/'.join([dirname, 'continuation', filename])
 tr = load(abspath)
 
@@ -42,4 +42,4 @@ print(f"Propellant fraction (excluding insertion): {(1 - tr.states[0][-1, -1]):.
 print(f"Propellant fraction (total): {(1 - tr.states[-1][-1, -1]):.16f}")
 
 print(tr)
-# tr.plot()
+tr.plot()
