@@ -65,7 +65,10 @@ class TwoDimLLO2ApoContinuationMetaModel(MetaModel):
 
             print(f"\nMajor Iteration {j}\nSpecific impulse: {self.Isp[j]:.6f} s\n")
 
-            sc = Spacecraft(self.Isp[j], np.exp(twr_flip[0]), g=body.g)  # initialize spacecraft with highest twr value
+            if kwargs['log_scale']:
+                sc = Spacecraft(self.Isp[j], np.exp(twr_flip[0]), g=body.g)
+            else:
+                sc = Spacecraft(self.Isp[j], twr_flip[0], g=body.g)
             tr = TwoDimLLO2ApoContinuationAnalyzer(body, sc, alt, kwargs['rp'], kwargs['t'], t_bounds, twr_flip,
                                                    method, nb_seg, order, solver, snopt_opts=snopt_opts,
                                                    log_scale=kwargs['log_scale'])

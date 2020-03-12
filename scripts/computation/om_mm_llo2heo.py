@@ -9,7 +9,7 @@ from rpfm.surrogate.meta_models_llo2heo import TwoDimLLO2ApoMetaModel, TwoDimLLO
 
 # MetaModel settings
 continuation = True  # use continuation method over thrust/weight ratios
-log_scale = True  # thrust/weight ratios equally spaced in logarithmic scale
+log_scale = False  # thrust/weight ratios equally spaced in logarithmic scale
 distributed = False  # variables distributed across multiple processes
 extrapolate = False  # extrapolation for out-of-bounds inputs
 interp_method = 'scipy_cubic'  # interpolation method
@@ -28,7 +28,7 @@ heo_period = 6.5655*86400  # target HEO period [s]
 
 # grid limits
 isp = [250., 495.]  # specific impulse [s]
-twr = [-3., 1.9]  # initial thrust/weight ratio [-]
+twr = [0.05, 3.]  # initial thrust/weight ratio [-]
 
 # NLP
 transcription_method = 'gauss-lobatto'

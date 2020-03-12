@@ -5,7 +5,7 @@ from rpfm.utils.primary import Moon
 from rpfm.data.data import dirname
 
 # load saved data
-filename = 'test_cont_log400.pkl'
+filename = 'test_log300.pkl'
 abspath = '/'.join([dirname, 'continuation', filename])
 tr = load(abspath)
 

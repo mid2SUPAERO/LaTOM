@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2ApoContinuationAnalyzer
 from rpfm.data.data import dirname
 
 # file ID
-fid = 'test_log450.pkl'
+fid = 'test_log300.pkl'
 
 # trajectory
 moon = Moon()
@@ -20,15 +20,15 @@ heo_rp = 3150e3  # target HEO periselene radius [m]
 heo_period = 6.5655 * 86400  # target HEO period [s]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
-twr_list = np.linspace(1.5, 1.2, 5)  # range of thrust/weight ratios in logarithmic scale [-]
+isp = 300.  # specific impulse [s]
+twr_list = np.linspace(-1.7, -2., 7)  # range of thrust/weight ratios in logarithmic scale [-]
 twr0 = np.exp(twr_list[0])  # maximum thrust/weight ratio in absolute value [-]
 log_scale = True
 sc = Spacecraft(isp, twr0, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 100
+segments = 300
 order = 3
 solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
