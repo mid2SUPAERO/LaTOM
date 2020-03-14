@@ -16,13 +16,13 @@ interp_method = 'cubic'
 
 training_data_gradients = True  # compute gradients wrt output training data
 vec_size = 5  # number of points to evaluate at once
-rec_file = 'llo2apo_lin_79_26.pkl'  # name of the file on which the solution is serialized
+rec_file = 'llo2apo_lin_19_6_390-440.pkl'  # name of the file on which the solution is serialized
 
 a = MetaModel(distributed=distributed, extrapolate=extrapolate, method=interp_method,
               training_data_gradients=training_data_gradients, vec_size=vec_size, rec_file=rec_file)
 
-a.p['twr'] = [1.]
-a.p['Isp'] = [400.]
+a.p['twr'] = [0.09]
+a.p['Isp'] = [395.]
 
 a.p.run_model()
 a.plot(nb_lines=50, log_scale=False)
