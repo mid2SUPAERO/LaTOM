@@ -10,6 +10,7 @@ from rpfm.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSur
 
 from rpfm.utils.primary import Moon
 from rpfm.utils.pickle_utils import save
+from rpfm.data.smt.data_smt import dirname_smt
 
 fid = 'file_name.pkl'
 
@@ -76,5 +77,5 @@ if samp_method != 'full':
 else:
     sm.evaluate()
 
-save(sm, fid)
+save(sm, '/'.join([dirname_smt, fid]))
 sm.plot()

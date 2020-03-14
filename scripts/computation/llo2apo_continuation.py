@@ -8,7 +8,7 @@ import numpy as np
 from rpfm.utils.primary import Moon
 from rpfm.utils.spacecraft import Spacecraft
 from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2ApoContinuationAnalyzer
-from rpfm.data.data import dirname
+from rpfm.data.continuation.data_continuation import dirname_continuation
 
 # file ID
 fid = 'test_log260.pkl'
@@ -53,6 +53,6 @@ tr.get_solutions(explicit=exp_sim, scaled=False)
 print(tr)
 
 if fid is not None:
-    tr.save('/'.join([dirname, 'continuation', fid]))
+    tr.save('/'.join([dirname_continuation, fid]))
 
 tr.plot()

@@ -13,7 +13,7 @@ from rpfm.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNL
     TwoDimDescVarNLP, TwoDimDescVLandNLP
 from rpfm.guess.guess_2d import HohmannTransfer
 from rpfm.utils.keplerian_orbit import TwoDimOrb
-from rpfm.data.data import dirname
+from rpfm.data.metamodels.data_mm import dirname_metamodels
 from rpfm.plots.response_surfaces import RespSurf
 from rpfm.analyzer.analyzer_2d import TwoDimDescTwoPhasesAnalyzer
 
@@ -37,7 +37,7 @@ class MetaModel:
     @staticmethod
     def abs_path(rec_file):
 
-        return dirname + '/metamodels/' + rec_file
+        return '/'.join([dirname_metamodels, rec_file])
 
     def load(self, rec_file):
 

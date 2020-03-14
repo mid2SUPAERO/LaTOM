@@ -4,9 +4,7 @@
 """
 
 from rpfm.utils.pickle_utils import load
-from rpfm.data.data import dirname
-
-path = dirname  # directory where the data are stored
+from rpfm.data.smt.data_smt import dirname_smt
 
 # choose the kind of simulation between the followings:
 # asc_const: ascent trajectory with constant thrust
@@ -19,8 +17,8 @@ path = dirname  # directory where the data are stored
 kind_lhs = 'desc_vland'  # kind of transfer with latin hypercube sampling
 kind_full = 'desc_var'  # kind of transfer with full grid sampling
 
-fid_lhs = ''.join([path, '/smt/', kind_lhs, '_lhs.pkl'])
-fid_full = ''.join([path, '/smt/', kind_full, '_full.pkl'])
+fid_lhs = ''.join([dirname_smt, '/', kind_lhs, '_lhs.pkl'])
+fid_full = ''.join([dirname_smt, '/', kind_full, '_full.pkl'])
 
 train = True  # train the surrogate model (to be done before the first iteration)
 plot = True

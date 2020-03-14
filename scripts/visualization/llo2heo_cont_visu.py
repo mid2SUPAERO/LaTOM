@@ -2,11 +2,11 @@ import numpy as np
 
 from rpfm.utils.pickle_utils import load
 from rpfm.utils.primary import Moon
-from rpfm.data.data import dirname
+from rpfm.data.continuation.data_continuation import dirname_continuation
 
 # load saved data
-filename = 'test_log300.pkl'
-abspath = '/'.join([dirname, 'continuation', filename])
+filename = 'test_cont_log400.pkl'
+abspath = '/'.join([dirname_continuation, 'tests', filename])
 tr = load(abspath)
 
 # primary
