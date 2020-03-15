@@ -232,13 +232,13 @@ class TwoDimConstNLP(TwoDimNLP):
     sc : Spacecraft
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     theta : float
         Guessed spawn angle [rad]
     alpha_bounds : tuple
         Lower and upper bounds on thrust vector direction [rad]
     tof : float
-        Guessed time of flight [-]
+        Guessed time of flight [s]
     t_bounds : tuple
         Time of flight bounds expressed as fraction of TOF [-]
     method : str
@@ -282,7 +282,7 @@ class TwoDimConstNLP(TwoDimNLP):
         theta : float
             Guessed spawn angle [rad]
         tof : float
-            Guessed time of flight [-]
+            Guessed time of flight [s]
         t_bounds : tuple
             Time of flight bounds expressed as fraction of TOF [-]
         u_bound : str or None, optional
@@ -311,13 +311,13 @@ class TwoDimAscConstNLP(TwoDimConstNLP):
     sc : Spacecraft
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     theta : float
         Guessed spawn angle [rad]
     alpha_bounds : tuple
         Lower and upper bounds on thrust vector direction [rad]
     tof : float
-        Guessed time of flight [-]
+        Guessed time of flight [s]
     t_bounds : tuple
         Time of flight bounds expressed as fraction of `tof` [-]
     method : str
@@ -371,13 +371,13 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
     sc : Spacecraft
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     theta : float
         Guessed spawn angle [rad]
     alpha_bounds : tuple
         Lower and upper bounds on thrust vector direction [rad]
     tof : float
-        Guessed time of flight [-]
+        Guessed time of flight [s]
     t_bounds : tuple
         Time of flight bounds expressed as fraction of `tof` [-]
     method : str
@@ -404,7 +404,7 @@ class TwoDimDescConstNLP(TwoDimConstNLP):
     Attributes
     ----------
     vp : float
-        Velocity at the periapsis of the Hohmann transfer where the final powered descent is initiated [-]
+        Velocity at the periapsis of the Hohmann transfer where the final powered descent is initiated [m/s]
 
     """
 
@@ -437,7 +437,7 @@ class TwoDimVarNLP(TwoDimNLP):
     sc : Spacecraft
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     alpha_bounds : tuple
         Lower and upper bounds on thrust vector direction [rad]
     t_bounds : tuple
@@ -576,7 +576,7 @@ class TwoDimDescVarNLP(TwoDimVarNLP):
     sc : Spacecraft
         Instance of `Spacecraft` class representing the spacecraft
     alt : float
-        Orbit altitude [-]
+        Orbit altitude [m]
     alpha_bounds : tuple
         Lower and upper bounds on thrust vector direction [rad]
     t_bounds : tuple
@@ -616,6 +616,66 @@ class TwoDimDescVarNLP(TwoDimVarNLP):
 
 
 class TwoDimVToffNLP(TwoDimVarNLP):
+    """TwoDimVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional ascent/descent trajectory is described in polar coordinates centered at the center of the
+    attracting body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+    An appropriate path constraint is imposed on the spacecraft state to guarantee a vertical take-off or landing.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [m]
+    alt_safe : float
+        Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]
+    slope : float
+        Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+        Higher the value, steeper the ascent/descent [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    guess : TwoDimGuess
+        Initial guess for the NLP solution
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+
+    Attributes
+    ----------
+    alt_safe : float
+        Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]
+    slope : float
+        Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+        Higher the value, steeper the ascent [-]
+    guess : TwoDimGuess
+        Initial guess for the NLP solution
+
+    """
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  guess, snopt_opts=None, rec_file=None, check_partials=False, u_bound=None, fix_final=False):
@@ -636,6 +696,18 @@ class TwoDimVToffNLP(TwoDimVarNLP):
         self.set_initial_guess(check_partials=check_partials, fix_final=fix_final)
 
     def set_options(self, theta, t_bounds, u_bound=None):
+        """Set the states and controls options and the path constraint.
+
+        Parameters
+        ----------
+        theta : float
+            Guessed spawn angle [rad]
+        t_bounds : tuple
+            Time of flight bounds expressed as fraction of `tof` [-]
+        u_bound : str or None, optional
+                Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is None
+
+        """
 
         self.phase.add_path_constraint('dist_safe', lower=0.0, ref=self.alt_safe/self.body.R)
         self.phase.add_timeseries_output('r_safe')
@@ -644,6 +716,54 @@ class TwoDimVToffNLP(TwoDimVarNLP):
 
 
 class TwoDimAscVToffNLP(TwoDimVToffNLP):
+    """TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional ascent trajectory is described in polar coordinates centered at the center of the attracting
+    body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+    An appropriate path constraint is imposed on the spacecraft state to guarantee a vertical take-off.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [m]
+    alt_safe : float
+        Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]
+    slope : float
+        Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+        Higher the value, steeper the ascent [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``lower``
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+
+    """
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower', fix_final=False):
@@ -655,6 +775,54 @@ class TwoDimAscVToffNLP(TwoDimVToffNLP):
 
 
 class TwoDimDescVLandNLP(TwoDimVToffNLP):
+    """TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+    optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-dimensional descent trajectory is described in polar coordinates centered at the center of the attracting
+    body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+    An appropriate path constraint is imposed on the spacecraft state to guarantee a vertical landing.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Orbit altitude [m]
+    alt_safe : float
+        Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]
+    slope : float
+        Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+        Higher the value, steeper the descent [-]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or None, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or None. Default is ``upper``
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+
+    """
 
     def __init__(self, body, sc, alt, alt_safe, slope, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound='upper', fix_final=True):
@@ -666,6 +834,72 @@ class TwoDimDescVLandNLP(TwoDimVToffNLP):
 
 
 class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
+    """MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by
+    multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Periselene altitude at which the powered descent is initiated [m]
+    alt_switch : float
+        Altitude at which the vertical descent is triggered [m]
+    vp :float
+        Periselene velocity at which the powered descent is initiated [m/s]
+    theta : float
+        Guessed spawn angle [rad]
+    alpha_bounds : iterable
+        Lower and upper bounds on thrust vector direction [rad]
+    tof : iterable
+        Guessed time of flight for the two phases [s]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int or tuple
+        Number of segments in which each phase is discretized
+    order : int or tuple
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : tuple
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    fix : str, optional
+        ``alt`` to trigger the vertical phase at fixed altitude equal to `alt_switch`, ``time`` to trigger the vertical
+        phase at fixed time to go equal to the second component of `tof`. Default is ``alt``
+
+    Attributes
+    ----------
+    alt : float
+        Periselene altitude at which the powered descent is initiated [m]
+    alt_switch : float
+        Altitude at which the vertical descent is triggered [m]
+    rp : float
+        Periselene radius at which the powered descent is initiated [m]
+    r_switch : float
+        Radius at which the vertical descent is triggered [m]
+    vp :float
+        Periselene velocity at which the powered descent is initiated [m/s]
+    alpha_bounds : iterable
+        Lower and upper bounds on thrust vector direction [rad]
+    tof : iterable
+        Guessed time of flight for the two phases [s]
+    fix : str, optional
+        ``alt`` to trigger the vertical phase at fixed altitude equal to `alt_switch`, ``time`` to trigger the vertical
+        phase at fixed time to go equal to the second component of `tof`. Default is ``alt``
+
+    """
 
     def __init__(self, body, sc, alt, alt_switch, vp, theta, alpha_bounds, tof, t_bounds, method, nb_seg, order, solver,
                  ph_name, snopt_opts=None, rec_file=None, check_partials=False, fix='alt'):
@@ -698,6 +932,16 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
         self.set_initial_guess(theta, check_partials=check_partials)
 
     def set_options(self, theta, t_bounds):
+        """Set the time, states and control options for both phases and add the NLP objective.
+
+        Parameters
+        ----------
+        theta : float
+            Guessed spawn angle [rad]
+        t_bounds : iterable
+            Time of flight bounds expressed as fraction of `tof` [-]
+
+        """
 
         # time
         if t_bounds is not None:
@@ -764,6 +1008,16 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
         self.phase[1].add_objective('m', loc='final', scaler=-1.0)
 
     def set_initial_guess(self, theta, check_partials=False):
+        """Set the initial guess for the NLP solution as simple linear interpolation of the Boundary Conditions.
+
+        Parameters
+        ----------
+        theta : float
+            Guessed spawn angle [rad]
+        check_partials : bool, optional
+            Check the partial derivatives computed analytically against complex step method. Default is ``False``
+
+        """
 
         # time
         self.p[self.phase_name[0] + '.t_initial'] = 0.0
