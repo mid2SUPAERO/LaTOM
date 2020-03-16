@@ -113,8 +113,8 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
 
         TwoDimHEOGuess.compute_trajectory(self, **kwargs)
 
-        t_ht = self.t[self.t < self.ht.tof]
-        t_pow = self.t[self.t >= self.ht.tof]
+        t_ht = self.t[self.t <= self.ht.tof]
+        t_pow = self.t[self.t > self.ht.tof]
 
         self.ht.compute_trajectory(t_ht, 0.0, theta0=np.pi, m=self.deorbit_burn.mf)
         # self.ht.states[:, 1] = self.ht.states[:, 1] - np.pi  # adjust true anomaly
@@ -228,7 +228,7 @@ if __name__ == '__main__':
     r_p = 3150e3
     T = 6.5655*86400
     sat = Spacecraft(450, 2.1, g=moon.g)
-    nb = (20, 200)
+    nb = (20, 1000)
 
     if case == 'ascent':
         tr = TwoDimLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)
@@ -240,8 +240,8 @@ if __name__ == '__main__':
         tr = TwoDimHEO2LLOGuess(moon.GM, moon.R, h, r_p, T, sat)
         a = tr.ht.depOrb.a
         e = tr.ht.depOrb.e
-        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.ht.tof, nb[0]),
-                                      np.linspace(tr.ht.tof, tr.pow.tf, nb[1] + 1)[1:])), (np.sum(nb), 1))
+        t_all = np.reshape(np.hstack((np.linspace(0.0, tr.ht.tof, nb[1]),
+                                      np.linspace(tr.ht.tof, tr.pow.tf, nb[0] + 1)[1:])), (np.sum(nb), 1))
     elif case == '3p':
         case = 'ascent'
         tr = TwoDim3PhasesLLO2HEOGuess(moon.GM, moon.R, h, r_p, T, sat)

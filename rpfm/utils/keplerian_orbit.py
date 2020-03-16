@@ -495,9 +495,60 @@ class KepOrb:
         tp : float
             Time at periapsis passage [s]
 
+        Returns
+        -------
+        f : float
+            Current value of Kepler's equation written as E - e*sin(E) - Me = 0
+
         """
 
-        return ea - e * np.sin(ea) - n * (t - tp)
+        f = ea - e * np.sin(ea) - n * (t - tp)
+
+        return f
+
+    @staticmethod
+    def kepler_eqn_prime(ea, e, n, t, tp):
+        """First derivative of Kepler's time of flight equation wrt eccentric anomaly.
+
+        Parameters
+        ----------
+        ea : float
+            Eccentric anomaly [rad]
+        e : float
+            Eccentricity [-]
+
+        Returns
+        -------
+        fprime : float
+            First derivative of Kepler's equation wrt eccentric anomaly
+
+        """
+
+        fprime = 1 - e*np.cos(ea)
+
+        return fprime
+
+    @staticmethod
+    def kepler_eqn_second(ea, e, n, t, tp):
+        """Second derivative of Kepler's time of flight equation wrt eccentric anomaly.
+
+        Parameters
+        ----------
+        ea : float
+            Eccentric anomaly [rad]
+        e : float
+            Eccentricity [-]
+
+        Returns
+        -------
+        fsecond : float
+            Second derivative of Kepler's equation wrt eccentric anomaly
+
+        """
+
+        fsecond = e * np.sin(ea)
+
+        return fsecond
 
     def __str__(self):
         """Prints the orbit Classical Orbital Elements. """

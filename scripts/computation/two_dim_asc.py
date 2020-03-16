@@ -38,7 +38,7 @@ snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance':
 u_bound = 'lower'  # lower bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
-exp_sim = True  # perform explicit simulation
+exp_sim = run_driver  # perform explicit simulation
 rec = False  # record the solution
 
 # record databases
