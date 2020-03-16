@@ -652,9 +652,60 @@
 <span class="sd">        tp : float</span>
 <span class="sd">            Time at periapsis passage [s]</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        f : float</span>
+<span class="sd">            Current value of Kepler&#39;s equation written as E - e*sin(E) - Me = 0</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="n">ea</span> <span class="o">-</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">tp</span><span class="p">)</span></div>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">ea</span> <span class="o">-</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">tp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="KepOrb.kepler_eqn_prime"><a class="viewcode-back" href="../../../modules/utils.html#rpfm.utils.keplerian_orbit.KepOrb.kepler_eqn_prime">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kepler_eqn_prime</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;First derivative of Kepler&#39;s time of flight equation wrt eccentric anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fprime : float</span>
+<span class="sd">            First derivative of Kepler&#39;s equation wrt eccentric anomaly</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fprime</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fprime</span></div>
+
+<div class="viewcode-block" id="KepOrb.kepler_eqn_second"><a class="viewcode-back" href="../../../modules/utils.html#rpfm.utils.keplerian_orbit.KepOrb.kepler_eqn_second">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kepler_eqn_second</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Second derivative of Kepler&#39;s time of flight equation wrt eccentric anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fsecond : float</span>
+<span class="sd">            Second derivative of Kepler&#39;s equation wrt eccentric anomaly</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fsecond</span> <span class="o">=</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fsecond</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prints the orbit Classical Orbital Elements. &quot;&quot;&quot;</span>

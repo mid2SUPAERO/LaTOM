@@ -5,6 +5,12 @@ rpfm.plots.response\_surfaces
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      deepcopy
+   
    
 
    

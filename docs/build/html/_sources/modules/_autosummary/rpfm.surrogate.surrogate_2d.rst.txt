@@ -5,6 +5,12 @@ rpfm.surrogate.surrogate\_2d
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      deepcopy
+   
    
 
    
@@ -13,12 +19,34 @@ rpfm.surrogate.surrogate\_2d
 
    .. autosummary::
    
+      FullFactorial
+      HohmannTransfer
+      IDW
+      ImpulsiveBurn
+      KPLS
+      KPLSK
+      KRG
+      LHS
+      LS
+      QP
+      RBF
+      RMTB
+      RMTC
+      RespSurf
+      Spacecraft
       SurrogateModel
+      TwoDimAscConstNLP
       TwoDimAscConstSurrogate
+      TwoDimAscVToffNLP
       TwoDimAscVToffSurrogate
+      TwoDimAscVarNLP
       TwoDimAscVarSurrogate
+      TwoDimDescConstNLP
       TwoDimDescConstSurrogate
+      TwoDimDescTwoPhasesNLP
+      TwoDimDescVLandNLP
       TwoDimDescVLandSurrogate
+      TwoDimDescVarNLP
       TwoDimDescVarSurrogate
       TwoDimDescVertSurrogate
    

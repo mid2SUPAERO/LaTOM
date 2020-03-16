@@ -1,6 +1,6 @@
 <map id="inheritancec3d2f0d1aa" name="inheritancec3d2f0d1aa">
-<area shape="rect" id="node1" href="_autosummary/rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.HohmannTransfer" target="_top" title="HohmannTransfer" alt="" coords="5,325,143,351"/>
-<area shape="rect" id="node2" href="_autosummary/rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.PowConstRadius" target="_top" title="PowConstRadius" alt="" coords="9,276,139,301"/>
+<area shape="rect" id="node1" href="_autosummary/rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.HohmannTransfer" target="_top" title="`HohmannTransfer` class implements a two&#45;dimensional Hohmann transfer between two coplanar, circular orbits in" alt="" coords="5,325,143,351"/>
+<area shape="rect" id="node2" href="_autosummary/rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.PowConstRadius" target="_top" title="`PowConstRadius` class implements a two&#45;dimensional powered phase at constant radius from the central attractive" alt="" coords="9,276,139,301"/>
 <area shape="rect" id="node3" href="_autosummary/rpfm.guess.guess_3d.html#rpfm.guess.guess_3d.ThreeDimAscGuess" target="_top" title="ThreeDimAscGuess" alt="" coords="421,5,570,31"/>
 <area shape="rect" id="node4" href="_autosummary/rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.TwoDimLLOGuess" target="_top" title="TwoDimLLOGuess" alt="" coords="193,153,331,179"/>
 <area shape="rect" id="node5" href="_autosummary/rpfm.guess.guess_3d.html#rpfm.guess.guess_3d.ThreeDimDescGuess" target="_top" title="ThreeDimDescGuess" alt="" coords="416,55,575,80"/>

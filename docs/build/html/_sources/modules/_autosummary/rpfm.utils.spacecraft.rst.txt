@@ -5,6 +5,12 @@ rpfm.utils.spacecraft
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      warn
+   
    
 
    
@@ -13,6 +19,8 @@ rpfm.utils.spacecraft
 
    .. autosummary::
    
+      DeorbitBurn
+      ImpulsiveBurn
       Spacecraft
    
    

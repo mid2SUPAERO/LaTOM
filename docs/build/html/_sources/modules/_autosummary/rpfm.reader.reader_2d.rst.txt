@@ -13,7 +13,9 @@ rpfm.reader.reader\_2d
 
    .. autosummary::
    
+      Reader
       TwoDimReader
+      TwoDimSolPlot
    
    
 

@@ -163,6 +163,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">rpfm.utils.pickle_utils</span> <span class="kn">import</span> <span class="n">save</span>
 
 
 <div class="viewcode-block" id="Analyzer"><a class="viewcode-back" href="../../../modules/analyzer.html#rpfm.analyzer.analyzer.Analyzer">[docs]</a><span class="k">class</span> <span class="nc">Analyzer</span><span class="p">:</span>
@@ -312,7 +313,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">gm_res</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rm_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">R</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gm_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">GM</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gm_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">GM</span></div>
+
+<div class="viewcode-block" id="Analyzer.save"><a class="viewcode-back" href="../../../modules/analyzer.html#rpfm.analyzer.analyzer.Analyzer.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Pickle the whole `Analyzer` class.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rec_file : str</span>
+<span class="sd">            Directory path to the file where the `Analyzer` is serialized</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

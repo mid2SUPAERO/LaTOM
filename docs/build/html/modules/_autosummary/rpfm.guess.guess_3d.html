@@ -171,6 +171,18 @@
   <div class="section" id="module-rpfm.guess.guess_3d">
 <span id="rpfm-guess-guess-3d"></span><h1>rpfm.guess.guess_3d<a class="headerlink" href="#module-rpfm.guess.guess_3d" title="Permalink to this headline">¶</a></h1>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">per2eq_vec</span></code>(xp, yp, vxp, vyp, raan, i, w)</p></td>
+<td><p>Transformation from perifocal reference frame to inertial, body-centred equatorial reference frame.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Classes</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -178,10 +190,25 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_3d.ThreeDimAscGuess" title="rpfm.guess.guess_3d.ThreeDimAscGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimAscGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">KepOrb</span></code>(a, e, i, raan, w, ta, gm)</p></td>
+<td><p>KepOrb defines a Keplerian Orbit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_3d.ThreeDimAscGuess" title="rpfm.guess.guess_3d.ThreeDimAscGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimAscGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_3d.ThreeDimDescGuess" title="rpfm.guess.guess_3d.ThreeDimDescGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimDescGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_3d.ThreeDimDescGuess" title="rpfm.guess.guess_3d.ThreeDimDescGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimDescGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscGuess</span></code>(gm, r, alt, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescGuess</span></code>(gm, r, alt, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLOGuess</span></code>(gm, r, dep, arr, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

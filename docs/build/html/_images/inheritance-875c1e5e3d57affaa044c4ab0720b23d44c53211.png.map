@@ -1,0 +1,21 @@
+<map id="inheritance60b7b1ce44" name="inheritance60b7b1ce44">
+<area shape="rect" id="node1" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" target="_top" title="MetaModel" alt="" coords="21,573,114,599"/>
+<area shape="rect" id="node3" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel" target="_top" title="TwoDim3PhasesLLO2HEOMetaModel" alt="" coords="191,351,449,376"/>
+<area shape="rect" id="node4" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimAscConstMetaModel" target="_top" title="TwoDimAscConstMetaModel" alt="" coords="217,400,423,425"/>
+<area shape="rect" id="node6" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel" target="_top" title="TwoDimAscVToffMetaModel" alt="" coords="220,449,420,475"/>
+<area shape="rect" id="node8" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimAscVarMetaModel" target="_top" title="TwoDimAscVarMetaModel" alt="" coords="225,499,415,524"/>
+<area shape="rect" id="node10" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescConstMetaModel" target="_top" title="TwoDimDescConstMetaModel" alt="" coords="213,548,427,573"/>
+<area shape="rect" id="node12" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel" target="_top" title="TwoDimDescTwoPhasesMetaModel" alt="" coords="196,597,444,623"/>
+<area shape="rect" id="node13" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel" target="_top" title="TwoDimDescVLandMetaModel" alt="" coords="211,647,429,672"/>
+<area shape="rect" id="node15" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescVarMetaModel" target="_top" title="TwoDimDescVarMetaModel" alt="" coords="221,696,419,721"/>
+<area shape="rect" id="node18" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoContinuationMetaModel" target="_top" title="TwoDimLLO2ApoContinuationMetaModel" alt="" coords="177,745,463,771"/>
+<area shape="rect" id="node19" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel" target="_top" title="TwoDimLLO2ApoMetaModel" alt="" coords="219,795,421,820"/>
+<area shape="rect" id="node2" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" target="_top" title="SurrogateModel" alt="" coords="5,153,129,179"/>
+<area shape="rect" id="node5" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate" target="_top" title="TwoDimAscConstSurrogate" alt="" coords="221,5,419,31"/>
+<area shape="rect" id="node7" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate" target="_top" title="TwoDimAscVToffSurrogate" alt="" coords="224,55,416,80"/>
+<area shape="rect" id="node9" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate" target="_top" title="TwoDimAscVarSurrogate" alt="" coords="229,104,411,129"/>
+<area shape="rect" id="node11" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate" target="_top" title="TwoDimDescConstSurrogate" alt="" coords="217,153,423,179"/>
+<area shape="rect" id="node14" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate" target="_top" title="TwoDimDescVLandSurrogate" alt="" coords="215,203,425,228"/>
+<area shape="rect" id="node16" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate" target="_top" title="TwoDimDescVarSurrogate" alt="" coords="225,252,415,277"/>
+<area shape="rect" id="node17" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate" target="_top" title="TwoDimDescVertSurrogate" alt="" coords="223,301,417,327"/>
+</map>

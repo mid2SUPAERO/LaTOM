@@ -179,26 +179,50 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiPhaseNLP</span></code>(body, sc, method, nb_seg, …)</p></td>
+<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dConstThrust</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVToff</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVarThrust</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVertical</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SinglePhaseNLP</span></code>(body, sc, method, nb_seg, …)</p></td>
+<td><p>SinglePhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by a single phase into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimAscConstNLP" title="rpfm.nlp.nlp_2d.TwoDimAscConstNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstNLP</span></code></a>(body, sc, alt, theta, …)</p></td>
 <td><p>TwoDimAscConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimAscVToffNLP" title="rpfm.nlp.nlp_2d.TwoDimAscVToffNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffNLP</span></code></a>(body, sc, alt, alt_safe, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscGuess</span></code>(gm, r, alt, sc)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimAscVarNLP" title="rpfm.nlp.nlp_2d.TwoDimAscVarNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarNLP</span></code></a>(body, sc, alt, alpha_bounds, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimAscVToffNLP" title="rpfm.nlp.nlp_2d.TwoDimAscVToffNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffNLP</span></code></a>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimAscVarNLP" title="rpfm.nlp.nlp_2d.TwoDimAscVarNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarNLP</span></code></a>(body, sc, alt, alpha_bounds, …)</p></td>
 <td><p>TwoDimAscVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimConstNLP" title="rpfm.nlp.nlp_2d.TwoDimConstNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimConstNLP</span></code></a>(body, sc, alt, theta, …[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimConstNLP" title="rpfm.nlp.nlp_2d.TwoDimConstNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimConstNLP</span></code></a>(body, sc, alt, theta, …[, …])</p></td>
 <td><p>TwoDimConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimDescConstNLP" title="rpfm.nlp.nlp_2d.TwoDimDescConstNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstNLP</span></code></a>(body, sc, alt, vp, theta, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimDescConstNLP" title="rpfm.nlp.nlp_2d.TwoDimDescConstNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstNLP</span></code></a>(body, sc, alt, vp, theta, …)</p></td>
 <td><p>TwoDimDescConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP" title="rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code></a>(body, sc, alt, …[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescGuess</span></code>(gm, r, alt, sc)</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP" title="rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code></a>(body, sc, alt, …[, …])</p></td>
+<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimDescVLandNLP" title="rpfm.nlp.nlp_2d.TwoDimDescVLandNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandNLP</span></code></a>(body, sc, alt, alt_safe, …)</p></td>
-<td><p></p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimDescVarNLP" title="rpfm.nlp.nlp_2d.TwoDimDescVarNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarNLP</span></code></a>(body, sc, alt, …[, …])</p></td>
 <td><p>TwoDimDescVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
@@ -207,7 +231,7 @@
 <td><p>TwoDimNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimVToffNLP" title="rpfm.nlp.nlp_2d.TwoDimVToffNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimVToffNLP</span></code></a>(body, sc, alt, alt_safe, …)</p></td>
-<td><p></p></td>
+<td><p>TwoDimVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimVarNLP" title="rpfm.nlp.nlp_2d.TwoDimVarNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimVarNLP</span></code></a>(body, sc, alt, alpha_bounds, …)</p></td>
 <td><p>TwoDimVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
@@ -373,10 +397,10 @@ The thrust delivered by the spacecraft engines is supposed to have a constant ma
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
 <li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
 <li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
 <li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
-<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of TOF [-]</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
 allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
@@ -399,7 +423,7 @@ Default is None</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
-<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of TOF [-]</p></li>
 <li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
 </ul>
@@ -529,10 +553,10 @@ the whole phase.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
 <li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
 <li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
 <li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
-<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
 allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
@@ -616,7 +640,7 @@ state and control variables.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
-<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of TOF [-]</p></li>
 <li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
 </ul>
@@ -686,10 +710,10 @@ the whole phase.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
 <li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
 <li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
 <li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
-<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
 allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
@@ -705,7 +729,7 @@ Default is None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables</dt>
-<dd class="field-even"><p><strong>vp</strong> (<em>float</em>) – Velocity at the periapsis of the Hohmann transfer where the final powered descent is initiated [-]</p>
+<dd class="field-even"><p><strong>vp</strong> (<em>float</em>) – Velocity at the periapsis of the Hohmann transfer where the final powered descent is initiated [m/s]</p>
 </dd>
 </dl>
 <dl class="method">
@@ -776,7 +800,7 @@ state and control variables.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
-<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [-]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of TOF [-]</p></li>
 <li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
 </ul>
@@ -845,7 +869,7 @@ The thrust delivered by the spacecraft engines varies in magnitude during the ph
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
 <li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
 <li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
@@ -1157,7 +1181,7 @@ body. The thrust delivered by the spacecraft engines varies in magnitude during 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
 <li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
 <li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
 <li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
@@ -1302,10 +1326,50 @@ discretization nodes.</p>
 <dt id="rpfm.nlp.nlp_2d.TwoDimVToffNLP">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_2d.</code><code class="sig-name descname">TwoDimVToffNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">guess</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">fix_final=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimVToffNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimVToffNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimVarNLP" title="rpfm.nlp.nlp_2d.TwoDimVarNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimVarNLP</span></code></a></p>
+<p>TwoDimVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p>
+<p>The two-dimensional ascent/descent trajectory is described in polar coordinates centered at the center of the
+attracting body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+An appropriate path constraint is imposed on the spacecraft state to guarantee a vertical take-off or landing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+Higher the value, steeper the ascent/descent [-]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>str</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>guess</strong> (<a class="reference internal" href="rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.TwoDimGuess" title="rpfm.guess.guess_2d.TwoDimGuess"><em>TwoDimGuess</em></a>) – Initial guess for the NLP solution</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is None</p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Name of the file in which the computed solution is recorded or None. Default is None</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+Higher the value, steeper the ascent [-]</p></li>
+<li><p><strong>guess</strong> (<a class="reference internal" href="rpfm.guess.guess_2d.html#rpfm.guess.guess_2d.TwoDimGuess" title="rpfm.guess.guess_2d.TwoDimGuess"><em>TwoDimGuess</em></a>) – Initial guess for the NLP solution</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimVToffNLP.set_options">
 <code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimVToffNLP.set_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimVToffNLP.set_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set options on state and control variables, time and objective function.</p>
+<dd><p>Set the states and controls options and the path constraint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1429,6 +1493,37 @@ discretization nodes.</p>
 <dt id="rpfm.nlp.nlp_2d.TwoDimAscVToffNLP">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_2d.</code><code class="sig-name descname">TwoDimAscVToffNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em>, <em class="sig-param">fix_final=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimAscVToffNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimAscVToffNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimVToffNLP" title="rpfm.nlp.nlp_2d.TwoDimVToffNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimVToffNLP</span></code></a></p>
+<p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p>
+<p>The two-dimensional ascent trajectory is described in polar coordinates centered at the center of the attracting
+body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+An appropriate path constraint is imposed on the spacecraft state to guarantee a vertical take-off.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+Higher the value, steeper the ascent [-]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>str</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is None</p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Name of the file in which the computed solution is recorded or None. Default is None</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimAscVToffNLP.cleanup">
 <code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimAscVToffNLP.cleanup" title="Permalink to this definition">¶</a></dt>
@@ -1492,7 +1587,7 @@ state and control variables.</p>
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimAscVToffNLP.set_options">
 <code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimAscVToffNLP.set_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set options on state and control variables, time and objective function.</p>
+<dd><p>Set the states and controls options and the path constraint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1556,6 +1651,37 @@ discretization nodes.</p>
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescVLandNLP">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_2d.</code><code class="sig-name descname">TwoDimDescVLandNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='upper'</em>, <em class="sig-param">fix_final=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimDescVLandNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimDescVLandNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rpfm.nlp.nlp_2d.TwoDimVToffNLP" title="rpfm.nlp.nlp_2d.TwoDimVToffNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimVToffNLP</span></code></a></p>
+<p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory
+optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p>
+<p>The two-dimensional descent trajectory is described in polar coordinates centered at the center of the attracting
+body. The thrust delivered by the spacecraft engines varies in magnitude during the phase.
+An appropriate path constraint is imposed on the spacecraft state to guarantee a vertical landing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Minimum altitude above the Moon surface to be maintained by the spacecraft far from the launch site [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the path constraint on the spacecraft radius and angle close to the launch site.
+Higher the value, steeper the descent [-]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>str</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is None</p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Name of the file in which the computed solution is recorded or None. Default is None</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is <code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescVLandNLP.cleanup">
 <code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimDescVLandNLP.cleanup" title="Permalink to this definition">¶</a></dt>
@@ -1619,7 +1745,7 @@ state and control variables.</p>
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescVLandNLP.set_options">
 <code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimDescVLandNLP.set_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set options on state and control variables, time and objective function.</p>
+<dd><p>Set the states and controls options and the path constraint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1683,15 +1809,75 @@ discretization nodes.</p>
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_2d.</code><code class="sig-name descname">TwoDimDescTwoPhasesNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">vp</em>, <em class="sig-param">theta</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">fix='alt'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimDescTwoPhasesNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp.html#rpfm.nlp.nlp.MultiPhaseNLP" title="rpfm.nlp.nlp.MultiPhaseNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp.MultiPhaseNLP</span></code></a></p>
+<p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by
+multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="rpfm.utils.primary.html#rpfm.utils.primary.Primary" title="rpfm.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="rpfm.utils.spacecraft.html#rpfm.utils.spacecraft.Spacecraft" title="rpfm.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Periselene altitude at which the powered descent is initiated [m]</p></li>
+<li><p><strong>alt_switch</strong> (<em>float</em>) – Altitude at which the vertical descent is triggered [m]</p></li>
+<li><p><strong>vp</strong> (<em>float</em>) – Periselene velocity at which the powered descent is initiated [m/s]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>iterable</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>tof</strong> (<em>iterable</em>) – Guessed time of flight for the two phases [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>tuple</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>tuple</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>tuple</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is None</p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Name of the file in which the computed solution is recorded or None. Default is None</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>fix</strong> (<em>str</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">alt</span></code> to trigger the vertical phase at fixed altitude equal to <cite>alt_switch</cite>, <code class="docutils literal notranslate"><span class="pre">time</span></code> to trigger the vertical
+phase at fixed time to go equal to the second component of <cite>tof</cite>. Default is <code class="docutils literal notranslate"><span class="pre">alt</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>alt</strong> (<em>float</em>) – Periselene altitude at which the powered descent is initiated [m]</p></li>
+<li><p><strong>alt_switch</strong> (<em>float</em>) – Altitude at which the vertical descent is triggered [m]</p></li>
+<li><p><strong>rp</strong> (<em>float</em>) – Periselene radius at which the powered descent is initiated [m]</p></li>
+<li><p><strong>r_switch</strong> (<em>float</em>) – Radius at which the vertical descent is triggered [m]</p></li>
+<li><p><strong>vp</strong> (<em>float</em>) – Periselene velocity at which the powered descent is initiated [m/s]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>iterable</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>tof</strong> (<em>iterable</em>) – Guessed time of flight for the two phases [s]</p></li>
+<li><p><strong>fix</strong> (<em>str</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">alt</span></code> to trigger the vertical phase at fixed altitude equal to <cite>alt_switch</cite>, <code class="docutils literal notranslate"><span class="pre">time</span></code> to trigger the vertical
+phase at fixed time to go equal to the second component of <cite>tof</cite>. Default is <code class="docutils literal notranslate"><span class="pre">alt</span></code></p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP.set_options">
 <code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">t_bounds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimDescTwoPhasesNLP.set_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP.set_options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the time, states and control options for both phases and add the NLP objective.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP.set_initial_guess">
 <code class="sig-name descname">set_initial_guess</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_2d.html#TwoDimDescTwoPhasesNLP.set_initial_guess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP.set_initial_guess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the initial guess for the NLP solution as simple linear interpolation of the Boundary Conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpfm.nlp.nlp_2d.TwoDimDescTwoPhasesNLP.cleanup">

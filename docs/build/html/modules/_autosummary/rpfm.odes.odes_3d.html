@@ -178,6 +178,12 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExplicitComponent</span></code>(**kwargs)</p></td>
+<td><p>Class to inherit from when all output variables are explicit.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Group</span></code>(**kwargs)</p></td>
+<td><p>Class used to group systems together; instantiate or inherit.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.odes.odes_3d.HE3d" title="rpfm.odes.odes_3d.HE3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HE3d</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
 </tr>
@@ -186,6 +192,15 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.odes.odes_3d.ODE3dGroup" title="rpfm.odes.odes_3d.ODE3dGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE3dGroup</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_parameter</span></code>(name[, targets, shape, …])</p></td>
+<td><p>Class Decorator used to attach ODE parameter metadata to an OpenMDAO system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_state</span></code>(name, rate_source[, targets, …])</p></td>
+<td><p>Class Decorator used to attach ODE state metadata to an OpenMDAO system.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_time</span></code>([targets, units, …])</p></td>
+<td><p>Class Decorator used to attach ODE time metadata to an OpenMDAO system.</p></td>
 </tr>
 </tbody>
 </table>

@@ -13,14 +13,18 @@ rpfm.odes.odes\_2d
 
    .. autosummary::
    
+      ExplicitComponent
       ODE2dConstThrust
       ODE2dThrust
       ODE2dVarThrust
       ODE2dVertical
-      Polar2AH
+      Polar2AEH
       Polar2COE
       Polar2RApo
       SafeAlt
+      declare_parameter
+      declare_state
+      declare_time
    
    
 

@@ -5,6 +5,14 @@ rpfm.utils.keplerian\_orbit
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      coe2sv_vec
+      per2eq
+      root
+   
    
 
    

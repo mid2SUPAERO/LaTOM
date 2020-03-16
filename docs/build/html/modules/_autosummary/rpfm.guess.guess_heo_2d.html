@@ -171,6 +171,18 @@
   <div class="section" id="module-rpfm.guess.guess_heo_2d">
 <span id="rpfm-guess-guess-heo-2d"></span><h1>rpfm.guess.guess_heo_2d<a class="headerlink" href="#module-rpfm.guess.guess_heo_2d" title="Permalink to this headline">¶</a></h1>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcopy</span></code>(x[, memo, _nil])</p></td>
+<td><p>Deep copy operation on arbitrary Python objects.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Classes</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -178,19 +190,34 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImpulsiveBurn</span></code>(sc, dv)</p></td>
+<td><p>ImpulsiveBurn class describes an impulsive burn.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PowConstRadius</span></code>(gm, r0, v0, vf, m0, thrust, isp)</p></td>
+<td><p><cite>PowConstRadius</cite> class implements a two-dimensional powered phase at constant radius from the central attractive body.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDim2PhasesLLO2HEOGuess" title="rpfm.guess.guess_heo_2d.TwoDim2PhasesLLO2HEOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim2PhasesLLO2HEOGuess</span></code></a>(gm, r, alt, rp, t, sc)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDim3PhasesLLO2HEOGuess" title="rpfm.guess.guess_heo_2d.TwoDim3PhasesLLO2HEOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEOGuess</span></code></a>(gm, r, alt, rp, t, sc)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDimHEO2LLOGuess" title="rpfm.guess.guess_heo_2d.TwoDimHEO2LLOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimHEO2LLOGuess</span></code></a>(gm, r, alt, rp, t, sc)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimGuess</span></code>(gm, r, dep, arr, sc)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDimHEOGuess" title="rpfm.guess.guess_heo_2d.TwoDimHEOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimHEOGuess</span></code></a>(gm, r, dep, arr, sc)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDimHEO2LLOGuess" title="rpfm.guess.guess_heo_2d.TwoDimHEO2LLOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimHEO2LLOGuess</span></code></a>(gm, r, alt, rp, t, sc)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDimLLO2HEOGuess" title="rpfm.guess.guess_heo_2d.TwoDimLLO2HEOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEOGuess</span></code></a>(gm, r, alt, rp, t, sc)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDimHEOGuess" title="rpfm.guess.guess_heo_2d.TwoDimHEOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimHEOGuess</span></code></a>(gm, r, dep, arr, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.guess.guess_heo_2d.TwoDimLLO2HEOGuess" title="rpfm.guess.guess_heo_2d.TwoDimLLO2HEOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEOGuess</span></code></a>(gm, r, alt, rp, t, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLOGuess</span></code>(gm, r, dep, arr, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

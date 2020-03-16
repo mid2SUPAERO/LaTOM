@@ -5,6 +5,14 @@ rpfm.guess.guess\_2d
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      newton
+      odeint
+      solve_ivp
+   
    
 
    
@@ -13,14 +21,14 @@ rpfm.guess.guess\_2d
 
    .. autosummary::
    
-      DeorbitBurn
       HohmannTransfer
-      ImpulsiveBurn
+      KepOrb
       PowConstRadius
       TwoDimAscGuess
       TwoDimDescGuess
       TwoDimGuess
       TwoDimLLOGuess
+      TwoDimOrb
    
    
 

@@ -18,9 +18,8 @@ from dymos import declare_time, declare_state, declare_parameter
 @declare_parameter('alpha', targets=['alpha'], units='rad')
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
-
 class ODE2dThrust(ExplicitComponent):
-    """ ODE2dThrust class defines the equations of motion for a two dim. powered trajectory.
+    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory.
 
     Other Parameters
     ----------------
@@ -46,7 +45,9 @@ class ODE2dThrust(ExplicitComponent):
         Number of nodes where to compute the equations
     GM : float
         Gravitational constant [m/s^2]
+
     """
+
     def initialize(self):
         """Initializes the `ODE2dThrust` class variables. """
 
@@ -55,7 +56,7 @@ class ODE2dThrust(ExplicitComponent):
         self.options.declare('w', types=float)
 
     def setup(self):
-        """ Setup of ODE2dThrust parameters. Declaration of input, output and partials variables."""
+        """Setup of ODE2dThrust parameters. Declaration of input, output and partials variables. """
 
         nn = self.options['num_nodes']
         w = self.options['w']
@@ -187,6 +188,7 @@ class ODE2dConstThrust(ODE2dThrust):
         Gravitational constant [m/s^2]
     T : float
        Value of the constant thrust force [N]
+
     """
 
     def initialize(self):
@@ -229,6 +231,7 @@ class ODE2dVarThrust(ODE2dThrust):
         Number of nodes where to compute the equations
     GM : float
         Gravitational constant [m/s^2]
+
     """
 
     def setup(self):
@@ -266,6 +269,7 @@ class ODE2dVertical(ExplicitComponent):
         Gravitational constant [m/s^2]
     T : float
        Value of the constant thrust force [N]
+
     """
 
     def initialize(self):
@@ -336,18 +340,18 @@ class ODE2dVertical(ExplicitComponent):
 
 
 class SafeAlt(ExplicitComponent):
-    """ SafeAlt class defines the curve representing geographical constraints on the central body surface
+    """SafeAlt class defines the curve representing geographical constraints on the central body surface
 
-        Other Parameters
-        ----------------
-        num_nodes : int
-            Number of nodes where to compute the equations
-        R : float
-            Moon radius [m]
-        alt_safe : float
-            Altitude of the curve representing the geographical constraint [m]
-        slope : float
-            Slope of the curves defining a geographical constraint
+    Other Parameters
+    ----------------
+    num_nodes : int
+        Number of nodes where to compute the equations
+    R : float
+        Moon radius [m]
+    alt_safe : float
+        Altitude of the curve representing the geographical constraint [m]
+    slope : float
+        Slope of the curves defining a geographical constraint
 
     """
 
@@ -417,11 +421,13 @@ class Polar2COE(ExplicitComponent):
 
     def initialize(self):
         """Initializes the `Polar2COE` class variables. """
+
         self.options.declare('num_nodes', types=int)
         self.options.declare('GM', types=float)
 
     def setup(self):
         """Setup of `Polar2COE` parameters. Declaration of input, output and partials variables. """
+
         nn = self.options['num_nodes']
 
         self.add_input('r', val=np.zeros(nn), desc='orbit radius', units='m')
@@ -436,6 +442,7 @@ class Polar2RApo(Polar2COE):
     ----------------
     ra : float
         Value of the apoapsis radius [m]
+
     """
 
     def initialize(self):
@@ -506,10 +513,11 @@ class Polar2AEH(Polar2COE):
             Number of nodes where to compute the equations
     GM : float
         Gravitational constant [m/s^2]
+
     """
 
     def setup(self):
-        """Setup of `Polar2AH` parameters. Declaration of input, output and partials variables. """
+        """Setup of `Polar2AEH` parameters. Declaration of input, output and partials variables. """
 
         Polar2COE.setup(self)
 

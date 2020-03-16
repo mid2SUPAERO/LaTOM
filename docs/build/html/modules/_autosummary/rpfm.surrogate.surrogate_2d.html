@@ -171,6 +171,18 @@
   <div class="section" id="module-rpfm.surrogate.surrogate_2d">
 <span id="rpfm-surrogate-surrogate-2d"></span><h1>rpfm.surrogate.surrogate_2d<a class="headerlink" href="#module-rpfm.surrogate.surrogate_2d" title="Permalink to this headline">¶</a></h1>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcopy</span></code>(x[, memo, _nil])</p></td>
+<td><p>Deep copy operation on arbitrary Python objects.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Classes</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -178,23 +190,95 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurrogateModel</span></code></a>(body, isp_lim, twr_lim, alt, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FullFactorial</span></code>(**kwargs)</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">HohmannTransfer</span></code>(gm, dep, arr)</p></td>
+<td><p><cite>HohmannTransfer</cite> class implements a two-dimensional Hohmann transfer between two coplanar, circular orbits in the Keplerian two-body approximation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IDW</span></code>(**kwargs)</p></td>
+<td><p>Inverse distance weighting interpolant This model uses the inverse distance between the unknown and training points to predeict the unknown point.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImpulsiveBurn</span></code>(sc, dv)</p></td>
+<td><p>ImpulsiveBurn class describes an impulsive burn.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">KPLS</span></code>(**kwargs)</p></td>
+<td><p><ul class="simple">
+<li><p>KPLS</p></li>
+</ul>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">KPLSK</span></code>(**kwargs)</p></td>
+<td><p><ul class="simple">
+<li><p>KPLSK</p></li>
+</ul>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">KRG</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LHS</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LS</span></code>(**kwargs)</p></td>
+<td><p>Least square model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">QP</span></code>(**kwargs)</p></td>
+<td><p>Square polynomial approach</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RBF</span></code>(**kwargs)</p></td>
+<td><p>Radial basis function interpolant with global polynomial trend.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMTB</span></code>(**kwargs)</p></td>
+<td><p>Regularized Minimal-energy Tensor-product B-spline (RMTB) interpolant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMTC</span></code>(**kwargs)</p></td>
+<td><p>Regularized Minimal-energy Tensor-product Cubic hermite spline (RMTC) interpolant.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RespSurf</span></code>(isp, twr, param, title[, nb_lines, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Spacecraft</span></code>(isp, twr[, throttle_min, m0, …])</p></td>
+<td><p>Spacecraft class defines the spacecraft characteristics.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurrogateModel</span></code></a>(body, isp_lim, twr_lim, alt, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstNLP</span></code>(body, sc, alt, theta, …)</p></td>
+<td><p>TwoDimAscConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstSurrogate</span></code></a>(body, isp_lim, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffSurrogate</span></code></a>(body, isp_lim, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffSurrogate</span></code></a>(body, isp_lim, …)</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
+<td><p>TwoDimAscVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarSurrogate</span></code></a>(body, isp_lim, …[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstSurrogate</span></code></a>(body, isp_lim, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstNLP</span></code>(body, sc, alt, vp, theta, …)</p></td>
+<td><p>TwoDimDescConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstSurrogate</span></code></a>(body, isp_lim, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandSurrogate</span></code></a>(body, isp_lim, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code>(body, sc, alt, …[, …])</p></td>
+<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandSurrogate</span></code></a>(body, isp_lim, …)</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarNLP</span></code>(body, sc, alt, …[, …])</p></td>
+<td><p>TwoDimDescVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate" title="rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarSurrogate</span></code></a>(body, isp_lim, …[, …])</p></td>
 <td><p></p></td>

@@ -179,7 +179,25 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim2PhasesLLO2HEONLP</span></code></a>(body, sc, alt, rp, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiPhaseNLP</span></code>(body, sc, method, nb_seg, …)</p></td>
+<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2Apo</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2HEO</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PhaseLinkageComp</span></code>(**kwargs)</p></td>
+<td><p>Provides a ‘linkage’ capability between two phases to provide continuity in states, time, and other variables between two phases.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim2PhasesLLO2HEOGuess</span></code>(gm, r, alt, rp, t, sc)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDim2PhasesLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim2PhasesLLO2HEONLP</span></code></a>(body, sc, alt, rp, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEOGuess</span></code>(gm, r, alt, rp, t, sc)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEONLP</span></code></a>(body, sc, alt, rp, …)</p></td>
@@ -188,8 +206,17 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2ApoNLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEONLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEOGuess</span></code>(gm, r, alt, rp, t, sc)</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP" title="rpfm.nlp.nlp_heo_2d.TwoDimLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEONLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
+<td><p>TwoDimNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimVarNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
+<td><p>TwoDimVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 </tbody>
 </table>
@@ -324,6 +351,11 @@ discretization nodes.</p>
 <dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP">
 <em class="property">class </em><code class="sig-prename descclassname">rpfm.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2ApoNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">params=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="rpfm.nlp.nlp_2d.html#rpfm.nlp.nlp_2d.TwoDimNLP" title="rpfm.nlp.nlp_2d.TwoDimNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.nlp.nlp_2d.TwoDimNLP</span></code></a></p>
+<dl class="method">
+<dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.add_timeseries_output">
+<code class="sig-name descname">add_timeseries_output</code><span class="sig-paren">(</span><em class="sig-param">names=('a'</em>, <em class="sig-param">'eps'</em>, <em class="sig-param">'h')</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.add_timeseries_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.add_timeseries_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options">
 <code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">rp</em>, <em class="sig-param">vp</em>, <em class="sig-param">thetaf</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options" title="Permalink to this definition">¶</a></dt>

@@ -5,6 +5,12 @@ rpfm.guess.guess\_3d
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      per2eq_vec
+   
    
 
    
@@ -13,8 +19,13 @@ rpfm.guess.guess\_3d
 
    .. autosummary::
    
+      KepOrb
       ThreeDimAscGuess
       ThreeDimDescGuess
+      TwoDimAscGuess
+      TwoDimDescGuess
+      TwoDimLLOGuess
+      TwoDimOrb
    
    
 

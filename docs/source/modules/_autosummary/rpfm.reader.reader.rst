@@ -5,6 +5,12 @@ rpfm.reader.reader
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      CaseReader
+   
    
 
    

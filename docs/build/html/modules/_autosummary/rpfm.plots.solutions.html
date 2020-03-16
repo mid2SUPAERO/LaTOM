@@ -172,6 +172,18 @@
   <div class="section" id="module-rpfm.plots.solutions">
 <span id="rpfm-plots-solutions"></span><h1>rpfm.plots.solutions<a class="headerlink" href="#module-rpfm.plots.solutions" title="Permalink to this headline">¶</a></h1>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcopy</span></code>(x[, memo, _nil])</p></td>
+<td><p>Deep copy operation on arbitrary Python objects.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Classes</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -179,13 +191,28 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAltProfile</span></code>(r, states[, states_exp, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimControlsTimeSeries</span></code>(time, controls[, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.plots.solutions.TwoDimDescTwoPhasesSolPlot" title="rpfm.plots.solutions.TwoDimDescTwoPhasesSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesSolPlot</span></code></a>(r, time, states, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2NRHO</span></code>(r_moon, a_nrho, e_nrho, states)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.plots.solutions.TwoDimMultiPhaseSolPlot" title="rpfm.plots.solutions.TwoDimMultiPhaseSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimMultiPhaseSolPlot</span></code></a>(r, time, states, …)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.plots.solutions.TwoDimSolPlot" title="rpfm.plots.solutions.TwoDimSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSolPlot</span></code></a>(r, time, states, controls[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.plots.solutions.TwoDimTwoPhasesSolPlot" title="rpfm.plots.solutions.TwoDimTwoPhasesSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimTwoPhasesSolPlot</span></code></a>(r, time, states, controls)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimStatesTimeSeries</span></code>(r, time, states[, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSurface2LLO</span></code>(r_moon, states[, kind, nb])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -213,12 +240,12 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="rpfm.plots.solutions.TwoDimTwoPhasesSolPlot">
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.solutions.</code><code class="sig-name descname">TwoDimTwoPhasesSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/solutions.html#TwoDimTwoPhasesSolPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.solutions.TwoDimTwoPhasesSolPlot" title="Permalink to this definition">¶</a></dt>
+<dt id="rpfm.plots.solutions.TwoDimDescTwoPhasesSolPlot">
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.solutions.</code><code class="sig-name descname">TwoDimDescTwoPhasesSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/solutions.html#TwoDimDescTwoPhasesSolPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.solutions.TwoDimDescTwoPhasesSolPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
-<dt id="rpfm.plots.solutions.TwoDimTwoPhasesSolPlot.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/solutions.html#TwoDimTwoPhasesSolPlot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.solutions.TwoDimTwoPhasesSolPlot.plot" title="Permalink to this definition">¶</a></dt>
+<dt id="rpfm.plots.solutions.TwoDimDescTwoPhasesSolPlot.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/plots/solutions.html#TwoDimDescTwoPhasesSolPlot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.plots.solutions.TwoDimDescTwoPhasesSolPlot.plot" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

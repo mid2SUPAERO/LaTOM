@@ -178,6 +178,12 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Group</span></code>(**kwargs)</p></td>
+<td><p>Class used to group systems together; instantiate or inherit.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dConstThrust</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo" title="rpfm.odes.odes_2d_group.ODE2dLLO2Apo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2Apo</span></code></a>(**kwargs)</p></td>
 <td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
 </tr>
@@ -186,6 +192,27 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.odes.odes_2d_group.ODE2dVToff" title="rpfm.odes.odes_2d_group.ODE2dVToff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVToff</span></code></a>(**kwargs)</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVarThrust</span></code>(**kwargs)</p></td>
+<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2AEH</span></code>(**kwargs)</p></td>
+<td><p>Polar2AEH class defines the set of equations to derive the a and h from Polar coordinates.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2RApo</span></code>(**kwargs)</p></td>
+<td><p>Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeAlt</span></code>(**kwargs)</p></td>
+<td><p>SafeAlt class defines the curve representing geographical constraints on the central body surface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_parameter</span></code>(name[, targets, shape, …])</p></td>
+<td><p>Class Decorator used to attach ODE parameter metadata to an OpenMDAO system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_state</span></code>(name, rate_source[, targets, …])</p></td>
+<td><p>Class Decorator used to attach ODE state metadata to an OpenMDAO system.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_time</span></code>([targets, units, …])</p></td>
+<td><p>Class Decorator used to attach ODE time metadata to an OpenMDAO system.</p></td>
 </tr>
 </tbody>
 </table>
@@ -196,7 +223,7 @@
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dVToff.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dVToff.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dVToff.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take off.</p>
+<dd><p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take-off.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -222,7 +249,7 @@
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dVToff.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dVToff.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dVToff.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup of <cite>ODE2dVToff</cite> parameters. Declaration of subsystem, input and output</p>
+<dd><p>Setup of <cite>ODE2dVToff</cite> parameters. Declaration of subsystem, input and output.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1061,13 +1088,13 @@ if a specific coloring is passed in.</p></li>
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2Apo.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2Apo.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes the <cite>ODE2dLLO2Apo</cite> class variables</p>
+<dd><p>Initializes the <cite>ODE2dLLO2Apo</cite> class variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2Apo.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2Apo.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2Apo.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup of <cite>ODE2dLLO2Apo</cite> parameters. Declaration of subsystem, input and output</p>
+<dd><p>Setup of <cite>ODE2dLLO2Apo</cite> parameters. Declaration of subsystem, input and output.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1905,13 +1932,13 @@ if a specific coloring is passed in.</p></li>
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2HEO.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2HEO.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2HEO.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes the <cite>ODE2dLLO2HEO</cite> class variables</p>
+<dd><p>Initializes the <cite>ODE2dLLO2HEO</cite> class variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rpfm.odes.odes_2d_group.ODE2dLLO2HEO.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/rpfm/odes/odes_2d_group.html#ODE2dLLO2HEO.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rpfm.odes.odes_2d_group.ODE2dLLO2HEO.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup of <cite>ODE2dLLO2HEO</cite> parameters. Declaration of subsystem, input and output</p>
+<dd><p>Setup of <cite>ODE2dLLO2HEO</cite> parameters. Declaration of subsystem, input and output.</p>
 </dd></dl>
 
 <dl class="method">

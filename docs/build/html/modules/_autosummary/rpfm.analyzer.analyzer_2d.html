@@ -179,20 +179,38 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAnalyzer</span></code></a>(body, sc)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Analyzer</span></code>(body, sc)</p></td>
+<td><p>Analyzer class defines the methods to analyze the results of a simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">HohmannTransfer</span></code>(gm, dep, arr)</p></td>
+<td><p><cite>HohmannTransfer</cite> class implements a two-dimensional Hohmann transfer between two coplanar, circular orbits in the Keplerian two-body approximation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImpulsiveBurn</span></code>(sc, dv)</p></td>
+<td><p>ImpulsiveBurn class describes an impulsive burn.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAnalyzer</span></code></a>(body, sc)</p></td>
 <td><p>TwoDimAnalyzer class defines the methods to analyze the results of a two dimensional simulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscAnalyzer</span></code></a>(body, sc, alt)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscAnalyzer</span></code></a>(body, sc, alt)</p></td>
 <td><p>TwoDimAscAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscConstAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscConstAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstAnalyzer</span></code></a>(body, sc, alt, theta, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscConstAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscConstAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstAnalyzer</span></code></a>(body, sc, alt, theta, …)</p></td>
 <td><p>TwoDimAscConstAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit performed at constant thrust.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstNLP</span></code>(body, sc, alt, theta, …)</p></td>
+<td><p>TwoDimAscConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
 <td><p>TwoDimAscVToffAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit performed at variable thrust with vertical take-off.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscVarAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscVarAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimAscVarAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimAscVarAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
 <td><p>TwoDimAscVarAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit performed at variable thrust.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
+<td><p>TwoDimAscVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescAnalyzer</span></code></a>(body, sc, alt)</p></td>
 <td><p>TwoDimDescAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface.</p></td>
@@ -200,17 +218,38 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescConstAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescConstAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
 <td><p>TwoDimDescConstAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface performed at constant thrust.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstNLP</span></code>(body, sc, alt, vp, theta, …)</p></td>
+<td><p>TwoDimDescConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
 <td><p>TwoDimDescTwoPhasesAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface composed by two subsequent phases.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code>(body, sc, alt, …[, …])</p></td>
+<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesSolPlot</span></code>(r, time, states, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
 <td><p>TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface performed at variable thrust with vertical landing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimDescVarAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimDescVarAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
 <td><p>TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface performed at variable thrust.</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarNLP</span></code>(body, sc, alt, …[, …])</p></td>
+<td><p>TwoDimDescVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer" title="rpfm.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSinglePhaseAnalyzer</span></code></a>(body, sc, alt)</p></td>
 <td><p>TwoDimSinglePhaseAnalyzer class defines the methods to analyze the results of a two dimensional single phase simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSolPlot</span></code>(r, time, states, controls[, …])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -346,6 +385,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>
@@ -501,6 +551,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -648,6 +709,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimAscAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>
@@ -822,6 +894,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -989,6 +1072,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1168,6 +1262,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -1315,6 +1420,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimDescAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimDescAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1491,6 +1607,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -1655,6 +1782,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1828,6 +1966,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2006,6 +2155,17 @@ discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rpfm.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#rpfm.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
 </dd>
 </dl>
 </dd></dl>

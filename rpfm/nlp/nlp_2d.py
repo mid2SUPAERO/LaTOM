@@ -869,7 +869,7 @@ class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
     ph_name : tuple
         Name of the phase within OpenMDAO
     snopt_opts : dict or None, optional
-        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide [1]_ for more details.
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
         Default is None
     rec_file : str or None, optional
         Name of the file in which the computed solution is recorded or None. Default is None

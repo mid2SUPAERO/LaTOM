@@ -5,6 +5,14 @@ rpfm.analyzer.analyzer\_heo\_2d
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      deepcopy
+      save
+      time
+   
    
 
    
@@ -13,11 +21,26 @@ rpfm.analyzer.analyzer\_heo\_2d
 
    .. autosummary::
    
+      ImpulsiveBurn
+      MassEnergyContinuation
       TwoDim2PhasesLLO2HEOAnalyzer
+      TwoDim2PhasesLLO2HEONLP
       TwoDim3PhasesLLO2HEOAnalyzer
+      TwoDim3PhasesLLO2HEONLP
+      TwoDimAnalyzer
+      TwoDimAscAnalyzer
+      TwoDimControlsTimeSeries
       TwoDimLLO2ApoAnalyzer
+      TwoDimLLO2ApoContinuationAnalyzer
+      TwoDimLLO2ApoNLP
       TwoDimLLO2HEOAnalyzer
+      TwoDimLLO2HEONLP
+      TwoDimMultiPhaseSolPlot
       TwoDimMultiPhasesLLO2HEOAnalyzer
+      TwoDimOrb
+      TwoDimSolPlot
+      TwoDimStatesTimeSeries
+      TwoDimTrajectoryContinuation
    
    
 

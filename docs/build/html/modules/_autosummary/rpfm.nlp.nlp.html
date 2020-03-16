@@ -179,14 +179,44 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp.MultiPhaseNLP" title="rpfm.nlp.nlp.MultiPhaseNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiPhaseNLP</span></code></a>(body, sc, method, nb_seg, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DirectSolver</span></code>(**kwargs)</p></td>
+<td><p>LinearSolver that uses linalg.solve or LU factor/solve.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">GaussLobatto</span></code>(**kwargs)</p></td>
+<td><p>High-order Gauss Lobatto Transcription</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Group</span></code>(**kwargs)</p></td>
+<td><p>Class used to group systems together; instantiate or inherit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp.MultiPhaseNLP" title="rpfm.nlp.nlp.MultiPhaseNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiPhaseNLP</span></code></a>(body, sc, method, nb_seg, …)</p></td>
 <td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp.NLP" title="rpfm.nlp.nlp.NLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NLP</span></code></a>(body, sc, method, nb_seg, order, solver)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp.NLP" title="rpfm.nlp.nlp.NLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NLP</span></code></a>(body, sc, method, nb_seg, order, solver)</p></td>
 <td><p>NLP class transcribes a continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rpfm.nlp.nlp.SinglePhaseNLP" title="rpfm.nlp.nlp.SinglePhaseNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SinglePhaseNLP</span></code></a>(body, sc, method, nb_seg, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Phase</span></code>([from_phase])</p></td>
+<td><p>The Phase object in Dymos.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Problem</span></code>([model, driver, comm, root])</p></td>
+<td><p>Top-level container for the systems and drivers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Radau</span></code>(**kwargs)</p></td>
+<td><p>Radau Pseudospectral Method Transcription</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RungeKutta</span></code>(**kwargs)</p></td>
+<td><p>The RungeKutta Transcription class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rpfm.nlp.nlp.SinglePhaseNLP" title="rpfm.nlp.nlp.SinglePhaseNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SinglePhaseNLP</span></code></a>(body, sc, method, nb_seg, …)</p></td>
 <td><p>SinglePhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by a single phase into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteRecorder</span></code>(filepath[, append, …])</p></td>
+<td><p>Recorder that saves cases in a sqlite db.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trajectory</span></code>(**kwargs)</p></td>
+<td><p>A Trajectory object serves as a container for one or more Phases, as well as the linkage conditions between phases.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyOptSparseDriver</span></code>(**kwargs)</p></td>
+<td><p>Driver wrapper for pyoptsparse.</p></td>
 </tr>
 </tbody>
 </table>

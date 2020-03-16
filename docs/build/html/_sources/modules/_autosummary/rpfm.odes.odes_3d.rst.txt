@@ -13,9 +13,14 @@ rpfm.odes.odes\_3d
 
    .. autosummary::
    
+      ExplicitComponent
+      Group
       HE3d
       ODE3d
       ODE3dGroup
+      declare_parameter
+      declare_state
+      declare_time
    
    
 

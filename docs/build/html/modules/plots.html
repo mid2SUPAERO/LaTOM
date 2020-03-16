@@ -337,11 +337,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.solutions.</code><code class="sig-name descname">TwoDimTwoPhasesSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/solutions.html#TwoDimTwoPhasesSolPlot"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.solutions.</code><code class="sig-name descname">TwoDimDescTwoPhasesSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/solutions.html#TwoDimDescTwoPhasesSolPlot"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/solutions.html#TwoDimTwoPhasesSolPlot.plot"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/solutions.html#TwoDimDescTwoPhasesSolPlot.plot"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -378,7 +378,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.continuation.</code><code class="sig-name descname">TwoDimTrajectoryContinuation</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">sol</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/continuation.html#TwoDimTrajectoryContinuation"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.continuation.</code><code class="sig-name descname">TwoDimTrajectoryContinuation</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">sol</em>, <em class="sig-param">nb=2000</em>, <em class="sig-param">labels=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/continuation.html#TwoDimTrajectoryContinuation"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Plots the ascent trajectories from an initial Low Lunar Orbit to an intermediate ballistic arc for different
 thrust/weight ratios.</p>
@@ -416,7 +416,7 @@ thrust/weight ratios.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.response_surfaces.</code><code class="sig-name descname">RespSurf</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em>, <em class="sig-param">m</em>, <em class="sig-param">tof=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/response_surfaces.html#RespSurf"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rpfm.plots.response_surfaces.</code><code class="sig-name descname">RespSurf</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em>, <em class="sig-param">param</em>, <em class="sig-param">title</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/plots/response_surfaces.html#RespSurf"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt>

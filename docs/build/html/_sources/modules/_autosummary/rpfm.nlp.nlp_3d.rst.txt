@@ -13,6 +13,7 @@ rpfm.nlp.nlp\_3d
 
    .. autosummary::
    
+      SinglePhaseNLP
       ThreeDimNLP
    
    

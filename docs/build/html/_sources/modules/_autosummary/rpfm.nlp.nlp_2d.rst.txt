@@ -13,11 +13,19 @@ rpfm.nlp.nlp\_2d
 
    .. autosummary::
    
+      MultiPhaseNLP
+      ODE2dConstThrust
+      ODE2dVToff
+      ODE2dVarThrust
+      ODE2dVertical
+      SinglePhaseNLP
       TwoDimAscConstNLP
+      TwoDimAscGuess
       TwoDimAscVToffNLP
       TwoDimAscVarNLP
       TwoDimConstNLP
       TwoDimDescConstNLP
+      TwoDimDescGuess
       TwoDimDescTwoPhasesNLP
       TwoDimDescVLandNLP
       TwoDimDescVarNLP

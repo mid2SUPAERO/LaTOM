@@ -67,15 +67,6 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
                                         check_partials=check_partials)
 
     def add_timeseries_output(self, names=('a', 'eps', 'h')):
-        """Add the variables in `name` to the timeseries output of the `Phase`.
-
-        Parameters
-        ----------
-        names : tuple
-            Names of the variables to be added to the timeseries outputs of the `Phase`. Default is ``('a', 'eps', 'h')`
-            which adds the semi-major axis, specific energy and specific angular momentum.
-
-        """
 
         for n in names:
             self.phase.add_timeseries_output(n, shape=(1,))

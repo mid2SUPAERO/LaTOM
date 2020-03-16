@@ -5,6 +5,13 @@ rpfm.analyzer.analyzer
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      save
+      time
+   
    
 
    

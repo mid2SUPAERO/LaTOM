@@ -5,6 +5,13 @@ rpfm.surrogate.meta\_models
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      load
+      save
+   
    
 
    
@@ -13,14 +20,28 @@ rpfm.surrogate.meta\_models
 
    .. autosummary::
    
+      HohmannTransfer
+      ImpulsiveBurn
       MetaModel
+      MetaModelStructuredComp
+      Problem
+      RespSurf
+      Spacecraft
       TwoDimAscConstMetaModel
+      TwoDimAscConstNLP
       TwoDimAscVToffMetaModel
+      TwoDimAscVToffNLP
       TwoDimAscVarMetaModel
+      TwoDimAscVarNLP
       TwoDimDescConstMetaModel
+      TwoDimDescConstNLP
+      TwoDimDescTwoPhasesAnalyzer
       TwoDimDescTwoPhasesMetaModel
       TwoDimDescVLandMetaModel
+      TwoDimDescVLandNLP
       TwoDimDescVarMetaModel
+      TwoDimDescVarNLP
+      TwoDimOrb
    
    
 

@@ -5,6 +5,12 @@ rpfm.plots.solutions
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      deepcopy
+   
    
 
    
@@ -13,9 +19,14 @@ rpfm.plots.solutions
 
    .. autosummary::
    
+      TwoDimAltProfile
+      TwoDimControlsTimeSeries
+      TwoDimDescTwoPhasesSolPlot
+      TwoDimLLO2NRHO
       TwoDimMultiPhaseSolPlot
       TwoDimSolPlot
-      TwoDimTwoPhasesSolPlot
+      TwoDimStatesTimeSeries
+      TwoDimSurface2LLO
    
    
 
