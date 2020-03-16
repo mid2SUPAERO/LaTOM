@@ -73,6 +73,43 @@ class HohmannTransfer:
 
         return sol
 
+    def compute_trajectory2(self, t, tp, theta0=0.0, m=1.0):
+
+        nb_nodes = len(t)
+
+        if self.depOrb.a < self.arrOrb.a:
+            ea0 = np.reshape(np.linspace(0.0, np.pi, nb_nodes), (nb_nodes, 1))
+            t = t - tp
+        else:
+            ea0 = np.reshape(np.linspace(np.pi, 2*np.pi, nb_nodes), (nb_nodes, 1))
+            t = t - tp + self.tof
+
+        print("\nSolving Kepler's equation using Scipy root function")
+
+        sol = root(KepOrb.kepler_eqn, ea0, args=(self.transfer.e, self.transfer.n, t, 0.0), tol=1e-12)
+
+        print("output:", sol.message)
+
+        ea = np.reshape(sol.x, (nb_nodes, 1))
+        theta = 2*np.arctan(((1 + self.transfer.e)/(1 - self.transfer.e))**0.5*np.tan(ea/2))
+        theta = np.where(theta < 0.0, theta + 2*np.pi, theta)
+
+        self.r = self.transfer.a * (1 - self.transfer.e ** 2) / (1 + self.transfer.e * np.cos(theta))
+        self.u = self.GM / self.transfer.h * self.transfer.e * np.sin(theta)
+        self.v = self.GM / self.transfer.h * (1 + self.transfer.e * np.cos(theta))
+
+        if self.depOrb.a < self.arrOrb.a:  # ascent
+            alpha = np.zeros((nb_nodes, 1))
+        else:  # descent
+            theta = theta - np.pi
+            alpha = np.pi*np.ones((nb_nodes, 1))
+
+        self.theta = theta + theta0
+        self.states = np.hstack((self.r, self.theta, self.u, self.v, m*np.ones((nb_nodes, 1))))
+        self.controls = np.hstack((np.zeros((nb_nodes, 1)), alpha))
+
+        return sol
+
 
 class PowConstRadius:
 
@@ -328,6 +365,8 @@ if __name__ == '__main__':
     case = 'ascent'
 
     moon = Moon()
+
+    """
     sma = 100e3
     sat = Spacecraft(450., 2., g=moon.g)
     nb = (100, 100, 100)
@@ -349,3 +388,16 @@ if __name__ == '__main__':
     p.plot()
 
     print(tr)
+    """
+
+    dep = TwoDimOrb(moon.GM, a=moon.R, e=0.0)
+    arr = TwoDimOrb(moon.GM, a=(moon.R + 100e3), e=0.0)
+
+    ht = HohmannTransfer(moon.GM, dep, arr)
+    ht2 = HohmannTransfer(moon.GM, dep, arr)
+    t = np.linspace(0, ht.tof, 200)
+
+    ht.compute_trajectory(t, 0.0)
+    ht2.compute_trajectory2(t, 0.0)
+
+    print(ht.states == ht2.states)

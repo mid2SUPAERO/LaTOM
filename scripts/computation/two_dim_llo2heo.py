@@ -19,13 +19,13 @@ heo_rp = 3150e3  # target HEO periselene radius [m]
 heo_period = 6.5655*86400  # target HEO period [s]
 
 # spacecraft
-isp = 400.  # specific impulse [s]
-twr = 0.17  # initial thrust/weight ratio [-]
+isp = 350.  # specific impulse [s]
+twr = 0.2  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 200
+segments = 400
 order = 3
 solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,

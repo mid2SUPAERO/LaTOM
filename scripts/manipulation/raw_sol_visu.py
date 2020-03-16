@@ -6,14 +6,14 @@ from rpfm.data.metamodels.data_mm import dirname_metamodels
 from rpfm.plots.response_surfaces import RespSurf
 
 plot = 'mp'  # 'mp' to plot the propellant fraction, 'en' to plot the spacecraft energy
-fid = None  # filename for adjusted solution
+fid = None  # 'llo2apo_lin_005-05_250-330.pkl'  # filename for adjusted solution
 
 en_threshold = -6e4  # spacecraft energy threshold
 isp_lim = (0, None)  # new specific impulse limits
 twr_lim = (0, None)  # new thrust/weight ratio limits
 
 # load raw solution
-fid_raw = '/'.join([dirname_metamodels, 'tests/llo2apo_mm_lin450-500.pkl'])
+fid_raw = '/'.join([dirname_metamodels, 'tests/llo2apo_mm_lin360-370.pkl'])
 d = load(fid_raw)
 
 # extract data from dictionary
@@ -31,11 +31,11 @@ twr_fail = twr_mat[energy_raw > en_threshold]
 isp_fail = isp_mat[energy_raw > -en_threshold]
 
 # extract adjusted solution
-m_prop = m_prop_raw[isp_lim[0]:isp_lim[1], twr_lim[0]:twr_lim[1]]
-energy = energy_raw[isp_lim[0]:isp_lim[1], twr_lim[0]:twr_lim[1]]
-failures = d['failures'][isp_lim[0]:isp_lim[1], twr_lim[0]:twr_lim[1]]
-isp = isp_raw[isp_lim[0]:isp_lim[1]].flatten()
-twr = twr_raw[twr_lim[0]:twr_lim[1]].flatten()
+m_prop = m_prop_raw[twr_lim[0]:twr_lim[1], isp_lim[0]:isp_lim[1]]
+energy = energy_raw[twr_lim[0]:twr_lim[1], isp_lim[0]:isp_lim[1]]
+failures = d['failures'][twr_lim[0]:twr_lim[1], isp_lim[0]:isp_lim[1]]
+isp = isp_raw[:, isp_lim[0]:isp_lim[1]].flatten()
+twr = twr_raw[twr_lim[0]:twr_lim[1], :].flatten()
 delta_isp = np.max(isp[1:] - isp[:-1])
 delta_twr = np.max(twr[1:] - twr[:-1])
 

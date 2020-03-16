@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnal
 
 
 # trajectory
-kind = 's'
+kind = 'v'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
 alt_p = 15e3  # periselene altitude [m]
@@ -22,8 +22,8 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = -10.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 500.  # specific impulse [s]
-twr = 1.1  # initial thrust/weight ratio [-]
+isp = 450.  # specific impulse [s]
+twr = 2.1  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
@@ -31,15 +31,15 @@ sc = Spacecraft(isp, twr, g=moon.g)
 method = 'gauss-lobatto'
 segments = 200
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
               'Minor feasibility tolerance': 1e-8}
 
 # additional settings
-u_bound = None  # upper bound on radial velocity
+u_bound = 'upper'  # upper bound on radial velocity
 check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
-exp_sim = False  # perform explicit simulation
+exp_sim = True  # perform explicit simulation
 rec = False  # record the solution
 
 # record databases
