@@ -1,6 +1,6 @@
 /build
 dist
-rpfossamiceli.egg-info
+*.egg-info
 *.pyc
 *.out
 *coloring_files*
