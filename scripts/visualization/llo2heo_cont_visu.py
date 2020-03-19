@@ -1,8 +1,8 @@
 import numpy as np
 
-from rpfm.utils.pickle_utils import load
-from rpfm.utils.primary import Moon
-from rpfm.data.continuation.data_continuation import dirname_continuation
+from latom.utils.pickle_utils import load
+from latom.utils.primary import Moon
+from latom.data.continuation.data_continuation import dirname_continuation
 
 # load saved data
 filename = 'lin350.pkl'

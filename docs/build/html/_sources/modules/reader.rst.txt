@@ -6,26 +6,26 @@ Readers Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: rpfm.reader.reader_2d rpfm.reader.reader_heo_2d rpfm.reader.reader_3d
+.. inheritance-diagram:: latom.reader.reader_2d latom.reader.reader_heo_2d latom.reader.reader_3d
   :parts: 1
 
 Modules List
 ------------
 
-.. autopackagesummary:: rpfm.reader
+.. autopackagesummary:: latom.reader
   :toctree: _autosummary
 
 Documentation
 -------------
 
-.. automodule:: rpfm.reader.reader
+.. automodule:: latom.reader.reader
   :noindex:
 
-.. automodule:: rpfm.reader.reader_2d
+.. automodule:: latom.reader.reader_2d
   :noindex:
 
-.. automodule:: rpfm.reader.reader_heo_2d
+.. automodule:: latom.reader.reader_heo_2d
   :noindex:
 
-.. automodule:: rpfm.reader.reader_3d
+.. automodule:: latom.reader.reader_3d
   :noindex:

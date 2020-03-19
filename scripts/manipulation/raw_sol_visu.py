@@ -1,9 +1,9 @@
 import numpy as np
 
-from rpfm.utils.pickle_utils import load, save
-from rpfm.data.continuation.data_continuation import dirname_continuation
-from rpfm.data.metamodels.data_mm import dirname_metamodels
-from rpfm.plots.response_surfaces import RespSurf
+from latom.utils.pickle_utils import load, save
+from latom.data.continuation.data_continuation import dirname_continuation
+from latom.data.metamodels.data_mm import dirname_metamodels
+from latom.plots.response_surfaces import RespSurf
 
 plot = 'mp'  # 'mp' to plot the propellant fraction, 'en' to plot the spacecraft energy
 fid = None  # 'llo2apo_lin_005-05_250-330.pkl'  # filename for adjusted solution

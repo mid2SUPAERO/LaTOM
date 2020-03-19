@@ -5,10 +5,10 @@
 import setuptools
 setuptools.setup(
       
-      name = 'rpfossamiceli',
-      version = '0.1',
-      description = '',
-      author = 'Alberto FOSSA, Giuliana Elena MICELI',
+      name='latom',
+      version='0.1',
+      description='',
+      author='Alberto FOSSA\', Giuliana Elena MICELI',
       
       packages = setuptools.find_packages()
       

@@ -3,8 +3,8 @@
 
 """
 
-from rpfm.reader.reader_heo_2d import TwoDim3PhasesLLO2HEOReader
-from rpfm.utils.primary import Moon
+from latom.reader.reader_heo_2d import TwoDim3PhasesLLO2HEOReader
+from latom.utils.primary import Moon
 
 
 moon = Moon()

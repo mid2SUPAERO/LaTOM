@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>latom.utils.keplerian_orbit &mdash; LaTOM 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> LaTOM
+          
+
+          
+            
+            <img src="../../../_static/LaTOM_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/installation_index.html">Installation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">LaTOM</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>latom.utils.keplerian_orbit</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for latom.utils.keplerian_orbit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@authors: Alberto FOSSA&#39; Giuliana Elena MICELI</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root</span>
+<span class="kn">from</span> <span class="nn">latom.utils.coc</span> <span class="kn">import</span> <span class="n">per2eq</span><span class="p">,</span> <span class="n">coe2sv_vec</span>
+
+
+<div class="viewcode-block" id="TwoDimOrb"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb">[docs]</a><span class="k">class</span> <span class="nc">TwoDimOrb</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
+
+        <span class="k">if</span> <span class="s1">&#39;T&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s1">&#39;ra&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="s1">&#39;rp&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rp&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;T or a must be provided with e, ra or rp&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;ra&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;rp&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rp&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;ra&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;rp&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rp&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;invalid kwargs combination&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">gm</span><span class="o">**</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">**</span><span class="mf">1.5</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">va</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vp</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">va</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)))</span><span class="o">**</span><span class="mf">0.5</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">gm</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)))</span><span class="o">**</span><span class="mf">0.5</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="o">-</span> <span class="n">gm</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="c1"># specific energy in 2BP [m^2/s^2]</span>
+
+<div class="viewcode-block" id="TwoDimOrb.coe2polar"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.coe2polar">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">coe2polar</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Exactly two kwargs between a,e,h must be provided&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">*</span><span class="n">e</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;h&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">h</span><span class="o">/</span><span class="n">gm</span><span class="o">/</span><span class="n">a</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;h&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Two kwargs between a,e,h must be provided&#39;</span><span class="p">)</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">h</span><span class="o">/</span><span class="n">gm</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ta</span><span class="p">))</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">gm</span><span class="o">/</span><span class="n">h</span><span class="o">*</span><span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ta</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">gm</span><span class="o">/</span><span class="n">h</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ta</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span></div>
+
+<div class="viewcode-block" id="TwoDimOrb.polar2coe"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.polar2coe">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">polar2coe</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="n">gm</span><span class="o">*</span><span class="n">r</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">gm</span> <span class="o">-</span> <span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">v</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="p">(((</span><span class="n">r</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">v</span> <span class="o">-</span> <span class="n">gm</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">u</span><span class="o">*</span><span class="n">v</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span><span class="o">/</span><span class="n">gm</span>
+        <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">u</span><span class="o">*</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">v</span> <span class="o">-</span> <span class="n">gm</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">ta</span></div>
+
+<div class="viewcode-block" id="TwoDimOrb.polar2energy"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.polar2energy">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">polar2energy</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">gm</span><span class="o">/</span><span class="n">r</span></div>
+
+<div class="viewcode-block" id="TwoDimOrb.propagate"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.propagate">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">tai</span><span class="p">,</span> <span class="n">taf</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">tp</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+
+        <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">tai</span><span class="p">,</span> <span class="n">taf</span><span class="p">,</span> <span class="n">nb</span><span class="p">),</span> <span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># true anomaly [rad]</span>
+        <span class="n">ea</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">ta</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># eccentric anomaly [rad]</span>
+        <span class="n">me</span> <span class="o">=</span> <span class="n">ea</span> <span class="o">-</span> <span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>  <span class="c1"># mean anomaly [rad]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">me</span><span class="o">*</span><span class="n">a</span><span class="o">**</span><span class="mf">1.5</span><span class="o">/</span><span class="n">gm</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">tp</span>  <span class="c1"># time [s]</span>
+
+        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="o">.</span><span class="n">coe2polar</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>  <span class="c1"># states [m, m/s, m/s]</span>
+
+        <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">states</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Semimajor axis:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="s1">&#39;km&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Eccentricity:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Periapsis radius:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="s1">&#39;km&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Apoapsis radius:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="s1">&#39;km&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Orbital period:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Periapsis velocity:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vp</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="s1">&#39;km/s&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Apoapsis velocity:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">va</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="s1">&#39;km/s&#39;</span><span class="p">)]</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="KepOrb"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb">[docs]</a><span class="k">class</span> <span class="nc">KepOrb</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;KepOrb defines a Keplerian Orbit.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Semi-major axis [m]</span>
+<span class="sd">    e : float</span>
+<span class="sd">        Eccentricity [-]</span>
+<span class="sd">    i : float</span>
+<span class="sd">        Inclination [rad]</span>
+<span class="sd">    raan : float</span>
+<span class="sd">        Right Ascension of the Ascending Node [rad]</span>
+<span class="sd">    w : float</span>
+<span class="sd">        Argument of Periapsis [rad]</span>
+<span class="sd">    ta : float</span>
+<span class="sd">        True anomaly [rad]</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eps : float</span>
+<span class="sd">        Smallest number such that ``1.0 + eps != 1.0``</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Semi-major axis [m]</span>
+<span class="sd">    e : float</span>
+<span class="sd">        Eccentricity [-]</span>
+<span class="sd">    i : float</span>
+<span class="sd">        Inclination [rad]</span>
+<span class="sd">    W : float</span>
+<span class="sd">        Right Ascension of the Ascending Node [rad]</span>
+<span class="sd">    w : float</span>
+<span class="sd">        Argument of Periapsis [rad]</span>
+<span class="sd">    ta : float</span>
+<span class="sd">        True anomaly [rad]</span>
+<span class="sd">    GM : float, optional</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    n : float</span>
+<span class="sd">        Mean motion [rad/s]</span>
+<span class="sd">    R : ndarray</span>
+<span class="sd">        Position vector [m]</span>
+<span class="sd">    V : ndarray</span>
+<span class="sd">        Velocity vector [m/s]</span>
+<span class="sd">    H : ndarray</span>
+<span class="sd">        Specific angular momentum vector [m^2/s]</span>
+<span class="sd">    E : ndarray</span>
+<span class="sd">        Eccentricity vector [-]</span>
+<span class="sd">    h : float</span>
+<span class="sd">        Specific angular momentum magnitude [m^2/s]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Position vector magnitude [m]</span>
+<span class="sd">    vr : float</span>
+<span class="sd">        Radial velocity [m/s]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">raan</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">gm</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes KepOrb class. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">raan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">ta</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
+
+        <span class="c1"># initialization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vr</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_state_vector</span><span class="p">()</span>
+
+<div class="viewcode-block" id="KepOrb.set_state_vector"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.set_state_vector">[docs]</a>    <span class="k">def</span> <span class="nf">set_state_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the spacecraft state vector and compute the corresponding COE, H, E.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        r : ndarray</span>
+<span class="sd">            Position vector [m]</span>
+<span class="sd">        v : ndarray</span>
+<span class="sd">            Velocity vector [m/s]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_classical_orbital_elements</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KepOrb.set_classical_orbital_elements"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.set_classical_orbital_elements">[docs]</a>    <span class="k">def</span> <span class="nf">set_classical_orbital_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">raan</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">ta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the spacecraft COE and compute the corresponding state vector, H, E.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        a : float</span>
+<span class="sd">            Semi-major axis [km]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+<span class="sd">        i : float</span>
+<span class="sd">            Inclination [rad]</span>
+<span class="sd">        raan : float</span>
+<span class="sd">            Right Ascension of the Ascending Node [rad]</span>
+<span class="sd">        w : float</span>
+<span class="sd">            Argument of Periapsis [rad]</span>
+<span class="sd">        ta : float</span>
+<span class="sd">            True anomaly [rad]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">raan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">ta</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_state_vector</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KepOrb.set_true_anomaly"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.set_true_anomaly">[docs]</a>    <span class="k">def</span> <span class="nf">set_true_anomaly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the spacecraft true anomaly and update the corresponding state vector.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ta : float</span>
+<span class="sd">            True anomaly [rad]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">ta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_state_vector</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_mean_motion"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_mean_motion">[docs]</a>    <span class="k">def</span> <span class="nf">compute_mean_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the spacecraft mean motion. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">**</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_angular_momentum"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_angular_momentum">[docs]</a>    <span class="k">def</span> <span class="nf">compute_angular_momentum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the specific angular momentum vector. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_eccentricity"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_eccentricity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_eccentricity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the spacecraft eccentricity vector. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_classical_orbital_elements"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_classical_orbital_elements">[docs]</a>    <span class="k">def</span> <span class="nf">compute_classical_orbital_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the spacecraft classical orbital elements, specific angular momentum vector and eccentricity vector</span>
+<span class="sd">        from its state vector. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># orbit radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>  <span class="c1"># radial velocity</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_angular_momentum</span><span class="p">()</span>  <span class="c1"># angular momentum vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># angular momentum magnitude</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>  <span class="c1"># inclination</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># unit vector along inertial Z axis</span>
+        <span class="n">node_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">)</span>  <span class="c1"># node line vector</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">node_line</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># node line vector magnitude</span>
+
+        <span class="c1"># right ascension of the ascending node</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>  <span class="c1"># inclined orbit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">node_line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node_line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># equatorial orbit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_eccentricity</span><span class="p">()</span>  <span class="c1"># eccentricity vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># eccentricity</span>
+
+        <span class="c1"># argument of periapsis</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>  <span class="c1"># elliptical orbit</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>  <span class="c1"># inclined orbit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">node_line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># equatorial orbit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># circular orbit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># true anomaly</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>  <span class="c1"># elliptical orbit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vr</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># circular orbit</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>  <span class="c1"># inclined orbit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">node_line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># equatorial orbit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># semi-major axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_mean_motion</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_state_vector"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_state_vector">[docs]</a>    <span class="k">def</span> <span class="nf">compute_state_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the spacecraft state vector, specific angular momentum vector and eccentricity vector</span>
+<span class="sd">        from its COE. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>  <span class="c1"># angular momentum magnitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="p">))</span>  <span class="c1"># distance from central body</span>
+
+        <span class="c1"># position and velocity vectors in perifocal reference frame</span>
+        <span class="n">r_per</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">])</span>
+        <span class="n">v_per</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">])</span>
+
+        <span class="n">q_per2eq</span> <span class="o">=</span> <span class="n">per2eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>  <span class="c1"># rotation matrix from perifocal to equatorial reference frame</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">q_per2eq</span> <span class="o">@</span> <span class="n">r_per</span>  <span class="c1"># position vector in equatorial reference frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">q_per2eq</span> <span class="o">@</span> <span class="n">v_per</span>  <span class="c1"># velocity vector in equatorial reference frame</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>  <span class="c1"># radial velocity</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_angular_momentum</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_eccentricity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_mean_motion</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_eccentric_anomaly"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_eccentric_anomaly">[docs]</a>    <span class="k">def</span> <span class="nf">compute_eccentric_anomaly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the eccentric anomaly from a given true anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ta : float</span>
+<span class="sd">            True anomaly [rad]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ea</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(((</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">ta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">ea</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_true_anomaly"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_true_anomaly">[docs]</a>    <span class="k">def</span> <span class="nf">compute_true_anomaly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ea</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the true anomaly from a given eccentric anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ta : float</span>
+<span class="sd">            True anomaly [rad]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(((</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">ea</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">ta</span></div>
+
+<div class="viewcode-block" id="KepOrb.compute_periapsis_passage"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.compute_periapsis_passage">[docs]</a>    <span class="k">def</span> <span class="nf">compute_periapsis_passage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the time at periapsis passage given the current time and true anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Time [s]</span>
+<span class="sd">        ta : float</span>
+<span class="sd">            True anomaly [rad]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tp : float</span>
+<span class="sd">            Time at periapsis passage [s]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ea</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_eccentric_anomaly</span><span class="p">(</span><span class="n">ta</span><span class="p">)</span>  <span class="c1"># eccentric anomaly</span>
+        <span class="n">me</span> <span class="o">=</span> <span class="n">ea</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>  <span class="c1"># mean anomaly</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="n">me</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>  <span class="c1"># time at periapsis passage</span>
+
+        <span class="k">return</span> <span class="n">tp</span></div>
+
+<div class="viewcode-block" id="KepOrb.propagate"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">t_vec</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Propagate the orbit forward or backward in time solving the Kepler&#39;s time of flight equation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ta : float</span>
+<span class="sd">            Initial true anomaly [rad]</span>
+<span class="sd">        t_vec : ndarray</span>
+<span class="sd">            Time vector [s]</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            ``fwd`` for forward propagation or ``back`` for backward propagation</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        r_vec : ndarray</span>
+<span class="sd">            Position vector time series [m]</span>
+<span class="sd">        v_vec : ndarray</span>
+<span class="sd">            Velocity vector time series [m/s]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_vec</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fwd&#39;</span><span class="p">:</span>
+            <span class="n">tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_periapsis_passage</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">t_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;back&#39;</span><span class="p">:</span>
+            <span class="n">tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_periapsis_passage</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">t_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mode must be either &#39;fwd&#39; or &#39;back&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">ea0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nb</span><span class="p">)</span>  <span class="c1"># eccentric anomaly initial guess</span>
+
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kepler_eqn</span><span class="p">,</span> <span class="n">ea0</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">t_vec</span><span class="p">,</span> <span class="n">tp</span><span class="p">),</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-20</span><span class="p">)</span>
+
+        <span class="n">ea_vec</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">x</span>  <span class="c1"># eccentric anomaly time series</span>
+        <span class="n">ta_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_true_anomaly</span><span class="p">(</span><span class="n">ea_vec</span><span class="p">)</span>  <span class="c1"># true anomaly time series</span>
+
+        <span class="n">r_vec</span><span class="p">,</span> <span class="n">v_vec</span> <span class="o">=</span> <span class="n">coe2sv_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">ta_vec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">)</span>  <span class="c1"># state vector time series</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;50s}{:&lt;30s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Solving Kepler&#39;s time of flight equation&quot;</span><span class="p">,</span> <span class="n">sol</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">r_vec</span><span class="p">,</span> <span class="n">v_vec</span></div>
+
+<div class="viewcode-block" id="KepOrb.kepler_eqn"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.kepler_eqn">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kepler_eqn</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Kepler&#39;s Time of Flight equation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+<span class="sd">        n : float</span>
+<span class="sd">            Mean motion [rad/s]</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Time [s]</span>
+<span class="sd">        tp : float</span>
+<span class="sd">            Time at periapsis passage [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        f : float</span>
+<span class="sd">            Current value of Kepler&#39;s equation written as E - e*sin(E) - Me = 0</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">ea</span> <span class="o">-</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">tp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="KepOrb.kepler_eqn_prime"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.kepler_eqn_prime">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kepler_eqn_prime</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;First derivative of Kepler&#39;s time of flight equation wrt eccentric anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fprime : float</span>
+<span class="sd">            First derivative of Kepler&#39;s equation wrt eccentric anomaly</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fprime</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fprime</span></div>
+
+<div class="viewcode-block" id="KepOrb.kepler_eqn_second"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.KepOrb.kepler_eqn_second">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kepler_eqn_second</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Second derivative of Kepler&#39;s time of flight equation wrt eccentric anomaly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ea : float</span>
+<span class="sd">            Eccentric anomaly [rad]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fsecond : float</span>
+<span class="sd">            Second derivative of Kepler&#39;s equation wrt eccentric anomaly</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fsecond</span> <span class="o">=</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fsecond</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the orbit Classical Orbital Elements. &quot;&quot;&quot;</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;km&#39;</span><span class="p">),</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;deg&#39;</span><span class="p">),</span>
+             <span class="s1">&#39;W&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;deg&#39;</span><span class="p">),</span>
+             <span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;deg&#39;</span><span class="p">),</span> <span class="s1">&#39;ta&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;deg&#39;</span><span class="p">)}</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;6s}{:&gt;20.6f}</span><span class="s1"> </span><span class="si">{:&lt;4s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
+    <span class="kn">from</span> <span class="nn">latom.utils.cr3bp</span> <span class="kn">import</span> <span class="n">Cr3bpEM</span>
+
+    <span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
+    <span class="n">cr3bp</span> <span class="o">=</span> <span class="n">Cr3bpEM</span><span class="p">()</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="mf">3.049</span>
+
+    <span class="n">gm_adim</span> <span class="o">=</span> <span class="n">moon</span><span class="o">.</span><span class="n">GM</span><span class="o">*</span><span class="n">cr3bp</span><span class="o">.</span><span class="n">T</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">cr3bp</span><span class="o">.</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span>
+    <span class="n">a_adim</span> <span class="o">=</span> <span class="n">gm_adim</span><span class="o">/</span><span class="p">(</span><span class="n">J</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">cr3bp</span><span class="o">.</span><span class="n">mu</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">cr3bp</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>
+    <span class="n">a_km</span> <span class="o">=</span> <span class="n">a_adim</span><span class="o">*</span><span class="n">cr3bp</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mi">1000</span>
+
+    <span class="n">o</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">moon</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="mf">3150e3</span><span class="p">,</span> <span class="n">ra</span><span class="o">=</span><span class="mf">65227.39e3</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossa&#39;, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

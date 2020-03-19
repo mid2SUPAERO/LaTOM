@@ -5,9 +5,9 @@
 
 import numpy as np
 
-from rpfm.utils.primary import Moon
-from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnalyzer, TwoDimDescVLandAnalyzer
+from latom.utils.primary import Moon
+from latom.utils.spacecraft import Spacecraft
+from latom.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnalyzer, TwoDimDescVLandAnalyzer
 
 
 # trajectory
@@ -22,8 +22,8 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = -5.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 450.  # specific impulse [s]
-twr = 2.1  # initial thrust/weight ratio [-]
+isp = 400.  # specific impulse [s]
+twr = 0.9  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 

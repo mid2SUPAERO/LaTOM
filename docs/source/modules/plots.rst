@@ -6,23 +6,23 @@ Plots Subpackage
 Modules List
 ------------
 
-.. autopackagesummary:: rpfm.plots
+.. autopackagesummary:: latom.plots
   :toctree: _autosummary
 
 Documentation
 -------------
 
-.. automodule:: rpfm.plots.timeseries
+.. automodule:: latom.plots.timeseries
   :noindex:
 
-.. automodule:: rpfm.plots.trajectories
+.. automodule:: latom.plots.trajectories
   :noindex:
 
-.. automodule:: rpfm.plots.solutions
+.. automodule:: latom.plots.solutions
   :noindex:
 
-.. automodule:: rpfm.plots.continuation
+.. automodule:: latom.plots.continuation
   :noindex:
 
-.. automodule:: rpfm.plots.response_surfaces
+.. automodule:: latom.plots.response_surfaces
   :noindex:

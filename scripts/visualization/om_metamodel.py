@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from rpfm.surrogate.meta_models import MetaModel
+from latom.surrogate.meta_models import MetaModel
 
 # MetaModel settings
 distributed = False  # variables distributed across multiple processes

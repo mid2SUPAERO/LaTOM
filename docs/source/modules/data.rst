@@ -6,11 +6,11 @@ Data Subpackage
 Modules List
 ------------
 
-.. autopackagesummary:: rpfm.data
+.. autopackagesummary:: latom.data
   :toctree: _autosummary
 
 Documentation
 -------------
 
-.. automodule:: rpfm.data.data
+.. automodule:: latom.data.data
   :noindex:

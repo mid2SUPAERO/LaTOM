@@ -3,8 +3,8 @@
 
 """
 
-from rpfm.utils.primary import Moon
-from rpfm.reader.reader_2d import TwoDimReader
+from latom.utils.primary import Moon
+from latom.reader.reader_2d import TwoDimReader
 
 moon = Moon()
 

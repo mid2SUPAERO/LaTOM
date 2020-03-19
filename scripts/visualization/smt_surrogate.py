@@ -3,8 +3,8 @@
 
 """
 
-from rpfm.utils.pickle_utils import load
-from rpfm.data.smt.data_smt import dirname_smt
+from latom.utils.pickle_utils import load
+from latom.data.smt.data_smt import dirname_smt
 
 # choose the kind of simulation between the followings:
 # asc_const: ascent trajectory with constant thrust

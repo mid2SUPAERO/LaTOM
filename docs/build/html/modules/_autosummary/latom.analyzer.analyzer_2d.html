@@ -1,0 +1,2229 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>latom.analyzer.analyzer_2d &mdash; LaTOM 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="latom.analyzer.analyzer_3d" href="latom.analyzer.analyzer_3d.html" />
+    <link rel="prev" title="latom.analyzer.analyzer" href="latom.analyzer.analyzer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> LaTOM
+          
+
+          
+            
+            <img src="../../_static/LaTOM_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../analyzer.html">Analyzers Subpackage</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../analyzer.html#inheritance-diagram">Inheritance Diagram</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../analyzer.html#modules-list">Modules List</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="latom.analyzer.analyzer.html">latom.analyzer.analyzer</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">latom.analyzer.analyzer_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="latom.analyzer.analyzer_3d.html">latom.analyzer.analyzer_3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="latom.analyzer.analyzer_heo_2d.html">latom.analyzer.analyzer_heo_2d</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../analyzer.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LaTOM</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../analyzer.html">Analyzers Subpackage</a> &raquo;</li>
+        
+      <li>latom.analyzer.analyzer_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-latom.analyzer.analyzer_2d">
+<span id="latom-analyzer-analyzer-2d"></span><h1>latom.analyzer.analyzer_2d<a class="headerlink" href="#module-latom.analyzer.analyzer_2d" title="Permalink to this headline">¶</a></h1>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Analyzer</span></code>(body, sc)</p></td>
+<td><p>Analyzer class defines the methods to analyze the results of a simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">HohmannTransfer</span></code>(gm, dep, arr)</p></td>
+<td><p><cite>HohmannTransfer</cite> class implements a two-dimensional Hohmann transfer between two coplanar, circular orbits in the Keplerian two-body approximation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImpulsiveBurn</span></code>(sc, dv)</p></td>
+<td><p>ImpulsiveBurn class describes an impulsive burn.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAnalyzer</span></code></a>(body, sc)</p></td>
+<td><p>TwoDimAnalyzer class defines the methods to analyze the results of a two dimensional simulation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscAnalyzer</span></code></a>(body, sc, alt)</p></td>
+<td><p>TwoDimAscAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstAnalyzer</span></code></a>(body, sc, alt, theta, …)</p></td>
+<td><p>TwoDimAscConstAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit performed at constant thrust.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstNLP</span></code>(body, sc, alt, theta, …)</p></td>
+<td><p>TwoDimAscConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
+<td><p>TwoDimAscVToffAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit performed at variable thrust with vertical take-off.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
+<td><p>TwoDimAscVarAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation from the Moon surface to a given Low Lunar Orbit performed at variable thrust.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
+<td><p>TwoDimAscVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescAnalyzer</span></code></a>(body, sc, alt)</p></td>
+<td><p>TwoDimDescAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<td><p>TwoDimDescConstAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface performed at constant thrust.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstNLP</span></code>(body, sc, alt, vp, theta, …)</p></td>
+<td><p>TwoDimDescConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<td><p>TwoDimDescTwoPhasesAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface composed by two subsequent phases.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code>(body, sc, alt, …[, …])</p></td>
+<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesSolPlot</span></code>(r, time, states, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandAnalyzer</span></code></a>(body, sc, alt, …)</p></td>
+<td><p>TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface performed at variable thrust with vertical landing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
+<td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarAnalyzer</span></code></a>(body, sc, alt, …[, …])</p></td>
+<td><p>TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation from a given Low Lunar Orbit to the Moon surface performed at variable thrust.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarNLP</span></code>(body, sc, alt, …[, …])</p></td>
+<td><p>TwoDimDescVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSinglePhaseAnalyzer</span></code></a>(body, sc, alt)</p></td>
+<td><p>TwoDimSinglePhaseAnalyzer class defines the methods to analyze the results of a two dimensional single phase simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSolPlot</span></code>(r, time, states, controls[, …])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="latom.analyzer.analyzer.html#latom.analyzer.analyzer.Analyzer" title="latom.analyzer.analyzer.Analyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer.Analyzer</span></code></a></p>
+<p>TwoDimAnalyzer class defines the methods to analyze the results of a two dimensional simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [-] or [m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAnalyzer.get_time_series_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAnalyzer.get_discretization_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimSinglePhaseAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimSinglePhaseAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimAnalyzer</span></code></a></p>
+<p>TwoDimSinglePhaseAnalyzer class defines the methods to analyze the results of a two dimensional single phase
+simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimSinglePhaseAnalyzer.get_time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimAscAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer</span></code></a></p>
+<p>TwoDimAscAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+from the Moon surface to a given Low Lunar Orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimAscConstAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscConstAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimAscAnalyzer</span></code></a></p>
+<p>TwoDimAscConstAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+from the Moon surface to a given Low Lunar Orbit performed at constant thrust.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Value for the guessed angle spawn during the trajectory [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value for the guessed trajectory time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em>) – Sets the bound of the radial velocity. Can be <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscConstAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscConstAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimAscVarAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscVarAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimAscAnalyzer</span></code></a></p>
+<p>TwoDimAscVarAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+from the Moon surface to a given Low Lunar Orbit performed at variable thrust.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Value for the guessed angle spawn during the trajectory [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value for the guessed trajectory time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em>) – Sets the bound of the radial velocity. Can be <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – </p></li>
+<li><p><strong>of NLP object describing the type of Non Linear Problem solver used</strong> (<em>Instance</em>) – </p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscVarAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimAscVToffAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscVToffAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimAscVarAnalyzer</span></code></a></p>
+<p>TwoDimAscVToffAnalyzer class defines the methods to analyze the results of a two dimensional ascent simulation
+from the Moon surface to a given Low Lunar Orbit performed at variable thrust with vertical take-off.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Value of the minimun safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Value of the slope of the constraint on minimum safe altitude [-]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Value for the guessed angle spawn during the trajectory [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value for the guessed trajectory time of flight [-]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [s]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em>) – Sets the bound of the radial velocity. Can be <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Value of the minimum safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Value of the slope of the constraint on minimum safe altitude [-]</p></li>
+<li><p><strong>r_safe</strong> (<em>float</em>) – Value of the minimum orbit radius to be compliant with the constraints [m]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscVToffAnalyzer.get_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimAscVToffAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimAscVToffAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimDescAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimSinglePhaseAnalyzer</span></code></a></p>
+<p>TwoDimDescAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+from a given Low Lunar Orbit to the Moon surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>= ndarray</strong> (<em>states_scalers</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimDescConstAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescConstAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimDescAnalyzer</span></code></a></p>
+<p>TwoDimDescConstAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+from a given Low Lunar Orbit to the Moon surface performed at constant thrust.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>alt_p</strong> (<em>float</em>) – Value of the orbit periselene altitude [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Value for the guessed angle spawn during the trajectory [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value for the guessed trajectory time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em>) – Sets the bound of the radial velocity. Can be <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+<li><p><strong>alt_p</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescConstAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescConstAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimDescVarAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescVarAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimDescAnalyzer</span></code></a></p>
+<p>TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+from a given Low Lunar Orbit to the Moon surface performed at variable thrust.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em>) – Sets the bound of the radial velocity. Can be <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescVarAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimDescVLandAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescVLandAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimDescVarAnalyzer</span></code></a></p>
+<p>TwoDimDescVarAnalyzer class defines the methods to analyze the results of a two dimensional descent simulation
+from a given Low Lunar Orbit to the Moon surface performed at variable thrust with vertical landing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Value of the minimum safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Value of the slope of the constraint on minimum safe altitude [-]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (<em>str</em>) – Sets the bound of the radial velocity. Can be <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>phase_name</strong> – Name assigned to the problem phase</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Value of the minimum safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Value of the slope of the constraint on minimum safe altitude [-]</p></li>
+<li><p><strong>r_safe</strong> (<em>float</em>) – Value of the minimum orbit radius to be compliant with the constraints [m]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescVLandAnalyzer.get_time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescVLandAnalyzer.get_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescVLandAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescVLandAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer">
+<em class="property">class </em><code class="sig-prename descclassname">latom.analyzer.analyzer_2d.</code><code class="sig-name descname">TwoDimDescTwoPhasesAnalyzer</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">fix='alt'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescTwoPhasesAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#latom.analyzer.analyzer_2d.TwoDimAnalyzer" title="latom.analyzer.analyzer_2d.TwoDimAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.analyzer.analyzer_2d.TwoDimAnalyzer</span></code></a></p>
+<p>TwoDimDescTwoPhasesAnalyzer class defines the methods to analyze the results of a two dimensional descent
+simulation from a given Low Lunar Orbit to the Moon surface composed by two subsequent phases.</p>
+<p>Firstly, the spacecraft is injected in a ballistic arc (Hohmann transfer) to move from the initial Low Lunar Orbit
+to a lower altitude. Starting from the periselene of the Hohmann transfer, the spacecraft performs a powered
+descent at constant thrust and free attitude (first phase) until the final vertical descent (second phase) is
+triggered at a given altitude or time-to-go.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>alt_switch</strong> (<em>float</em>) – Value of the minimum safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Value for the guessed angle spawn during the trajectory [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value for the guessed trajectory time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>float</em>) – Value for the time of flight bounds [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – NLP transcription method</p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments for the transcription</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em>) – Sets some SNOPT’s options. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em>) – Directory path for the solution recording file. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em>) – Checking of partial derivatives. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>fix</strong> (<em>str</em>) – Chooses to switch from the optimized phase to the vertical one at a specific altitude or time. Can be
+<code class="docutils literal notranslate"><span class="pre">alt</span></code> or <code class="docutils literal notranslate"><span class="pre">time</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">alt</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class describing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class describing the spacecraft characteristics</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Describes the phase name in case of multi-phase trajectories</p></li>
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – Instance of <cite>NLP</cite> object describing the type of Non Linear Problem solver used</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Value of the time of flight resulting by the simulation [s]</p></li>
+<li><p><strong>tof_exp</strong> (<em>float</em>) – Value of the time of flight of the explicit simulation [s]</p></li>
+<li><p><strong>err</strong> (<em>float</em>) – Value of the error between the optimized simulation results and the explicit simulation results</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Value of the central body radius [- or m]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Reference values of the states with which perform the scaling</p></li>
+<li><p><strong>controls_scalers</strong> (<em>ndarray</em>) – Reference values of the controls with which perform the scaling</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Value of the final orbit altitude [m]</p></li>
+<li><p><strong>alt_p</strong> (<em>float</em>) – Value of the minimum safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>alt_switch</strong> (<em>float</em>) – Value of the minimum safe altitude to avoid geographical constraints [m]</p></li>
+<li><p><strong>ht</strong> (<cite>Guess_2d</cite>) – Instance of <cite>Guess_2d</cite> class to define an Hohmann transfer trajectory</p></li>
+<li><p><strong>deorbit_burn</strong> (<cite>Guess_2d</cite>) – Instance of <cite>Guess_2d</cite> class to define an an impulsive burn</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_time_series">
+<code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescTwoPhasesAnalyzer.get_time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/analyzer/analyzer_2d.html#TwoDimDescTwoPhasesAnalyzer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the states and controls resulting from the simulation and the ones from the explicit computation in
+time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_discretization_phase">
+<code class="sig-name descname">get_discretization_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_discretization_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time of flight, the states on the states discretization nodes and the controls on the control
+discretization nodes for a given <cite>Problem</cite> and <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States values on the state discretization nodes for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls values on the controls discretization nodes for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_solution_dictionary">
+<code class="sig-name descname">get_solution_dictionary</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_solution_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sol</strong> – Dictionary containing the NLP solution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_solutions">
+<code class="sig-name descname">get_solutions</code><span class="sig-paren">(</span><em class="sig-param">explicit=True</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the simulation solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>explicit</strong> (<em>bool</em>) – Computes also the explicit simulation. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em>) – Scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_time_series_phase">
+<code class="sig-name descname">get_time_series_phase</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">phase_name</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.get_time_series_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the time series of one of the problem phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Problem</em>) – Instance of <cite>Problem</cite> class</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name defined for the problem phase</p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scales the simulation results. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight resulting from the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time of flight time series for the optimized simulation phase [-] or [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the optimized simulation phase</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for the optimized simulation phase</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.run_driver">
+<code class="sig-name descname">run_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.run_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>failed</strong> – Returns the result of the optimization <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.analyzer.analyzer_2d.TwoDimDescTwoPhasesAnalyzer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the whole <cite>Analyzer</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Directory path to the file where the <cite>Analyzer</cite> is serialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="latom.analyzer.analyzer_3d.html" class="btn btn-neutral float-right" title="latom.analyzer.analyzer_3d" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="latom.analyzer.analyzer.html" class="btn btn-neutral float-left" title="latom.analyzer.analyzer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossa&#39;, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

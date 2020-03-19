@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Trajectory Optimization for Reusable Lunar Lander'
-copyright = '2020, Alberto Fossà, Giuliana Elena Miceli'
-author = 'Alberto Fossà, Giuliana Elena Miceli'
+project = 'LaTOM'
+copyright = '2020, Alberto Fossa\', Giuliana Elena Miceli'
+author = 'Alberto Fossa\', Giuliana Elena Miceli'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = '1.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -98,3 +98,6 @@ html_show_sourcelink = False
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# 'sphinx_rtd_theme' options
+html_logo = 'LaTOM_logo.png'

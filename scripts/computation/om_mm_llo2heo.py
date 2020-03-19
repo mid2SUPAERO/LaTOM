@@ -3,9 +3,9 @@
 
 """
 
-from rpfm.utils.pickle_utils import save
-from rpfm.utils.primary import Moon
-from rpfm.surrogate.meta_models_llo2heo import TwoDimLLO2ApoMetaModel, TwoDimLLO2ApoContinuationMetaModel
+from latom.utils.pickle_utils import save
+from latom.utils.primary import Moon
+from latom.surrogate.meta_models_llo2heo import TwoDimLLO2ApoMetaModel, TwoDimLLO2ApoContinuationMetaModel
 
 # MetaModel settings
 continuation = True  # use continuation method over thrust/weight ratios

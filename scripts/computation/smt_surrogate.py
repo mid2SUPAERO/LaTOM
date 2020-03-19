@@ -5,12 +5,12 @@
 
 import numpy as np
 
-from rpfm.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSurrogate, TwoDimAscVToffSurrogate,\
+from latom.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSurrogate, TwoDimAscVToffSurrogate,\
     TwoDimDescVertSurrogate, TwoDimDescConstSurrogate, TwoDimDescVarSurrogate, TwoDimDescVLandSurrogate
 
-from rpfm.utils.primary import Moon
-from rpfm.utils.pickle_utils import save
-from rpfm.data.smt.data_smt import dirname_smt
+from latom.utils.primary import Moon
+from latom.utils.pickle_utils import save
+from latom.data.smt.data_smt import dirname_smt
 
 fid = 'file_name.pkl'
 

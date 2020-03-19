@@ -3,8 +3,8 @@
 
 """
 
-from rpfm.surrogate.meta_models import *
-from rpfm.utils.primary import Moon
+from latom.surrogate.meta_models import *
+from latom.utils.primary import Moon
 
 
 # MetaModel settings

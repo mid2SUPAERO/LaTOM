@@ -5,12 +5,12 @@
 
 import numpy as np
 
-from rpfm.utils.primary import Moon
-from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
+from latom.utils.primary import Moon
+from latom.utils.spacecraft import Spacecraft
+from latom.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
     TwoDim3PhasesLLO2HEOAnalyzer
 
-kind = 'first'
+kind = 'full'
 
 # trajectory
 moon = Moon()
@@ -19,15 +19,15 @@ heo_rp = 3150e3  # target HEO periselene radius [m]
 heo_period = 6.5655*86400  # target HEO period [s]
 
 # spacecraft
-isp = 350.  # specific impulse [s]
-twr = 0.2  # initial thrust/weight ratio [-]
+isp = 450.  # specific impulse [s]
+twr = 2.1  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
 segments = 400
 order = 3
-solver = 'IPOPT'
+solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
               'Minor feasibility tolerance': 1e-12}
 

@@ -6,23 +6,23 @@ ODEs Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: rpfm.odes.odes_2d rpfm.odes.odes_2d_group rpfm.odes.odes_3d
+.. inheritance-diagram:: latom.odes.odes_2d latom.odes.odes_2d_group latom.odes.odes_3d
   :parts: 1
 
 Modules List
 ------------
 
-.. autopackagesummary:: rpfm.odes
+.. autopackagesummary:: latom.odes
   :toctree: _autosummary
 
 Documentation
 -------------
 
-.. automodule:: rpfm.odes.odes_2d
+.. automodule:: latom.odes.odes_2d
    :noindex:
 
-.. automodule:: rpfm.odes.odes_2d_group
+.. automodule:: latom.odes.odes_2d_group
   :noindex:
 
-.. automodule:: rpfm.odes.odes_3d
+.. automodule:: latom.odes.odes_3d
   :noindex:

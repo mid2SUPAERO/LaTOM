@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>latom.guess.guess_2d &mdash; LaTOM 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> LaTOM
+          
+
+          
+            
+            <img src="../../../_static/LaTOM_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/installation_index.html">Installation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">LaTOM</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>latom.guess.guess_2d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for latom.guess.guess_2d</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@authors: Alberto FOSSA&#39; Giuliana Elena MICELI</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span><span class="p">,</span> <span class="n">odeint</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">newton</span>
+
+<span class="kn">from</span> <span class="nn">latom.utils.keplerian_orbit</span> <span class="kn">import</span> <span class="n">KepOrb</span><span class="p">,</span> <span class="n">TwoDimOrb</span>
+<span class="kn">from</span> <span class="nn">latom.utils.const</span> <span class="kn">import</span> <span class="n">g0</span>
+
+
+<div class="viewcode-block" id="HohmannTransfer"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.HohmannTransfer">[docs]</a><span class="k">class</span> <span class="nc">HohmannTransfer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;`HohmannTransfer` class implements a two-dimensional Hohmann transfer between two coplanar, circular orbits in</span>
+<span class="sd">    the Keplerian two-body approximation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Standard gravitational parameter of the central attracting body [m^3/s^2]</span>
+<span class="sd">    dep : TwoDimOrb</span>
+<span class="sd">        `TwoDimOrb` class instance representing the departure orbit</span>
+<span class="sd">    arr : TwoDimOrb</span>
+<span class="sd">        `TwoDimOrb` class instance representing the arrival orbit</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    GM : float</span>
+<span class="sd">        Standard gravitational parameter of the central attracting body [m^3/s^2]</span>
+<span class="sd">    dep : TwoDimOrb</span>
+<span class="sd">        `TwoDimOrb` class instance representing the departure orbit</span>
+<span class="sd">    arr : TwoDimOrb</span>
+<span class="sd">        `TwoDimOrb` class instance representing the arrival orbit</span>
+<span class="sd">    ra : float</span>
+<span class="sd">        Transfer orbit apoapsis radius [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        Transfer orbit periapsis radius [m]</span>
+<span class="sd">    transfer : TwoDimOrb</span>
+<span class="sd">        `TwoDimOrb` class instance representing the transfer orbit</span>
+<span class="sd">    tof : float</span>
+<span class="sd">        Hohmann transfer time of flight corresponding to half of the `transfer` period [s]</span>
+<span class="sd">    dvp : float</span>
+<span class="sd">        Impulsive delta-V at periapsis [m/s]</span>
+<span class="sd">    dva : float</span>
+<span class="sd">        Impulsive delta-V at apoapsis [m/s]</span>
+<span class="sd">    r : ndarray</span>
+<span class="sd">        Radius time series for the transfer arc [m]</span>
+<span class="sd">    theta : ndarray</span>
+<span class="sd">        Angle time series for the transfer arc [rad]</span>
+<span class="sd">    u : ndarray</span>
+<span class="sd">        Radial velocity time series for the transfer arc [m/s]</span>
+<span class="sd">    v : ndarray</span>
+<span class="sd">        Tangential velocity time series for the transfer arc [m/s]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States variables time series for the transfer arc as [r, theta, u, v, m]</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Control variables time series for the transfer arc as [thrust, alpha]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `HohmannTransfer` class. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span> <span class="o">=</span> <span class="n">dep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span> <span class="o">=</span> <span class="n">arr</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">a</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">a</span><span class="p">:</span>  <span class="c1"># ascent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">ra</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">rp</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># descent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">ra</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">rp</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="n">ra</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">a</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">a</span><span class="p">:</span>  <span class="c1"># ascent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dvp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">vp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">vp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dva</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">va</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">va</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># descent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dva</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">va</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">va</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dvp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">vp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">vp</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="HohmannTransfer.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.HohmannTransfer.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the states and control time series along the transfer trajectory.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : ndarray</span>
+<span class="sd">            Time vector [s]</span>
+<span class="sd">        t0 : float</span>
+<span class="sd">            Initial time [s]</span>
+<span class="sd">        theta0 : float, optional</span>
+<span class="sd">            Initial angle. Default is ``0.0`` [rad]</span>
+<span class="sd">        m : float</span>
+<span class="sd">            Spacecraft mass. Default is ``1.0`` [kg]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        root : ndarray</span>
+<span class="sd">            Solution of the Kepler time of flight equation for the eccentric anomaly in function of the true anomaly</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>  <span class="c1"># flattened time array [s]</span>
+        <span class="n">nb_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="c1"># number of points in which the states are computed</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">a</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">a</span><span class="p">:</span>  <span class="c1"># ascent</span>
+            <span class="n">ea0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">nb_nodes</span><span class="p">)</span>
+            <span class="n">tp</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># time at periapsis passage [s]</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># descent</span>
+            <span class="n">ea0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">nb_nodes</span><span class="p">)</span>
+            <span class="n">tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tof</span>  <span class="c1"># time at periapsis passage [s]</span>
+
+        <span class="n">root</span><span class="p">,</span> <span class="n">converged</span><span class="p">,</span> <span class="n">zero_der</span> <span class="o">=</span> <span class="n">newton</span><span class="p">(</span><span class="n">KepOrb</span><span class="o">.</span><span class="n">kepler_eqn</span><span class="p">,</span> <span class="n">ea0</span><span class="p">,</span> <span class="n">fprime</span><span class="o">=</span><span class="n">KepOrb</span><span class="o">.</span><span class="n">kepler_eqn_prime</span><span class="p">,</span>
+                                           <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tp</span><span class="p">),</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                                           <span class="n">fprime2</span><span class="o">=</span><span class="n">KepOrb</span><span class="o">.</span><span class="n">kepler_eqn_second</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">ea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># eccentric anomaly in [-pi, pi]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(((</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">ea</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># [-pi, pi]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">a</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">a</span><span class="p">:</span>  <span class="c1"># ascent</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># descent</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># true anomaly in [0, 2pi]</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">theta0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">m</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">alpha</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">root</span></div></div>
+
+
+<div class="viewcode-block" id="PowConstRadius"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius">[docs]</a><span class="k">class</span> <span class="nc">PowConstRadius</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;`PowConstRadius` class implements a two-dimensional powered phase at constant radius from the central attractive</span>
+<span class="sd">    body.</span>
+
+<span class="sd">    The trajectory is modeled in the restricted two-body problem framework and the spacecraft engines are supposed to</span>
+<span class="sd">    deliver a constant thrust magnitude across the whole phase. Since the radius `r` is constant, the radial velocity</span>
+<span class="sd">    `u` is always null.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r0 : float</span>
+<span class="sd">        Radius [m]</span>
+<span class="sd">    v0 : float</span>
+<span class="sd">        Initial tangential velocity [m/s]</span>
+<span class="sd">    vf : float</span>
+<span class="sd">        Final tangential velocity [m/s]</span>
+<span class="sd">    m0 : float</span>
+<span class="sd">        Initial spacecraft mass [kg]</span>
+<span class="sd">    thrust : float</span>
+<span class="sd">        Thrust magnitude [N]</span>
+<span class="sd">    isp : float</span>
+<span class="sd">        Specific impulse [s]</span>
+<span class="sd">    theta0 : float</span>
+<span class="sd">        Initial angle [rad]</span>
+<span class="sd">    t0 : float</span>
+<span class="sd">        Initial time [rad]</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    GM : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    R : float</span>
+<span class="sd">        Radius [m]</span>
+<span class="sd">    v0 : float</span>
+<span class="sd">        Initial tangential velocity [m/s]</span>
+<span class="sd">    vf : float</span>
+<span class="sd">        Final tangential velocity [m/s]</span>
+<span class="sd">    m0 : float</span>
+<span class="sd">        Initial spacecraft mass [kg]</span>
+<span class="sd">    T : float</span>
+<span class="sd">        Thrust magnitude [N]</span>
+<span class="sd">    Isp : float</span>
+<span class="sd">        Specific impulse [s]</span>
+<span class="sd">    theta0 : float</span>
+<span class="sd">        Initial angle [rad]</span>
+<span class="sd">    t0 : float</span>
+<span class="sd">        Initial time [rad]</span>
+<span class="sd">    dv_inf : float</span>
+<span class="sd">        Delta-V required to accelerate the spacecraft from `v0` to `vf` assuming an impulsive burn [m/s]</span>
+<span class="sd">    tf : float</span>
+<span class="sd">        Final time [s]</span>
+<span class="sd">    thetaf : float</span>
+<span class="sd">        Final angle [rad]</span>
+<span class="sd">    mf : float</span>
+<span class="sd">        Final spacecraft mass [kg]</span>
+<span class="sd">    dv : float</span>
+<span class="sd">        Delta-V required to accelerate the spacecraft from `v0` to `vf` taking into account a finite thrust magnitude</span>
+<span class="sd">        equal to `T` [m/s]</span>
+<span class="sd">    t : ndarray</span>
+<span class="sd">        Time vector [s]</span>
+<span class="sd">    r : ndarray</span>
+<span class="sd">        Radius time series [m]</span>
+<span class="sd">    theta : ndarray</span>
+<span class="sd">        Angle time series [rad]</span>
+<span class="sd">    u : ndarray</span>
+<span class="sd">        Radial velocity time series [m/s]</span>
+<span class="sd">    v : ndarray</span>
+<span class="sd">        Tangential velocity time series [m/s]</span>
+<span class="sd">    m : ndarray</span>
+<span class="sd">        Spacecraft mass time series [kg]</span>
+<span class="sd">    alpha : ndarray</span>
+<span class="sd">        Thrust direction time series [rad]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States variables time series as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls variables time series as `[thrust, alpha]`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">vf</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">thrust</span><span class="p">,</span> <span class="n">isp</span><span class="p">,</span> <span class="n">theta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">r0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v0</span> <span class="o">=</span> <span class="n">v0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf</span> <span class="o">=</span> <span class="n">vf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m0</span> <span class="o">=</span> <span class="n">m0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">thrust</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span> <span class="o">=</span> <span class="n">isp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta0</span> <span class="o">=</span> <span class="n">theta0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span> <span class="n">t0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dv_inf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="p">)</span>  <span class="c1"># impulsive dV [m/s]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thetaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="PowConstRadius.compute_mass"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius.compute_mass">[docs]</a>    <span class="k">def</span> <span class="nf">compute_mass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the spacecraft mass time series.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : ndarray</span>
+<span class="sd">            Time vector [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        m : ndarray</span>
+<span class="sd">            Spacecraft mass time series [kg]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span> <span class="o">/</span> <span class="n">g0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">m</span></div>
+
+<div class="viewcode-block" id="PowConstRadius.compute_final_time_states"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius.compute_final_time_states">[docs]</a>    <span class="k">def</span> <span class="nf">compute_final_time_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the required time of flight and the final spacecraft states.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sol_time : tuple</span>
+<span class="sd">            Solution of the Initial Value Problem (IVP) for the final time.</span>
+<span class="sd">            See scipy.integrate.solve_ivp for more details</span>
+<span class="sd">        sol_states : tuple</span>
+<span class="sd">            Solution of the Initial Value Problem (IVP) for the final angle and speed.</span>
+<span class="sd">            See scipy.integrate.solve_ivp for more details</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Computing final time for powered trajectory at constant R&#39;</span><span class="p">)</span>
+
+        <span class="n">sol_time</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt_dv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">),</span>
+                             <span class="n">t_span</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vf</span><span class="p">),</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">],</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-20</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output:&#39;</span><span class="p">,</span> <span class="n">sol_time</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">=</span> <span class="n">sol_time</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Computing final states for powered trajectory at constant R&#39;</span><span class="p">)</span>
+
+        <span class="n">sol_states</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">),</span>
+                               <span class="n">t_span</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf</span><span class="p">),</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">theta0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="p">],</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-20</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output:&#39;</span><span class="p">,</span> <span class="n">sol_states</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Achieved target speed: &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vf</span><span class="p">,</span> <span class="n">sol_states</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">thetaf</span> <span class="o">=</span> <span class="n">sol_states</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># final angle [rad]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_mass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tf</span><span class="p">)</span>  <span class="c1"># final spacecraft mass [kg]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span> <span class="o">*</span> <span class="n">g0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">mf</span><span class="p">)</span>  <span class="c1"># finite Delta-V [m/s]</span>
+
+        <span class="k">return</span> <span class="n">sol_time</span><span class="p">,</span> <span class="n">sol_states</span></div>
+
+<div class="viewcode-block" id="PowConstRadius.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_eval</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the spacecraft states and controls variables time series across the powered phase.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t_eval : ndarray</span>
+<span class="sd">            Time vector in which the states and controls are provided [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sol : tuple or dict</span>
+<span class="sd">            Solution of the Initial Value Problem (IVP) for the final time.</span>
+<span class="sd">            See scipy.integrate.solve_ivp or scipy.integrate.odeint for more details</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nb_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_eval</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Integrating ODEs for initial powered trajectory at constant R &#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;using Scipy solve_ivp function&#39;</span><span class="p">)</span>
+
+            <span class="n">sol</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">),</span>
+                            <span class="n">t_span</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">),</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">theta0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="p">],</span> <span class="n">t_eval</span><span class="o">=</span><span class="n">t_eval</span><span class="p">,</span>
+                            <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-20</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;time vector not strictly monotonically increasing, using Scipy odeint function&#39;</span><span class="p">)</span>
+
+            <span class="n">y</span><span class="p">,</span> <span class="n">sol</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx_dt</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">theta0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="p">],</span> <span class="n">t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">],</span> <span class="n">t_eval</span><span class="p">)),</span>
+                            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">),</span>
+                            <span class="n">full_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-20</span><span class="p">,</span> <span class="n">tfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">t_eval</span><span class="p">,</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output:&#39;</span><span class="p">,</span> <span class="n">sol</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_mass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="n">v_dot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv_dt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">)</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">v_dot</span><span class="p">)</span>  <span class="c1"># angles in [-pi, pi]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># angles in [-pi/2, 3/2pi]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nb_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">sol</span></div>
+
+<div class="viewcode-block" id="PowConstRadius.dt_dv"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius.dt_dv">[docs]</a>    <span class="k">def</span> <span class="nf">dt_dv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">thrust</span><span class="p">,</span> <span class="n">isp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ODE for the first derivative of the time `t` wrt the tangential velocity `v`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v : float or ndarray</span>
+<span class="sd">            Tangential velocity time series [m/s]</span>
+<span class="sd">        t : float or ndarray</span>
+<span class="sd">            Time vector [s]</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        r : float or ndarray</span>
+<span class="sd">            Radius time series [m]</span>
+<span class="sd">        m0 : float</span>
+<span class="sd">            Initial spacecraft mass [kg]</span>
+<span class="sd">        t0 : float</span>
+<span class="sd">            Initial time [s]</span>
+<span class="sd">        thrust : float</span>
+<span class="sd">            Thrust magnitude [N]</span>
+<span class="sd">        isp : float</span>
+<span class="sd">            Specific impulse [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dt_dv : float or ndarray</span>
+<span class="sd">            First derivative of `t` wrt `v` [s^2/m]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dt_dv</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">thrust</span><span class="p">,</span> <span class="n">isp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dt_dv</span></div>
+
+<div class="viewcode-block" id="PowConstRadius.dv_dt"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius.dv_dt">[docs]</a>    <span class="k">def</span> <span class="nf">dv_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">thrust</span><span class="p">,</span> <span class="n">isp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ODE for first time derivative of the tangential velocity `v`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : float or ndarray</span>
+<span class="sd">            Time vector [s]</span>
+<span class="sd">        v : float or ndarray</span>
+<span class="sd">            Tangential velocity time series [m/s]</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        r : float or ndarray</span>
+<span class="sd">            Radius time series [m]</span>
+<span class="sd">        m0 : float</span>
+<span class="sd">            Initial spacecraft mass [kg]</span>
+<span class="sd">        t0 : float</span>
+<span class="sd">            Initial time [s]</span>
+<span class="sd">        thrust : float</span>
+<span class="sd">            Thrust magnitude [N]</span>
+<span class="sd">        isp : float</span>
+<span class="sd">            Specific impulse [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dv_dt : float or ndarray</span>
+<span class="sd">            First time derivative of `v` [m/s^2]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dv_dt</span> <span class="o">=</span> <span class="p">((</span><span class="n">thrust</span> <span class="o">/</span> <span class="p">(</span><span class="n">m0</span> <span class="o">-</span> <span class="p">(</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">isp</span> <span class="o">/</span> <span class="n">g0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">gm</span> <span class="o">/</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">v</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">vf</span><span class="p">:</span>  <span class="c1"># positive acceleration</span>
+            <span class="k">return</span> <span class="n">dv_dt</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># negative acceleration</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">dv_dt</span></div>
+
+<div class="viewcode-block" id="PowConstRadius.dx_dt"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.PowConstRadius.dx_dt">[docs]</a>    <span class="k">def</span> <span class="nf">dx_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">thrust</span><span class="p">,</span> <span class="n">isp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Systems of ODEs for the first time derivatives of the angle `theta` and the tangential velocity `v`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : float or ndarray</span>
+<span class="sd">            Time vector [s]</span>
+<span class="sd">        x : ndarray</span>
+<span class="sd">            Angle and tangential velocity time series as `[theta, v]` [rad, m/s]</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        r : float or ndarray</span>
+<span class="sd">            Radius time series [m]</span>
+<span class="sd">        m0 : float</span>
+<span class="sd">            Initial spacecraft mass [kg]</span>
+<span class="sd">        t0 : float</span>
+<span class="sd">            Initial time [s]</span>
+<span class="sd">        thrust : float</span>
+<span class="sd">            Thrust magnitude [N]</span>
+<span class="sd">        isp : float</span>
+<span class="sd">            Specific impulse [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x_dot : ndarray</span>
+<span class="sd">            First time derivatives of `theta` and `v` [rad/s, m/s^2]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x0_dot</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">r</span>
+        <span class="n">x1_dot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">thrust</span><span class="p">,</span> <span class="n">isp</span><span class="p">)</span>
+        <span class="n">x_dot</span> <span class="o">=</span> <span class="p">[</span><span class="n">x0_dot</span><span class="p">,</span> <span class="n">x1_dot</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">x_dot</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints info on `PowConstRadius` class instance. &quot;&quot;&quot;</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Impulsive dV:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv_inf</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Finite dV:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Burn time:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Propellant fraction:&#39;</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mf</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)]</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="TwoDimGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimGuess</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sc</span> <span class="o">=</span> <span class="n">sc</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ht</span> <span class="o">=</span> <span class="n">HohmannTransfer</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Departure Orbit:&#39;</span><span class="p">),</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Arrival Orbit:&#39;</span><span class="p">),</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Hohmann transfer:&#39;</span><span class="p">),</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()]</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="TwoDimLLOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimLLOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLOGuess</span><span class="p">(</span><span class="n">TwoDimGuess</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+
+        <span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="TwoDimLLOGuess.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimLLOGuess.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="s1">&#39;t_eval&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_eval&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s1">&#39;nb_nodes&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nb_nodes&#39;</span><span class="p">]),</span> <span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nb_nodes&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">t_pow1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span><span class="p">]</span>
+        <span class="n">t_ht</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">tof</span><span class="p">))]</span>
+        <span class="n">t_pow2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">tof</span><span class="p">)]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">t_pow1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">t_ht</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="n">theta0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">thetaf</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">mf</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">t_pow2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">vf</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">states</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">controls</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">fix_final</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;theta&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Initial guess:&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Propellant fraction:&#39;</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">mf</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Time of flight:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Departure burn:&#39;</span><span class="p">),</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Arrival burn:&#39;</span><span class="p">),</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()]</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="TwoDimAscGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimAscGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscGuess</span><span class="p">(</span><span class="n">TwoDimLLOGuess</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="n">dep</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span> <span class="o">=</span> <span class="n">PowConstRadius</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">T_max</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">compute_final_time_states</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span> <span class="o">=</span> <span class="n">PowConstRadius</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">va</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">va</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">mf</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">T_max</span><span class="p">,</span>
+                                   <span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">tof</span><span class="p">),</span> <span class="n">theta0</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">thetaf</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">compute_final_time_states</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">tf</span></div>
+
+
+<div class="viewcode-block" id="TwoDimDescGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimDescGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescGuess</span><span class="p">(</span><span class="n">TwoDimLLOGuess</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dep</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span> <span class="o">=</span> <span class="n">PowConstRadius</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">va</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">va</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">T_max</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">compute_final_time_states</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span> <span class="o">=</span> <span class="n">PowConstRadius</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">mf</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">T_max</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="p">,</span>
+                                   <span class="n">t0</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">tof</span><span class="p">),</span> <span class="n">theta0</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">thetaf</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">compute_final_time_states</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">tf</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
+    <span class="kn">from</span> <span class="nn">latom.utils.spacecraft</span> <span class="kn">import</span> <span class="n">Spacecraft</span>
+    <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+    <span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
+    <span class="n">sat</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="mf">450.</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">moon</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+
+    <span class="n">nb</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">ff</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">dg</span> <span class="o">=</span> <span class="n">TwoDimDescGuess</span><span class="p">(</span><span class="n">moon</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="n">moon</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="mf">100e3</span><span class="p">,</span> <span class="n">sat</span><span class="p">)</span>
+    <span class="n">dg2</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
+
+    <span class="n">tvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dg</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="n">nb</span><span class="p">),</span> <span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">tvec2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">tvec</span><span class="p">,</span> <span class="n">tvec</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">dg</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">fix_final</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">t_eval</span><span class="o">=</span><span class="n">tvec</span><span class="p">)</span>
+    <span class="n">dg2</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">fix_final</span><span class="o">=</span><span class="n">ff</span><span class="p">,</span> <span class="n">t_eval</span><span class="o">=</span><span class="n">tvec2</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossa&#39;, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

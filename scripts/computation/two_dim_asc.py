@@ -5,9 +5,9 @@
 
 import numpy as np
 
-from rpfm.utils.primary import Moon
-from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyzer, TwoDimAscVToffAnalyzer
+from latom.utils.primary import Moon
+from latom.utils.spacecraft import Spacecraft
+from latom.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyzer, TwoDimAscVToffAnalyzer
 
 
 # trajectory

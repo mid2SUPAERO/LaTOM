@@ -5,10 +5,10 @@
 
 import numpy as np
 
-from rpfm.utils.primary import Moon
-from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_heo_2d import TwoDimLLO2ApoContinuationAnalyzer
-from rpfm.data.continuation.data_continuation import dirname_continuation
+from latom.utils.primary import Moon
+from latom.utils.spacecraft import Spacecraft
+from latom.analyzer.analyzer_heo_2d import TwoDimLLO2ApoContinuationAnalyzer
+from latom.data.continuation.data_continuation import dirname_continuation
 
 # file ID
 fid = 'tests/lin350.pkl'

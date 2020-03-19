@@ -5,9 +5,9 @@
 
 import numpy as np
 
-from rpfm.utils.primary import Moon
-from rpfm.utils.spacecraft import Spacecraft
-from rpfm.analyzer.analyzer_2d import TwoDimDescTwoPhasesAnalyzer
+from latom.utils.primary import Moon
+from latom.utils.spacecraft import Spacecraft
+from latom.analyzer.analyzer_2d import TwoDimDescTwoPhasesAnalyzer
 
 
 # trajectory
@@ -22,20 +22,20 @@ t_bounds = (0., 2.)  # time of flight bounds [-]
 fix = 'alt'
 
 # spacecraft
-isp = 250.  # specific impulse [s]
-twr = 0.5  # initial thrust/weight ratio [-]
+isp = 400.  # specific impulse [s]
+twr = 0.9  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
 segments = (100, 20)
 order = 3
-solver = 'SNOPT'
+solver = 'IPOPT'
 
 # additional settings
-check_partials = True  # check partial derivatives
+check_partials = False  # check partial derivatives
 run_driver = True  # solve the NLP
-exp_sim = False  # perform explicit simulation
+exp_sim = True  # perform explicit simulation
 rec = False  # record the solution
 
 # init analyzer

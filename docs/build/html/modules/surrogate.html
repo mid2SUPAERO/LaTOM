@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Surrogate Subpackage &mdash; Trajectory Optimization for Reusable Lunar Lander 0.1 documentation</title>
+  <title>Surrogate Subpackage &mdash; LaTOM 1.0 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rpfm.surrogate.meta_models" href="_autosummary/rpfm.surrogate.meta_models.html" />
-    <link rel="prev" title="rpfm.reader.reader_heo_2d" href="_autosummary/rpfm.reader.reader_heo_2d.html" /> 
+    <link rel="next" title="latom.surrogate.meta_models" href="_autosummary/latom.surrogate.meta_models.html" />
+    <link rel="prev" title="latom.reader.reader_heo_2d" href="_autosummary/latom.reader.reader_heo_2d.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -52,9 +52,12 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> Trajectory Optimization for Reusable Lunar Lander
+            <a href="../index.html" class="icon icon-home"> LaTOM
           
 
+          
+            
+            <img src="../_static/LaTOM_logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -94,9 +97,9 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Surrogate Subpackage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#inheritance-diagram">Inheritance Diagram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modules-list">Modules List</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html">rpfm.surrogate.meta_models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html">rpfm.surrogate.meta_models_llo2heo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html">rpfm.surrogate.surrogate_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html">latom.surrogate.meta_models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/latom.surrogate.meta_models_llo2heo.html">latom.surrogate.meta_models_llo2heo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html">latom.surrogate.surrogate_2d</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
@@ -118,7 +121,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Trajectory Optimization for Reusable Lunar Lander</a>
+          <a href="../index.html">LaTOM</a>
         
       </nav>
 
@@ -172,27 +175,27 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance Diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<div class="graphviz"><img src="../_images/inheritance-875c1e5e3d57affaa044c4ab0720b23d44c53211.png" alt="Inheritance diagram of rpfm.surrogate.meta_models, rpfm.surrogate.meta_models_llo2heo, rpfm.surrogate.surrogate_2d" usemap="#inheritance60b7b1ce44" class="inheritance graphviz" /></div>
-<map id="inheritance60b7b1ce44" name="inheritance60b7b1ce44">
-<area shape="rect" id="node1" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" target="_top" title="MetaModel" alt="" coords="21,573,114,599"/>
-<area shape="rect" id="node3" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#rpfm.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel" target="_top" title="TwoDim3PhasesLLO2HEOMetaModel" alt="" coords="191,351,449,376"/>
-<area shape="rect" id="node4" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimAscConstMetaModel" target="_top" title="TwoDimAscConstMetaModel" alt="" coords="217,400,423,425"/>
-<area shape="rect" id="node6" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimAscVToffMetaModel" target="_top" title="TwoDimAscVToffMetaModel" alt="" coords="220,449,420,475"/>
-<area shape="rect" id="node8" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimAscVarMetaModel" target="_top" title="TwoDimAscVarMetaModel" alt="" coords="225,499,415,524"/>
-<area shape="rect" id="node10" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescConstMetaModel" target="_top" title="TwoDimDescConstMetaModel" alt="" coords="213,548,427,573"/>
-<area shape="rect" id="node12" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel" target="_top" title="TwoDimDescTwoPhasesMetaModel" alt="" coords="196,597,444,623"/>
-<area shape="rect" id="node13" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescVLandMetaModel" target="_top" title="TwoDimDescVLandMetaModel" alt="" coords="211,647,429,672"/>
-<area shape="rect" id="node15" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.TwoDimDescVarMetaModel" target="_top" title="TwoDimDescVarMetaModel" alt="" coords="221,696,419,721"/>
-<area shape="rect" id="node18" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoContinuationMetaModel" target="_top" title="TwoDimLLO2ApoContinuationMetaModel" alt="" coords="177,745,463,771"/>
-<area shape="rect" id="node19" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#rpfm.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel" target="_top" title="TwoDimLLO2ApoMetaModel" alt="" coords="219,795,421,820"/>
-<area shape="rect" id="node2" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" target="_top" title="SurrogateModel" alt="" coords="5,153,129,179"/>
-<area shape="rect" id="node5" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimAscConstSurrogate" target="_top" title="TwoDimAscConstSurrogate" alt="" coords="221,5,419,31"/>
-<area shape="rect" id="node7" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimAscVToffSurrogate" target="_top" title="TwoDimAscVToffSurrogate" alt="" coords="224,55,416,80"/>
-<area shape="rect" id="node9" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimAscVarSurrogate" target="_top" title="TwoDimAscVarSurrogate" alt="" coords="229,104,411,129"/>
-<area shape="rect" id="node11" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescConstSurrogate" target="_top" title="TwoDimDescConstSurrogate" alt="" coords="217,153,423,179"/>
-<area shape="rect" id="node14" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescVLandSurrogate" target="_top" title="TwoDimDescVLandSurrogate" alt="" coords="215,203,425,228"/>
-<area shape="rect" id="node16" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescVarSurrogate" target="_top" title="TwoDimDescVarSurrogate" alt="" coords="225,252,415,277"/>
-<area shape="rect" id="node17" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.TwoDimDescVertSurrogate" target="_top" title="TwoDimDescVertSurrogate" alt="" coords="223,301,417,327"/>
+<div class="graphviz"><img src="../_images/inheritance-47d0de1f81f642fe47add8b3a73af5ab616bb59c.png" alt="Inheritance diagram of latom.surrogate.meta_models, latom.surrogate.meta_models_llo2heo, latom.surrogate.surrogate_2d" usemap="#inheritance17cc512e4e" class="inheritance graphviz" /></div>
+<map id="inheritance17cc512e4e" name="inheritance17cc512e4e">
+<area shape="rect" id="node1" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" target="_top" title="MetaModel" alt="" coords="21,573,114,599"/>
+<area shape="rect" id="node3" href="_autosummary/latom.surrogate.meta_models_llo2heo.html#latom.surrogate.meta_models_llo2heo.TwoDim3PhasesLLO2HEOMetaModel" target="_top" title="TwoDim3PhasesLLO2HEOMetaModel" alt="" coords="191,351,449,376"/>
+<area shape="rect" id="node4" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimAscConstMetaModel" target="_top" title="TwoDimAscConstMetaModel" alt="" coords="217,400,423,425"/>
+<area shape="rect" id="node6" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimAscVToffMetaModel" target="_top" title="TwoDimAscVToffMetaModel" alt="" coords="220,449,420,475"/>
+<area shape="rect" id="node8" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimAscVarMetaModel" target="_top" title="TwoDimAscVarMetaModel" alt="" coords="225,499,415,524"/>
+<area shape="rect" id="node10" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimDescConstMetaModel" target="_top" title="TwoDimDescConstMetaModel" alt="" coords="213,548,427,573"/>
+<area shape="rect" id="node12" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimDescTwoPhasesMetaModel" target="_top" title="TwoDimDescTwoPhasesMetaModel" alt="" coords="196,597,444,623"/>
+<area shape="rect" id="node13" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimDescVLandMetaModel" target="_top" title="TwoDimDescVLandMetaModel" alt="" coords="211,647,429,672"/>
+<area shape="rect" id="node15" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.TwoDimDescVarMetaModel" target="_top" title="TwoDimDescVarMetaModel" alt="" coords="221,696,419,721"/>
+<area shape="rect" id="node18" href="_autosummary/latom.surrogate.meta_models_llo2heo.html#latom.surrogate.meta_models_llo2heo.TwoDimLLO2ApoContinuationMetaModel" target="_top" title="TwoDimLLO2ApoContinuationMetaModel" alt="" coords="177,745,463,771"/>
+<area shape="rect" id="node19" href="_autosummary/latom.surrogate.meta_models_llo2heo.html#latom.surrogate.meta_models_llo2heo.TwoDimLLO2ApoMetaModel" target="_top" title="TwoDimLLO2ApoMetaModel" alt="" coords="219,795,421,820"/>
+<area shape="rect" id="node2" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" target="_top" title="SurrogateModel" alt="" coords="5,153,129,179"/>
+<area shape="rect" id="node5" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimAscConstSurrogate" target="_top" title="TwoDimAscConstSurrogate" alt="" coords="221,5,419,31"/>
+<area shape="rect" id="node7" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimAscVToffSurrogate" target="_top" title="TwoDimAscVToffSurrogate" alt="" coords="224,55,416,80"/>
+<area shape="rect" id="node9" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimAscVarSurrogate" target="_top" title="TwoDimAscVarSurrogate" alt="" coords="229,104,411,129"/>
+<area shape="rect" id="node11" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimDescConstSurrogate" target="_top" title="TwoDimDescConstSurrogate" alt="" coords="217,153,423,179"/>
+<area shape="rect" id="node14" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimDescVLandSurrogate" target="_top" title="TwoDimDescVLandSurrogate" alt="" coords="215,203,425,228"/>
+<area shape="rect" id="node16" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimDescVarSurrogate" target="_top" title="TwoDimDescVarSurrogate" alt="" coords="225,252,415,277"/>
+<area shape="rect" id="node17" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.TwoDimDescVertSurrogate" target="_top" title="TwoDimDescVertSurrogate" alt="" coords="223,301,417,327"/>
 </map></div>
 <div class="section" id="modules-list">
 <h2>Modules List<a class="headerlink" href="#modules-list" title="Permalink to this headline">¶</a></h2>
@@ -202,13 +205,13 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#module-rpfm.surrogate.meta_models" title="rpfm.surrogate.meta_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#module-latom.surrogate.meta_models" title="latom.surrogate.meta_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.surrogate.meta_models</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models_llo2heo.html#module-rpfm.surrogate.meta_models_llo2heo" title="rpfm.surrogate.meta_models_llo2heo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models_llo2heo</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/latom.surrogate.meta_models_llo2heo.html#module-latom.surrogate.meta_models_llo2heo" title="latom.surrogate.meta_models_llo2heo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.surrogate.meta_models_llo2heo</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#module-rpfm.surrogate.surrogate_2d" title="rpfm.surrogate.surrogate_2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#module-latom.surrogate.surrogate_2d" title="latom.surrogate.surrogate_2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
 </tbody>
@@ -219,57 +222,57 @@
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">MetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">MetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.abs_path"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.abs_path"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.load"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.load"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.save"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.save"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.compute_grid"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.compute_grid"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.setup"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.setup"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#MetaModel.plot"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#MetaModel.plot"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscConstMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscConstMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscConstMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimAscConstMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscConstMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimAscConstMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -311,11 +314,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscVarMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVarMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscVarMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimAscVarMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVarMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimAscVarMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -357,11 +360,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscVToffMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVToffMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimAscVToffMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimAscVToffMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimAscVToffMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimAscVToffMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -403,11 +406,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescConstMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescConstMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescConstMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescConstMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescConstMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescConstMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -449,11 +452,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescVarMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVarMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescVarMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescVarMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVarMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescVarMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -495,11 +498,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescVLandMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVLandMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescVLandMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescVLandMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescVLandMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescVLandMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -541,11 +544,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescTwoPhasesMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescTwoPhasesMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models.</code><code class="sig-name descname">TwoDimDescTwoPhasesMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescTwoPhasesMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models.html#TwoDimDescTwoPhasesMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models.html#TwoDimDescTwoPhasesMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -588,11 +591,11 @@
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -634,31 +637,31 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoContinuationMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoContinuationMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.load"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.load"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.save"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.save"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.compute_grid"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.compute_grid"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.plot"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.plot"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -680,11 +683,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEOMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.meta_models.html#rpfm.surrogate.meta_models.MetaModel" title="rpfm.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.meta_models.MetaModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.meta_models_llo2heo.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEOMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.meta_models.html#latom.surrogate.meta_models.MetaModel" title="latom.surrogate.meta_models.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.meta_models.MetaModel</span></code></a></p>
 <dl class="method">
 <dt>
-<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/meta_models_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/meta_models_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -727,37 +730,37 @@
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">SurrogateModel</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">SurrogateModel</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#SurrogateModel"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.solve"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#SurrogateModel.solve"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.train"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#SurrogateModel.train"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.evaluate"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#SurrogateModel.evaluate"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#SurrogateModel.plot"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#SurrogateModel.plot"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscConstSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimAscConstSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimAscConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -784,11 +787,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVarSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimAscVarSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimAscVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -815,11 +818,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscVToffSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVToffSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimAscVToffSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimAscVToffSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimAscVToffSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimAscVToffSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -846,11 +849,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescConstSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescConstSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -877,11 +880,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVarSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescVarSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -908,11 +911,11 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVLandSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVLandSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVLandSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescVLandSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVLandSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescVLandSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -939,8 +942,8 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">rpfm.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVertSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVertSurrogate"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/rpfm.surrogate.surrogate_2d.html#rpfm.surrogate.surrogate_2d.SurrogateModel" title="rpfm.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">rpfm.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.surrogate_2d.</code><code class="sig-name descname">TwoDimDescVertSurrogate</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescVertSurrogate"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.surrogate.surrogate_2d.html#latom.surrogate.surrogate_2d.SurrogateModel" title="latom.surrogate.surrogate_2d.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.surrogate_2d.SurrogateModel</span></code></a></p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span></dt>
@@ -963,7 +966,7 @@
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rpfm/surrogate/surrogate_2d.html#TwoDimDescVertSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/surrogate/surrogate_2d.html#TwoDimDescVertSurrogate.sampling"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -979,10 +982,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="_autosummary/rpfm.surrogate.meta_models.html" class="btn btn-neutral float-right" title="rpfm.surrogate.meta_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="_autosummary/latom.surrogate.meta_models.html" class="btn btn-neutral float-right" title="latom.surrogate.meta_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="_autosummary/rpfm.reader.reader_heo_2d.html" class="btn btn-neutral float-left" title="rpfm.reader.reader_heo_2d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="_autosummary/latom.reader.reader_heo_2d.html" class="btn btn-neutral float-left" title="latom.reader.reader_heo_2d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -991,7 +994,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Alberto Fossà, Giuliana Elena Miceli
+        &copy; Copyright 2020, Alberto Fossa&#39;, Giuliana Elena Miceli
 
     </p>
   </div>
