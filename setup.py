@@ -6,7 +6,7 @@ import setuptools
 setuptools.setup(
       
       name='latom',
-      version='0.1',
+      version='1.0',
       description='',
       author='Alberto FOSSA\', Giuliana Elena MICELI',
       
