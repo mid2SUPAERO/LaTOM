@@ -290,7 +290,7 @@ class PowConstRadius:
 
         print('output:', sol_states.message)
 
-        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-10, atol=1e-10))
+        print('\nAchieved target speed: ', np.isclose(self.vf, sol_states.y[1, -1], rtol=1e-8, atol=1e-8))
 
         self.thetaf = sol_states.y[0, -1]  # final angle [rad]
         self.mf = self.compute_mass(self.tf)  # final spacecraft mass [kg]
@@ -319,11 +319,11 @@ class PowConstRadius:
         print('\nIntegrating ODEs for initial powered trajectory at constant R ')
 
         try:
+            print('using Scipy solve_ivp function')
+
             sol = solve_ivp(fun=lambda t, x: self.dx_dt(t, x, self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
                             t_span=(self.t0, self.tf + 1e-6), y0=[self.theta0, self.v0], t_eval=t_eval,
                             rtol=1e-12, atol=1e-20)
-
-            print('using Scipy solve_ivp function')
 
             self.t = np.reshape(sol.t, (nb_nodes, 1))
             self.theta = np.reshape(sol.y[0], (nb_nodes, 1))
@@ -332,13 +332,13 @@ class PowConstRadius:
         except ValueError:
             print('time vector not strictly monotonically increasing, using Scipy odeint function')
 
-            y, sol = odeint(self.dx_dt, y0=[self.theta0, self.v0], t=t_eval,
+            y, sol = odeint(self.dx_dt, y0=[self.theta0, self.v0], t=np.hstack(([self.t0], t_eval)),
                             args=(self.GM, self.R, self.m0, self.t0, self.T, self.Isp),
                             full_output=True, rtol=1e-12, atol=1e-20, tfirst=True)
 
             self.t = np.reshape(t_eval, (nb_nodes, 1))
-            self.theta = np.reshape(y[:, 0], (nb_nodes, 1))
-            self.v = np.reshape(y[:, 1], (nb_nodes, 1))
+            self.theta = np.reshape(y[1:, 0], (nb_nodes, 1))
+            self.v = np.reshape(y[1:, 1], (nb_nodes, 1))
 
         print('output:', sol['message'])
 
@@ -528,7 +528,7 @@ class TwoDimLLOGuess(TwoDimGuess):
         self.controls = np.vstack((self.pow1.controls, self.ht.controls, self.pow2.controls))
 
         if fix_final:
-            self.states[:, 1] = self.states[:, 1] - self.pow2.thetaf
+            self.states[:, 1] = self.states[:, 1] - self.states[-1, 1]
 
         if 'theta' in kwargs:
             self.states[:, 1] = self.states[:, 1] + kwargs['theta']
@@ -570,6 +570,7 @@ class TwoDimAscGuess(TwoDimLLOGuess):
 class TwoDimDescGuess(TwoDimLLOGuess):
 
     def __init__(self, gm, r, alt, sc):
+
         arr = TwoDimOrb(gm, a=r, e=0)
         dep = TwoDimOrb(gm, a=(r + alt), e=0)
 
@@ -583,3 +584,25 @@ class TwoDimDescGuess(TwoDimLLOGuess):
         self.pow2.compute_final_time_states()
 
         self.tf = self.pow2.tf
+
+
+if __name__ == '__main__':
+
+    from rpfm.utils.primary import Moon
+    from rpfm.utils.spacecraft import Spacecraft
+    from copy import deepcopy
+
+    moon = Moon()
+    sat = Spacecraft(450., 2.1, g=moon.g)
+
+    nb = 50
+    ff = False
+
+    dg = TwoDimDescGuess(moon.GM, moon.R, 100e3, sat)
+    dg2 = deepcopy(dg)
+
+    tvec = np.reshape(np.linspace(0.0, dg.pow2.tf, nb), (nb, 1))
+    tvec2 = np.sort(np.vstack((tvec, tvec[1:-1])), axis=0)
+
+    dg.compute_trajectory(fix_final=ff, t_eval=tvec)
+    dg2.compute_trajectory(fix_final=ff, t_eval=tvec2)

@@ -11,7 +11,7 @@ from rpfm.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAnal
 
 
 # trajectory
-kind = 'v'
+kind = 's'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
 alt_p = 15e3  # periselene altitude [m]

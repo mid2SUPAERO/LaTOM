@@ -1014,7 +1014,7 @@ class TwoDimDescVLandAnalyzer(TwoDimDescVarAnalyzer):
 
         self.nlp = TwoDimDescVLandNLP(body, sc, alt, alt_safe, slope, (0.0, 1.5 * np.pi), t_bounds, method, nb_seg,
                                       order, solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                      check_partials=check_partials, u_bound=u_bound)
+                                      check_partials=check_partials, u_bound=u_bound, fix_final=True)
 
         self.alt_safe = alt_safe
         self.slope = slope

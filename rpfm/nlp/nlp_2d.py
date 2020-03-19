@@ -165,8 +165,7 @@ class TwoDimNLP(SinglePhaseNLP):
         """
 
         self.set_initial_guess_interpolation(bcs=np.ones((7, 2)), check_partials=False, throttle=throttle)
-
-        self.guess.compute_trajectory(t_eval=self.t_all*self.body.tc, fix_final=fix_final, throttle=throttle)
+        self.guess.compute_trajectory(fix_final=fix_final, t_eval=self.t_all*self.body.tc, throttle=throttle)
 
         self.p[self.phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, self.state_nodes)
         self.p[self.phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], self.state_nodes)
