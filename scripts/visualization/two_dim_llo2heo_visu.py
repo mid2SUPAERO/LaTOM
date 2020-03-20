@@ -5,14 +5,13 @@
 
 from latom.reader.reader_heo_2d import TwoDim3PhasesLLO2HEOReader
 from latom.utils.primary import Moon
+from latom.data.llo2heo3phases.data_llo2heo3ph import dirname_llo2heo3ph
 
 
 moon = Moon()
 
-path = '/home/alberto/Documents/ResultsRP/'
-db = path + 's7/llo2heo_ipopt1200.pkl'
-db_exp = path + 's7/llo2heo_ipopt1200_exp.pkl'
+db = dirname_llo2heo3ph + '/llo2heo_ipopt1200.pkl'
 
-cr = TwoDim3PhasesLLO2HEOReader(moon, db, db_exp=db_exp)
+cr = TwoDim3PhasesLLO2HEOReader(moon, db, db_exp=None)
 
 cr.plot()
