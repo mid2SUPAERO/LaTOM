@@ -11,54 +11,61 @@ from smt.sampling_methods import LHS, FullFactorial
 from smt.surrogate_models import IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
 
 from latom.utils.spacecraft import Spacecraft, ImpulsiveBurn
+from latom.utils.keplerian_orbit import TwoDimOrb
 from latom.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescTwoPhasesNLP,\
     TwoDimDescConstNLP, TwoDimDescVarNLP, TwoDimDescVLandNLP
 from latom.guess.guess_2d import HohmannTransfer
 from latom.plots.response_surfaces import RespSurf
+from latom.data.smt.data_smt import dirname_smt
+from latom.utils.pickle_utils import save, load
 
 
 class SurrogateModel:
 
-    def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='lhs', criterion='m', snopt_opts=None, u_bound=None):
+    def __init__(self, train_method, rec_file=None):
 
-        # parameters
-        self.body = body
+        self.limits = self.x_samp = self.m_prop = self.failures = self.d = None
+        self.trained = None
+
+        if rec_file is not None:
+            self.load(rec_file)
+            self.train(train_method)
+
+    @staticmethod
+    def abs_path(rec_file):
+
+        return '/'.join([dirname_smt, rec_file])
+
+    def load(self, rec_file):
+
+        self.d = load(self.abs_path(rec_file))
+        self.limits = self.d['limits']
+        self.x_samp = self.d['x_samp']
+        self.m_prop = self.d['m_prop']
+        self.failures = self.d['failures']
+
+    def save(self, rec_file):
+
+        d = {'limits': self.limits, 'x_samp': self.x_samp, 'm_prop': self.m_prop, 'failures': self.failures}
+        save(d, self.abs_path(rec_file))
+
+    def compute_grid(self, isp_lim, twr_lim, nb_samp, samp_method='full', criterion='m'):
+
         self.limits = np.vstack((np.asarray(isp_lim), np.asarray(twr_lim)))
-        self.alt = alt
-        self.t_bounds = t_bounds
-        self.method = method
-        self.nb_seg = nb_seg
-        self.order = order
-        self.solver = solver
-        self.nb_samp = nb_samp
-        self.snopt_opts = snopt_opts
-        self.u_bound = u_bound
 
-        # training models
-        self.train_mass = self.train_tof = None
-
-        # sampling, evaluation and matrices values
-        self.failures = []
-        self.tof_samp = np.zeros((nb_samp, 1))
-        self.m_samp = np.zeros((nb_samp, 1))
-
-        self.nb_eval = self.samp_eval = self.x_eval = self.m_eval = self.tof_eval = None
-        self.isp = self.twr = self.m_mat = self.tof_mat = None
-
-        # sampling grid
         if samp_method == 'lhs':
-            self.samp = LHS(xlimits=self.limits, criterion=criterion)
+            samp = LHS(xlimits=self.limits, criterion=criterion)
         elif samp_method == 'full':
-            self.samp = FullFactorial(xlimits=self.limits)
-            self.nb_eval = self.nb_samp
+            samp = FullFactorial(xlimits=self.limits)
         else:
             raise ValueError('samp_method must be either lhs or full')
 
-        self.x_samp = self.samp(self.nb_samp)
-        self.surf_plot = None
+        self.x_samp = samp(nb_samp)
+        self.m_prop = np.zeros((nb_samp, 1))
+        self.failures = np.zeros((nb_samp, 1))
 
-    def solve(self, nlp, i):
+    @staticmethod
+    def solve(nlp, i):
 
         print('\nIteration:', i, '\n')
 
@@ -71,262 +78,202 @@ class SurrogateModel:
         else:
             phase_name = nlp.phase_name[-1]
 
-        self.m_samp[i, 0] = nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
-        self.tof_samp[i, 0] = nlp.p.get_val(phase_name + '.time')[-1]*self.body.tc
-        self.failures.append(f)
+        m_prop = 1.0 - nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
 
         nlp.cleanup()
+
+        return m_prop, f
 
     def train(self, train_method, **kwargs):
 
         if train_method == 'IDW':
-            self.train_mass = IDW(**kwargs)
-            self.train_tof = IDW(**kwargs)
+            self.trained = IDW(**kwargs)
         elif train_method == 'KPLS':
-            self.train_mass = KPLS(**kwargs)
-            self.train_tof = KPLS(**kwargs)
+            self.trained = KPLS(**kwargs)
         elif train_method == 'KPLSK':
-            self.train_mass = KPLSK(**kwargs)
-            self.train_tof = KPLSK(**kwargs)
+            self.trained = KPLSK(**kwargs)
         elif train_method == 'KRG':
-            self.train_mass = KRG(**kwargs)
-            self.train_tof = KRG(**kwargs)
+            self.trained = KRG(**kwargs)
         elif train_method == 'LS':
-            self.train_mass = LS(**kwargs)
-            self.train_tof = LS(**kwargs)
+            self.trained = LS(**kwargs)
         elif train_method == 'QP':
-            self.train_mass = QP(**kwargs)
-            self.train_tof = QP(**kwargs)
+            self.trained = QP(**kwargs)
         elif train_method == 'RBF':
-            self.train_mass = RBF(**kwargs)
-            self.train_tof = RBF(**kwargs)
+            self.trained = RBF(**kwargs)
         elif train_method == 'RMTB':
-            self.train_mass = RMTB(xlimits=self.limits, **kwargs)
-            self.train_tof = RMTB(xlimits=self.limits, **kwargs)
+            self.trained = RMTB(xlimits=self.limits, **kwargs)
         elif train_method == 'RMTC':
-            self.train_mass = RMTC(xlimits=self.limits, **kwargs)
-            self.train_tof = RMTC(xlimits=self.limits, **kwargs)
+            self.trained = RMTC(xlimits=self.limits, **kwargs)
         else:
             raise ValueError('train_method must be one between IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC')
 
-        self.train_mass.set_training_values(self.x_samp, self.m_samp[:, 0])
-        self.train_tof.set_training_values(self.x_samp, self.tof_samp[:, 0])
+        self.trained.set_training_values(self.x_samp, self.m_prop)
+        self.trained.train()
 
-        self.train_mass.train()
-        self.train_tof.train()
+    def evaluate(self, isp, twr):
 
-    def evaluate(self, **kwargs):
+        if isinstance(isp, float):
+            isp = [isp]
+        if isinstance(twr, float):
+            twr = [twr]
 
-        if ('isp' in kwargs) and ('twr' in kwargs):  # single values
+        x_eval = np.hstack((np.reshape(isp, (len(isp), 1)), np.reshape(twr, (len(twr), 1))))
+        m_eval = self.trained.predict_values(x_eval)
 
-            isp = kwargs['isp']
-            twr = kwargs['twr']
+        return m_eval
 
-            if isinstance(isp, float):
-                isp = [isp]
-            if isinstance(twr, float):
-                twr = [twr]
+    def compute_matrix(self, nb_eval=None):
 
-            x_eval = np.hstack((np.reshape(isp, (len(isp), 1)), np.reshape(twr, (len(twr), 1))))
-            m_eval = self.train_mass.predict_values(x_eval)
-            tof_eval = self.train_tof.predict_values(x_eval)
+        if nb_eval is not None:  # LHS
+            samp_eval = FullFactorial(xlimits=self.limits)
+            x_eval = samp_eval(nb_eval)
+            m_prop_eval = self.trained.predict_values(x_eval)
 
-            return m_eval, tof_eval
+        else:  # Full-Factorial
+            nb_eval = np.size(self.m_prop)
+            x_eval = deepcopy(self.x_samp)
+            m_prop_eval = deepcopy(self.m_prop)
 
-        else:  # full grid
+        isp = np.unique(x_eval[:, 0])
+        twr = np.unique(x_eval[:, 1])
+        n = int(np.sqrt(nb_eval))
+        m_mat = np.reshape(m_prop_eval, (n, n))
 
-            if 'nb_eval' in kwargs:
+        return isp, twr, m_mat
 
-                self.nb_eval = kwargs['nb_eval']
+    def plot(self, nb_eval=None, nb_lines=50, kind='prop'):
 
-                self.samp_eval = FullFactorial(xlimits=self.limits)
+        isp, twr, m_mat = self.compute_matrix(nb_eval=nb_eval)
 
-                self.x_eval = self.samp_eval(self.nb_eval)
-                self.m_eval = self.train_mass.predict_values(self.x_eval)
-                self.tof_eval = self.train_tof.predict_values(self.x_eval)
+        if kind == 'prop':
+            surf_plot = RespSurf(isp, twr, m_mat, 'Propellant fraction', nb_lines=nb_lines)
+        elif kind == 'final':
+            surf_plot = RespSurf(isp, twr, (1 - m_mat), 'Final/initial mass ratio', nb_lines=nb_lines)
+        else:
+            raise ValueError('kind must be either prop or final')
 
-            elif self.nb_eval is not None:
-
-                self.x_eval = deepcopy(self.x_samp)
-                self.m_eval = deepcopy(self.m_samp)
-                self.tof_eval = deepcopy(self.tof_samp)
-
-            else:
-                raise ValueError('Surrogate model built with LHS sampling method.'
-                                 '\nThe two arrays isp, twr or nb_eval must be provided')
-
-            self.isp = np.unique(self.x_eval[:, 0])
-            self.twr = np.unique(self.x_eval[:, 1])
-
-            n = int(np.sqrt(self.nb_eval))
-
-            self.m_mat = np.reshape(self.m_eval, (n, n))
-            self.tof_mat = np.reshape(self.tof_eval, (n, n))
-
-    def plot(self):
-
-        self.surf_plot = RespSurf(self.isp, self.twr, self.m_mat, self.tof_mat)
-        self.surf_plot.plot()
+        surf_plot.plot()
 
         plt.show()
 
 
 class TwoDimAscConstSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='lhs', criterion='m', snopt_opts=None, u_bound='lower'):
+    def sampling(self, body, isp_lim, twr_lim, alt, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
+                 samp_method='full', criterion='m', snopt_opts=None, u_bound='lower'):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts, u_bound=u_bound)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-        self.theta = theta
-        self.tof = tof
+        for i in range(nb_samp):
 
-    def sampling(self):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            nlp = TwoDimAscConstNLP(body, sc, alt, theta, (-np.pi/2, np.pi/2), tof, t_bounds, method, nb_seg, order,
+                                    solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-        for i in range(self.nb_samp):
-
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            nlp = TwoDimAscConstNLP(self.body, sc, self.alt, self.theta, (-np.pi/2, np.pi/2), self.tof, self.t_bounds,
-                                    self.method, self.nb_seg, self.order, self.solver, 'powered',
-                                    snopt_opts=self.snopt_opts, u_bound=self.u_bound)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
 
 
 class TwoDimAscVarSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, samp_method='lhs',
-                 criterion='m', snopt_opts=None, u_bound='lower'):
+    def sampling(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
+                 samp_method='full', criterion='m', snopt_opts=None, u_bound='lower'):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts, u_bound=u_bound)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-    def sampling(self):
+        for i in range(nb_samp):
 
-        for i in range(self.nb_samp):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            nlp = TwoDimAscVarNLP(body, sc, alt, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order, solver,
+                                  'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            nlp = TwoDimAscVarNLP(self.body, sc, self.alt, (-np.pi/2, np.pi/2), self.t_bounds, self.method, self.nb_seg,
-                                  self.order, self.solver, 'powered', snopt_opts=self.snopt_opts, u_bound=self.u_bound)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
 
 
 class TwoDimAscVToffSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
+    def sampling(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
                  nb_samp, samp_method='lhs', criterion='m', snopt_opts=None, u_bound='lower'):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts, u_bound=u_bound)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-        self.alt_safe = alt_safe
-        self.slope = slope
+        for i in range(nb_samp):
 
-    def sampling(self):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            nlp = TwoDimAscVToffNLP(body, sc, alt, alt_safe, slope, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg,
+                                    order, solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-        for i in range(self.nb_samp):
-
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            nlp = TwoDimAscVToffNLP(self.body, sc, self.alt, self.alt_safe, self.slope, (-np.pi/2, np.pi/2),
-                                    self.t_bounds, self.method, self.nb_seg, self.order, self.solver, 'powered',
-                                    snopt_opts=self.snopt_opts, u_bound=self.u_bound)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescConstSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
+    def sampling(self, body, isp_lim, twr_lim, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
                  samp_method='lhs', criterion='m', snopt_opts=None, u_bound='upper'):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts, u_bound=u_bound)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p))
-        self.alt_p = alt_p
-        self.theta = theta
-        self.tof = tof
+        ht = HohmannTransfer(body.GM, TwoDimOrb(body.GM, a=(body.R + alt), e=0.0),
+                             TwoDimOrb(body.GM, a=(body.R + alt_p), e=0.0))
 
-    def sampling(self):
+        for i in range(nb_samp):
 
-        for i in range(self.nb_samp):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            deorbit_burn = ImpulsiveBurn(sc, ht.dva)
+            nlp = TwoDimDescConstNLP(body, deorbit_burn.sc, alt_p, ht.transfer.vp, theta, (0, 3/2*np.pi),  tof,
+                                     t_bounds, method, nb_seg, order, solver, 'powered', snopt_opts=snopt_opts,
+                                     u_bound=u_bound)
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            deorbit_burn = ImpulsiveBurn(sc, self.ht.dva)
-            nlp = TwoDimDescConstNLP(self.body, deorbit_burn.sc, self.alt_p, self.ht.transfer.vp, self.theta,
-                                     (0, 3/2*np.pi), self.tof, self.t_bounds, self.method, self.nb_seg, self.order,
-                                     self.solver, 'powered', snopt_opts=self.snopt_opts, u_bound=self.u_bound)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescVarSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, samp_method='lhs',
+    def sampling(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, samp_method='lhs',
                  criterion='m', snopt_opts=None, u_bound='upper'):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts, u_bound=u_bound)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-    def sampling(self):
+        for i in range(nb_samp):
 
-        for i in range(self.nb_samp):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            nlp = TwoDimDescVarNLP(body, sc, alt, (0.0, 3/2*np.pi), t_bounds, method, nb_seg, order, solver, 'powered',
+                                   snopt_opts=snopt_opts, u_bound=u_bound)
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            nlp = TwoDimDescVarNLP(self.body, sc, self.alt, (0.0, 3/2*np.pi), self.t_bounds, self.method, self.nb_seg,
-                                   self.order, self.solver, 'powered', snopt_opts=self.snopt_opts, u_bound=self.u_bound)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescVLandSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
+    def sampling(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
                  nb_samp, samp_method='lhs', criterion='m', snopt_opts=None, u_bound='upper'):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts, u_bound=u_bound)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-        self.alt_safe = alt_safe
-        self.slope = slope
+        for i in range(nb_samp):
 
-    def sampling(self):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            nlp = TwoDimDescVLandNLP(body, sc, alt, alt_safe, slope, (0.0, 3/2*np.pi), t_bounds, method, nb_seg, order,
+                                     solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-        for i in range(self.nb_samp):
-
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-            nlp = TwoDimDescVLandNLP(self.body, sc, self.alt, self.alt_safe, self.slope, (0.0, 3/2*np.pi),
-                                     self.t_bounds, self.method, self.nb_seg, self.order, self.solver, 'powered',
-                                     snopt_opts=self.snopt_opts, u_bound=self.u_bound)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescVertSurrogate(SurrogateModel):
 
-    def __init__(self, body, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order,
+    def sampling(self, body, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order,
                  solver, nb_samp, samp_method='lhs', criterion='m', snopt_opts=None):
 
-        SurrogateModel.__init__(self, body, isp_lim, twr_lim, alt_p, t_bounds, method, nb_seg, order, solver, nb_samp,
-                                samp_method=samp_method, criterion=criterion, snopt_opts=snopt_opts)
+        self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
-        self.ht = HohmannTransfer(body.GM, (body.R + alt), (body.R + alt_p))
-        self.alt_switch = alt_switch
-        self.theta = theta
-        self.tof = tof
+        ht = HohmannTransfer(body.GM, TwoDimOrb(body.GM, a=(body.R + alt), e=0.0),
+                             TwoDimOrb(body.GM, a=(body.R + alt_p), e=0.0))
 
-    def sampling(self):
+        for i in range(nb_samp):
 
-        for i in range(self.nb_samp):
+            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=body.g)
+            deorbit_burn = ImpulsiveBurn(sc, ht.dva)
+            nlp = TwoDimDescTwoPhasesNLP(body, deorbit_burn.sc, alt, alt_switch, ht.transfer.vp, theta, (0.0, np.pi),
+                                         tof, t_bounds, method, nb_seg, order, solver, ('free', 'vertical'),
+                                         snopt_opts=snopt_opts)
 
-            sc = Spacecraft(self.x_samp[i, 0], self.x_samp[i, 1], g=self.body.g)
-
-            deorbit_burn = ImpulsiveBurn(sc, self.ht.dva)
-
-            nlp = TwoDimDescTwoPhasesNLP(self.body, deorbit_burn.sc, self.alt, self.alt_switch, self.ht.vp, self.theta,
-                                         (0.0, np.pi), self.tof, self.t_bounds, self.method, self.nb_seg, self.order,
-                                         self.solver, ('free', 'vertical'), snopt_opts=self.snopt_opts)
-
-            self.solve(nlp, i)
+            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)

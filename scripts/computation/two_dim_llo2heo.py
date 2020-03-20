@@ -10,7 +10,7 @@ from latom.utils.spacecraft import Spacecraft
 from latom.analyzer.analyzer_heo_2d import TwoDimLLO2HEOAnalyzer, TwoDimLLO2ApoAnalyzer, TwoDim2PhasesLLO2HEOAnalyzer,\
     TwoDim3PhasesLLO2HEOAnalyzer
 
-kind = 'full'
+kind = 'first'
 
 # trajectory
 moon = Moon()

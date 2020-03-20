@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from openmdao.api import Problem, MetaModelStructuredComp
 from latom.utils.pickle_utils import load, save
 from latom.utils.spacecraft import Spacecraft, ImpulsiveBurn
-from latom.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP,\
+from latom.nlp.nlp_2d import TwoDimAscConstNLP, TwoDimAscVarNLP, TwoDimAscVToffNLP, TwoDimDescConstNLP, \
     TwoDimDescVarNLP, TwoDimDescVLandNLP
 from latom.guess.guess_2d import HohmannTransfer
 from latom.utils.keplerian_orbit import TwoDimOrb
@@ -107,11 +107,18 @@ class MetaModel:
 
         return None, None
 
-    def plot(self, nb_lines=50, log_scale=False):
+    def plot(self, nb_lines=50, kind='prop', log_scale=False):
 
-        mf = RespSurf(self.Isp, self.twr, (1 - self.m_prop.T), 'Final/initial mass ratio', nb_lines=nb_lines,
-                      log_scale=log_scale)
-        mf.plot()
+        if kind == 'prop':
+            rs = RespSurf(self.Isp, self.twr, self.m_prop.T, 'Propellant fraction', nb_lines=nb_lines,
+                          log_scale=log_scale)
+        elif kind == 'final':
+            rs = RespSurf(self.Isp, self.twr, (1 - self.m_prop.T), 'Final/initial mass ratio', nb_lines=nb_lines,
+                          log_scale=log_scale)
+        else:
+            raise ValueError('kind must be either prop or final')
+
+        rs.plot()
         plt.show()
 
 
@@ -119,7 +126,6 @@ class TwoDimAscConstMetaModel(MetaModel):
 
     @staticmethod
     def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
-
         nlp = TwoDimAscConstNLP(body, sc, alt, kwargs['theta'], (-np.pi / 2, np.pi / 2), kwargs['tof'], t_bounds,
                                 method, nb_seg, order, solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
@@ -134,7 +140,6 @@ class TwoDimAscVarMetaModel(MetaModel):
 
     @staticmethod
     def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
-
         nlp = TwoDimAscVarNLP(body, sc, alt, (-np.pi / 2, np.pi / 2), t_bounds, method, nb_seg, order, solver,
                               'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
@@ -149,7 +154,6 @@ class TwoDimAscVToffMetaModel(MetaModel):
 
     @staticmethod
     def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
-
         nlp = TwoDimAscVToffNLP(body, sc, alt, kwargs['alt_safe'], kwargs['slope'], (-np.pi / 2, np.pi / 2), t_bounds,
                                 method, nb_seg, order, solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
@@ -176,7 +180,7 @@ class TwoDimDescConstMetaModel(MetaModel):
         ht = HohmannTransfer(body.GM, dep, arr)
         deorbit_burn = ImpulsiveBurn(sc, ht.dva)
 
-        nlp = TwoDimDescConstNLP(body, deorbit_burn.sc, alt_p, ht.transfer.vp, kwargs['theta'], (0.0, 1.5*np.pi),
+        nlp = TwoDimDescConstNLP(body, deorbit_burn.sc, alt_p, ht.transfer.vp, kwargs['theta'], (0.0, 1.5 * np.pi),
                                  kwargs['tof'], t_bounds, method, nb_seg, order, solver, 'powered',
                                  snopt_opts=snopt_opts, u_bound=u_bound)
 
@@ -191,7 +195,6 @@ class TwoDimDescVarMetaModel(MetaModel):
 
     @staticmethod
     def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
-
         nlp = TwoDimDescVarNLP(body, sc, alt, (0.0, 3 / 2 * np.pi), t_bounds, method, nb_seg, order, solver, 'powered',
                                snopt_opts=snopt_opts, u_bound=u_bound)
 
@@ -206,7 +209,6 @@ class TwoDimDescVLandMetaModel(MetaModel):
 
     @staticmethod
     def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
-
         nlp = TwoDimDescVLandNLP(body, sc, alt, kwargs['alt_safe'], kwargs['slope'], (0.0, 3 / 2 * np.pi), t_bounds,
                                  method, nb_seg, order, solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
@@ -221,7 +223,6 @@ class TwoDimDescTwoPhasesMetaModel(MetaModel):
 
     @staticmethod
     def solve(body, sc, alt, t_bounds, method, nb_seg, order, solver, snopt_opts=None, u_bound=None, **kwargs):
-
         tr = TwoDimDescTwoPhasesAnalyzer(body, sc, alt, kwargs['alt_p'], kwargs['alt_switch'], kwargs['theta'],
                                          kwargs['tof'], t_bounds, method, nb_seg, order, solver, snopt_opts=snopt_opts,
                                          fix=kwargs['fix'])
@@ -230,6 +231,6 @@ class TwoDimDescTwoPhasesMetaModel(MetaModel):
         tr.get_solutions(explicit=False, scaled=False)
         tr.nlp.cleanup()
 
-        m_prop = 1 - tr.states[-1][-1, -1]/tr.sc.m0
+        m_prop = 1 - tr.states[-1][-1, -1] / tr.sc.m0
 
         return m_prop, f
