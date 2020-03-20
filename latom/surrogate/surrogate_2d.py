@@ -67,11 +67,9 @@ class SurrogateModel:
     @staticmethod
     def solve(nlp, i):
 
-        print('\nIteration:', i, '\n')
-
+        print(f"\nIteration {i}\nIsp: {nlp.sc.Isp:.6f} s\ttwr: {nlp.sc.twr:.6f}")
         f = nlp.p.run_driver()
-
-        print('\nFailure:', f, '\n')
+        print("\nFailure: {0}".format(f))
 
         if isinstance(nlp.phase_name, str):
             phase_name = nlp.phase_name
@@ -79,7 +77,6 @@ class SurrogateModel:
             phase_name = nlp.phase_name[-1]
 
         m_prop = 1.0 - nlp.p.get_val(phase_name + '.timeseries.states:m')[-1, -1]
-
         nlp.cleanup()
 
         return m_prop, f
@@ -170,7 +167,7 @@ class TwoDimAscConstSurrogate(SurrogateModel):
             nlp = TwoDimAscConstNLP(body, sc, alt, theta, (-np.pi/2, np.pi/2), tof, t_bounds, method, nb_seg, order,
                                     solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
 
 
 class TwoDimAscVarSurrogate(SurrogateModel):
@@ -186,7 +183,7 @@ class TwoDimAscVarSurrogate(SurrogateModel):
             nlp = TwoDimAscVarNLP(body, sc, alt, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order, solver,
                                   'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
 
 
 class TwoDimAscVToffSurrogate(SurrogateModel):
@@ -202,7 +199,7 @@ class TwoDimAscVToffSurrogate(SurrogateModel):
             nlp = TwoDimAscVToffNLP(body, sc, alt, alt_safe, slope, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg,
                                     order, solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescConstSurrogate(SurrogateModel):
@@ -223,7 +220,7 @@ class TwoDimDescConstSurrogate(SurrogateModel):
                                      t_bounds, method, nb_seg, order, solver, 'powered', snopt_opts=snopt_opts,
                                      u_bound=u_bound)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescVarSurrogate(SurrogateModel):
@@ -239,7 +236,7 @@ class TwoDimDescVarSurrogate(SurrogateModel):
             nlp = TwoDimDescVarNLP(body, sc, alt, (0.0, 3/2*np.pi), t_bounds, method, nb_seg, order, solver, 'powered',
                                    snopt_opts=snopt_opts, u_bound=u_bound)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescVLandSurrogate(SurrogateModel):
@@ -255,7 +252,7 @@ class TwoDimDescVLandSurrogate(SurrogateModel):
             nlp = TwoDimDescVLandNLP(body, sc, alt, alt_safe, slope, (0.0, 3/2*np.pi), t_bounds, method, nb_seg, order,
                                      solver, 'powered', snopt_opts=snopt_opts, u_bound=u_bound)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
 
 
 class TwoDimDescVertSurrogate(SurrogateModel):
@@ -276,4 +273,4 @@ class TwoDimDescVertSurrogate(SurrogateModel):
                                          tof, t_bounds, method, nb_seg, order, solver, ('free', 'vertical'),
                                          snopt_opts=snopt_opts)
 
-            self.m_prop[:, 0], self.failures[:, 0] = self.solve(nlp, i)
+            self.m_prop[i, 0], self.failures[i, 0] = self.solve(nlp, i)
