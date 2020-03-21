@@ -28,7 +28,7 @@ class MetaModel:
 
         self.p = Problem()
         self.p.model.add_subsystem('mm', self.mm, promotes=['Isp', 'twr'])
-        self.twr = self.Isp = self.m_prop = self.failures = self.d = None
+        self.twr = self.Isp = self.m_prop = self.failures = self.limits = self.d = None
 
         if rec_file is not None:
             self.load(rec_file)
@@ -62,6 +62,7 @@ class MetaModel:
 
     def setup(self):
 
+        self.limits = np.array([[self.Isp[0], self.Isp[-1]], [self.twr[0], self.twr[-1]]])
         self.mm.add_input('twr', training_data=self.twr)
         self.mm.add_input('Isp', training_data=self.Isp)
         self.mm.add_output('m_prop', training_data=self.m_prop)

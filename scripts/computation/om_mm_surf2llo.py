@@ -3,7 +3,7 @@
 
 """
 
-from latom.surrogate.meta_models import *
+from latom.surrogate.om_metamodels import *
 from latom.utils.primary import Moon
 
 

@@ -5,15 +5,19 @@
 
 import numpy as np
 
-from latom.surrogate.surrogate_2d import SurrogateModel
+from latom.surrogate.smt_surrogates import SurrogateModel
 
-fid_lhs = 'asc_vtoff_lhs.pkl'
-fid_full = 'desc_const_full.pkl'
+fid_lhs = 'asc_const_lhs.pkl'
+fid_full = 'asc_const_full.pkl'
 kind = 'prop'  # 'final'
 
-# 'IDW', 'KPLS', 'KPLSK', 'KRG', 'LS', 'QP', 'RBF', 'RMTB', 'RMTC'
 sm_lhs = SurrogateModel('KRG', rec_file=fid_lhs)
 sm_full = SurrogateModel('LS', rec_file=fid_full)
+
+twr = np.linspace(2, 3, 5)
+isp = np.linspace(300, 400, 5)
+m_prop = sm_lhs.evaluate(isp, twr)
+print(m_prop)
 
 sm_lhs.plot(2500, kind=kind)
 sm_full.plot(kind=kind)

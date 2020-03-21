@@ -22,7 +22,7 @@ t_bounds = (0., 2.)  # time of flight bounds [-]
 fix = 'alt'
 
 # spacecraft
-isp = 400.  # specific impulse [s]
+isp = 310.  # specific impulse [s]
 twr = 0.9  # initial thrust/weight ratio [-]
 sc = Spacecraft(isp, twr, g=moon.g)
 

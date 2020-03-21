@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from latom.surrogate.meta_models import MetaModel
+from latom.surrogate.om_metamodels import MetaModel
 
 # MetaModel settings
 distributed = False  # variables distributed across multiple processes
@@ -22,8 +22,8 @@ kind = 'final'  # quantity to display, prop for propellant fraction or final for
 a = MetaModel(distributed=distributed, extrapolate=extrapolate, method=interp_method,
               training_data_gradients=training_data_gradients, vec_size=vec_size, rec_file=rec_file)
 
-a.p['twr'] = [1.9]
-a.p['Isp'] = [345.]
+a.p['twr'] = np.linspace(2, 3, 5)
+a.p['Isp'] = np.linspace(300, 400, 5)
 
 a.p.run_model()
 a.plot(nb_lines=50, log_scale=False, kind=kind)

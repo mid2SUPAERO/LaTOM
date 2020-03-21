@@ -7,7 +7,7 @@ import numpy as np
 
 from latom.nlp.nlp_heo_2d import TwoDim3PhasesLLO2HEONLP
 from latom.analyzer.analyzer_heo_2d import TwoDimLLO2ApoAnalyzer, TwoDimLLO2ApoContinuationAnalyzer
-from latom.surrogate.meta_models import MetaModel
+from latom.surrogate.om_metamodels import MetaModel
 from latom.utils.pickle_utils import save
 from latom.utils.spacecraft import Spacecraft
 from latom.plots.response_surfaces import RespSurf

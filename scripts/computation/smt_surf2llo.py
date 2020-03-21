@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from latom.surrogate.surrogate_2d import TwoDimAscConstSurrogate, TwoDimAscVarSurrogate, TwoDimAscVToffSurrogate, \
+from latom.surrogate.smt_surrogates import TwoDimAscConstSurrogate, TwoDimAscVarSurrogate, TwoDimAscVToffSurrogate, \
     TwoDimDescVertSurrogate, TwoDimDescConstSurrogate, TwoDimDescVarSurrogate, TwoDimDescVLandSurrogate
 from latom.utils.primary import Moon
 
