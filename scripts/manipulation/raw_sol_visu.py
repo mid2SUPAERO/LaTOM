@@ -10,10 +10,10 @@ fid = None  # 'llo2apo_lin_005-05_250-330.pkl'  # filename for adjusted solution
 
 en_threshold = -6e4  # spacecraft energy threshold
 isp_lim = (0, None)  # new specific impulse limits
-twr_lim = (0, None)  # new thrust/weight ratio limits
+twr_lim = (2, None)  # new thrust/weight ratio limits
 
 # load raw solution
-fid_raw = '/'.join([dirname_metamodels, 'tests/llo2apo_mm_lin360-370.pkl'])
+fid_raw = '/'.join([dirname_metamodels, 'tests/llo2apo_mm_lin159.pkl'])
 d = load(fid_raw)
 
 # extract data from dictionary

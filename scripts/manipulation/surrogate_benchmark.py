@@ -64,8 +64,8 @@ fid_real = dirname + '/asc_const_benchmark20.pkl'  # actual NLP solutions
 # common metamodels settings
 solve = False  # recompute actual solutions
 store = False  # store computed actual solutions
-multiple = False  # compare multiple surrogate modeling methods and interpolation schemes
-compute_err = False  # compute the error
+multiple = True  # compare multiple surrogate modeling methods and interpolation schemes
+compute_err = True  # compute the error
 case = 'asc_const'  # study case between asc_const, asc_var, asc_vtoff, desc_const, desc_var, desc_vland
 kind = None  # quantity to be displayed between prop (propellant fraction) or final (final/initial mass ratio)
 nb_points = 20  # number of benchmark points
@@ -162,9 +162,9 @@ for im_mm in interp_method:
                     err_full = np.fabs(m_prop.flatten() - m_prop_full.flatten())
                 else:
                     err_full = None
-                fid.write(f"\n{'mm':4s}\t{im_mm:20s}\t{np.min(err_mm):.16f}\t{np.max(err_mm):.16f}")
-                fid.write(f"\n{'lhs':4s}\t{tm_lhs:20s}\t{np.min(err_lhs):.16f}\t{np.max(err_lhs):.16f}")
-                fid.write(f"\n{'full':4s}\t{tm_full:20s}\t{np.min(err_full):.16f}\t{np.max(err_full):.16f}")
+                fid.write(f"\n{'mm':4s}\t{im_mm:20s}\t{np.min(err_mm):.16e}\t{np.max(err_mm):.16e}")
+                fid.write(f"\n{'lhs':4s}\t{tm_lhs:20s}\t{np.min(err_lhs):.16e}\t{np.max(err_lhs):.16e}")
+                fid.write(f"\n{'full':4s}\t{tm_full:20s}\t{np.min(err_full):.16e}\t{np.max(err_full):.16e}")
             if store:
                 d = {'Isp': isp, 'twr': twr, 'm_prop': m_prop}
                 save(d, fid_real)

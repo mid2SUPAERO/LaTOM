@@ -42,4 +42,4 @@ print(f"Propellant fraction (excluding insertion): {(1 - tr.states[0][-1, -1]):.
 print(f"Propellant fraction (total): {(1 - tr.states[-1][-1, -1]):.16f}")
 
 print(tr)
-tr.plot()
+# tr.plot()
