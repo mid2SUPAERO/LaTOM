@@ -19,13 +19,10 @@ latom.guess.guess\_3d
 
    .. autosummary::
    
-      KepOrb
       ThreeDimAscGuess
       ThreeDimDescGuess
       TwoDimAscGuess
       TwoDimDescGuess
-      TwoDimLLOGuess
-      TwoDimOrb
    
    
 

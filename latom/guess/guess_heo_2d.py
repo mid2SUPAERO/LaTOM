@@ -12,14 +12,48 @@ from latom.utils.spacecraft import ImpulsiveBurn
 
 
 class TwoDimHEOGuess(TwoDimGuess):
+    """`TwoDimHEOGuess` provides an initial guess for an LLO to HEO transfer or vice-versa.
+
+    The approximate trajectory comprises a powered phase at constant radius, an Hohmann transfer and an impulsive burn.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    dep : TwoDimOrb
+        Departure orbit object
+    arr : TwoDimOrb
+        Arrival orbit object
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow : PowConstRadius
+        `PowConstRadius` object
+
+    """
 
     def __init__(self, gm, r, dep, arr, sc):
+        """Initializes `TwoDimHEOGuess` class. """
 
         TwoDimGuess.__init__(self, gm, r, dep, arr, sc)  # set central body, spacecraft, Hohmann transfer
-
         self.pow = None
 
     def compute_trajectory(self, **kwargs):
+        """Computes the states and controls timeseries on the provided time grid.
+
+        Parameters
+        ----------
+        kwargs :
+            t_eval : ndarray
+                Time vector in which states and controls are computed [s]
+            nb_nodes : int
+                Number of equally space nodes in time in which states and controls are computed
+
+        """
 
         if 't_eval' in kwargs:
             self.t = kwargs['t_eval']
@@ -29,8 +63,39 @@ class TwoDimHEOGuess(TwoDimGuess):
 
 
 class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
+    """`TwoDimLLO2HEOGuess` provides an initial guess for an LLO to HEO transfer.
+
+    The approximate trajectory comprises a powered phase at constant radius equal to the LLO one, an Hohmann transfer
+    and an impulsive burn at the HEO apoapsis.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    alt : float
+        LLO altitude [m]
+    rp : float
+        HEO periapsis radius [m]
+    t : float
+        HEO period [s]
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow : PowConstRadius
+        `PowConstRadius` object
+    tf : float
+        Final time [s]
+    insertion_burn : ImpulsiveBurn
+        `ImpulsiveBurn` object
+
+    """
 
     def __init__(self, gm, r, alt, rp, t, sc):
+        """Initializes `TwoDimLLO2HEOGuess` class. """
 
         dep = TwoDimOrb(gm, a=(r + alt), e=0)
         arr = TwoDimOrb(gm, T=t, rp=rp)
@@ -45,6 +110,21 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
         self.insertion_burn = None
 
     def compute_trajectory(self, fix_final=True, throttle=True, **kwargs):
+        """Computes the states and controls timeseries on the provided time grid.
+
+        Parameters
+        ----------
+        fix_final : bool, optional
+            ``True`` if the final angle is fixed, ``False`` otherwise. Default is ``True``
+        throttle : bool, optional
+            If ``True`` replace the spacecraft states on the last node with the ones from `ImpulsiveBurn`
+        kwargs :
+            t_eval : ndarray
+                Time vector in which states and controls are computed [s]
+            nb_nodes : int
+                Number of equally space nodes in time in which states and controls are computed
+
+        """
 
         TwoDimHEOGuess.compute_trajectory(self, **kwargs)
 
@@ -77,6 +157,14 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
             self.controls[-1, 0] = self.sc.T_max
 
     def __str__(self):
+        """Prints infos on `TwoDimLLO2HEOGuess`.
+
+        Returns
+        -------
+        s : str
+            Infos on `TwoDimLLO2HEOGuess`
+
+        """
 
         lines = [TwoDimHEOGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
@@ -94,8 +182,39 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
 
 
 class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
+    """`TwoDimHEO2LLOGuess` provides an initial guess for an HEO to LLO transfer.
+
+    The approximate trajectory comprises an impulsive burn at the HEO apoapsis, an Hohmann transfer and a powered phase
+    at constant radius equal to the LLO one.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    alt : float
+        LLO altitude [m]
+    rp : float
+        HEO periapsis radius [m]
+    t : float
+        HEO period [s]
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow : PowConstRadius
+        `PowConstRadius` object
+    tf : float
+        Final time [s]
+    deorbit_burn : ImpulsiveBurn
+        `ImpulsiveBurn` object
+
+    """
 
     def __init__(self, gm, r, alt, rp, t, sc):
+        """Initializes `TwoDimHEO2LLOGuess` class. """
 
         arr = TwoDimOrb(gm, a=(r + alt), e=0)
         dep = TwoDimOrb(gm, T=t, rp=rp)
@@ -110,6 +229,17 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         self.tf = self.pow.tf
 
     def compute_trajectory(self, **kwargs):
+        """Computes the states and controls timeseries on the provided time grid.
+
+        Parameters
+        ----------
+        kwargs :
+            t_eval : ndarray
+                Time vector in which states and controls are computed [s]
+            nb_nodes : int
+                Number of equally space nodes in time in which states and controls are computed
+
+        """
 
         TwoDimHEOGuess.compute_trajectory(self, **kwargs)
 
@@ -131,6 +261,14 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         self.controls[0, 0] = self.sc.T_max
 
     def __str__(self):
+        """Prints infos on `TwoDimHEO2LLOGuess`.
+
+        Returns
+        -------
+        s : str
+            Infos on `TwoDimHEOLLOGuess`
+
+        """
 
         lines = [TwoDimHEOGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
@@ -148,56 +286,39 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
         return s
 
 
-class TwoDim2PhasesLLO2HEOGuess(TwoDimLLOGuess):
-
-    def __init__(self, gm, r, alt, rp, t, sc):
-
-        dep = TwoDimOrb(gm, a=(r + alt), e=0)
-        arr = TwoDimOrb(gm, T=t, rp=rp)
-
-        TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
-
-        self.pow1 = PowConstRadius(gm, (r + alt), dep.vp, self.ht.transfer.vp, sc.m0, sc.T_max, sc.Isp)
-        self.pow1.compute_final_time_states()
-
-        self.pow2 = PowConstRadius(gm, arr.ra, self.ht.transfer.va, arr.va, self.pow1.mf, sc.T_max, sc.Isp)
-        self.pow2.compute_final_time_states()
-
-    def compute_trajectory(self, fix_final=False, **kwargs):
-
-        if ('t1' in kwargs) and ('t2' in kwargs):
-            t_pow1 = kwargs['t1']
-            t_pow2 = kwargs['t2']
-        elif ('nb1' in kwargs) and ('nb2' in kwargs):
-            t_pow1 = np.linspace(0.0, self.pow1.tf, kwargs['nb1'])
-            t_pow2 = np.linspace(0.0, self.pow2.tf, kwargs['nb2'])
-        else:
-            raise AttributeError('Either t1, t2 or nb1, nb2 must be provided')
-
-        self.pow1.compute_trajectory(t_pow1.flatten())
-        self.pow2.compute_trajectory(t_pow2.flatten())
-
-        self.pow2.states[-1, 0] = self.pow2.R
-        self.pow2.states[-1, 3] = self.pow2.vf
-
-        if fix_final:
-            self.pow1.states[:, 1] = self.pow1.states[:, 1] - self.pow1.thetaf
-            self.pow2.states[:, 1] = self.pow2.states[:, 1] - self.pow2.thetaf
-
-    def __str__(self):
-
-        lines = [TwoDimGuess.__str__(self),
-                 '\n{:^50s}'.format('Departure burn:'),
-                 self.pow1.__str__(),
-                 '\n{:^50s}'.format('Arrival burn:'),
-                 self.pow2.__str__()]
-
-        s = '\n'.join(lines)
-
-        return s
-
-
 class TwoDim3PhasesLLO2HEOGuess(TwoDimLLOGuess):
+    """`TwoDim3PhasesLLO2HEOGuess` provides an initial guess for a LLO to HEO transfer trajectory subdivided into two
+    powered phases and an intermediate coasting phase.
+
+    The approximate transfer is constituted by an initial powered phase at constant radius equal to the LLO one, an
+    intermediate Hohmann transfer and a second powered phase at constant radius equal to the HEO apoapsis one.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    alt : float
+        LLO altitude [m]
+    rp : float
+        HEO periapsis radius [m]
+    t : float
+        HEO period [s]
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow1 : PowConstRadius
+        `PowConstRadius` object for the first powered phase
+    pow2 : PowConstRadius
+        `PowConstRadius` object for the second powered phase
+    tf : float
+        Final time [s]
+
+
+    """
 
     def __init__(self, gm, r, alt, rp, t, sc):
 

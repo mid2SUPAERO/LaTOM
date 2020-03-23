@@ -8,7 +8,7 @@ from copy import deepcopy
 from time import time
 
 from latom.analyzer.analyzer_2d import TwoDimAscAnalyzer, TwoDimAnalyzer
-from latom.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP, TwoDim2PhasesLLO2HEONLP
+from latom.nlp.nlp_heo_2d import TwoDimLLO2HEONLP, TwoDimLLO2ApoNLP, TwoDim3PhasesLLO2HEONLP
 from latom.plots.solutions import TwoDimSolPlot, TwoDimMultiPhaseSolPlot
 from latom.plots.timeseries import TwoDimStatesTimeSeries, TwoDimControlsTimeSeries
 from latom.plots.continuation import MassEnergyContinuation, TwoDimTrajectoryContinuation
@@ -639,65 +639,6 @@ class TwoDimMultiPhasesLLO2HEOAnalyzer(TwoDimAnalyzer):
                                            self.states_exp, a=self.nlp.guess.ht.arrOrb.a*(self.rm_res/self.body.R),
                                            e=self.nlp.guess.ht.arrOrb.e, dtheta=dtheta)
         sol_plot.plot()
-
-
-class TwoDim2PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):
-
-    def __init__(self, body, sc, alt, rp, t, t_bounds, method, nb_seg, order, solver, snopt_opts=None, rec_file=None,
-                 check_partials=False):
-
-        TwoDimMultiPhasesLLO2HEOAnalyzer.__init__(self, body, sc)
-
-        self.phase_name = ('dep', 'arr')
-        self.nlp = TwoDim2PhasesLLO2HEONLP(body, sc, alt, rp, t, (-np.pi/2, np.pi/2), t_bounds, method, nb_seg, order,
-                                           solver, self.phase_name, snopt_opts=snopt_opts, rec_file=rec_file,
-                                           check_partials=check_partials)
-
-    def get_time_series(self, p, scaled=False):
-
-        tof1, t1, s1, c1 = self.get_time_series_phase(p, self.nlp.phase_name[0], scaled=scaled)
-        tof2, t2, s2, c2 = self.get_time_series_phase(p, self.nlp.phase_name[1], scaled=scaled)
-
-        return [tof1, tof2], [t1, t2], [s1, s2], [c1, c2]
-
-    def compute_coasting_arc(self, nb=200):
-
-        # COEs as (a, e, h, ta) at the end of the 1st powered phase and at the beginning of the 2nd one
-        coe1 = TwoDimOrb.polar2coe(self.gm_res, self.states[0][-1, 0], self.states[0][-1, 2], self.states[0][-1, 3])
-        coe2 = TwoDimOrb.polar2coe(self.gm_res, self.states[1][0, 0], self.states[1][0, 2], self.states[1][0, 3])
-
-        if np.allclose(coe1[:3], coe2[:3], rtol=1e-4, atol=1e-6):
-
-            t, states = TwoDimOrb.propagate(self.gm_res, coe1[0], coe1[1], coe1[-1], coe2[-1], nb)
-            tof = t[-1, 0] - t[0, 0]
-
-            # adjust time
-            self.tof = [self.tof[0], tof, self.tof[1]]
-            self.time = [self.time[0], t + self.tof[0], self.time[1] + self.tof[0] + tof]
-
-            # adjust theta
-            states[:, 1] = states[:, 1] - coe1[-1] + self.states[0][-1, 1]
-            states = np.hstack((states, self.states[0][-1, -1] * np.ones((len(t), 1))))
-            self.states[1][:, 1] = self.states[1][:, 1] + states[-1, 1]
-
-            # adjust states and controls
-            self.states = [self.states[0], states, self.states[1]]
-            self.controls = [self.controls[0], np.zeros((len(t), 2)), self.controls[1]]
-
-        else:
-            raise ValueError('a, e, h are not constant throughout the coasting phase')
-
-        return coe1, coe2
-
-    def get_solutions(self, explicit=True, scaled=False, nb=200):
-
-        TwoDimAnalyzer.get_solutions(self, explicit=explicit, scaled=scaled)
-
-        self.compute_coasting_arc(nb=nb)
-
-    def __str__(self):
-
-        pass
 
 
 class TwoDim3PhasesLLO2HEOAnalyzer(TwoDimMultiPhasesLLO2HEOAnalyzer):

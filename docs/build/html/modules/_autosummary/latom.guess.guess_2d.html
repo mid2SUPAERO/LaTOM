@@ -209,16 +209,16 @@
 <td><p><cite>PowConstRadius</cite> class implements a two-dimensional powered phase at constant radius from the central attractive body.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.guess.guess_2d.TwoDimAscGuess" title="latom.guess.guess_2d.TwoDimAscGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscGuess</span></code></a>(gm, r, alt, sc)</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimAscGuess</cite> provides an initial guess for a two-dimensional ascent trajectory from the Moon surface to a circular LLO.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.guess.guess_2d.TwoDimDescGuess" title="latom.guess.guess_2d.TwoDimDescGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescGuess</span></code></a>(gm, r, alt, sc)</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimDescGuess</cite> provides an initial guess for a two-dimensional descent trajectory from a circular LLO to the Moon surface.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.guess.guess_2d.TwoDimGuess" title="latom.guess.guess_2d.TwoDimGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimGuess</span></code></a>(gm, r, dep, arr, sc)</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimGuess</cite> provides an initial guess for a two-dimensional transfer trajectory combining powered phases at constant radius with Hohmann transfer arcs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.guess.guess_2d.TwoDimLLOGuess" title="latom.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLOGuess</span></code></a>(gm, r, dep, arr, sc)</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimLLOGuess</cite> provides an initial guess for a two-dimensional ascent or descent trajectory from the Moon surface to a circular Low Lunar Orbit.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
 <td><p></p></td>
@@ -471,16 +471,75 @@ See scipy.integrate.solve_ivp or scipy.integrate.odeint for more details</p>
 <dt id="latom.guess.guess_2d.TwoDimGuess">
 <em class="property">class </em><code class="sig-prename descclassname">latom.guess.guess_2d.</code><code class="sig-name descname">TwoDimGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">dep</em>, <em class="sig-param">arr</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_2d.html#TwoDimGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_2d.TwoDimGuess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><cite>TwoDimGuess</cite> provides an initial guess for a two-dimensional transfer trajectory combining powered phases at
+constant radius with Hohmann transfer arcs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Central body equatorial radius [m]</p></li>
+<li><p><strong>dep</strong> (<a class="reference internal" href="latom.utils.keplerian_orbit.html#latom.utils.keplerian_orbit.TwoDimOrb" title="latom.utils.keplerian_orbit.TwoDimOrb"><em>TwoDimOrb</em></a>) – Departure orbit object</p></li>
+<li><p><strong>arr</strong> (<a class="reference internal" href="latom.utils.keplerian_orbit.html#latom.utils.keplerian_orbit.TwoDimOrb" title="latom.utils.keplerian_orbit.TwoDimOrb"><em>TwoDimOrb</em></a>) – Arrival orbit object</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – <cite>Spacecraft</cite> object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>GM</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>R</strong> (<em>float</em>) – Central body equatorial radius [m]</p></li>
+<li><p><strong>dep</strong> (<a class="reference internal" href="latom.utils.keplerian_orbit.html#latom.utils.keplerian_orbit.TwoDimOrb" title="latom.utils.keplerian_orbit.TwoDimOrb"><em>TwoDimOrb</em></a>) – Departure orbit object</p></li>
+<li><p><strong>ht</strong> (<a class="reference internal" href="#latom.guess.guess_2d.HohmannTransfer" title="latom.guess.guess_2d.HohmannTransfer"><em>HohmannTransfer</em></a>) – <cite>HohmannTransfer</cite> object</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time vector [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series as <cite>[thrust, alpha]</cite></p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
 <dt id="latom.guess.guess_2d.TwoDimLLOGuess">
 <em class="property">class </em><code class="sig-prename descclassname">latom.guess.guess_2d.</code><code class="sig-name descname">TwoDimLLOGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">dep</em>, <em class="sig-param">arr</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_2d.html#TwoDimLLOGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_2d.TwoDimLLOGuess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.guess.guess_2d.TwoDimGuess" title="latom.guess.guess_2d.TwoDimGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.guess.guess_2d.TwoDimGuess</span></code></a></p>
+<p><cite>TwoDimLLOGuess</cite> provides an initial guess for a two-dimensional ascent or descent trajectory from the Moon
+surface to a circular Low Lunar Orbit.</p>
+<p>The approximate transfer consists into two powered phases at constant radius and an Hohmann transfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Central body equatorial radius [m]</p></li>
+<li><p><strong>dep</strong> (<a class="reference internal" href="latom.utils.keplerian_orbit.html#latom.utils.keplerian_orbit.TwoDimOrb" title="latom.utils.keplerian_orbit.TwoDimOrb"><em>TwoDimOrb</em></a>) – Departure orbit object</p></li>
+<li><p><strong>arr</strong> (<a class="reference internal" href="latom.utils.keplerian_orbit.html#latom.utils.keplerian_orbit.TwoDimOrb" title="latom.utils.keplerian_orbit.TwoDimOrb"><em>TwoDimOrb</em></a>) – Arrival orbit object</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – <cite>Spacecraft</cite> object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>pow1</strong> (<a class="reference internal" href="#latom.guess.guess_2d.PowConstRadius" title="latom.guess.guess_2d.PowConstRadius"><em>PowConstRadius</em></a>) – First powered phase at constant radius</p></li>
+<li><p><strong>pow2</strong> (<a class="reference internal" href="#latom.guess.guess_2d.PowConstRadius" title="latom.guess.guess_2d.PowConstRadius"><em>PowConstRadius</em></a>) – Second powered phase at constant radius</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.guess.guess_2d.TwoDimLLOGuess.compute_trajectory">
 <code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_2d.html#TwoDimLLOGuess.compute_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_2d.TwoDimLLOGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>kwargs</strong> – <dl class="simple">
+<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+</dd>
+<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -488,10 +547,46 @@ See scipy.integrate.solve_ivp or scipy.integrate.odeint for more details</p>
 <dt id="latom.guess.guess_2d.TwoDimAscGuess">
 <em class="property">class </em><code class="sig-prename descclassname">latom.guess.guess_2d.</code><code class="sig-name descname">TwoDimAscGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">alt</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_2d.html#TwoDimAscGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_2d.TwoDimAscGuess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.guess.guess_2d.TwoDimLLOGuess" title="latom.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.guess.guess_2d.TwoDimLLOGuess</span></code></a></p>
+<p><cite>TwoDimAscGuess</cite> provides an initial guess for a two-dimensional ascent trajectory from the Moon surface to a
+circular LLO.</p>
+<p>The approximate transfer comprises a first powered phase at constant radius equal to the Moon one, an Hohmann
+transfer and a second powered phase at constant radius equal to the LLO one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Central body equatorial radius [m]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – LLO altitude [m]</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – <cite>Spacecraft</cite> object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>pow1</strong> (<a class="reference internal" href="#latom.guess.guess_2d.PowConstRadius" title="latom.guess.guess_2d.PowConstRadius"><em>PowConstRadius</em></a>) – First powered phase at constant radius</p></li>
+<li><p><strong>pow2</strong> (<a class="reference internal" href="#latom.guess.guess_2d.PowConstRadius" title="latom.guess.guess_2d.PowConstRadius"><em>PowConstRadius</em></a>) – Second powered phase at constant radius</p></li>
+<li><p><strong>tf</strong> (<em>float</em>) – Final time [s]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.guess.guess_2d.TwoDimAscGuess.compute_trajectory">
 <code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.guess.guess_2d.TwoDimAscGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>kwargs</strong> – <dl class="simple">
+<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+</dd>
+<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -499,10 +594,46 @@ See scipy.integrate.solve_ivp or scipy.integrate.odeint for more details</p>
 <dt id="latom.guess.guess_2d.TwoDimDescGuess">
 <em class="property">class </em><code class="sig-prename descclassname">latom.guess.guess_2d.</code><code class="sig-name descname">TwoDimDescGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">alt</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_2d.html#TwoDimDescGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_2d.TwoDimDescGuess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.guess.guess_2d.TwoDimLLOGuess" title="latom.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.guess.guess_2d.TwoDimLLOGuess</span></code></a></p>
+<p><cite>TwoDimDescGuess</cite> provides an initial guess for a two-dimensional descent trajectory from a circular LLO to the
+Moon surface.</p>
+<p>The approximate transfer comprises a first powered phase at constant radius equal to the LLO one, an Hohmann
+transfer and a second powered phase at constant radius equal to the Moon one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Central body equatorial radius [m]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – LLO altitude [m]</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – <cite>Spacecraft</cite> object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>pow1</strong> (<a class="reference internal" href="#latom.guess.guess_2d.PowConstRadius" title="latom.guess.guess_2d.PowConstRadius"><em>PowConstRadius</em></a>) – First powered phase at constant radius</p></li>
+<li><p><strong>pow2</strong> (<a class="reference internal" href="#latom.guess.guess_2d.PowConstRadius" title="latom.guess.guess_2d.PowConstRadius"><em>PowConstRadius</em></a>) – Second powered phase at constant radius</p></li>
+<li><p><strong>tf</strong> (<em>float</em>) – Final time [s]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.guess.guess_2d.TwoDimDescGuess.compute_trajectory">
 <code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.guess.guess_2d.TwoDimDescGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>kwargs</strong> – <dl class="simple">
+<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+</dd>
+<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

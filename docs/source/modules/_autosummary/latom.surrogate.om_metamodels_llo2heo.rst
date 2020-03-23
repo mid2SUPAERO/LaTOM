@@ -1,7 +1,7 @@
-latom.surrogate.meta\_models\_llo2heo
-=====================================
+latom.surrogate.om\_metamodels\_llo2heo
+=======================================
 
-.. automodule:: latom.surrogate.meta_models_llo2heo
+.. automodule:: latom.surrogate.om_metamodels_llo2heo
 
    
    

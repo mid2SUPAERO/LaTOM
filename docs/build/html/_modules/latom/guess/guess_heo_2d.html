@@ -172,14 +172,48 @@
 
 
 <div class="viewcode-block" id="TwoDimHEOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDimHEOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimHEOGuess</span><span class="p">(</span><span class="n">TwoDimGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimHEOGuess` provides an initial guess for an LLO to HEO transfer or vice-versa.</span>
+
+<span class="sd">    The approximate trajectory comprises a powered phase at constant radius, an Hohmann transfer and an impulsive burn.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    dep : TwoDimOrb</span>
+<span class="sd">        Departure orbit object</span>
+<span class="sd">    arr : TwoDimOrb</span>
+<span class="sd">        Arrival orbit object</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow : PowConstRadius</span>
+<span class="sd">        `PowConstRadius` object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimHEOGuess` class. &quot;&quot;&quot;</span>
 
         <span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>  <span class="c1"># set central body, spacecraft, Hohmann transfer</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">pow</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="TwoDimHEOGuess.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDimHEOGuess.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the states and controls timeseries on the provided time grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            t_eval : ndarray</span>
+<span class="sd">                Time vector in which states and controls are computed [s]</span>
+<span class="sd">            nb_nodes : int</span>
+<span class="sd">                Number of equally space nodes in time in which states and controls are computed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="s1">&#39;t_eval&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_eval&#39;</span><span class="p">]</span>
@@ -189,8 +223,39 @@
 
 
 <div class="viewcode-block" id="TwoDimLLO2HEOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDimLLO2HEOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLO2HEOGuess</span><span class="p">(</span><span class="n">TwoDimHEOGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimLLO2HEOGuess` provides an initial guess for an LLO to HEO transfer.</span>
+
+<span class="sd">    The approximate trajectory comprises a powered phase at constant radius equal to the LLO one, an Hohmann transfer</span>
+<span class="sd">    and an impulsive burn at the HEO apoapsis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        HEO periapsis radius [m]</span>
+<span class="sd">    t : float</span>
+<span class="sd">        HEO period [s]</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow : PowConstRadius</span>
+<span class="sd">        `PowConstRadius` object</span>
+<span class="sd">    tf : float</span>
+<span class="sd">        Final time [s]</span>
+<span class="sd">    insertion_burn : ImpulsiveBurn</span>
+<span class="sd">        `ImpulsiveBurn` object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimLLO2HEOGuess` class. &quot;&quot;&quot;</span>
 
         <span class="n">dep</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">rp</span><span class="p">)</span>
@@ -205,6 +270,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">insertion_burn</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="TwoDimLLO2HEOGuess.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDimLLO2HEOGuess.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">throttle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the states and controls timeseries on the provided time grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fix_final : bool, optional</span>
+<span class="sd">            ``True`` if the final angle is fixed, ``False`` otherwise. Default is ``True``</span>
+<span class="sd">        throttle : bool, optional</span>
+<span class="sd">            If ``True`` replace the spacecraft states on the last node with the ones from `ImpulsiveBurn`</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            t_eval : ndarray</span>
+<span class="sd">                Time vector in which states and controls are computed [s]</span>
+<span class="sd">            nb_nodes : int</span>
+<span class="sd">                Number of equally space nodes in time in which states and controls are computed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">TwoDimHEOGuess</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -237,6 +317,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">T_max</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints infos on `TwoDimLLO2HEOGuess`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        s : str</span>
+<span class="sd">            Infos on `TwoDimLLO2HEOGuess`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">TwoDimHEOGuess</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
                  <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Initial guess:&#39;</span><span class="p">),</span>
@@ -254,8 +342,39 @@
 
 
 <div class="viewcode-block" id="TwoDimHEO2LLOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDimHEO2LLOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimHEO2LLOGuess</span><span class="p">(</span><span class="n">TwoDimHEOGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimHEO2LLOGuess` provides an initial guess for an HEO to LLO transfer.</span>
+
+<span class="sd">    The approximate trajectory comprises an impulsive burn at the HEO apoapsis, an Hohmann transfer and a powered phase</span>
+<span class="sd">    at constant radius equal to the LLO one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        HEO periapsis radius [m]</span>
+<span class="sd">    t : float</span>
+<span class="sd">        HEO period [s]</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow : PowConstRadius</span>
+<span class="sd">        `PowConstRadius` object</span>
+<span class="sd">    tf : float</span>
+<span class="sd">        Final time [s]</span>
+<span class="sd">    deorbit_burn : ImpulsiveBurn</span>
+<span class="sd">        `ImpulsiveBurn` object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimHEO2LLOGuess` class. &quot;&quot;&quot;</span>
 
         <span class="n">arr</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">dep</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">rp</span><span class="p">)</span>
@@ -270,6 +389,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow</span><span class="o">.</span><span class="n">tf</span>
 
 <div class="viewcode-block" id="TwoDimHEO2LLOGuess.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDimHEO2LLOGuess.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the states and controls timeseries on the provided time grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            t_eval : ndarray</span>
+<span class="sd">                Time vector in which states and controls are computed [s]</span>
+<span class="sd">            nb_nodes : int</span>
+<span class="sd">                Number of equally space nodes in time in which states and controls are computed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">TwoDimHEOGuess</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -291,6 +421,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">T_max</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints infos on `TwoDimHEO2LLOGuess`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        s : str</span>
+<span class="sd">            Infos on `TwoDimHEOLLOGuess`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">TwoDimHEOGuess</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
                  <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Initial guess:&#39;</span><span class="p">),</span>
@@ -308,56 +446,39 @@
         <span class="k">return</span> <span class="n">s</span></div>
 
 
-<div class="viewcode-block" id="TwoDim2PhasesLLO2HEOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDim2PhasesLLO2HEOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDim2PhasesLLO2HEOGuess</span><span class="p">(</span><span class="n">TwoDimLLOGuess</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
-
-        <span class="n">dep</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">rp</span><span class="p">)</span>
-
-        <span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span> <span class="o">=</span> <span class="n">PowConstRadius</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">dep</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">T_max</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">compute_final_time_states</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span> <span class="o">=</span> <span class="n">PowConstRadius</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">va</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">va</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">mf</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">T_max</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">compute_final_time_states</span><span class="p">()</span>
-
-<div class="viewcode-block" id="TwoDim2PhasesLLO2HEOGuess.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDim2PhasesLLO2HEOGuess.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;t1&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;t2&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">t_pow1</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">]</span>
-            <span class="n">t_pow2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;nb1&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;nb2&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">t_pow1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nb1&#39;</span><span class="p">])</span>
-            <span class="n">t_pow2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nb2&#39;</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Either t1, t2 or nb1, nb2 must be provided&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">t_pow1</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="n">t_pow2</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">R</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">vf</span>
-
-        <span class="k">if</span> <span class="n">fix_final</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="n">thetaf</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="n">thetaf</span></div>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
-        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Departure burn:&#39;</span><span class="p">),</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
-                 <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Arrival burn:&#39;</span><span class="p">),</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()]</span>
-
-        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">s</span></div>
-
-
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_heo_2d.TwoDim3PhasesLLO2HEOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDim3PhasesLLO2HEOGuess</span><span class="p">(</span><span class="n">TwoDimLLOGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDim3PhasesLLO2HEOGuess` provides an initial guess for a LLO to HEO transfer trajectory subdivided into two</span>
+<span class="sd">    powered phases and an intermediate coasting phase.</span>
+
+<span class="sd">    The approximate transfer is constituted by an initial powered phase at constant radius equal to the LLO one, an</span>
+<span class="sd">    intermediate Hohmann transfer and a second powered phase at constant radius equal to the HEO apoapsis one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        HEO periapsis radius [m]</span>
+<span class="sd">    t : float</span>
+<span class="sd">        HEO period [s]</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow1 : PowConstRadius</span>
+<span class="sd">        `PowConstRadius` object for the first powered phase</span>
+<span class="sd">    pow2 : PowConstRadius</span>
+<span class="sd">        `PowConstRadius` object for the second powered phase</span>
+<span class="sd">    tf : float</span>
+<span class="sd">        Final time [s]</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
 

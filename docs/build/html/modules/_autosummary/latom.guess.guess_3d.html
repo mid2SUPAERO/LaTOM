@@ -193,61 +193,30 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">KepOrb</span></code>(a, e, i, raan, w, ta, gm)</p></td>
-<td><p>KepOrb defines a Keplerian Orbit.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#latom.guess.guess_3d.ThreeDimAscGuess" title="latom.guess.guess_3d.ThreeDimAscGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimAscGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#latom.guess.guess_3d.ThreeDimAscGuess" title="latom.guess.guess_3d.ThreeDimAscGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimAscGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#latom.guess.guess_3d.ThreeDimDescGuess" title="latom.guess.guess_3d.ThreeDimDescGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimDescGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#latom.guess.guess_3d.ThreeDimDescGuess" title="latom.guess.guess_3d.ThreeDimDescGuess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeDimDescGuess</span></code></a>(gm, r, alt, sc, raan, i, w)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscGuess</span></code>(gm, r, alt, sc)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscGuess</span></code>(gm, r, alt, sc)</p></td>
+<td><p><cite>TwoDimAscGuess</cite> provides an initial guess for a two-dimensional ascent trajectory from the Moon surface to a circular LLO.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescGuess</span></code>(gm, r, alt, sc)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLOGuess</span></code>(gm, r, dep, arr, sc)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescGuess</span></code>(gm, r, alt, sc)</p></td>
+<td><p><cite>TwoDimDescGuess</cite> provides an initial guess for a two-dimensional descent trajectory from a circular LLO to the Moon surface.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="latom.guess.guess_3d.ThreeDimAscGuess">
 <em class="property">class </em><code class="sig-prename descclassname">latom.guess.guess_3d.</code><code class="sig-name descname">ThreeDimAscGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">alt</em>, <em class="sig-param">sc</em>, <em class="sig-param">raan</em>, <em class="sig-param">i</em>, <em class="sig-param">w</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_3d.html#ThreeDimAscGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_3d.ThreeDimAscGuess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="latom.guess.guess_2d.html#latom.guess.guess_2d.TwoDimLLOGuess" title="latom.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.guess.guess_2d.TwoDimLLOGuess</span></code></a></p>
-<dl class="attribute">
-<dt id="latom.guess.guess_3d.ThreeDimAscGuess.u">
-<code class="sig-name descname">u</code><em class="property"> = None</em><a class="headerlink" href="#latom.guess.guess_3d.ThreeDimAscGuess.u" title="Permalink to this definition">¶</a></dt>
-<dd><p>controls</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="latom.guess.guess_3d.ThreeDimAscGuess.compute_trajectory">
-<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.guess.guess_3d.ThreeDimAscGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="latom.guess.guess_3d.ThreeDimDescGuess">
 <em class="property">class </em><code class="sig-prename descclassname">latom.guess.guess_3d.</code><code class="sig-name descname">ThreeDimDescGuess</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">alt</em>, <em class="sig-param">sc</em>, <em class="sig-param">raan</em>, <em class="sig-param">i</em>, <em class="sig-param">w</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/guess/guess_3d.html#ThreeDimDescGuess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.guess.guess_3d.ThreeDimDescGuess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="latom.guess.guess_2d.html#latom.guess.guess_2d.TwoDimLLOGuess" title="latom.guess.guess_2d.TwoDimLLOGuess"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.guess.guess_2d.TwoDimLLOGuess</span></code></a></p>
-<dl class="method">
-<dt id="latom.guess.guess_3d.ThreeDimDescGuess.compute_trajectory">
-<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">fix_final=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.guess.guess_3d.ThreeDimDescGuess.compute_trajectory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="latom.guess.guess_3d.ThreeDimDescGuess.u">
-<code class="sig-name descname">u</code><em class="property"> = None</em><a class="headerlink" href="#latom.guess.guess_3d.ThreeDimDescGuess.u" title="Permalink to this definition">¶</a></dt>
-<dd><p>controls</p>
-</dd></dl>
-
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 </div>

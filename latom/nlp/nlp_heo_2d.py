@@ -5,11 +5,9 @@
 
 import numpy as np
 
-from dymos.transcriptions.common import PhaseLinkageComp
-
 from latom.nlp.nlp import MultiPhaseNLP
 from latom.nlp.nlp_2d import TwoDimVarNLP, TwoDimNLP
-from latom.guess.guess_heo_2d import TwoDimLLO2HEOGuess, TwoDim2PhasesLLO2HEOGuess, TwoDim3PhasesLLO2HEOGuess
+from latom.guess.guess_heo_2d import TwoDimLLO2HEOGuess, TwoDim3PhasesLLO2HEOGuess
 from latom.odes.odes_2d_group import ODE2dLLO2HEO, ODE2dLLO2Apo
 
 
@@ -121,120 +119,6 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
 
         if check_partials:
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
-
-
-class TwoDim2PhasesLLO2HEONLP(MultiPhaseNLP):
-
-    def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
-                 snopt_opts=None, rec_file=None, check_partials=None):
-
-        self.guess = TwoDim2PhasesLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
-        self.tof_adim = np.reshape(np.array([self.guess.pow1.tf, self.guess.pow2.tf]), (2, 1))/body.tc
-
-        ode_kwargs = {'GM': 1.0, 'T': sc.twr, 'w': sc.w / body.vc}
-
-        MultiPhaseNLP.__init__(self, body, sc, method, nb_seg, order, solver, (ODE2dLLO2HEO, ODE2dLLO2HEO),
-                               (ode_kwargs, ode_kwargs), ph_name, snopt_opts=snopt_opts, rec_file=rec_file)
-
-        # time options
-        if t_bounds is None:
-            for i in range(2):
-                self.phase[i].set_time_options(fix_initial=True, duration_ref=self.tof_adim[i, 0])
-        else:
-            t_bounds = np.asarray(t_bounds) * self.tof_adim
-            for i in range(2):
-                self.phase[i].set_time_options(fix_initial=True, duration_ref=self.tof_adim[i, 0],
-                                               duration_bounds=t_bounds[i])
-
-        # states options
-
-        # first phase (departure)
-        self.phase[0].set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0,
-                                        ref=self.guess.ht.depOrb.rp/self.body.R)
-        self.phase[0].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0,
-                                        ref=self.guess.pow1.thetaf)
-        self.phase[0].set_state_options('u', fix_initial=True, fix_final=False,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
-        self.phase[0].set_state_options('v', fix_initial=True, fix_final=False, lower=0.0,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
-        self.phase[0].set_state_options('m', fix_initial=True, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
-                                        ref0=self.sc.m_dry, ref=self.sc.m0)
-
-        # second phase (injection)
-        self.phase[1].set_state_options('r', fix_initial=False, fix_final=False, lower=1.0,
-                                        ref0=1.0,
-                                        ref=self.guess.ht.depOrb.rp/self.body.R)
-        self.phase[1].set_state_options('theta', fix_initial=True, fix_final=False, lower=0.0,
-                                        ref0=self.guess.pow2.theta0,
-                                        ref=self.guess.pow2.thetaf)
-        self.phase[1].set_state_options('u', fix_initial=False, fix_final=False,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
-        self.phase[1].set_state_options('v', fix_initial=False, fix_final=False,
-                                        ref=self.guess.ht.depOrb.vp/self.body.vc)
-        self.phase[1].set_state_options('m', fix_initial=False, fix_final=False, lower=self.sc.m_dry, upper=self.sc.m0,
-                                        ref0=self.sc.m_dry, ref=self.sc.m0)
-
-        # controls and design parameters options
-        for i in range(2):
-            self.phase[i].add_control('alpha', fix_initial=False, fix_final=False, continuity=True,
-                                      rate_continuity=True, rate2_continuity=False, lower=alpha_bounds[0],
-                                      upper=alpha_bounds[1], ref=alpha_bounds[1])
-
-            self.phase[i].add_design_parameter('w', opt=False, val=self.sc.w/self.body.vc)
-            self.phase[i].add_design_parameter('thrust', opt=False, val=self.sc.twr)
-
-        # constraints on injection
-        self.phase[1].add_boundary_constraint('a', loc='final', equals=self.guess.ht.arrOrb.a/self.body.R, shape=(1,))
-        self.phase[1].add_boundary_constraint('h', loc='final', equals=self.guess.ht.arrOrb.h/self.body.R/self.body.vc,
-                                              shape=(1,))
-
-        # objective
-        self.phase[1].add_objective('m', loc='final', scaler=-1.0)
-
-        # linkages
-        self.trajectory.link_phases(ph_name, vars=['m'])
-
-        linkage_comp = PhaseLinkageComp()
-        self.trajectory.add_subsystem('linkage_comp', subsys=linkage_comp)
-
-        for s in ['a', 'h']:
-
-            linkage_comp.add_linkage(s, vars=(s,), equals=0.0, shape=(1,))
-            var_name = []
-
-            for i in range(2):
-                self.phase[i].add_timeseries_output(s)
-                ph_name_list = self.phase_name[i].split('.')
-                var_name.append('.'.join([ph_name_list[1], 'rhs_disc', s]))
-
-            link_name = ''.join(['linkage_comp.', s, '_', s])
-            self.trajectory.connect(var_name[0], link_name + ':lhs', src_indices=[-1], flat_src_indices=True)
-            self.trajectory.connect(var_name[1], link_name + ':rhs', src_indices=[0], flat_src_indices=True)
-
-        # setup
-        self.setup()
-
-        # time grid and initial guess
-        sn1, cn1, ts1, tc1, ta1 = self.set_time_phase(0.0, self.tof_adim[0, 0], self.phase[0], self.phase_name[0])
-        sn2, cn2, ts2, tc2, ta2 = self.set_time_phase(0.0, self.tof_adim[1, 0], self.phase[1], self.phase_name[1])
-
-        self.guess.compute_trajectory(t1=ta1*self.body.tc, t2=ta2*self.body.tc)
-        self.set_initial_guess_phase(sn1, cn1, self.guess.pow1, self.phase_name[0])
-        self.set_initial_guess_phase(sn2, cn2, self.guess.pow2, self.phase_name[1])
-
-        self.p.run_model()
-
-        if check_partials:
-            self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
-
-    def set_initial_guess_phase(self, state_nodes, control_nodes, guess, phase_name):
-
-        self.p[phase_name + '.states:r'] = np.take(guess.states[:, 0]/self.body.R, state_nodes)
-        self.p[phase_name + '.states:theta'] = np.take(guess.states[:, 1], state_nodes)
-        self.p[phase_name + '.states:u'] = np.take(guess.states[:, 2]/self.body.vc, state_nodes)
-        self.p[phase_name + '.states:v'] = np.take(guess.states[:, 3]/self.body.vc, state_nodes)
-        self.p[phase_name + '.states:m'] = np.take(guess.states[:, 4], state_nodes)
-        self.p[phase_name + '.controls:alpha'] = np.take(guess.controls[:, 1], control_nodes)
 
 
 class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):

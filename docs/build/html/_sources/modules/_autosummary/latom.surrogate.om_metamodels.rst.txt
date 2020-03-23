@@ -1,7 +1,7 @@
-latom.surrogate.meta\_models
-============================
+latom.surrogate.om\_metamodels
+==============================
 
-.. automodule:: latom.surrogate.meta_models
+.. automodule:: latom.surrogate.om_metamodels
 
    
    

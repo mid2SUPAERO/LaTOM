@@ -2,7 +2,8 @@
 
 @author Alberto FOSSA'
 
-This *step-by-step* guide will help you to install the package for Trajectory Optimization of a Reusable Lunar Lander.
+This *step-by-step* guide will help you to install **LaTOM**,
+Launcher Trajectory Optimization Module.
 
 ## Dependencies
 
@@ -14,7 +15,7 @@ This *step-by-step* guide will help you to install the package for Trajectory Op
 Clone the package repository:
 
 ```
-git clone https://github.com/mid2SUPAERO/RpFossaMiceli.git
+git clone https://github.com/mid2SUPAERO/LaTOM.git
 ```
 
 Enter the top level folder, activate your environment and install the package in development mode:

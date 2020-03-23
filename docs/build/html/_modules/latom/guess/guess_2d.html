@@ -636,8 +636,44 @@
 
 
 <div class="viewcode-block" id="TwoDimGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimGuess</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimGuess` provides an initial guess for a two-dimensional transfer trajectory combining powered phases at</span>
+<span class="sd">    constant radius with Hohmann transfer arcs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    dep : TwoDimOrb</span>
+<span class="sd">        Departure orbit object</span>
+<span class="sd">    arr : TwoDimOrb</span>
+<span class="sd">        Arrival orbit object</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    GM : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    R : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    dep : TwoDimOrb</span>
+<span class="sd">        Departure orbit object</span>
+<span class="sd">    ht : HohmannTransfer</span>
+<span class="sd">        `HohmannTransfer` object</span>
+<span class="sd">    t : ndarray</span>
+<span class="sd">        Time vector [s]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series as `[thrust, alpha]`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimGuess` class. &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">r</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sc</span> <span class="o">=</span> <span class="n">sc</span>
@@ -647,6 +683,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints infos on `TwoDimGuess`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        s : str</span>
+<span class="sd">            Infos on `TwoDimGuess`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Departure Orbit:&#39;</span><span class="p">),</span>
                  <span class="bp">self</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
                  <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Arrival Orbit:&#39;</span><span class="p">),</span>
@@ -660,14 +705,54 @@
 
 
 <div class="viewcode-block" id="TwoDimLLOGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimLLOGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLOGuess</span><span class="p">(</span><span class="n">TwoDimGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimLLOGuess` provides an initial guess for a two-dimensional ascent or descent trajectory from the Moon</span>
+<span class="sd">    surface to a circular Low Lunar Orbit.</span>
+
+<span class="sd">    The approximate transfer consists into two powered phases at constant radius and an Hohmann transfer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    dep : TwoDimOrb</span>
+<span class="sd">        Departure orbit object</span>
+<span class="sd">    arr : TwoDimOrb</span>
+<span class="sd">        Arrival orbit object</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow1 : PowConstRadius</span>
+<span class="sd">        First powered phase at constant radius</span>
+<span class="sd">    pow2 : PowConstRadius</span>
+<span class="sd">        Second powered phase at constant radius</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimLLOGuess` class. &quot;&quot;&quot;</span>
 
         <span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pow1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pow2</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="TwoDimLLOGuess.compute_trajectory"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimLLOGuess.compute_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">compute_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the states and controls time series for a given time vector or number of equally space nodes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fix_final : bool, optional</span>
+<span class="sd">            ``True`` if the final angle is fixed, ``False`` otherwise. Default is ``False``</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            t_eval : ndarray</span>
+<span class="sd">                Time vector in which states and controls are computed [s]</span>
+<span class="sd">            nb_nodes : int</span>
+<span class="sd">                Number of equally space nodes in time in which states and controls are computed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="s1">&#39;t_eval&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_eval&#39;</span><span class="p">]</span>
@@ -694,6 +779,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints info on `TwoDimLLOGuess`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        s : str</span>
+<span class="sd">            Info on `TwoDimLLOGuess`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">TwoDimGuess</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
                  <span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:^50s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Initial guess:&#39;</span><span class="p">),</span>
@@ -710,8 +803,37 @@
 
 
 <div class="viewcode-block" id="TwoDimAscGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimAscGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscGuess</span><span class="p">(</span><span class="n">TwoDimLLOGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimAscGuess` provides an initial guess for a two-dimensional ascent trajectory from the Moon surface to a</span>
+<span class="sd">    circular LLO.</span>
+
+<span class="sd">    The approximate transfer comprises a first powered phase at constant radius equal to the Moon one, an Hohmann</span>
+<span class="sd">    transfer and a second powered phase at constant radius equal to the LLO one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow1 : PowConstRadius</span>
+<span class="sd">        First powered phase at constant radius</span>
+<span class="sd">    pow2 : PowConstRadius</span>
+<span class="sd">        Second powered phase at constant radius</span>
+<span class="sd">    tf : float</span>
+<span class="sd">        Final time [s]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimAscGuess` class. &quot;&quot;&quot;</span>
+
         <span class="n">dep</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">alt</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -728,6 +850,33 @@
 
 
 <div class="viewcode-block" id="TwoDimDescGuess"><a class="viewcode-back" href="../../../modules/guess.html#latom.guess.guess_2d.TwoDimDescGuess">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescGuess</span><span class="p">(</span><span class="n">TwoDimLLOGuess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimDescGuess` provides an initial guess for a two-dimensional descent trajectory from a circular LLO to the</span>
+<span class="sd">    Moon surface.</span>
+
+<span class="sd">    The approximate transfer comprises a first powered phase at constant radius equal to the LLO one, an Hohmann</span>
+<span class="sd">    transfer and a second powered phase at constant radius equal to the Moon one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Central body equatorial radius [m]</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        `Spacecraft` object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pow1 : PowConstRadius</span>
+<span class="sd">        First powered phase at constant radius</span>
+<span class="sd">    pow2 : PowConstRadius</span>
+<span class="sd">        Second powered phase at constant radius</span>
+<span class="sd">    tf : float</span>
+<span class="sd">        Final time [s]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
 

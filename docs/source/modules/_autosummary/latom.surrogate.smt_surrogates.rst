@@ -1,7 +1,7 @@
-latom.surrogate.surrogate\_2d
-=============================
+latom.surrogate.smt\_surrogates
+===============================
 
-.. automodule:: latom.surrogate.surrogate_2d
+.. automodule:: latom.surrogate.smt_surrogates
 
    
    
@@ -10,6 +10,8 @@ latom.surrogate.surrogate\_2d
    .. autosummary::
    
       deepcopy
+      load
+      save
    
    
 
@@ -49,6 +51,7 @@ latom.surrogate.surrogate\_2d
       TwoDimDescVarNLP
       TwoDimDescVarSurrogate
       TwoDimDescVertSurrogate
+      TwoDimOrb
    
    
 

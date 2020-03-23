@@ -6,7 +6,7 @@ Surrogate Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: latom.surrogate.meta_models latom.surrogate.meta_models_llo2heo latom.surrogate.surrogate_2d
+.. inheritance-diagram:: latom.surrogate.om_metamodels latom.surrogate.om_metamodels_llo2heo latom.surrogate.smt_surrogates
   :parts: 1
 
 Modules List
@@ -18,11 +18,11 @@ Modules List
 Documentation
 -------------
 
-.. automodule:: latom.surrogate.meta_models
+.. automodule:: latom.surrogate.om_metamodels
   :noindex:
 
-.. automodule:: latom.surrogate.meta_models_llo2heo
+.. automodule:: latom.surrogate.om_metamodels_llo2heo
   :noindex:
 
-.. automodule:: latom.surrogate.surrogate_2d
+.. automodule:: latom.surrogate.smt_surrogates
   :noindex:

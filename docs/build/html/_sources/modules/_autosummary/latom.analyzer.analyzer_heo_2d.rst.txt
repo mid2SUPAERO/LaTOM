@@ -23,8 +23,6 @@ latom.analyzer.analyzer\_heo\_2d
    
       ImpulsiveBurn
       MassEnergyContinuation
-      TwoDim2PhasesLLO2HEOAnalyzer
-      TwoDim2PhasesLLO2HEONLP
       TwoDim3PhasesLLO2HEOAnalyzer
       TwoDim3PhasesLLO2HEONLP
       TwoDimAnalyzer

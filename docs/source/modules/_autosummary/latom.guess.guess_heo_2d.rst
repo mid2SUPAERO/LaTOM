@@ -21,7 +21,6 @@ latom.guess.guess\_heo\_2d
    
       ImpulsiveBurn
       PowConstRadius
-      TwoDim2PhasesLLO2HEOGuess
       TwoDim3PhasesLLO2HEOGuess
       TwoDimGuess
       TwoDimHEO2LLOGuess

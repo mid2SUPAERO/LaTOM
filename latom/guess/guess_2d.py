@@ -476,8 +476,44 @@ class PowConstRadius:
 
 
 class TwoDimGuess:
+    """`TwoDimGuess` provides an initial guess for a two-dimensional transfer trajectory combining powered phases at
+    constant radius with Hohmann transfer arcs.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    dep : TwoDimOrb
+        Departure orbit object
+    arr : TwoDimOrb
+        Arrival orbit object
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    GM : float
+        Central body standard gravitational parameter [m^3/s^2]
+    R : float
+        Central body equatorial radius [m]
+    dep : TwoDimOrb
+        Departure orbit object
+    ht : HohmannTransfer
+        `HohmannTransfer` object
+    t : ndarray
+        Time vector [s]
+    states : ndarray
+        States time series as `[r, theta, u, v, m]`
+    controls : ndarray
+        Controls time series as `[thrust, alpha]`
+
+    """
 
     def __init__(self, gm, r, dep, arr, sc):
+        """Initializes `TwoDimGuess` class. """
+
         self.GM = gm
         self.R = r
         self.sc = sc
@@ -487,6 +523,15 @@ class TwoDimGuess:
         self.t = self.states = self.controls = None
 
     def __str__(self):
+        """Prints infos on `TwoDimGuess`.
+
+        Returns
+        -------
+        s : str
+            Infos on `TwoDimGuess`
+
+        """
+
         lines = ['\n{:^50s}'.format('Departure Orbit:'),
                  self.ht.depOrb.__str__(),
                  '\n{:^50s}'.format('Arrival Orbit:'),
@@ -500,14 +545,54 @@ class TwoDimGuess:
 
 
 class TwoDimLLOGuess(TwoDimGuess):
+    """`TwoDimLLOGuess` provides an initial guess for a two-dimensional ascent or descent trajectory from the Moon
+    surface to a circular Low Lunar Orbit.
+
+    The approximate transfer consists into two powered phases at constant radius and an Hohmann transfer.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    dep : TwoDimOrb
+        Departure orbit object
+    arr : TwoDimOrb
+        Arrival orbit object
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow1 : PowConstRadius
+        First powered phase at constant radius
+    pow2 : PowConstRadius
+        Second powered phase at constant radius
+
+    """
 
     def __init__(self, gm, r, dep, arr, sc):
+        """Initializes `TwoDimLLOGuess` class. """
 
         TwoDimGuess.__init__(self, gm, r, dep, arr, sc)
 
         self.pow1 = self.pow2 = None
 
     def compute_trajectory(self, fix_final=False, **kwargs):
+        """Computes the states and controls time series for a given time vector or number of equally space nodes.
+
+        Parameters
+        ----------
+        fix_final : bool, optional
+            ``True`` if the final angle is fixed, ``False`` otherwise. Default is ``False``
+        kwargs :
+            t_eval : ndarray
+                Time vector in which states and controls are computed [s]
+            nb_nodes : int
+                Number of equally space nodes in time in which states and controls are computed
+
+        """
 
         if 't_eval' in kwargs:
             self.t = kwargs['t_eval']
@@ -534,6 +619,14 @@ class TwoDimLLOGuess(TwoDimGuess):
             self.states[:, 1] = self.states[:, 1] + kwargs['theta']
 
     def __str__(self):
+        """Prints info on `TwoDimLLOGuess`.
+
+        Returns
+        -------
+        s : str
+            Info on `TwoDimLLOGuess`
+
+        """
 
         lines = [TwoDimGuess.__str__(self),
                  '\n{:^50s}'.format('Initial guess:'),
@@ -550,8 +643,37 @@ class TwoDimLLOGuess(TwoDimGuess):
 
 
 class TwoDimAscGuess(TwoDimLLOGuess):
+    """`TwoDimAscGuess` provides an initial guess for a two-dimensional ascent trajectory from the Moon surface to a
+    circular LLO.
+
+    The approximate transfer comprises a first powered phase at constant radius equal to the Moon one, an Hohmann
+    transfer and a second powered phase at constant radius equal to the LLO one.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    alt : float
+        LLO altitude [m]
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow1 : PowConstRadius
+        First powered phase at constant radius
+    pow2 : PowConstRadius
+        Second powered phase at constant radius
+    tf : float
+        Final time [s]
+
+    """
 
     def __init__(self, gm, r, alt, sc):
+        """Initializes `TwoDimAscGuess` class. """
+
         dep = TwoDimOrb(gm, a=r, e=0)
         arr = TwoDimOrb(gm, a=(r + alt), e=0)
 
@@ -568,6 +690,33 @@ class TwoDimAscGuess(TwoDimLLOGuess):
 
 
 class TwoDimDescGuess(TwoDimLLOGuess):
+    """`TwoDimDescGuess` provides an initial guess for a two-dimensional descent trajectory from a circular LLO to the
+    Moon surface.
+
+    The approximate transfer comprises a first powered phase at constant radius equal to the LLO one, an Hohmann
+    transfer and a second powered phase at constant radius equal to the Moon one.
+
+    Parameters
+    ----------
+    gm : float
+        Central body standard gravitational parameter [m^3/s^2]
+    r : float
+        Central body equatorial radius [m]
+    alt : float
+        LLO altitude [m]
+    sc : Spacecraft
+        `Spacecraft` object
+
+    Attributes
+    ----------
+    pow1 : PowConstRadius
+        First powered phase at constant radius
+    pow2 : PowConstRadius
+        Second powered phase at constant radius
+    tf : float
+        Final time [s]
+
+    """
 
     def __init__(self, gm, r, alt, sc):
 
