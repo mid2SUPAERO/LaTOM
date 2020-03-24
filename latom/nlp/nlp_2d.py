@@ -833,8 +833,12 @@ class TwoDimDescVLandNLP(TwoDimVToffNLP):
 
 
 class TwoDimDescTwoPhasesNLP(MultiPhaseNLP):
-    """MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by
-    multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.
+    """TwoDimDescTwoPhasesNLP transcribes a continuous-time optimal control problem for a two-dimensional descent
+    trajectory into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.
+
+    The two-phases transfer is constituted by an initial deorbit burn to lower the periapsis of the departure orbit,
+    an Hohmann transfer, a first powered phase from its periapsis to a predetermined altitude or time to go and a final
+    vertical descent at full thrust.
 
     Parameters
     ----------

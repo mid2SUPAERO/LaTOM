@@ -12,9 +12,57 @@ from latom.odes.odes_2d_group import ODE2dLLO2HEO, ODE2dLLO2Apo
 
 
 class TwoDimLLO2HEONLP(TwoDimVarNLP):
+    """TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory
+    from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using
+    the OpenMDAO and dymos libraries.
+
+    The transfer is modeled as a single phase ascent trajectory from the departure LLO to the apoapsis of the arrival
+    HEO. The thrust magnitude is allowed to vary over time.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        LLO altitude [m]
+    rp : float
+        HEO periapsis radius [m]
+    t : float
+        HEO period [s]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or ``None``, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+        Default is ``None``
+    rec_file : str or ``None``, optional
+        Name of the file in which the computed solution is recorded or ``None``. Default is ``None``
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    u_bound : str or ``None``, optional
+            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or ``None``. Default is ``lower``
+    fix_final : bool, optional
+        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``True``
+
+    """
 
     def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, u_bound='lower', fix_final=True):
+        """Initializes TwoDimLLO2HEONLP class. """
 
         guess = TwoDimLLO2HEOGuess(body.GM, body.R, alt, rp, t, sc)
 
@@ -23,6 +71,19 @@ class TwoDimLLO2HEONLP(TwoDimVarNLP):
                               u_bound=u_bound, fix_final=fix_final)
 
     def set_states_options(self, theta, u_bound=None):
+        """Set the states variables options.
+
+        Parameters
+        ----------
+        theta : float
+            Unit reference value for spawn angle [rad]
+        u_bound : str or ``None``, optional
+                Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or ``None``. Default is ``lower``
+
+        Returns
+        -------
+
+        """
 
         self.phase.set_state_options('r', fix_initial=True, fix_final=True, lower=1.0,
                                      ref0=self.guess.ht.depOrb.a/self.body.R,
@@ -37,6 +98,57 @@ class TwoDimLLO2HEONLP(TwoDimVarNLP):
 
 
 class TwoDimLLO2ApoNLP(TwoDimNLP):
+    """TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory
+    from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using
+    the OpenMDAO and dymos libraries.
+
+    The transfer is modeled as a single phase ascent trajectory from the departure LLO to the apoapsis of the arrival
+    HEO. The thrust magnitude is allowed to vary over time.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        LLO altitude [m]
+    rp : float
+        HEO periapsis radius [m]
+    t : float
+        HEO period [s]
+    alpha_bounds : tuple
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int
+        Number of segments in which each phase is discretized
+    order : int
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : str
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or ``None``, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+        Default is ``None``
+    rec_file : str or ``None``, optional
+        Name of the file in which the computed solution is recorded or ``None``. Default is ``None``
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+    params : dict or ``None``, optional
+        Optional parameters to be passed when a continuation method is employed and the NLP guess is not defined or
+        ``None``. Default is ``None``
+
+    Attributes
+    ----------
+    guess : TwoDimLLO2HEOGuess or ``None``
+        Initial guess or ``None`` if continuation is used
+
+    """
 
     def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False, params=None):
@@ -65,11 +177,37 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
                                         check_partials=check_partials)
 
     def add_timeseries_output(self, names=('a', 'eps', 'h')):
+        """Adds the semi-major axis, specific energy and specific angular momentum magnitude to the time series outputs
+        of the phase.
+
+        Parameters
+        ----------
+        names : iterable
+            List of strings corresponding to the names of the variables to be added to the outputs
+
+        """
 
         for n in names:
             self.phase.add_timeseries_output(n, shape=(1,))
 
     def set_options(self, rp, vp, thetaf, tof, t_bounds=None):
+        """Set the states, controls and time options, add the design parameters and boundary constraints, define the
+        objective of the optimization.
+
+        Parameters
+        ----------
+        rp : float
+            Unit reference value for lengths [m]
+        vp : float
+            Unit reference value for velocities [m/s]
+        thetaf : float
+            Unit reference value for spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
+        t_bounds : iterable or ``None``, optional
+            Time of flight lower and upper bounds expressed as fraction of `tof` [-]
+
+        """
 
         # states options
         self.phase.set_state_options('r', fix_initial=True, fix_final=False, lower=1.0, ref0=1.0, ref=rp/self.body.R)
@@ -101,9 +239,37 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
         self.setup()
 
     def set_initial_guess(self, check_partials=False, fix_final=False, throttle=False):
+        """Set the initial guess for a single solution or the first solution of a continuation procedure.
+
+        Parameters
+        ----------
+        check_partials : bool, optional
+            Check the partial derivatives computed analytically against complex step method. Default is ``False``
+        fix_final : bool, optional
+            ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``
+        throttle : bool, optional
+            ``True`` of variable thrust, ``False`` otherwise
+
+        """
+
         TwoDimNLP.set_initial_guess(self, check_partials=check_partials, fix_final=fix_final, throttle=throttle)
 
     def set_continuation_guess(self, tof, states, controls, check_partials=False):
+        """Set the initial guess for the solution ``k+1`` as the optimal transfer found for the solution ``k`` during
+        a continuation procedure.
+
+        Parameters
+        ----------
+        tof : float
+            Time of flight for the previous optimal solution [s]
+        states : ndarray
+            States on the states discretization nodes for the previous optimal solution
+        controls : ndarray
+            Controls on the controls discretization nodes for the previous optimal solution
+        check_partials : bool, optional
+            Check the partial derivatives computed analytically against complex step method. Default is ``False``
+
+        """
 
         self.p[self.phase_name + '.t_initial'] = 0.0
         self.p[self.phase_name + '.t_duration'] = tof/self.body.tc
@@ -122,6 +288,56 @@ class TwoDimLLO2ApoNLP(TwoDimNLP):
 
 
 class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
+    """TwoDim3PhasesLLO2HEONLP transcribes an optimal control problem for a three-phases ascent trajectory from a
+    circular Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using
+    the OpenMDAO and dymos libraries.
+
+    The transfer is modeled with a first powered phase at maximum thrust to leave the initial LLO, and intermediate
+    coasting phase and a second powered phase to inject in the target HEO.
+
+    Parameters
+    ----------
+    body : Primary
+        Instance of `Primary` class representing the central attracting body
+    sc : Spacecraft
+        Instance of `Spacecraft` class representing the spacecraft
+    alt : float
+        Periselene altitude at which the powered descent is initiated [m]
+    rp : float
+        HEO periapsis radius [m]
+    t : float
+        HEO period [s]
+    alpha_bounds : iterable
+        Lower and upper bounds on thrust vector direction [rad]
+    t_bounds : tuple
+        Time of flight bounds expressed as fraction of `tof` [-]
+    method : str
+        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+    nb_seg : int or tuple
+        Number of segments in which each phase is discretized
+    order : int or tuple
+        Transcription order within each phase, must be odd
+    solver : str
+        NLP solver, must be supported by OpenMDAO
+    ph_name : tuple
+        Name of the phase within OpenMDAO
+    snopt_opts : dict or None, optional
+        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+        Default is None
+    rec_file : str or None, optional
+        Name of the file in which the computed solution is recorded or None. Default is None
+    check_partials : bool, optional
+        Check the partial derivatives computed analytically against complex step method. Default is ``False``
+
+    Attributes
+    ----------
+    guess : TwoDim3PhasesLLO2HEOGuess
+        Initial guess for the iterative NLP solution
+    tof_adim : ndarray
+        Time of flight in non-dimensional units [-]
+
+    """
 
     def __init__(self, body, sc, alt, rp, t, alpha_bounds, t_bounds, method, nb_seg, order, solver, ph_name,
                  snopt_opts=None, rec_file=None, check_partials=False):
@@ -259,6 +475,18 @@ class TwoDim3PhasesLLO2HEONLP(MultiPhaseNLP):
             self.p.check_partials(method='cs', compact_print=True, show_only_incorrect=True)
 
     def set_initial_guess_phase(self, state_nodes, control_nodes, phase_name):
+        """Set the initial guess for a given `Phase`.
+
+        Parameters
+        ----------
+        state_nodes : ndarray
+            Indexes corresponding to the states discretization nodes within the specified transcription
+        control_nodes : ndarray
+            Indexes corresponding to the controls discretization nodes within the specified transcription
+        phase_name : str
+            Name of the current `Phase` object
+
+        """
 
         self.p[phase_name + '.states:r'] = np.take(self.guess.states[:, 0]/self.body.R, state_nodes)
         self.p[phase_name + '.states:theta'] = np.take(self.guess.states[:, 1], state_nodes)
