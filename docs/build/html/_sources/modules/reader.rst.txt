@@ -6,7 +6,7 @@ Readers Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: latom.reader.reader_2d latom.reader.reader_heo_2d latom.reader.reader_3d
+.. inheritance-diagram:: latom.reader.reader_2d latom.reader.reader_heo_2d
   :parts: 1
 
 Modules List
@@ -25,7 +25,4 @@ Documentation
   :noindex:
 
 .. automodule:: latom.reader.reader_heo_2d
-  :noindex:
-
-.. automodule:: latom.reader.reader_3d
   :noindex:

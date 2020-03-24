@@ -6,7 +6,7 @@ NLPs Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: latom.nlp.nlp latom.nlp.nlp_2d latom.nlp.nlp_heo_2d latom.nlp.nlp_3d
+.. inheritance-diagram:: latom.nlp.nlp latom.nlp.nlp_2d latom.nlp.nlp_heo_2d
   :parts: 1
 
 Modules List
@@ -25,7 +25,4 @@ Documentation
   :noindex:
 
 .. automodule:: latom.nlp.nlp_heo_2d
-  :noindex:
-
-.. automodule:: latom.nlp.nlp_3d
   :noindex:

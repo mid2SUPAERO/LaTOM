@@ -19,7 +19,6 @@ latom.utils.spacecraft
 
    .. autosummary::
    
-      DeorbitBurn
       ImpulsiveBurn
       Spacecraft
    

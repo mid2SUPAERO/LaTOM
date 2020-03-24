@@ -98,7 +98,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities Subpackage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/latom.utils.coc.html">latom.utils.coc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/latom.utils.const.html">latom.utils.const</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/latom.utils.cr3bp.html">latom.utils.cr3bp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/latom.utils.keplerian_orbit.html">latom.utils.keplerian_orbit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/latom.utils.pickle_utils.html">latom.utils.pickle_utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/latom.utils.primary.html">latom.utils.primary</a></li>
@@ -185,19 +184,16 @@
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/latom.utils.const.html#module-latom.utils.const" title="latom.utils.const"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.const</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.utils.cr3bp.html#module-latom.utils.cr3bp" title="latom.utils.cr3bp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.cr3bp</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.utils.keplerian_orbit.html#module-latom.utils.keplerian_orbit" title="latom.utils.keplerian_orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.keplerian_orbit</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/latom.utils.keplerian_orbit.html#module-latom.utils.keplerian_orbit" title="latom.utils.keplerian_orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.keplerian_orbit</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/latom.utils.pickle_utils.html#module-latom.utils.pickle_utils" title="latom.utils.pickle_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.pickle_utils</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.utils.pickle_utils.html#module-latom.utils.pickle_utils" title="latom.utils.pickle_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.pickle_utils</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.utils.primary.html#module-latom.utils.primary" title="latom.utils.primary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.primary</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/latom.utils.primary.html#module-latom.utils.primary" title="latom.utils.primary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.primary</span></code></a></p></td>
-<td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/latom.utils.spacecraft.html#module-latom.utils.spacecraft" title="latom.utils.spacecraft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.spacecraft</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/latom.utils.spacecraft.html#module-latom.utils.spacecraft" title="latom.utils.spacecraft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latom.utils.spacecraft</span></code></a></p></td>
 <td><p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p></td>
 </tr>
 </tbody>
@@ -587,72 +583,6 @@ equation.</p>
 
 </dd></dl>
 
-<dl class="class">
-<dt>
-<em class="property">class </em><code class="sig-prename descclassname">latom.utils.spacecraft.</code><code class="sig-name descname">DeorbitBurn</code><span class="sig-paren">(</span><em class="sig-param">sc</em>, <em class="sig-param">dv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/spacecraft.html#DeorbitBurn"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_autosummary/latom.utils.spacecraft.html#latom.utils.spacecraft.ImpulsiveBurn" title="latom.utils.spacecraft.ImpulsiveBurn"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.utils.spacecraft.ImpulsiveBurn</span></code></a></p>
-<p>DeorbitBurn class describes an impulsive burn.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sc</strong> (<a class="reference internal" href="_autosummary/latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instant of <cite>Spacecraft</cite> class</p></li>
-<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity corresponding to the impulsive burn [m/s]</p></li>
-</ul>
-</dd>
-<dt class="field-even">Variables</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>sc</strong> (<a class="reference internal" href="_autosummary/latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instant of <cite>Spacecraft</cite> class</p></li>
-<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity corresponding to the impulsive burn [m/s]</p></li>
-<li><p><strong>mf</strong> (<em>float</em>) – Spacecraft final mass after the impulsive burn [kg]</p></li>
-<li><p><strong>dm</strong> (<em>float</em>) – Propellant mass required for the impulsive burn [kg]</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt>
-<em class="property">static </em><code class="sig-name descname">tsiolkovsky_dv</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">mf</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span></dt>
-<dd><p>Computes the velocity change for a given initial and final spacecraft masses using the Tsiolkovsky rocket
-equation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>m0</strong> (<em>float</em>) – Initial spacecraft mass [kg]</p></li>
-<li><p><strong>mf</strong> (<em>float</em>) – Final spacecraft mass [kg]</p></li>
-<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse of the spacecraft rocket engine [s]</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>dv</strong> – Change in velocity [m/s]</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<em class="property">static </em><code class="sig-name descname">tsiolkovsky_mf</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">dv</em>, <em class="sig-param">isp</em><span class="sig-paren">)</span></dt>
-<dd><p>Computes the final spacecraft mass for a given velocity change using the Tsiolkovsky rocket equation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>m0</strong> (<em>float</em>) – Initial spacecraft mass [kg]</p></li>
-<li><p><strong>dv</strong> (<em>float</em>) – Change in velocity [m/s]</p></li>
-<li><p><strong>isp</strong> (<em>float</em>) – Specific impulse of the spacecraft rocket engine [s]</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mf</strong> – Final spacecraft mass [kg]</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="function">
 <dt>
@@ -861,13 +791,6 @@ equation.</p>
 
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <p>Defines useful constants</p>
-<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
-<dl class="class">
-<dt>
-<em class="property">class </em><code class="sig-prename descclassname">latom.utils.cr3bp.</code><code class="sig-name descname">Cr3bpEM</code><a class="reference internal" href="../_modules/latom/utils/cr3bp.html#Cr3bpEM"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <dl class="class">
 <dt>

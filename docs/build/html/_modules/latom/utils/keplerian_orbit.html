@@ -725,23 +725,6 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">s</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-
-    <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
-    <span class="kn">from</span> <span class="nn">latom.utils.cr3bp</span> <span class="kn">import</span> <span class="n">Cr3bpEM</span>
-
-    <span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
-    <span class="n">cr3bp</span> <span class="o">=</span> <span class="n">Cr3bpEM</span><span class="p">()</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="mf">3.049</span>
-
-    <span class="n">gm_adim</span> <span class="o">=</span> <span class="n">moon</span><span class="o">.</span><span class="n">GM</span><span class="o">*</span><span class="n">cr3bp</span><span class="o">.</span><span class="n">T</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">cr3bp</span><span class="o">.</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span>
-    <span class="n">a_adim</span> <span class="o">=</span> <span class="n">gm_adim</span><span class="o">/</span><span class="p">(</span><span class="n">J</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">cr3bp</span><span class="o">.</span><span class="n">mu</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">cr3bp</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>
-    <span class="n">a_km</span> <span class="o">=</span> <span class="n">a_adim</span><span class="o">*</span><span class="n">cr3bp</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mi">1000</span>
-
-    <span class="n">o</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="p">(</span><span class="n">moon</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="mf">3150e3</span><span class="p">,</span> <span class="n">ra</span><span class="o">=</span><span class="mf">65227.39e3</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 </pre></div>
 
            </div>

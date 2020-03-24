@@ -6,7 +6,7 @@ Initial Guesses Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: latom.guess.guess_2d latom.guess.guess_heo_2d latom.guess.guess_3d
+.. inheritance-diagram:: latom.guess.guess_2d latom.guess.guess_heo_2d
   :parts: 1
 
 Modules List
@@ -22,7 +22,4 @@ Documentation
   :noindex:
 
 .. automodule:: latom.guess.guess_heo_2d
-  :noindex:
-
-.. automodule:: latom.guess.guess_3d
   :noindex:

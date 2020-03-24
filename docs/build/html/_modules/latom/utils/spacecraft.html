@@ -340,36 +340,6 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">s</span></div>
-
-
-<div class="viewcode-block" id="DeorbitBurn"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.spacecraft.DeorbitBurn">[docs]</a><span class="k">class</span> <span class="nc">DeorbitBurn</span><span class="p">(</span><span class="n">ImpulsiveBurn</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;DeorbitBurn class describes an impulsive burn.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    sc : Spacecraft</span>
-<span class="sd">        Instant of `Spacecraft` class</span>
-<span class="sd">    dv : float</span>
-<span class="sd">        Change in velocity corresponding to the impulsive burn [m/s]</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    sc : Spacecraft</span>
-<span class="sd">        Instant of `Spacecraft` class</span>
-<span class="sd">    dv : float</span>
-<span class="sd">        Change in velocity corresponding to the impulsive burn [m/s]</span>
-<span class="sd">    mf : float</span>
-<span class="sd">        Spacecraft final mass after the impulsive burn [kg]</span>
-<span class="sd">    dm : float</span>
-<span class="sd">        Propellant mass required for the impulsive burn [kg]</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initializes `DeorbitBurn` class. &quot;&quot;&quot;</span>
-
-        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;deprecated, use ImpulsiveBurn instead&#39;</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
-        <span class="n">ImpulsiveBurn</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

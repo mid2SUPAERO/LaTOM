@@ -2,7 +2,7 @@
 
 This package has been developed by **Alberto FOSSA'** and **Giuliana Elena
 MICELI** as part of the MAE2 Research Project **"Optimal Control of Trajectory
-for a Reusable Lunar Lander in OpenMDAO/dymos"**
+of a Reusable Launcher in OpenMDAO/dymos"**
 
 ## Authors
 
@@ -24,13 +24,13 @@ for the package documentation
 ## Contents
 
 This directory contains the source code to find the most fuel efficient transfer
-trajectory from the Moon surface to a specified Low Lunar Orbit (LLO) and back.
+trajectory from the Moon surface to a specified Low Lunar Orbit (LLO) and back
+or from an LLO to an Highly Elliptical Orbit (HEO).
 
 The optimization can be performed in the following cases:
 
 1. two-dimensional ascent trajectories:
   - constant thrust
-  - constant thrust and constrained vertical take-off
   - variable thrust
   - variable thrust and constrained minimum safe altitude
 
@@ -38,10 +38,13 @@ The optimization can be performed in the following cases:
   - constant thrust
   - constant thrust and constrained vertical landing
   - variable thrust
+  - variable thrust and constrained minimum safe altitude
 
-3. three-dimensional ascent trajectories:
-  - constant thrust
-  - variable thrust
+3. two-dimensional LLO to HEO transfers:
+  - single phase trajectory with variable thrust
+  - three-phases trajectory with two powered phases at constant thrust and
+  intermediate coasting arc
+  - single phase escape burn with constant thrust
 
 ## Run a simulation
 
@@ -57,9 +60,9 @@ display those results
 
 In either case do the following:
 
-1. open one of the scripts in the *Mains* subdirectory
+1. open one of the scripts in the *scripts* subdirectory
 2. read the list that describes the different possibilities and choose the
-appropriate value for the variable *ch*
+appropriate settings
 3. optionally define your own parameters to perform a new optimization
 4. run the script and wait for the results to be displayed
 

@@ -565,20 +565,3 @@ class KepOrb:
         s = '\n'.join(lines)
 
         return s
-
-
-if __name__ == '__main__':
-
-    from latom.utils.primary import Moon
-    from latom.utils.cr3bp import Cr3bpEM
-
-    moon = Moon()
-    cr3bp = Cr3bpEM()
-    J = 3.049
-
-    gm_adim = moon.GM*cr3bp.T**2/cr3bp.L**3
-    a_adim = gm_adim/(J - 3 + cr3bp.mu*(1 + cr3bp.mu))
-    a_km = a_adim*cr3bp.L/1000
-
-    o = TwoDimOrb(moon.GM, rp=3150e3, ra=65227.39e3)
-    print(o)

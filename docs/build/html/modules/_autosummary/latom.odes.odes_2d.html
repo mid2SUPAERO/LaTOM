@@ -96,7 +96,6 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../odes.html#modules-list">Modules List</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">latom.odes.odes_2d</a></li>
 <li class="toctree-l3"><a class="reference internal" href="latom.odes.odes_2d_group.html">latom.odes.odes_2d_group</a></li>
-<li class="toctree-l3"><a class="reference internal" href="latom.odes.odes_3d.html">latom.odes.odes_3d</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../odes.html#documentation">Documentation</a></li>
@@ -227,17 +226,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [rad]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [rad]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
-<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -1140,18 +1139,18 @@ if a specific coloring is passed in.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [rad]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [rad]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
-<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
-<li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [N]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -2054,17 +2053,17 @@ if a specific coloring is passed in.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [rad]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [rad]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
-<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -2967,15 +2966,15 @@ if a specific coloring is passed in.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [s]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [m]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [m/s]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [kg]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [N]</p></li>
-<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [m/s]</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
-<li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [N]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -3880,7 +3879,7 @@ if a specific coloring is passed in.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
 <li><p><strong>R</strong> (<em>float</em>) – Moon radius [m]</p></li>
-<li><p><strong>alt_safe</strong> (<em>float</em>) – Altitude of the curve representing the geographical constraint [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Altitude of the curve representing the geographical constraint [-]</p></li>
 <li><p><strong>slope</strong> (<em>float</em>) – Slope of the curves defining a geographical constraint</p></li>
 </ul>
 </dd>
@@ -4780,7 +4779,7 @@ if a specific coloring is passed in.</p></li>
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -5696,7 +5695,7 @@ if a specific coloring is passed in.</p></li>
 <p>Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
-<dd class="field-odd"><p><strong>ra</strong> (<em>float</em>) – Value of the apoapsis radius [m]</p>
+<dd class="field-odd"><p><strong>ra</strong> (<em>float</em>) – Value of the apoapsis radius [-]</p>
 </dd>
 </dl>
 <dl class="method">
@@ -6596,7 +6595,7 @@ coordinates r, u, v.</p>
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [m/s^2]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
 </ul>
 </dd>
 </dl>

@@ -6,7 +6,7 @@ ODEs Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: latom.odes.odes_2d latom.odes.odes_2d_group latom.odes.odes_3d
+.. inheritance-diagram:: latom.odes.odes_2d latom.odes.odes_2d_group
   :parts: 1
 
 Modules List
@@ -22,7 +22,4 @@ Documentation
    :noindex:
 
 .. automodule:: latom.odes.odes_2d_group
-  :noindex:
-
-.. automodule:: latom.odes.odes_3d
   :noindex:

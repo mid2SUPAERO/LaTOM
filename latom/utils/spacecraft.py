@@ -180,33 +180,3 @@ class ImpulsiveBurn:
         s = '\n'.join(lines)
 
         return s
-
-
-class DeorbitBurn(ImpulsiveBurn):
-    """DeorbitBurn class describes an impulsive burn.
-
-    Parameters
-    ----------
-    sc : Spacecraft
-        Instant of `Spacecraft` class
-    dv : float
-        Change in velocity corresponding to the impulsive burn [m/s]
-
-    Attributes
-    ----------
-    sc : Spacecraft
-        Instant of `Spacecraft` class
-    dv : float
-        Change in velocity corresponding to the impulsive burn [m/s]
-    mf : float
-        Spacecraft final mass after the impulsive burn [kg]
-    dm : float
-        Propellant mass required for the impulsive burn [kg]
-
-    """
-
-    def __init__(self, sc, dv):
-        """Initializes `DeorbitBurn` class. """
-
-        warn('deprecated, use ImpulsiveBurn instead', FutureWarning)
-        ImpulsiveBurn.__init__(self, sc, dv)

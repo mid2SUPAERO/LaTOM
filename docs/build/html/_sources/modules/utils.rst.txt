@@ -24,8 +24,5 @@ Documentation
 .. automodule:: latom.utils.const
   :noindex:
 
-.. automodule:: latom.utils.cr3bp
-  :noindex:
-
 .. automodule:: latom.utils.primary
   :noindex:

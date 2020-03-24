@@ -6,7 +6,7 @@ Analyzers Subpackage
 Inheritance Diagram
 -------------------
 
-.. inheritance-diagram:: latom.analyzer.analyzer latom.analyzer.analyzer_2d latom.analyzer.analyzer_heo_2d latom.analyzer.analyzer_3d
+.. inheritance-diagram:: latom.analyzer.analyzer latom.analyzer.analyzer_2d latom.analyzer.analyzer_heo_2d
   :parts: 1
 
 Modules List
@@ -25,7 +25,4 @@ Documentation
   :noindex:
 
 .. automodule:: latom.analyzer.analyzer_heo_2d
-  :noindex:
-
-.. automodule:: latom.analyzer.analyzer_3d
   :noindex:
