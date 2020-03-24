@@ -11,7 +11,7 @@ from latom.analyzer.analyzer_2d import TwoDimDescConstAnalyzer, TwoDimDescVarAna
 
 
 # trajectory
-kind = 'c'
+kind = 's'
 moon = Moon()
 alt = 100e3  # initial orbit altitude [m]
 alt_p = 15e3  # periselene altitude [m]
@@ -22,14 +22,14 @@ alt_safe = 5e3  # minimum safe altitude [m]
 slope = -5.  # slope of the constraint on minimum safe altitude [-]
 
 # spacecraft
-isp = 310.  # specific impulse [s]
+isp = 400.  # specific impulse [s]
 twr = 0.9  # initial thrust/weight ratio [-]
 
 sc = Spacecraft(isp, twr, g=moon.g)
 
 # NLP
 method = 'gauss-lobatto'
-segments = 60
+segments = 200
 order = 3
 solver = 'SNOPT'
 snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,

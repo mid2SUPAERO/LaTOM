@@ -26,31 +26,31 @@ class ODE2dVToff(Group):
         Other Parameters
         ----------------
         time : float
-            Represents the time variable of the system [s]
+            Represents the time variable of the system [-]
         r : float
-            Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+            Represents a position along the trajectory. The distance is measured from the center of the central body [-]
         theta : float
-            Angle spawn from the starting point of the orbit to the final one [rad]
+            Angle spawn from the starting point of the orbit to the final one [-]
         u : float
-            Radial velocity of a point along the trajectory [m/s]
+            Radial velocity of a point along the trajectory [-]
         v : float
-            Tangential velocity of a point along the trajectry [m/s]
+            Tangential velocity of a point along the trajectry [-]
         m : float
-            Mass of the space vehicle that performs the trajectory [kg]
+            Mass of the space vehicle that performs the trajectory [-]
         alpha : float
-            Angle defining the thrust direction [rad]
+            Angle defining the thrust direction [-]
         thrust : float
-            Value of the applied thrust force [N]
+            Value of the applied thrust force [-]
         w : float
-            Value of the exhaust velocity [m/s]
+            Value of the exhaust velocity [-]
         num_nodes : int
             Number of nodes where to compute the equations
         GM : float
-            Gravitational constant [m/s^2]
+            Gravitational constant [-]
         R : float
-            Moon radius [m]
+            Moon radius [-]
         alt_safe : float
-            Altitude of the curve representing the geographical constraint [m]
+            Altitude of the curve representing the geographical constraint [-]
         slope : float
             Slope of the curves defining a geographical constraint
 
@@ -95,31 +95,31 @@ class ODE2dLLO2Apo(Group):
     Other Parameters
     ----------------
     time : float
-        Represents the time variable of the system [s]
+        Represents the time variable of the system [-]
     r : float
-        Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+        Represents a position along the trajectory. The distance is measured from the center of the central body [-]
     theta : float
-        Angle spawn from the starting point of the orbit to the final one [rad]
+        Angle spawn from the starting point of the orbit to the final one [-]
     u : float
-        Radial velocity of a point along the trajectory [m/s]
+        Radial velocity of a point along the trajectory [-]
     v : float
-        Tangential velocity of a point along the trajectry [m/s]
+        Tangential velocity of a point along the trajectry [-]
     m : float
-        Mass of the space vehicle that performs the trajectory [kg]
+        Mass of the space vehicle that performs the trajectory [-]
     alpha : float
-        Angle defining the thrust direction [rad]
+        Angle defining the thrust direction [-]
     thrust : float
-        Value of the applied thrust force [N]
+        Value of the applied thrust force [-]
     w : float
-        Value of the exhaust velocity [m/s]
+        Value of the exhaust velocity [-]
     num_nodes : int
         Number of nodes where to compute the equations
     GM : float
-        Gravitational constant [m/s^2]
+        Gravitational constant [-]
     T : float
-       Value of the constant thrust force [N]
+       Value of the constant thrust force [-]
     ra : float
-        Value of the apoapsis radius [m]
+        Value of the apoapsis radius [-]
     """
 
     def initialize(self):
@@ -161,29 +161,29 @@ class ODE2dLLO2HEO(Group):
     Other Parameters
     ----------------
     time : float
-        Represents the time variable of the system [s]
+        Represents the time variable of the system [-]
     r : float
-        Represents a position along the trajectory. The distance is measured from the center of the central body [m]
+        Represents a position along the trajectory. The distance is measured from the center of the central body [-]
     theta : float
-        Angle spawn from the starting point of the orbit to the final one [rad]
+        Angle spawn from the starting point of the orbit to the final one [-]
     u : float
-        Radial velocity of a point along the trajectory [m/s]
+        Radial velocity of a point along the trajectory [-]
     v : float
-        Tangential velocity of a point along the trajectry [m/s]
+        Tangential velocity of a point along the trajectry [-]
     m : float
-        Mass of the space vehicle that performs the trajectory [kg]
+        Mass of the space vehicle that performs the trajectory [-]
     alpha : float
-        Angle defining the thrust direction [rad]
+        Angle defining the thrust direction [-]
     thrust : float
-        Value of the applied thrust force [N]
+        Value of the applied thrust force [-]
     w : float
-        Value of the exhaust velocity [m/s]
+        Value of the exhaust velocity [-]
     num_nodes : int
         Number of nodes where to compute the equations
     GM : float
-        Gravitational constant [m/s^2]
+        Gravitational constant [-]
     T : float
-       Value of the constant thrust force [N]
+       Value of the constant thrust force [-]
 
     """
 
