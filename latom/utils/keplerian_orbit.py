@@ -221,14 +221,14 @@ class TwoDimOrb:
         t : float
             Orbital period [s]
         states : ndarray
-            List of the states values propagated in time
+            List of the states values propagated in time [m, m/s, m/s]
         """
-        ta = np.reshape(np.linspace(tai, taf, nb), (nb, 1))  # true anomaly [rad]
+        ta = np.reshape(np.linspace(tai, taf, nb), (nb, 1)) 
         ea = 2*np.arctan(((1 - e)/(1 + e))**0.5*np.tan(ta/2))  # eccentric anomaly [rad]
         me = ea - e*np.sin(ea)  # mean anomaly [rad]
-        t = me*a**1.5/gm**0.5 + tp  # time [s]
+        t = me*a**1.5/gm**0.5 + tp
 
-        r, u, v = TwoDimOrb.coe2polar(gm, ta, a=a, e=e)  # states [m, m/s, m/s]
+        r, u, v = TwoDimOrb.coe2polar(gm, ta, a=a, e=e)
 
         states = np.hstack((r, ta, u, v))
 
