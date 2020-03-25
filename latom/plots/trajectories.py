@@ -227,8 +227,8 @@ class TwoDimTrajectory:
 
         Parameters
         ----------
-        ax : ?
-
+        ax : Axes
+            Instance of `Axes` class
         title : str
             Title of the plot
         units : str
