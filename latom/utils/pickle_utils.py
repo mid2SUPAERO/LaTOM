@@ -1,6 +1,7 @@
 """
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
+Defines the methods to save and load files using the pickle library
 """
 
 import pickle

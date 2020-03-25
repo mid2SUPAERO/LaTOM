@@ -65,7 +65,13 @@ class Spacecraft:
         self.update_twr(twr)
 
     def update_twr(self, twr):
+        """ Updates the boundaries value for the thrust throttle
 
+         Parameters
+         ----------
+         twr : float
+            Thrust over initial weight ratio [-]
+        """
         self.twr = twr
         self.T_max = self.twr * self.m0 * self.g
         self.T_min = self.T_max * self.throttle_min

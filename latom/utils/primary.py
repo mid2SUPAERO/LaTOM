@@ -39,6 +39,7 @@ class Primary:
 
 
 class Moon(Primary):
+    """ Defines the Moon"""
 
     def __init__(self):
         """Init Moon class. """
