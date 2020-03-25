@@ -11,9 +11,66 @@ from latom.plots.trajectories import TwoDimAltProfile, TwoDimSurface2LLO, TwoDim
 
 
 class TwoDimSolPlot:
+    """ Plot the two-dimensional simulation's states and controls in time
+
+     Parameters
+     ----------
+     r : ndarray
+        Position along the trajectory [m] or [-]
+     time : ndarray
+        Simulation time interval [s] or [-]
+     states : ndarray
+        List of the states values obtained from the simulation
+     controls : ndarray
+        List of the controls values obtained from the simulation
+     time_exp : bool
+        Defines if the time scale is exponential
+     states_exp : bool
+        Defines if the states values scale is exponential
+     r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+     threshold : float
+        The threshold for the thrust values
+     kind : str
+        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
+     a : float
+        HEO orbit's semi-major axis [m] or [-]
+     e : float
+        HEO orbit's eccentricity
+
+    Attributes
+    ----------
+    R : ndarray
+        Position along the trajectory [m] or [-]
+    time : ndarray
+        Simulation time interval [s] or [-]
+    states : ndarray
+        List of the states values obtained from the simulation
+    controls : ndarray
+        List of the controls values obtained from the simulation
+    time_exp : bool
+        Defines if the time scale is exponential
+    states_exp : bool
+        Defines if the states values scale is exponential
+    r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+    threshold : float
+        The threshold for the thrust values
+    kind : str
+        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
+    states_plot : timeseries
+        Instance of `timeseries` class to create a states plot
+    alt_plot : trajectories
+        Instance of `trajectories` class to create an altitude profile plot
+    controls_plot : timeseries
+        Instance of `timeseries` class to create a controls plot
+    trajectory_plot :  trajectories
+        Instance of `trajectories` class to create a LLO to NRHO trajectory plot or a Surface to Moon trajectory plot
+    """
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, r_safe=None,
                  threshold=1e-6, kind='ascent', a=None, e=None):
+        """Initializes `TwoDimSolPlot` class. """
 
         self.R = deepcopy(r)
 
@@ -54,6 +111,7 @@ class TwoDimSolPlot:
             self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, self.kind)
 
     def plot(self):
+        """ Plot the two-dimensional simulation's states and controls in time """
 
         self.states_plot.plot()
         self.controls_plot.plot()
@@ -64,9 +122,39 @@ class TwoDimSolPlot:
 
 
 class TwoDimMultiPhaseSolPlot(TwoDimSolPlot):
+    """ Plot the two-dimensional multi phase simulation's states and controls in time
+
+     Parameters
+     ----------
+     r : ndarray
+        Position along the trajectory [m] or [-]
+     time : ndarray
+        Simulation time interval [s] or [-]
+     states : ndarray
+        List of the states values obtained from the simulation
+     controls : ndarray
+        List of the controls values obtained from the simulation
+     time_exp : bool
+        Defines if the time scale is exponential
+     states_exp : bool
+        Defines if the states values scale is exponential
+     r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+     threshold : float
+        The threshold for the thrust values
+     kind : str
+        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
+     a : float
+        HEO orbit's semi-major axis [m] or [-]
+     e : float
+        HEO orbit's eccentricity
+     dtheta : float
+        Delta theta to translate the position angle time series [rad] or [-]
+     """
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, r_safe=None, threshold=1e-6,
                  kind='ascent', a=None, e=None, dtheta=None):
+        """Initializes `TwoDimMultiPhaseSolPlot` class. """
 
         time = np.vstack(time)
         states = np.vstack(states)
@@ -86,8 +174,54 @@ class TwoDimMultiPhaseSolPlot(TwoDimSolPlot):
 
 
 class TwoDimDescTwoPhasesSolPlot:
+    """ Plot the two-dimensional two-phases descent simulation's states and controls in time
+
+     Parameters
+     ----------
+     r : ndarray
+        Position along the trajectory [m] or [-]
+     time : ndarray
+        Simulation time interval [s] or [-]
+     states : ndarray
+        List of the states values obtained from the simulation
+     controls : ndarray
+        List of the controls values obtained from the simulation
+     time_exp : bool
+        Defines if the time scale is exponential
+     states_exp : bool
+        Defines if the states values scale is exponential
+     kind : str
+        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
+
+    Attributes
+    ----------
+    R : ndarray
+        Position along the trajectory [m] or [-]
+    time : ndarray
+        Simulation time interval [s] or [-]
+    states : ndarray
+        List of the states values obtained from the simulation
+    controls : ndarray
+        List of the controls values obtained from the simulation
+    time_exp : bool
+        Defines if the time scale is exponential
+    states_exp : bool
+        Defines if the states values scale is exponential
+    kind : str
+        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
+    states_plot : timeseries
+        Instance of `timeseries` class to create a states plot
+    alt_plot : trajectories
+        Instance of `trajectories` class to create an altitude profile plot
+    controls_plot : timeseries
+        Instance of `timeseries` class to create a controls plot
+    trajectory_plot :  trajectories
+        Instance of `trajectories` class to create a Surface to Moon trajectory plot
+     """
+
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, kind='ascent'):
+        """Initializes `TwoDimDescTwoPhasesSolPlot` class. """
 
         self.R = deepcopy(r)
 
@@ -121,6 +255,7 @@ class TwoDimDescTwoPhasesSolPlot:
         self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, self.kind)
 
     def plot(self):
+        """ Plot the two-dimensional two-phases descent simulation's states and controls in time """
 
         self.states_plot.plot()
         self.controls_plot.plot()

@@ -8,9 +8,62 @@ import matplotlib.pyplot as plt
 
 
 class TwoDimStatesTimeSeries:
+    """ Plot the two-dimensional simulation's states in time
+
+     Parameters
+     ----------
+     r : ndarray
+        Position along the trajectory [m] or [-]
+     time : ndarray
+        Simulation time interval [s] or [-]
+     states : ndarray
+        List of the states values obtained from the simulation
+     time_exp : bool
+        Defines if the time scale is exponential
+     states_exp : bool
+        Defines if the states values scale is exponential
+     thrust : ndarray
+        List of the thrust values
+     r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+     threshold : float
+        The threshold for the thrust values
+     labels : str
+        Defines the kind of phase. The possible values are ['powered', 'coast']
+
+     Attributes
+     ----------
+     R : ndarray
+        Position along the trajectory [m] or [-]
+     scaler : float
+        Value to scale the distances
+     units : ndarray
+        List of measurement units
+     time : ndarray
+        Simulation time interval [s] or [-]
+     states : ndarray
+        List of the states values obtained from the simulation
+     time_exp : bool
+        Defines if the time scale is exponential
+     states_exp : bool
+        Defines if the states values scale is exponential
+     time_pow : ndarray
+        List of time values for the powered phase
+     states_pow : ndarray
+        List of states values for the powered phase
+     time_coast : ndarray
+        List of time value for the coasting phase
+     states_coast : ndarray
+        List of states values for the coasting phase
+     r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+     labels : str
+        Defines the kind of phase. The possible values are ['powered', 'coast']
+     """
 
     def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-6, r_safe=None,
                  labels=('powered', 'coast')):
+        """Initializes `TwoDimStatesTimeSeries` class. """
 
         self.R = r
 
@@ -39,6 +92,7 @@ class TwoDimStatesTimeSeries:
         self.labels = labels
 
     def plot(self):
+        """ Plot the two-dimensional simulation's states and controls in time"""
 
         fig, axs = plt.subplots(2, 2, constrained_layout=True)
 
@@ -94,8 +148,35 @@ class TwoDimStatesTimeSeries:
 
 
 class TwoDimControlsTimeSeries:
+    """ Plot the two-dimensional simulation's controls in time
 
+     Parameters
+     ----------
+     time : ndarray
+        Simulation time interval [s] or [-]
+     controls : ndarray
+        List of the controls values obtained from the simulation
+     threshold : float
+        The threshold for the thrust values
+     units : str
+        Defines the measures units
+
+    Attributes
+    ---------
+    time : ndarray
+        Simulation time interval [s] or [-]
+    thrust : ndarray
+        List of thrust time series [N] or [-]
+    alpha : ndarray
+        List of thrust angle time series [rad] or [-]
+    threshold : float
+        The threshold for the thrust values
+    units : str
+        Defines the measures units
+
+    """
     def __init__(self, time, controls, threshold=1e-6, units=('N', 's')):
+        """Initializes `TwoDimControlsTimeSeries` class. """
 
         self.time = time
         self.thrust = controls[:, 0]
@@ -107,6 +188,7 @@ class TwoDimControlsTimeSeries:
             self.alpha[(self.thrust < threshold).flatten()] = None
 
     def plot(self):
+        """ Plot the two-dimensional simulation's controls in time"""
 
         if self.threshold is None:
 

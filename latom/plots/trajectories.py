@@ -8,6 +8,53 @@ import matplotlib.pyplot as plt
 
 
 class TwoDimAltProfile:
+    """ Plot the two-dimensional simulation's altitude profile in time
+
+     Parameters
+     ----------
+     r : ndarray
+        Position along the trajectory [m] or [-]
+     states : ndarray
+        List of the states values obtained from the simulation
+     states_exp : bool
+        Defines if the states values scale is exponential
+     r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+     threshold : float
+        The threshold for the thrust values
+     labels : str
+        Defines the kind of phase. The possible values are ['powered', 'coast']
+
+     Attributes
+     ----------
+     R : ndarray
+        Position along the trajectory [m] or [-]
+     scaler : float
+        Value to scale the distances
+     units : ndarray
+        List of measurement units
+     r : ndarray
+        Position time series [m] or [-]
+     theta : ndarray
+        Position angle time series [rad]
+     r_pow : ndarray
+        List of position values for the powered phase [m] or [-]
+     theta_pow : ndarray
+        List of position angle values for the powered phase [rad] or [-]
+     r_coast : ndarray
+        List of position values for the coasting phase [m] or [-]
+     theta_coast : ndarray
+        List of position angle values for the coasting phase [rad] or [-]
+     r_exp : ndarray
+        List of position values explicitly computed [m] or [-]
+     theta_exp : ndarray
+        List of position angle values explicitly computed [rad] or [-]
+     r_safe : float
+        Value of the minimum safe altitude [m] or [-]
+     labels : str
+        Defines the kind of phase. The possible values are ['powered', 'coast']
+     """
+
 
     def __init__(self, r, states, states_exp=None, thrust=None, threshold=1e-6, r_safe=None,
                  labels=('powered', 'coast')):
@@ -43,6 +90,7 @@ class TwoDimAltProfile:
         self.labels = labels
 
     def plot(self):
+        """ Plot the two-dimensional simulation's altitude profile in time """
 
         fig, ax = plt.subplots(1, 1, constrained_layout=True)
 
@@ -72,9 +120,44 @@ class TwoDimAltProfile:
 
 
 class TwoDimTrajectory:
+    """Plots the two-dimensional trajectories
 
+    Parameters
+    ----------
+    r_moon : float
+       Moon radius [m] or [-]
+    r_llo : float
+       Initial Low Lunar Orbit radius [m] o [-]
+    states : dict
+       Dictionary that maps states values obtained from the simulation
+    kind : str
+        Defines the kind of trajectory. It can be 'ascent' or 'descent'
+    nb : float, optional
+       Number of points in which the Moon surface and the initial orbits are discretized. Default is ``2000``
+
+    Attributes
+    ----------
+    scaler : float
+       scaler for lengths
+    units : str
+       Unit of measurement for lengths
+    x_moon : ndarray
+       x coordinates for the Moon surface [km] or [-]
+    y_moon : ndarray
+       y coordinates for the Moon surface [km] or [-]
+    x_llo : ndarray
+       x coordinates for the initial orbit [km] or [-]
+    y_llo : ndarray
+       y coordinates for the initial orbit [km] or [-]
+    x : dict
+       x coordinates for the ascent trajectories [km] or [-]
+    y : dict
+       y coordinates for the ascent trajectories [km] or [-]
+    kind : str
+        Defines the kind of trajectory. It can be 'ascent' or 'descent'
+    """
     def __init__(self, r_moon, r_llo, states, kind='ascent', nb=2000):
-
+        """Initializes `TwoDimTrajectory` class. """
         self.scaler, self.units = self.get_scalers(r_moon)
 
         self.x_moon, self.y_moon = self.polar2cartesian(r_moon, self.scaler, nb=nb)  # Moon surface in xy plane
@@ -85,7 +168,20 @@ class TwoDimTrajectory:
 
     @staticmethod
     def get_scalers(r):
+        """ Defines the scaler values to use
 
+        Parameters
+        ----------
+        r : float
+            Value of a distance from the Moon center [m] or [-]
+
+        Returns
+        -------
+        scaler : float
+            Scaler value [-]
+        units : str
+            Measurement unit
+        """
         if not np.isclose(r, 1.0):
             scaler = 1e3
             units = 'km'
@@ -97,7 +193,22 @@ class TwoDimTrajectory:
 
     @staticmethod
     def polar2cartesian(r, scaler=1., **kwargs):
+        """ Transforms the polar coordinates into cartesian coordinates
 
+        Parameters
+        ----------
+        r : float
+            Value of a distance from the Moon center [m] or [-]
+        scaler : float
+            Scaler value [-]
+
+        Returns
+        -------
+        x : float
+            X value
+        y : float
+            Y value
+        """
         if 'nb' in kwargs:
             angle = np.linspace(0.0, 2 * np.pi, kwargs['nb'])
         elif 'angle' in kwargs:
@@ -112,7 +223,17 @@ class TwoDimTrajectory:
 
     @staticmethod
     def set_axes_decorators(ax, title, units):
+        """ Sets the plot axes decorators
 
+        Parameters
+        ----------
+        ax : ?
+
+        title : str
+            Title of the plot
+        units : str
+            Measurement units
+        """
         ax.set_aspect('equal')
         ax.grid()
 
@@ -124,6 +245,7 @@ class TwoDimTrajectory:
         ax.legend(bbox_to_anchor=(1, 1), loc=2)
 
     def plot(self):
+        """ Plots the two-dimensional trajectories from the Moon surface to a Low Lunar Orbit and vice versa."""
 
         fig, ax = plt.subplots(constrained_layout=True)
 
@@ -142,9 +264,43 @@ class TwoDimTrajectory:
 
 
 class TwoDimSurface2LLO(TwoDimTrajectory):
+    """Plots the two-dimensional trajectories from the Moon surface to a Low Lunar Orbit and vice versa
+
+    Parameters
+    ----------
+    r_moon : float
+       Moon radius [m] or [-]
+    states : dict
+       Dictionary that maps states values obtained from the simulation
+    kind : str
+        Defines the kind of trajectory. It can be 'ascent' or 'descent'
+    nb : float, optional
+       Number of points in which the Moon surface and the initial orbits are discretized. Default is ``2000``
+
+    Attributes
+    ----------
+    scaler : float
+       scaler for lengths
+    units : str
+       Unit of measurement for lengths
+    x_moon : ndarray
+       x coordinates for the Moon surface [km] or [-]
+    y_moon : ndarray
+       y coordinates for the Moon surface [km] or [-]
+    x_llo : ndarray
+       x coordinates for the initial orbit [km] or [-]
+    y_llo : ndarray
+       y coordinates for the initial orbit [km] or [-]
+    x : dict
+       x coordinates for the ascent trajectories [km] or [-]
+    y : dict
+       y coordinates for the ascent trajectories [km] or [-]
+    kind : str
+        Defines the kind of trajectory. It can be 'ascent' or 'descent'
+    """
 
     def __init__(self, r_moon, states, kind='ascent', nb=2000):
-
+        """Initializes `TwoDimSurface2LLO` class. """
         # kind
         if kind == 'ascent':
             r_llo = states[-1, 0]
@@ -157,8 +313,46 @@ class TwoDimSurface2LLO(TwoDimTrajectory):
 
 
 class TwoDimLLO2NRHO(TwoDimTrajectory):
+    """Plots the two-dimensional trajectories from a Low Lunar Orbit to a Near rectilinear Halo Orbit
 
+    Parameters
+    ----------
+    r_moon : float
+       Moon radius [m] or [-]
+    a_nrho : float
+        Semi-major axis of the NRHO [m] or [-]
+    e_nrho : float
+        Eccentricity of the NRHO
+    states : dict
+       Dictionary that maps states values obtained from the simulation
+    kind : str
+        Defines the kind of trajectory. It can be 'ascent' or 'descent'
+    nb : float, optional
+       Number of points in which the Moon surface and the initial orbits are discretized. Default is ``2000``
+
+    Attributes
+    ----------
+    scaler : float
+       scaler for lengths
+    units : str
+       Unit of measurement for lengths
+    x_moon : ndarray
+       x coordinates for the Moon surface [km] or [-]
+    y_moon : ndarray
+       y coordinates for the Moon surface [km] or [-]
+    x_llo : ndarray
+       x coordinates for the initial orbit [km] or [-]
+    y_llo : ndarray
+       y coordinates for the initial orbit [km] or [-]
+    x : dict
+       x coordinates for the ascent trajectories [km] or [-]
+    y : dict
+       y coordinates for the ascent trajectories [km] or [-]
+    kind : str
+        Defines the kind of trajectory. It can be 'ascent' or 'descent'
+    """
     def __init__(self, r_moon, a_nrho, e_nrho, states, kind='ascent', nb=2000):
+        """Initializes `TwoDimLLO2NRHO` class. """
 
         # kind
         if kind == 'ascent':
