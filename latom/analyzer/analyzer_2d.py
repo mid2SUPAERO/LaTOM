@@ -1293,6 +1293,6 @@ class TwoDimDescTwoPhasesAnalyzer(TwoDimAnalyzer):
         """
 
         sol_plot = TwoDimDescTwoPhasesSolPlot(self.rm_res, self.time, self.states, self.controls,
-                                              time_exp=self.time_exp, states_exp=self.states_exp, kind='descent')
+                                              time_exp=self.time_exp, states_exp=self.states_exp)
 
         sol_plot.plot()

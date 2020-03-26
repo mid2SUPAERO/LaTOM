@@ -8,58 +8,61 @@ import matplotlib.pyplot as plt
 
 
 class TwoDimStatesTimeSeries:
-    """ Plot the two-dimensional simulation's states in time
+    """Plot the two-dimensional simulation's states in time.
 
-     Parameters
-     ----------
-     r : ndarray
-        Position along the trajectory [m] or [-]
-     time : ndarray
-        Simulation time interval [s] or [-]
-     states : ndarray
-        List of the states values obtained from the simulation
-     time_exp : bool
-        Defines if the time scale is exponential
-     states_exp : bool
-        Defines if the states values scale is exponential
-     thrust : ndarray
-        List of the thrust values
-     r_safe : float
-        Value of the minimum safe altitude [m] or [-]
-     threshold : float
+    Parameters
+    ----------
+    r : float
+        Equatorial radius of central attracting body [m] or [-]
+    time : ndarray
+        Time vector for implicit NLP solution [s] or [-]
+    states : ndarray
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
+    time_exp : ndarray or ``None``, optional
+        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``
+    states_exp : ndarray or ``None``, optional
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``
+    thrust : ndarray or ``None``
+        Thrust time series [N] or [-] or ``None``. Default is ``None``
+    threshold : float or ``None``, optional
+        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``
+    r_safe : ndarray or ``None``, optional
+        Time series for minimum safe altitude [m] or [-] or ``None``. Default is ``None``
+    threshold : float
         The threshold for the thrust values
-     labels : str
-        Defines the kind of phase. The possible values are ['powered', 'coast']
+    labels : iterable, optional
+        Labels for the different phases. Default is `('powered', 'coast')`
 
-     Attributes
-     ----------
-     R : ndarray
-        Position along the trajectory [m] or [-]
-     scaler : float
+    Attributes
+    ----------
+    R : float
+        Equatorial radius of central attracting body [m] or [-]
+    scaler : float
         Value to scale the distances
-     units : ndarray
-        List of measurement units
-     time : ndarray
-        Simulation time interval [s] or [-]
-     states : ndarray
-        List of the states values obtained from the simulation
-     time_exp : bool
-        Defines if the time scale is exponential
-     states_exp : bool
-        Defines if the states values scale is exponential
-     time_pow : ndarray
-        List of time values for the powered phase
-     states_pow : ndarray
-        List of states values for the powered phase
-     time_coast : ndarray
-        List of time value for the coasting phase
-     states_coast : ndarray
-        List of states values for the coasting phase
-     r_safe : float
-        Value of the minimum safe altitude [m] or [-]
-     labels : str
-        Defines the kind of phase. The possible values are ['powered', 'coast']
-     """
+    units : list
+        List of measurement units for distances, velocities and time
+    time : ndarray
+        Time vector for implicit NLP solution [s] or [-]
+    states : ndarray
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
+    time_exp : ndarray or ``None``
+        Time vector for explicit simulation [s] o [-] or ``None``
+    states_exp : ndarray or ``None``
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``
+    time_pow : ndarray
+        Time vector for implicit NLP solution corresponding to a powered phase [s] or [-]
+    states_pow : ndarray
+        States time series for implicit NLP solution corresponding to a powered phase as `[r, theta, u, v, m]`
+    time_coast : ndarray
+        Time vector for implicit NLP solution corresponding to a coasting phase [s] or [-]
+    states_coast : ndarray
+        States time series for implicit NLP solution corresponding to a coasting phase as `[r, theta, u, v, m]`
+    r_safe : ndarray or ``None``
+        Time series for minimum safe altitude [m] or [-] or ``None``
+    labels : iterable
+        Labels for the different phases
+
+    """
 
     def __init__(self, r, time, states, time_exp=None, states_exp=None, thrust=None, threshold=1e-6, r_safe=None,
                  labels=('powered', 'coast')):
@@ -92,7 +95,7 @@ class TwoDimStatesTimeSeries:
         self.labels = labels
 
     def plot(self):
-        """ Plot the two-dimensional simulation's states and controls in time"""
+        """Plot the two-dimensional simulation's states and in time. """
 
         fig, axs = plt.subplots(2, 2, constrained_layout=True)
 
@@ -148,31 +151,31 @@ class TwoDimStatesTimeSeries:
 
 
 class TwoDimControlsTimeSeries:
-    """ Plot the two-dimensional simulation's controls in time
+    """Plot the two-dimensional simulation's controls in time.
 
-     Parameters
-     ----------
-     time : ndarray
-        Simulation time interval [s] or [-]
-     controls : ndarray
-        List of the controls values obtained from the simulation
-     threshold : float
-        The threshold for the thrust values
-     units : str
-        Defines the measures units
+    Parameters
+    ----------
+    time : ndarray
+        Time vector for implicit NLP solution [s] or [-]
+    controls : ndarray
+        Controls time series for implicit NLP solution as `[thrust, alpha]`
+    threshold : float or ``None``, optional
+        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``
+    units : iterable, optional
+        Measurements units for thrust, time. Default is `('N', 's')`
 
     Attributes
-    ---------
+    ----------
     time : ndarray
-        Simulation time interval [s] or [-]
+        Time vector for implicit NLP solution [s] or [-]
     thrust : ndarray
-        List of thrust time series [N] or [-]
+        Thrust magnitude time series for implicit NLP solution [N] or [-]
     alpha : ndarray
-        List of thrust angle time series [rad] or [-]
-    threshold : float
-        The threshold for the thrust values
-    units : str
-        Defines the measures units
+        Thrust direction time series for implicit NLP solution [rad]
+    threshold : float or ``None``
+        Threshold value to determine the on/off control structure or ``None``
+    units : iterable
+        Measurements units for thrust, time
 
     """
     def __init__(self, time, controls, threshold=1e-6, units=('N', 's')):
@@ -188,7 +191,7 @@ class TwoDimControlsTimeSeries:
             self.alpha[(self.thrust < threshold).flatten()] = None
 
     def plot(self):
-        """ Plot the two-dimensional simulation's controls in time"""
+        """Plot the two-dimensional simulation's controls in time. """
 
         if self.threshold is None:
 

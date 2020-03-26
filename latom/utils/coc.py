@@ -302,16 +302,3 @@ def lat_long2cartesian(lat, long, r):
     z = r*np.sin(lat)
 
     return x, y, z
-
-
-if __name__ == '__main__':
-
-    lat = 90.
-    long = 0.
-
-    r = 1.
-
-    x, y, z = lat_long2cartesian(lat, long, r)
-
-    for i in x, y, z:
-        print(i)

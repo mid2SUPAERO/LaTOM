@@ -10,12 +10,23 @@ from latom.utils.coc import per2eq, coe2sv_vec
 
 
 class TwoDimOrb:
-    """Defines a two-dimensional orbit from its keplerian parameters
+    """Defines a two-dimensional orbit from its keplerian parameters.
 
-     Parameters
-     ----------
-     gm : float
+    Parameters
+    ----------
+    gm : float
         Central body standard gravitational parameter [m^3/s^2]
+    kwargs :
+        T : float
+            Orbital period [s]
+        a : float
+            Semi-major axis [m]
+        e : float
+            Eccentricity [-]
+        ra : float
+            Apoapsis radius [m]
+        rp : float
+            Periapsis radius [m]
 
     Attributes
     ----------
@@ -41,8 +52,9 @@ class TwoDimOrb:
         Specific energy of the orbit in 2BP [m^2/s^2]
 
     """
+
     def __init__(self, gm, **kwargs):
-        """Initializes TwoDimOrb class. """
+        """Initializes `TwoDimOrb` class. """
 
         self.GM = gm
 
@@ -101,24 +113,33 @@ class TwoDimOrb:
 
     @staticmethod
     def coe2polar(gm, ta, **kwargs):
-        """ Transforms the classical orbital elements to polar coordinates
+        """Transforms the classical orbital elements into polar coordinates.
 
         Parameters
         ----------
         gm : float
             Central body standard gravitational parameter [m^3/s^2]
-        ta : float
+        ta : float or ndarray
             True anomaly [rad]
+        kwargs :
+            a : float
+                Semi-major axis [m]
+            e : float
+                Eccentricity [-]
+            h : float
+                Specific angular momentum magnitude [m^2/s]
 
         Returns
         -------
-        r : float
+        r : float or ndarray
             Position in polar coordinates [m]
-        u : float
+        u : float or ndarray
             radial velocity [m/s]
-        v : float
+        v : float or ndarray
             tangential velocity [m/s]
+
         """
+
         if len(kwargs) != 2:
             raise AttributeError('Exactly two kwargs between a,e,h must be provided')
         elif ('a' in kwargs) and ('e' in kwargs):
@@ -143,17 +164,17 @@ class TwoDimOrb:
 
     @staticmethod
     def polar2coe(gm, r, u, v):
-        """ Transforms the polar coordinates into classical orbital elements
+        """Transforms the polar coordinates into classical orbital elements.
 
         Parameters
         ----------
         gm : float
             Central body standard gravitational parameter [m^3/s^2]
-        r : float
+        r : float or ndarray
             Position in polar coordinates [m]
-        u : float
+        u : float or ndarray
             radial velocity [m/s]
-        v : float
+        v : float or ndarray
             tangential velocity [m/s]
 
         Returns
@@ -164,9 +185,11 @@ class TwoDimOrb:
             Orbit eccentricity [-]
         h : float
             Orbit specific angular momentum magnitude [m^2/s]
-        ta : float
+        ta : float or ndarray
             True anomaly [rad]
+
         """
+
         a = gm*r/(2*gm - r*(u*u + v*v))
         h = r*v
         e = (((r*v*v - gm)**2 + (r*u*v)**2)**0.5)/gm
@@ -176,28 +199,31 @@ class TwoDimOrb:
 
     @staticmethod
     def polar2energy(gm, r, u, v):
-        """ Returns the energy given the polar coordinates
+        """Returns the energy given the polar coordinates.
 
         Parameters
         ----------
         gm : float
             Central body standard gravitational parameter [m^3/s^2]
-        r : float
+        r : float or ndarray
             Position in polar coordinates [m]
-        u : float
+        u : float or ndarray
             radial velocity [m/s]
-        v : float
+        v : float or ndarray
             tangential velocity [m/s]
 
         Returns
-        (u**2 + v**2)*0.5 - gm/r : float
+        -------
+        (u**2 + v**2)*0.5 - gm/r : float or ndarray
             Specific energy of the orbit in 2BP [m^2/s^2]
+
         """
+
         return (u**2 + v**2)*0.5 - gm/r
 
     @staticmethod
     def propagate(gm, a, e, tai, taf, nb, tp=0.0):
-        """ Propagates the orbit states in polar coordinates for the orbital period duration
+        """Propagates the orbit states in polar coordinates for the orbital period duration.
 
         Parameters
         ----------
@@ -218,11 +244,13 @@ class TwoDimOrb:
 
         Returns
         -------
-        t : float
-            Orbital period [s]
+        t : ndarray
+            Time vector [s]
         states : ndarray
             List of the states values propagated in time [m, m/s, m/s]
+
         """
+
         ta = np.reshape(np.linspace(tai, taf, nb), (nb, 1)) 
         ea = 2*np.arctan(((1 - e)/(1 + e))**0.5*np.tan(ta/2))  # eccentric anomaly [rad]
         me = ea - e*np.sin(ea)  # mean anomaly [rad]
@@ -511,12 +539,12 @@ class KepOrb:
 
         Parameters
         ----------
-        ea : float
-            Eccentric anomaly [rad]
+        ea : ndarray or float
+            Eccentric anomaly [-]
 
         Returns
         -------
-        ta : float
+        ta : ndarray or float
             True anomaly [rad]
 
         """
@@ -629,6 +657,12 @@ class KepOrb:
             Eccentric anomaly [rad]
         e : float
             Eccentricity [-]
+        n : float
+            Mean motion [rad/s]
+        t : float
+            Time [s]
+        tp : float
+            Time at periapsis passage [s]
 
         Returns
         -------
@@ -651,6 +685,12 @@ class KepOrb:
             Eccentric anomaly [rad]
         e : float
             Eccentricity [-]
+        n : float
+            Mean motion [rad/s]
+        t : float
+            Time [s]
+        tp : float
+            Time at periapsis passage [s]
 
         Returns
         -------

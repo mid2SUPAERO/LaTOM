@@ -5,7 +5,6 @@
 
 import numpy as np
 
-from warnings import warn
 from latom.utils.const import g0
 
 

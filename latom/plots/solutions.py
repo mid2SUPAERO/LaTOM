@@ -11,61 +11,63 @@ from latom.plots.trajectories import TwoDimAltProfile, TwoDimSurface2LLO, TwoDim
 
 
 class TwoDimSolPlot:
-    """ Plot the two-dimensional simulation's states and controls in time
+    """Plot the two-dimensional simulation's states and controls in time and in the xy plane.
 
-     Parameters
-     ----------
-     r : ndarray
-        Position along the trajectory [m] or [-]
-     time : ndarray
-        Simulation time interval [s] or [-]
-     states : ndarray
-        List of the states values obtained from the simulation
-     controls : ndarray
-        List of the controls values obtained from the simulation
-     time_exp : bool
-        Defines if the time scale is exponential
-     states_exp : bool
-        Defines if the states values scale is exponential
-     r_safe : float
-        Value of the minimum safe altitude [m] or [-]
-     threshold : float
-        The threshold for the thrust values
-     kind : str
-        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
-     a : float
-        HEO orbit's semi-major axis [m] or [-]
-     e : float
-        HEO orbit's eccentricity
+    Parameters
+    ----------
+    r : float
+        Equatorial radius of central attracting body [m] or [-]
+    time : ndarray
+        Time vector for implicit NLP solution [s] or [-]
+    states : ndarray
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
+    controls : ndarray
+        Controls time series for implicit NLP solution as `[thrust, alpha]`
+    time_exp : ndarray or ``None``, optional
+        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``
+    states_exp : ndarray or ``None``, optional
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``
+    r_safe : ndarray or ``None``, optional
+        Time series for minimum safe altitude [m] or [-] or ``None``. Default is ``None``
+    threshold : float or ``None``, optional
+        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``
+    kind : str, optional
+        Defines the kind of trajectory. The possible values are `ascent` or `descent`. Default is `ascent`
+    a : float or ``None``, optional
+        HEO orbit's semi-major axis [m] or [-] or ``None`` for surface to LLO transfers. Default is ``None``
+    e : float or ``None``, optional
+        HEO orbit's eccentricity [-] or ``None`` for surface to LLO transfers. Default is ``None``
 
     Attributes
     ----------
-    R : ndarray
-        Position along the trajectory [m] or [-]
+    R : float
+        Equatorial radius of central attracting body [m] or [-]
     time : ndarray
-        Simulation time interval [s] or [-]
+        Time vector for implicit NLP solution [s] or [-]
     states : ndarray
-        List of the states values obtained from the simulation
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
     controls : ndarray
-        List of the controls values obtained from the simulation
-    time_exp : bool
-        Defines if the time scale is exponential
-    states_exp : bool
-        Defines if the states values scale is exponential
-    r_safe : float
-        Value of the minimum safe altitude [m] or [-]
-    threshold : float
-        The threshold for the thrust values
+        Controls time series for implicit NLP solution as `[thrust, alpha]`
+    time_exp : ndarray or ``None``
+        Time vector for explicit simulation [s] o [-] or ``None``
+    states_exp : ndarray or ``None``
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``
+    r_safe : ndarray or ``None``
+        Time series for minimum safe altitude [m] or [-] or ``None``
+    threshold : float or ``None``
+        Threshold value to determine the on/off control structure or ``None``
     kind : str
-        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
-    states_plot : timeseries
-        Instance of `timeseries` class to create a states plot
-    alt_plot : trajectories
-        Instance of `trajectories` class to create an altitude profile plot
-    controls_plot : timeseries
-        Instance of `timeseries` class to create a controls plot
-    trajectory_plot :  trajectories
-        Instance of `trajectories` class to create a LLO to NRHO trajectory plot or a Surface to Moon trajectory plot
+        Defines the kind of trajectory. The possible values are `ascent` or `descent`
+    states_plot : TwoDimStatesTimeSeries
+        Instance of `TwoDimStatesTimeSeries` class to display the states variables as function of time
+    alt_plot : TwoDimAltProfile
+        Instance of `TwoDimAltProfile` class to display the altitude over spawn angle
+    controls_plot : TwoDimControlsTimeSeries
+        Instance of `TwoDimControlsTimeSeries` class to display the controls variables as function of time
+    trajectory_plot : TwoDimLLO2NRHO or TwoDimSurface2LLO
+        Instance of `TwoDimLLO2NRHO` or `TwoDimSurface2LLO` class to create a LLO to NRHO trajectory plot or a Surface
+        to Moon trajectory plot
+
     """
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, r_safe=None,
@@ -111,7 +113,7 @@ class TwoDimSolPlot:
             self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, self.kind)
 
     def plot(self):
-        """ Plot the two-dimensional simulation's states and controls in time """
+        """Plots the two-dimensional simulation's states and controls in time and in the xy plane. """
 
         self.states_plot.plot()
         self.controls_plot.plot()
@@ -122,35 +124,36 @@ class TwoDimSolPlot:
 
 
 class TwoDimMultiPhaseSolPlot(TwoDimSolPlot):
-    """ Plot the two-dimensional multi phase simulation's states and controls in time
+    """Plots the two-dimensional multi phase simulation's states and controls in time and in the xy plane.
 
-     Parameters
-     ----------
-     r : ndarray
-        Position along the trajectory [m] or [-]
-     time : ndarray
-        Simulation time interval [s] or [-]
-     states : ndarray
-        List of the states values obtained from the simulation
-     controls : ndarray
-        List of the controls values obtained from the simulation
-     time_exp : bool
-        Defines if the time scale is exponential
-     states_exp : bool
-        Defines if the states values scale is exponential
-     r_safe : float
-        Value of the minimum safe altitude [m] or [-]
-     threshold : float
-        The threshold for the thrust values
-     kind : str
-        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
-     a : float
-        HEO orbit's semi-major axis [m] or [-]
-     e : float
-        HEO orbit's eccentricity
-     dtheta : float
-        Delta theta to translate the position angle time series [rad] or [-]
-     """
+    Parameters
+    ----------
+    r : float
+        Equatorial radius of central attracting body [m] or [-]
+    time : ndarray
+        Time vector for implicit NLP solution [s] or [-]
+    states : ndarray
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
+    controls : ndarray
+        Controls time series for implicit NLP solution as `[thrust, alpha]`
+    time_exp : ndarray or ``None``, optional
+        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``
+    states_exp : ndarray or ``None``, optional
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``
+    r_safe : ndarray or ``None``, optional
+        Time series for minimum safe altitude [m] or [-] or ``None``. Default is ``None``
+    threshold : float or ``None``, optional
+        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``
+    kind : str, optional
+        Defines the kind of trajectory. The possible values are `ascent` or `descent`. Default is `ascent`
+    a : float or ``None``, optional
+        HEO orbit's semi-major axis [m] or [-] or ``None`` for surface to LLO transfers. Default is ``None``
+    e : float or ``None``, optional
+        HEO orbit's eccentricity [-] or ``None`` for surface to LLO transfers. Default is ``None``
+    dtheta : float or ``None``, optional
+        Angle to translate the position angle time series [rad]
+
+    """
 
     def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, r_safe=None, threshold=1e-6,
                  kind='ascent', a=None, e=None, dtheta=None):
@@ -174,53 +177,49 @@ class TwoDimMultiPhaseSolPlot(TwoDimSolPlot):
 
 
 class TwoDimDescTwoPhasesSolPlot:
-    """ Plot the two-dimensional two-phases descent simulation's states and controls in time
+    """Plot the two-dimensional two-phases descent simulation's states and controls in time and in the xy plane.
 
-     Parameters
-     ----------
-     r : ndarray
-        Position along the trajectory [m] or [-]
-     time : ndarray
-        Simulation time interval [s] or [-]
-     states : ndarray
-        List of the states values obtained from the simulation
-     controls : ndarray
-        List of the controls values obtained from the simulation
-     time_exp : bool
-        Defines if the time scale is exponential
-     states_exp : bool
-        Defines if the states values scale is exponential
-     kind : str
-        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
+    Parameters
+    ----------
+    r : float
+        Equatorial radius of central attracting body [m] or [-]
+    time : ndarray
+        Time vector for implicit NLP solution [s] or [-]
+    states : ndarray
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
+    controls : ndarray
+        Controls time series for implicit NLP solution as `[thrust, alpha]`
+    time_exp : ndarray or ``None``, optional
+        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``
+    states_exp : ndarray or ``None``, optional
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``
 
     Attributes
     ----------
-    R : ndarray
-        Position along the trajectory [m] or [-]
+    R : float
+        Equatorial radius of central attracting body [m] or [-]
     time : ndarray
-        Simulation time interval [s] or [-]
+        Time vector for implicit NLP solution [s] or [-]
     states : ndarray
-        List of the states values obtained from the simulation
+        States time series for implicit NLP solution as `[r, theta, u, v, m]`
     controls : ndarray
-        List of the controls values obtained from the simulation
-    time_exp : bool
-        Defines if the time scale is exponential
-    states_exp : bool
-        Defines if the states values scale is exponential
-    kind : str
-        Defines the kind of trajectory. The possible values are ['ascent', 'descent']
-    states_plot : timeseries
-        Instance of `timeseries` class to create a states plot
-    alt_plot : trajectories
-        Instance of `trajectories` class to create an altitude profile plot
-    controls_plot : timeseries
-        Instance of `timeseries` class to create a controls plot
-    trajectory_plot :  trajectories
-        Instance of `trajectories` class to create a Surface to Moon trajectory plot
-     """
+        Controls time series for implicit NLP solution as `[thrust, alpha]`
+    time_exp : ndarray or ``None``
+        Time vector for explicit simulation [s] o [-] or ``None``
+    states_exp : ndarray or ``None``
+        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``
+    states_plot : TwoDimStatesTimeSeries
+        Instance of `TwoDimStatesTimeSeries` class to display the states variables as function of time
+    alt_plot : TwoDimAltProfile
+        Instance of `TwoDimAltProfile` class to display the altitude over spawn angle
+    controls_plot : TwoDimControlsTimeSeries
+        Instance of `TwoDimControlsTimeSeries` class to display the controls variables as function of time
+    trajectory_plot : TwoDimSurface2LLO
+        Instance of `TwoDimSurface2LLO` class to create a Surface to Moon trajectory plot
 
+    """
 
-    def __init__(self, r, time, states, controls, time_exp=None, states_exp=None, kind='ascent'):
+    def __init__(self, r, time, states, controls, time_exp=None, states_exp=None):
         """Initializes `TwoDimDescTwoPhasesSolPlot` class. """
 
         self.R = deepcopy(r)
@@ -238,24 +237,17 @@ class TwoDimDescTwoPhasesSolPlot:
         n0 = np.size(time[0])
         n1 = np.size(time[1])
 
-        if kind == 'ascent':
-            thrust = np.vstack((np.reshape(controls[0][:, 0], (n0, 1)), np.zeros((n1, 1))))
-            self.kind = kind
-        elif kind == 'descent':
-            thrust = np.vstack((np.zeros((n0, 1)), np.reshape(controls[1][:, 0], (n1, 1))))
-            self.kind = kind
-        else:
-            raise ValueError('kind must be either ascent or descent')
+        thrust = np.vstack((np.zeros((n0, 1)), np.reshape(controls[1][:, 0], (n1, 1))))
 
         self.states_plot = TwoDimStatesTimeSeries(self.R, self.time, self.states, self.time_exp, self.states_exp,
                                                   thrust=thrust, labels=('vertical', 'attitude-free'))
         self.controls_plot = TwoDimControlsTimeSeries(self.time, self.controls, threshold=None)
         self.alt_plot = TwoDimAltProfile(self.R, self.states, self.states_exp, thrust=thrust,
                                          labels=('vertical', 'attitude-free'))
-        self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, self.kind)
+        self.trajectory_plot = TwoDimSurface2LLO(self.R, self.states, 'descent')
 
     def plot(self):
-        """ Plot the two-dimensional two-phases descent simulation's states and controls in time """
+        """Plot the two-dimensional two-phases descent simulation's states and controls in time and in the xy plane. """
 
         self.states_plot.plot()
         self.controls_plot.plot()

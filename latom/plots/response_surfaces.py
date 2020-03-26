@@ -10,7 +10,7 @@ from copy import deepcopy
 
 
 class RespSurf:
-    """ Plots the response surface resulting from the surrogate models computations
+    """ Plots the response surface resulting from the surrogate models computations.
 
     Parameters
     ----------
@@ -25,7 +25,7 @@ class RespSurf:
     nb_lines : int
         Numbers of lines of response surfaces
     log_scale : bool
-        Defines if the twr scale is logaritmic
+        Defines if the twr scale is logarithmic
 
     Attributes
     ----------
