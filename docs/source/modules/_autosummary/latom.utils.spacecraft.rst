@@ -5,12 +5,6 @@ latom.utils.spacecraft
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      warn
-   
    
 
    

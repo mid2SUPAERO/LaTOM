@@ -171,9 +171,68 @@
 
 
 <div class="viewcode-block" id="TwoDimSolPlot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.solutions.TwoDimSolPlot">[docs]</a><span class="k">class</span> <span class="nc">TwoDimSolPlot</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Plot the two-dimensional simulation&#39;s states and controls in time and in the xy plane.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series for implicit NLP solution as `[thrust, alpha]`</span>
+<span class="sd">    time_exp : ndarray or ``None``, optional</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``, optional</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``</span>
+<span class="sd">    r_safe : ndarray or ``None``, optional</span>
+<span class="sd">        Time series for minimum safe altitude [m] or [-] or ``None``. Default is ``None``</span>
+<span class="sd">    threshold : float or ``None``, optional</span>
+<span class="sd">        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``</span>
+<span class="sd">    kind : str, optional</span>
+<span class="sd">        Defines the kind of trajectory. The possible values are `ascent` or `descent`. Default is `ascent`</span>
+<span class="sd">    a : float or ``None``, optional</span>
+<span class="sd">        HEO orbit&#39;s semi-major axis [m] or [-] or ``None`` for surface to LLO transfers. Default is ``None``</span>
+<span class="sd">    e : float or ``None``, optional</span>
+<span class="sd">        HEO orbit&#39;s eccentricity [-] or ``None`` for surface to LLO transfers. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    R : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series for implicit NLP solution as `[thrust, alpha]`</span>
+<span class="sd">    time_exp : ndarray or ``None``</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``</span>
+<span class="sd">    r_safe : ndarray or ``None``</span>
+<span class="sd">        Time series for minimum safe altitude [m] or [-] or ``None``</span>
+<span class="sd">    threshold : float or ``None``</span>
+<span class="sd">        Threshold value to determine the on/off control structure or ``None``</span>
+<span class="sd">    kind : str</span>
+<span class="sd">        Defines the kind of trajectory. The possible values are `ascent` or `descent`</span>
+<span class="sd">    states_plot : TwoDimStatesTimeSeries</span>
+<span class="sd">        Instance of `TwoDimStatesTimeSeries` class to display the states variables as function of time</span>
+<span class="sd">    alt_plot : TwoDimAltProfile</span>
+<span class="sd">        Instance of `TwoDimAltProfile` class to display the altitude over spawn angle</span>
+<span class="sd">    controls_plot : TwoDimControlsTimeSeries</span>
+<span class="sd">        Instance of `TwoDimControlsTimeSeries` class to display the controls variables as function of time</span>
+<span class="sd">    trajectory_plot : TwoDimLLO2NRHO or TwoDimSurface2LLO</span>
+<span class="sd">        Instance of `TwoDimLLO2NRHO` or `TwoDimSurface2LLO` class to create a LLO to NRHO trajectory plot or a Surface</span>
+<span class="sd">        to Moon trajectory plot</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r_safe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ascent&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimSolPlot` class. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
@@ -214,6 +273,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span> <span class="o">=</span> <span class="n">TwoDimSurface2LLO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TwoDimSolPlot.plot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.solutions.TwoDimSolPlot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plots the two-dimensional simulation&#39;s states and controls in time and in the xy plane. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -224,9 +284,40 @@
 
 
 <div class="viewcode-block" id="TwoDimMultiPhaseSolPlot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.solutions.TwoDimMultiPhaseSolPlot">[docs]</a><span class="k">class</span> <span class="nc">TwoDimMultiPhaseSolPlot</span><span class="p">(</span><span class="n">TwoDimSolPlot</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots the two-dimensional multi phase simulation&#39;s states and controls in time and in the xy plane.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series for implicit NLP solution as `[thrust, alpha]`</span>
+<span class="sd">    time_exp : ndarray or ``None``, optional</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``, optional</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``</span>
+<span class="sd">    r_safe : ndarray or ``None``, optional</span>
+<span class="sd">        Time series for minimum safe altitude [m] or [-] or ``None``. Default is ``None``</span>
+<span class="sd">    threshold : float or ``None``, optional</span>
+<span class="sd">        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``</span>
+<span class="sd">    kind : str, optional</span>
+<span class="sd">        Defines the kind of trajectory. The possible values are `ascent` or `descent`. Default is `ascent`</span>
+<span class="sd">    a : float or ``None``, optional</span>
+<span class="sd">        HEO orbit&#39;s semi-major axis [m] or [-] or ``None`` for surface to LLO transfers. Default is ``None``</span>
+<span class="sd">    e : float or ``None``, optional</span>
+<span class="sd">        HEO orbit&#39;s eccentricity [-] or ``None`` for surface to LLO transfers. Default is ``None``</span>
+<span class="sd">    dtheta : float or ``None``, optional</span>
+<span class="sd">        Angle to translate the position angle time series [rad]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r_safe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
                  <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ascent&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtheta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimMultiPhaseSolPlot` class. &quot;&quot;&quot;</span>
 
         <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
@@ -246,8 +337,50 @@
 
 
 <div class="viewcode-block" id="TwoDimDescTwoPhasesSolPlot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.solutions.TwoDimDescTwoPhasesSolPlot">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescTwoPhasesSolPlot</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Plot the two-dimensional two-phases descent simulation&#39;s states and controls in time and in the xy plane.</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ascent&#39;</span><span class="p">):</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series for implicit NLP solution as `[thrust, alpha]`</span>
+<span class="sd">    time_exp : ndarray or ``None``, optional</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``, optional</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    R : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series for implicit NLP solution as `[thrust, alpha]`</span>
+<span class="sd">    time_exp : ndarray or ``None``</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``</span>
+<span class="sd">    states_plot : TwoDimStatesTimeSeries</span>
+<span class="sd">        Instance of `TwoDimStatesTimeSeries` class to display the states variables as function of time</span>
+<span class="sd">    alt_plot : TwoDimAltProfile</span>
+<span class="sd">        Instance of `TwoDimAltProfile` class to display the altitude over spawn angle</span>
+<span class="sd">    controls_plot : TwoDimControlsTimeSeries</span>
+<span class="sd">        Instance of `TwoDimControlsTimeSeries` class to display the controls variables as function of time</span>
+<span class="sd">    trajectory_plot : TwoDimSurface2LLO</span>
+<span class="sd">        Instance of `TwoDimSurface2LLO` class to create a Surface to Moon trajectory plot</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimDescTwoPhasesSolPlot` class. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
@@ -264,23 +397,17 @@
         <span class="n">n0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">n1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;ascent&#39;</span><span class="p">:</span>
-            <span class="n">thrust</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">n0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
-        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;descent&#39;</span><span class="p">:</span>
-            <span class="n">thrust</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;kind must be either ascent or descent&#39;</span><span class="p">)</span>
+        <span class="n">thrust</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span> <span class="o">=</span> <span class="n">TwoDimStatesTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span>
                                                   <span class="n">thrust</span><span class="o">=</span><span class="n">thrust</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="s1">&#39;attitude-free&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span> <span class="o">=</span> <span class="n">TwoDimControlsTimeSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alt_plot</span> <span class="o">=</span> <span class="n">TwoDimAltProfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span> <span class="n">thrust</span><span class="o">=</span><span class="n">thrust</span><span class="p">,</span>
                                          <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="s1">&#39;attitude-free&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span> <span class="o">=</span> <span class="n">TwoDimSurface2LLO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_plot</span> <span class="o">=</span> <span class="n">TwoDimSurface2LLO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="s1">&#39;descent&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TwoDimDescTwoPhasesSolPlot.plot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.solutions.TwoDimDescTwoPhasesSolPlot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the two-dimensional two-phases descent simulation&#39;s states and controls in time and in the xy plane. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">states_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>

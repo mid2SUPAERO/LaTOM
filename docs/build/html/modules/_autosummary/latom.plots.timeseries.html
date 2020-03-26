@@ -183,10 +183,10 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.plots.timeseries.TwoDimControlsTimeSeries" title="latom.plots.timeseries.TwoDimControlsTimeSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimControlsTimeSeries</span></code></a>(time, controls[, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s controls in time.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.plots.timeseries.TwoDimStatesTimeSeries" title="latom.plots.timeseries.TwoDimStatesTimeSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimStatesTimeSeries</span></code></a>(r, time, states[, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s states in time.</p></td>
 </tr>
 </tbody>
 </table>
@@ -194,10 +194,45 @@
 <dt id="latom.plots.timeseries.TwoDimStatesTimeSeries">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.timeseries.</code><code class="sig-name descname">TwoDimStatesTimeSeries</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">thrust=None</em>, <em class="sig-param">threshold=1e-06</em>, <em class="sig-param">r_safe=None</em>, <em class="sig-param">labels=('powered'</em>, <em class="sig-param">'coast')</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/timeseries.html#TwoDimStatesTimeSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.timeseries.TwoDimStatesTimeSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plot the two-dimensional simulation’s states in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>thrust</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Thrust time series [N] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>threshold</strong> – The threshold for the thrust values</p></li>
+<li><p><strong>labels</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Labels for the different phases. Default is <cite>(‘powered’, ‘coast’)</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>R</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>scaler</strong> (<em>float</em>) – Value to scale the distances</p></li>
+<li><p><strong>units</strong> (<em>list</em>) – List of measurement units for distances, velocities and time</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>time_pow</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution corresponding to a powered phase [s] or [-]</p></li>
+<li><p><strong>states_pow</strong> (<em>ndarray</em>) – States time series for implicit NLP solution corresponding to a powered phase as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>time_coast</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution corresponding to a coasting phase [s] or [-]</p></li>
+<li><p><strong>states_coast</strong> (<em>ndarray</em>) – States time series for implicit NLP solution corresponding to a coasting phase as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>labels</strong> (<em>iterable</em>) – Labels for the different phases</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.timeseries.TwoDimStatesTimeSeries.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/timeseries.html#TwoDimStatesTimeSeries.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.timeseries.TwoDimStatesTimeSeries.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the two-dimensional simulation’s states and in time.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -205,10 +240,31 @@
 <dt id="latom.plots.timeseries.TwoDimControlsTimeSeries">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.timeseries.</code><code class="sig-name descname">TwoDimControlsTimeSeries</code><span class="sig-paren">(</span><em class="sig-param">time</em>, <em class="sig-param">controls</em>, <em class="sig-param">threshold=1e-06</em>, <em class="sig-param">units=('N'</em>, <em class="sig-param">'s')</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/timeseries.html#TwoDimControlsTimeSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.timeseries.TwoDimControlsTimeSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plot the two-dimensional simulation’s controls in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for implicit NLP solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>threshold</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p><strong>units</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Measurements units for thrust, time. Default is <cite>(‘N’, ‘s’)</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Thrust magnitude time series for implicit NLP solution [N] or [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Thrust direction time series for implicit NLP solution [rad]</p></li>
+<li><p><strong>threshold</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>units</strong> (<em>iterable</em>) – Measurements units for thrust, time</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.timeseries.TwoDimControlsTimeSeries.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/timeseries.html#TwoDimControlsTimeSeries.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.timeseries.TwoDimControlsTimeSeries.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the two-dimensional simulation’s controls in time.</p>
+</dd></dl>
 
 </dd></dl>
 

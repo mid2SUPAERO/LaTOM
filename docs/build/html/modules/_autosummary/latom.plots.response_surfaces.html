@@ -195,7 +195,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.plots.response_surfaces.RespSurf" title="latom.plots.response_surfaces.RespSurf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RespSurf</span></code></a>(isp, twr, param, title[, nb_lines, …])</p></td>
-<td><p></p></td>
+<td><p>Plots the response surface resulting from the surrogate models computations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -203,10 +203,33 @@
 <dt id="latom.plots.response_surfaces.RespSurf">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.response_surfaces.</code><code class="sig-name descname">RespSurf</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em>, <em class="sig-param">param</em>, <em class="sig-param">title</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/response_surfaces.html#RespSurf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.response_surfaces.RespSurf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plots the response surface resulting from the surrogate models computations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – List of isp values [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – List of thrust/weight ratios [-]</p></li>
+<li><p><strong>param</strong> (<em>ndarray</em>) – List of parameters</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the plot</p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em>) – Numbers of lines of response surfaces</p></li>
+<li><p><strong>log_scale</strong> (<em>bool</em>) – Defines if the twr scale is logarithmic</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – List of isp values [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – List of thrust/weight ratios [-]</p></li>
+<li><p><strong>param</strong> (<em>ndarray</em>) – List of parameters</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the plot</p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em>) – Numbers of lines of response surfaces</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.response_surfaces.RespSurf.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/response_surfaces.html#RespSurf.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.response_surfaces.RespSurf.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plots the response surface resulting from the surrogate models computations</p>
+</dd></dl>
 
 </dd></dl>
 

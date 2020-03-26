@@ -195,28 +195,28 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAltProfile</span></code>(r, states[, states_exp, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s altitude profile over spawn angle.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimControlsTimeSeries</span></code>(time, controls[, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s controls in time.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.plots.solutions.TwoDimDescTwoPhasesSolPlot" title="latom.plots.solutions.TwoDimDescTwoPhasesSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesSolPlot</span></code></a>(r, time, states, …)</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional two-phases descent simulation’s states and controls in time and in the xy plane.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2NRHO</span></code>(r_moon, a_nrho, e_nrho, states)</p></td>
-<td><p></p></td>
+<td><p>Plots the two-dimensional trajectories from a Low Lunar Orbit to a Near rectilinear Halo Orbit.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.plots.solutions.TwoDimMultiPhaseSolPlot" title="latom.plots.solutions.TwoDimMultiPhaseSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimMultiPhaseSolPlot</span></code></a>(r, time, states, …)</p></td>
-<td><p></p></td>
+<td><p>Plots the two-dimensional multi phase simulation’s states and controls in time and in the xy plane.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.plots.solutions.TwoDimSolPlot" title="latom.plots.solutions.TwoDimSolPlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSolPlot</span></code></a>(r, time, states, controls[, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s states and controls in time and in the xy plane.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimStatesTimeSeries</span></code>(r, time, states[, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s states in time.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSurface2LLO</span></code>(r_moon, states[, kind, nb])</p></td>
-<td><p></p></td>
+<td><p>Plots the two-dimensional trajectories from the Moon surface to a Low Lunar Orbit and vice versa.</p></td>
 </tr>
 </tbody>
 </table>
@@ -224,10 +224,47 @@
 <dt id="latom.plots.solutions.TwoDimSolPlot">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.solutions.</code><code class="sig-name descname">TwoDimSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">r_safe=None</em>, <em class="sig-param">threshold=1e-06</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">a=None</em>, <em class="sig-param">e=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/solutions.html#TwoDimSolPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.solutions.TwoDimSolPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plot the two-dimensional simulation’s states and controls in time and in the xy plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for implicit NLP solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>threshold</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Defines the kind of trajectory. The possible values are <cite>ascent</cite> or <cite>descent</cite>. Default is <cite>ascent</cite></p></li>
+<li><p><strong>a</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – HEO orbit’s semi-major axis [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code> for surface to LLO transfers. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>e</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – HEO orbit’s eccentricity [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code> for surface to LLO transfers. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>R</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for implicit NLP solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>threshold</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – Defines the kind of trajectory. The possible values are <cite>ascent</cite> or <cite>descent</cite></p></li>
+<li><p><strong>states_plot</strong> (<a class="reference internal" href="latom.plots.timeseries.html#latom.plots.timeseries.TwoDimStatesTimeSeries" title="latom.plots.timeseries.TwoDimStatesTimeSeries"><em>TwoDimStatesTimeSeries</em></a>) – Instance of <cite>TwoDimStatesTimeSeries</cite> class to display the states variables as function of time</p></li>
+<li><p><strong>alt_plot</strong> (<a class="reference internal" href="latom.plots.trajectories.html#latom.plots.trajectories.TwoDimAltProfile" title="latom.plots.trajectories.TwoDimAltProfile"><em>TwoDimAltProfile</em></a>) – Instance of <cite>TwoDimAltProfile</cite> class to display the altitude over spawn angle</p></li>
+<li><p><strong>controls_plot</strong> (<a class="reference internal" href="latom.plots.timeseries.html#latom.plots.timeseries.TwoDimControlsTimeSeries" title="latom.plots.timeseries.TwoDimControlsTimeSeries"><em>TwoDimControlsTimeSeries</em></a>) – Instance of <cite>TwoDimControlsTimeSeries</cite> class to display the controls variables as function of time</p></li>
+<li><p><strong>trajectory_plot</strong> (<a class="reference internal" href="latom.plots.trajectories.html#latom.plots.trajectories.TwoDimLLO2NRHO" title="latom.plots.trajectories.TwoDimLLO2NRHO"><em>TwoDimLLO2NRHO</em></a><em> or </em><a class="reference internal" href="latom.plots.trajectories.html#latom.plots.trajectories.TwoDimSurface2LLO" title="latom.plots.trajectories.TwoDimSurface2LLO"><em>TwoDimSurface2LLO</em></a>) – Instance of <cite>TwoDimLLO2NRHO</cite> or <cite>TwoDimSurface2LLO</cite> class to create a LLO to NRHO trajectory plot or a Surface
+to Moon trajectory plot</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.solutions.TwoDimSolPlot.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/solutions.html#TwoDimSolPlot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.solutions.TwoDimSolPlot.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plots the two-dimensional simulation’s states and controls in time and in the xy plane.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -235,21 +272,69 @@
 <dt id="latom.plots.solutions.TwoDimMultiPhaseSolPlot">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.solutions.</code><code class="sig-name descname">TwoDimMultiPhaseSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">r_safe=None</em>, <em class="sig-param">threshold=1e-06</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">a=None</em>, <em class="sig-param">e=None</em>, <em class="sig-param">dtheta=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/solutions.html#TwoDimMultiPhaseSolPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.solutions.TwoDimMultiPhaseSolPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.plots.solutions.TwoDimSolPlot" title="latom.plots.solutions.TwoDimSolPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.plots.solutions.TwoDimSolPlot</span></code></a></p>
+<p>Plots the two-dimensional multi phase simulation’s states and controls in time and in the xy plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for implicit NLP solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>threshold</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Defines the kind of trajectory. The possible values are <cite>ascent</cite> or <cite>descent</cite>. Default is <cite>ascent</cite></p></li>
+<li><p><strong>a</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – HEO orbit’s semi-major axis [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code> for surface to LLO transfers. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>e</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – HEO orbit’s eccentricity [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code> for surface to LLO transfers. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>dtheta</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Angle to translate the position angle time series [rad]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.solutions.TwoDimMultiPhaseSolPlot.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.solutions.TwoDimMultiPhaseSolPlot.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plots the two-dimensional simulation’s states and controls in time and in the xy plane.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="latom.plots.solutions.TwoDimDescTwoPhasesSolPlot">
-<em class="property">class </em><code class="sig-prename descclassname">latom.plots.solutions.</code><code class="sig-name descname">TwoDimDescTwoPhasesSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">kind='ascent'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/solutions.html#TwoDimDescTwoPhasesSolPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.solutions.TwoDimDescTwoPhasesSolPlot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">latom.plots.solutions.</code><code class="sig-name descname">TwoDimDescTwoPhasesSolPlot</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">time</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">time_exp=None</em>, <em class="sig-param">states_exp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/solutions.html#TwoDimDescTwoPhasesSolPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.solutions.TwoDimDescTwoPhasesSolPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plot the two-dimensional two-phases descent simulation’s states and controls in time and in the xy plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for implicit NLP solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>R</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for implicit NLP solution [s] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls time series for implicit NLP solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time vector for explicit simulation [s] o [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_plot</strong> (<a class="reference internal" href="latom.plots.timeseries.html#latom.plots.timeseries.TwoDimStatesTimeSeries" title="latom.plots.timeseries.TwoDimStatesTimeSeries"><em>TwoDimStatesTimeSeries</em></a>) – Instance of <cite>TwoDimStatesTimeSeries</cite> class to display the states variables as function of time</p></li>
+<li><p><strong>alt_plot</strong> (<a class="reference internal" href="latom.plots.trajectories.html#latom.plots.trajectories.TwoDimAltProfile" title="latom.plots.trajectories.TwoDimAltProfile"><em>TwoDimAltProfile</em></a>) – Instance of <cite>TwoDimAltProfile</cite> class to display the altitude over spawn angle</p></li>
+<li><p><strong>controls_plot</strong> (<a class="reference internal" href="latom.plots.timeseries.html#latom.plots.timeseries.TwoDimControlsTimeSeries" title="latom.plots.timeseries.TwoDimControlsTimeSeries"><em>TwoDimControlsTimeSeries</em></a>) – Instance of <cite>TwoDimControlsTimeSeries</cite> class to display the controls variables as function of time</p></li>
+<li><p><strong>trajectory_plot</strong> (<a class="reference internal" href="latom.plots.trajectories.html#latom.plots.trajectories.TwoDimSurface2LLO" title="latom.plots.trajectories.TwoDimSurface2LLO"><em>TwoDimSurface2LLO</em></a>) – Instance of <cite>TwoDimSurface2LLO</cite> class to create a Surface to Moon trajectory plot</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.solutions.TwoDimDescTwoPhasesSolPlot.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/solutions.html#TwoDimDescTwoPhasesSolPlot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.solutions.TwoDimDescTwoPhasesSolPlot.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the two-dimensional two-phases descent simulation’s states and controls in time and in the xy plane.</p>
+</dd></dl>
 
 </dd></dl>
 

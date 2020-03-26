@@ -170,9 +170,39 @@
 
 
 <div class="viewcode-block" id="RespSurf"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.response_surfaces.RespSurf">[docs]</a><span class="k">class</span> <span class="nc">RespSurf</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Plots the response surface resulting from the surrogate models computations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    isp : ndarray</span>
+<span class="sd">        List of isp values [s]</span>
+<span class="sd">    twr : ndarray</span>
+<span class="sd">        List of thrust/weight ratios [-]</span>
+<span class="sd">    param : ndarray</span>
+<span class="sd">        List of parameters</span>
+<span class="sd">    title : str</span>
+<span class="sd">        Title of the plot</span>
+<span class="sd">    nb_lines : int</span>
+<span class="sd">        Numbers of lines of response surfaces</span>
+<span class="sd">    log_scale : bool</span>
+<span class="sd">        Defines if the twr scale is logarithmic</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    isp : ndarray</span>
+<span class="sd">        List of isp values [s]</span>
+<span class="sd">    twr : ndarray</span>
+<span class="sd">        List of thrust/weight ratios [-]</span>
+<span class="sd">    param : ndarray</span>
+<span class="sd">        List of parameters</span>
+<span class="sd">    title : str</span>
+<span class="sd">        Title of the plot</span>
+<span class="sd">    nb_lines : int</span>
+<span class="sd">        Numbers of lines of response surfaces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isp</span><span class="p">,</span> <span class="n">twr</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Initializes `RespSurf` class. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">log_scale</span><span class="p">:</span>
             <span class="n">twr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">twr</span><span class="p">)</span>
         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">twr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">isp</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">twr</span><span class="p">,</span> <span class="n">isp</span><span class="p">)</span>
@@ -181,6 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nb_lines</span> <span class="o">=</span> <span class="n">nb_lines</span>
 
 <div class="viewcode-block" id="RespSurf.plot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.response_surfaces.RespSurf.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;  Plots the response surface resulting from the surrogate models computations &quot;&quot;&quot;</span>
 
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
         <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">twr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">isp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_lines</span><span class="p">)</span>

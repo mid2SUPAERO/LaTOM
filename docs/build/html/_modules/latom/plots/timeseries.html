@@ -168,9 +168,65 @@
 
 
 <div class="viewcode-block" id="TwoDimStatesTimeSeries"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.timeseries.TwoDimStatesTimeSeries">[docs]</a><span class="k">class</span> <span class="nc">TwoDimStatesTimeSeries</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Plot the two-dimensional simulation&#39;s states in time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    time_exp : ndarray or ``None``, optional</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``. Default is ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``, optional</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``. Default is ``None``</span>
+<span class="sd">    thrust : ndarray or ``None``</span>
+<span class="sd">        Thrust time series [N] or [-] or ``None``. Default is ``None``</span>
+<span class="sd">    threshold : float or ``None``, optional</span>
+<span class="sd">        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``</span>
+<span class="sd">    r_safe : ndarray or ``None``, optional</span>
+<span class="sd">        Time series for minimum safe altitude [m] or [-] or ``None``. Default is ``None``</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        The threshold for the thrust values</span>
+<span class="sd">    labels : iterable, optional</span>
+<span class="sd">        Labels for the different phases. Default is `(&#39;powered&#39;, &#39;coast&#39;)`</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    R : float</span>
+<span class="sd">        Equatorial radius of central attracting body [m] or [-]</span>
+<span class="sd">    scaler : float</span>
+<span class="sd">        Value to scale the distances</span>
+<span class="sd">    units : list</span>
+<span class="sd">        List of measurement units for distances, velocities and time</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    time_exp : ndarray or ``None``</span>
+<span class="sd">        Time vector for explicit simulation [s] o [-] or ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``</span>
+<span class="sd">        States time series for explicit simulation as `[r, theta, u, v, m]` or ``None``</span>
+<span class="sd">    time_pow : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution corresponding to a powered phase [s] or [-]</span>
+<span class="sd">    states_pow : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution corresponding to a powered phase as `[r, theta, u, v, m]`</span>
+<span class="sd">    time_coast : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution corresponding to a coasting phase [s] or [-]</span>
+<span class="sd">    states_coast : ndarray</span>
+<span class="sd">        States time series for implicit NLP solution corresponding to a coasting phase as `[r, theta, u, v, m]`</span>
+<span class="sd">    r_safe : ndarray or ``None``</span>
+<span class="sd">        Time series for minimum safe altitude [m] or [-] or ``None``</span>
+<span class="sd">    labels : iterable</span>
+<span class="sd">        Labels for the different phases</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">time_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thrust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">r_safe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;powered&#39;</span><span class="p">,</span> <span class="s1">&#39;coast&#39;</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimStatesTimeSeries` class. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">r</span>
 
@@ -199,6 +255,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
 
 <div class="viewcode-block" id="TwoDimStatesTimeSeries.plot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.timeseries.TwoDimStatesTimeSeries.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the two-dimensional simulation&#39;s states and in time. &quot;&quot;&quot;</span>
 
         <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -254,8 +311,35 @@
 
 
 <div class="viewcode-block" id="TwoDimControlsTimeSeries"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.timeseries.TwoDimControlsTimeSeries">[docs]</a><span class="k">class</span> <span class="nc">TwoDimControlsTimeSeries</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Plot the two-dimensional simulation&#39;s controls in time.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls time series for implicit NLP solution as `[thrust, alpha]`</span>
+<span class="sd">    threshold : float or ``None``, optional</span>
+<span class="sd">        Threshold value to determine the on/off control structure or ``None``. Default is ``1e-6``</span>
+<span class="sd">    units : iterable, optional</span>
+<span class="sd">        Measurements units for thrust, time. Default is `(&#39;N&#39;, &#39;s&#39;)`</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for implicit NLP solution [s] or [-]</span>
+<span class="sd">    thrust : ndarray</span>
+<span class="sd">        Thrust magnitude time series for implicit NLP solution [N] or [-]</span>
+<span class="sd">    alpha : ndarray</span>
+<span class="sd">        Thrust direction time series for implicit NLP solution [rad]</span>
+<span class="sd">    threshold : float or ``None``</span>
+<span class="sd">        Threshold value to determine the on/off control structure or ``None``</span>
+<span class="sd">    units : iterable</span>
+<span class="sd">        Measurements units for thrust, time</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimControlsTimeSeries` class. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thrust</span> <span class="o">=</span> <span class="n">controls</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
@@ -267,6 +351,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">thrust</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="TwoDimControlsTimeSeries.plot"><a class="viewcode-back" href="../../../modules/plots.html#latom.plots.timeseries.TwoDimControlsTimeSeries.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the two-dimensional simulation&#39;s controls in time. &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 

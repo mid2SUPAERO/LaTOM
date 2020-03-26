@@ -173,6 +173,7 @@
   <div class="section" id="module-latom.utils.pickle_utils">
 <span id="latom-utils-pickle-utils"></span><h1>latom.utils.pickle_utils<a class="headerlink" href="#module-latom.utils.pickle_utils" title="Permalink to this headline">¶</a></h1>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p>Defines the methods to save and load files using the pickle library</p>
 <p class="rubric">Functions</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -181,22 +182,43 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.utils.pickle_utils.load" title="latom.utils.pickle_utils.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(filename)</p></td>
-<td><p></p></td>
+<td><p>Load an object.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.utils.pickle_utils.save" title="latom.utils.pickle_utils.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(obj, filename)</p></td>
-<td><p></p></td>
+<td><p>Save an object.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="latom.utils.pickle_utils.save">
 <code class="sig-prename descclassname">latom.utils.pickle_utils.</code><code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/utils/pickle_utils.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.utils.pickle_utils.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Save an object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – Object to be serialized</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Full path to file where the object is serialized</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="latom.utils.pickle_utils.load">
 <code class="sig-prename descclassname">latom.utils.pickle_utils.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/utils/pickle_utils.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.utils.pickle_utils.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Load an object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Full path to file where the object is serialized</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obj</strong> – Object to be serialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

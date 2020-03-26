@@ -993,8 +993,12 @@
 
 
 <div class="viewcode-block" id="TwoDimDescTwoPhasesNLP"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_2d.TwoDimDescTwoPhasesNLP">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescTwoPhasesNLP</span><span class="p">(</span><span class="n">MultiPhaseNLP</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by</span>
-<span class="sd">    multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</span>
+    <span class="sd">&quot;&quot;&quot;TwoDimDescTwoPhasesNLP transcribes a continuous-time optimal control problem for a two-dimensional descent</span>
+<span class="sd">    trajectory into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</span>
+
+<span class="sd">    The two-phases transfer is constituted by an initial deorbit burn to lower the periapsis of the departure orbit,</span>
+<span class="sd">    an Hohmann transfer, a first powered phase from its periapsis to a predetermined altitude or time to go and a final</span>
+<span class="sd">    vertical descent at full thrust.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

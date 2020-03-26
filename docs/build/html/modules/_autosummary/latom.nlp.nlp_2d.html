@@ -221,7 +221,7 @@
 <td><p><cite>TwoDimDescGuess</cite> provides an initial guess for a two-dimensional descent trajectory from a circular LLO to the Moon surface.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.nlp.nlp_2d.TwoDimDescTwoPhasesNLP" title="latom.nlp.nlp_2d.TwoDimDescTwoPhasesNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code></a>(body, sc, alt, …[, …])</p></td>
-<td><p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p></td>
+<td><p>TwoDimDescTwoPhasesNLP transcribes a continuous-time optimal control problem for a two-dimensional descent trajectory into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.nlp.nlp_2d.TwoDimDescVLandNLP" title="latom.nlp.nlp_2d.TwoDimDescVLandNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandNLP</span></code></a>(body, sc, alt, alt_safe, …)</p></td>
 <td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
@@ -1811,8 +1811,11 @@ discretization nodes.</p>
 <dt id="latom.nlp.nlp_2d.TwoDimDescTwoPhasesNLP">
 <em class="property">class </em><code class="sig-prename descclassname">latom.nlp.nlp_2d.</code><code class="sig-name descname">TwoDimDescTwoPhasesNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">vp</em>, <em class="sig-param">theta</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">fix='alt'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_2d.html#TwoDimDescTwoPhasesNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_2d.TwoDimDescTwoPhasesNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.MultiPhaseNLP" title="latom.nlp.nlp.MultiPhaseNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.nlp.nlp.MultiPhaseNLP</span></code></a></p>
-<p>MultiPhaseNLP transcribes a continuous-time optimal control problem in trajectory optimization constituted by
-multiple phases into a Non Linear Programming Problem (NLP) using the libraries OpenMDAO and dymos.</p>
+<p>TwoDimDescTwoPhasesNLP transcribes a continuous-time optimal control problem for a two-dimensional descent
+trajectory into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p>
+<p>The two-phases transfer is constituted by an initial deorbit burn to lower the periapsis of the departure orbit,
+an Hohmann transfer, a first powered phase from its periapsis to a predetermined altitude or time to go and a final
+vertical descent at full thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

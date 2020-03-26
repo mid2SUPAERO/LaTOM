@@ -194,16 +194,16 @@
 <td><p><cite>TwoDim3PhasesLLO2HEOGuess</cite> provides an initial guess for a LLO to HEO transfer trajectory subdivided into two powered phases and an intermediate coasting phase.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP" title="latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEONLP</span></code></a>(body, sc, alt, rp, …)</p></td>
-<td><p></p></td>
+<td><p>TwoDim3PhasesLLO2HEONLP transcribes an optimal control problem for a three-phases ascent trajectory from a circular Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2ApoNLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
-<td><p></p></td>
+<td><p>TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEOGuess</span></code>(gm, r, alt, rp, t, sc)</p></td>
 <td><p><cite>TwoDimLLO2HEOGuess</cite> provides an initial guess for an LLO to HEO transfer.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP" title="latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2HEONLP</span></code></a>(body, sc, alt, rp, t, …)</p></td>
-<td><p></p></td>
+<td><p>TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
 <td><p>TwoDimNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
@@ -217,15 +217,45 @@
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP">
 <em class="property">class </em><code class="sig-prename descclassname">latom.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2HEONLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">u_bound='lower'</em>, <em class="sig-param">fix_final=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2HEONLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.nlp.nlp_2d.html#latom.nlp.nlp_2d.TwoDimVarNLP" title="latom.nlp.nlp_2d.TwoDimVarNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.nlp.nlp_2d.TwoDimVarNLP</span></code></a></p>
-<dl class="method">
-<dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options">
-<code class="sig-name descname">set_states_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2HEONLP.set_states_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set options on the state variables of the NLP.</p>
+<p>TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory
+from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using
+the OpenMDAO and dymos libraries.</p>
+<p>The transfer is modeled as a single phase ascent trajectory from the departure LLO to the apoapsis of the arrival
+HEO. The thrust magnitude is allowed to vary over time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>float</em>) – Reference value for spawn angle [rad]</p></li>
-<li><p><strong>u_bound</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or None. Default is None</p></li>
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – LLO altitude [m]</p></li>
+<li><p><strong>rp</strong> (<em>float</em>) – HEO periapsis radius [m]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – HEO period [s]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>str</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (dict or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Name of the file in which the computed solution is recorded or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>u_bound</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options">
+<code class="sig-name descname">set_states_options</code><span class="sig-paren">(</span><em class="sig-param">theta</em>, <em class="sig-param">u_bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2HEONLP.set_states_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the states variables options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Unit reference value for spawn angle [rad]</p></li>
+<li><p><strong>u_bound</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Bounds on spacecraft radial velocity between <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -344,26 +374,79 @@ discretization nodes.</p>
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP">
 <em class="property">class </em><code class="sig-prename descclassname">latom.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDimLLO2ApoNLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em>, <em class="sig-param">params=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.nlp.nlp_2d.html#latom.nlp.nlp_2d.TwoDimNLP" title="latom.nlp.nlp_2d.TwoDimNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.nlp.nlp_2d.TwoDimNLP</span></code></a></p>
+<p>TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory
+from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using
+the OpenMDAO and dymos libraries.</p>
+<p>The transfer is modeled as a single phase ascent trajectory from the departure LLO to the apoapsis of the arrival
+HEO. The thrust magnitude is allowed to vary over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – LLO altitude [m]</p></li>
+<li><p><strong>rp</strong> (<em>float</em>) – HEO periapsis radius [m]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – HEO period [s]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>tuple</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>str</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (dict or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Name of the file in which the computed solution is recorded or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>params</strong> (dict or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Optional parameters to be passed when a continuation method is employed and the NLP guess is not defined or
+<code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>guess</strong> (TwoDimLLO2HEOGuess or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Initial guess or <code class="docutils literal notranslate"><span class="pre">None</span></code> if continuation is used</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.add_timeseries_output">
 <code class="sig-name descname">add_timeseries_output</code><span class="sig-paren">(</span><em class="sig-param">names=('a'</em>, <em class="sig-param">'eps'</em>, <em class="sig-param">'h')</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.add_timeseries_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.add_timeseries_output" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Adds the semi-major axis, specific energy and specific angular momentum magnitude to the time series outputs
+of the phase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>names</strong> (<em>iterable</em>) – List of strings corresponding to the names of the variables to be added to the outputs</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options">
 <code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param">rp</em>, <em class="sig-param">vp</em>, <em class="sig-param">thetaf</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the states, controls and time options, add the design parameters and boundary constraints, define the
+objective of the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rp</strong> (<em>float</em>) – Unit reference value for lengths [m]</p></li>
+<li><p><strong>vp</strong> (<em>float</em>) – Unit reference value for velocities [m/s]</p></li>
+<li><p><strong>thetaf</strong> (<em>float</em>) – Unit reference value for spawn angle [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (iterable or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess">
 <code class="sig-name descname">set_initial_guess</code><span class="sig-paren">(</span><em class="sig-param">check_partials=False</em>, <em class="sig-param">fix_final=False</em>, <em class="sig-param">throttle=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_initial_guess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the initial guess for the iterative solution of the NLP.</p>
+<dd><p>Set the initial guess for a single solution or the first solution of a continuation procedure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final time is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> for variable thrust magnitude, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <cite>‘True`</cite></p></li>
+<li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> of variable thrust, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p></li>
 </ul>
 </dd>
 </dl>
@@ -372,7 +455,19 @@ discretization nodes.</p>
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_continuation_guess">
 <code class="sig-name descname">set_continuation_guess</code><span class="sig-paren">(</span><em class="sig-param">tof</em>, <em class="sig-param">states</em>, <em class="sig-param">controls</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDimLLO2ApoNLP.set_continuation_guess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_continuation_guess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the initial guess for the solution <code class="docutils literal notranslate"><span class="pre">k+1</span></code> as the optimal transfer found for the solution <code class="docutils literal notranslate"><span class="pre">k</span></code> during
+a continuation procedure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight for the previous optimal solution [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States on the states discretization nodes for the previous optimal solution</p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls on the controls discretization nodes for the previous optimal solution</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.cleanup">
@@ -471,10 +566,54 @@ discretization nodes.</p>
 <dt id="latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP">
 <em class="property">class </em><code class="sig-prename descclassname">latom.nlp.nlp_heo_2d.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEONLP</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">rp</em>, <em class="sig-param">t</em>, <em class="sig-param">alpha_bounds</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">ph_name</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">check_partials=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDim3PhasesLLO2HEONLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.MultiPhaseNLP" title="latom.nlp.nlp.MultiPhaseNLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.nlp.nlp.MultiPhaseNLP</span></code></a></p>
+<p>TwoDim3PhasesLLO2HEONLP transcribes an optimal control problem for a three-phases ascent trajectory from a
+circular Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using
+the OpenMDAO and dymos libraries.</p>
+<p>The transfer is modeled with a first powered phase at maximum thrust to leave the initial LLO, and intermediate
+coasting phase and a second powered phase to inject in the target HEO.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Instance of <cite>Primary</cite> class representing the central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Instance of <cite>Spacecraft</cite> class representing the spacecraft</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Periselene altitude at which the powered descent is initiated [m]</p></li>
+<li><p><strong>rp</strong> (<em>float</em>) – HEO periapsis radius [m]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – HEO period [s]</p></li>
+<li><p><strong>alpha_bounds</strong> (<em>iterable</em>) – Lower and upper bounds on thrust vector direction [rad]</p></li>
+<li><p><strong>t_bounds</strong> (<em>tuple</em>) – Time of flight bounds expressed as fraction of <cite>tof</cite> [-]</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>tuple</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>tuple</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>ph_name</strong> (<em>tuple</em>) – Name of the phase within OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.
+Default is None</p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Name of the file in which the computed solution is recorded or None. Default is None</p></li>
+<li><p><strong>check_partials</strong> (<em>bool</em><em>, </em><em>optional</em>) – Check the partial derivatives computed analytically against complex step method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>guess</strong> (<a class="reference internal" href="latom.guess.guess_heo_2d.html#latom.guess.guess_heo_2d.TwoDim3PhasesLLO2HEOGuess" title="latom.guess.guess_heo_2d.TwoDim3PhasesLLO2HEOGuess"><em>TwoDim3PhasesLLO2HEOGuess</em></a>) – Initial guess for the iterative NLP solution</p></li>
+<li><p><strong>tof_adim</strong> (<em>ndarray</em>) – Time of flight in non-dimensional units [-]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase">
 <code class="sig-name descname">set_initial_guess_phase</code><span class="sig-paren">(</span><em class="sig-param">state_nodes</em>, <em class="sig-param">control_nodes</em>, <em class="sig-param">phase_name</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/nlp/nlp_heo_2d.html#TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the initial guess for a given <cite>Phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state_nodes</strong> (<em>ndarray</em>) – Indexes corresponding to the states discretization nodes within the specified transcription</p></li>
+<li><p><strong>control_nodes</strong> (<em>ndarray</em>) – Indexes corresponding to the controls discretization nodes within the specified transcription</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name of the current <cite>Phase</cite> object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.cleanup">

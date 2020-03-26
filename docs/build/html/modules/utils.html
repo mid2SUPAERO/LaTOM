@@ -205,25 +205,144 @@
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">latom.utils.keplerian_orbit.</code><code class="sig-name descname">TwoDimOrb</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/keplerian_orbit.html#TwoDimOrb"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines a two-dimensional orbit from its keplerian parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>kwargs</strong> – <dl class="simple">
+<dt>T<span class="classifier">float</span></dt><dd><p>Orbital period [s]</p>
+</dd>
+<dt>a<span class="classifier">float</span></dt><dd><p>Semi-major axis [m]</p>
+</dd>
+<dt>e<span class="classifier">float</span></dt><dd><p>Eccentricity [-]</p>
+</dd>
+<dt>ra<span class="classifier">float</span></dt><dd><p>Apoapsis radius [m]</p>
+</dd>
+<dt>rp<span class="classifier">float</span></dt><dd><p>Periapsis radius [m]</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>GM</strong> (<em>float</em><em>, </em><em>optional</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Orbit period [s]</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>ra</strong> (<em>float</em>) – Apoapsis radius [m]</p></li>
+<li><p><strong>rp</strong> (<em>float</em>) – Periapsis radius [m]</p></li>
+<li><p><strong>va</strong> (<em>float</em>) – Velocity at the apoapsis [m/s]</p></li>
+<li><p><strong>vp</strong> (<em>float</em>) – Velocity at the periapsis [m/s]</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Specific angular momentum magnitude [m^2/s]</p></li>
+<li><p><strong>energy</strong> (<em>float</em>) – Specific energy of the orbit in 2BP [m^2/s^2]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt>
 <em class="property">static </em><code class="sig-name descname">coe2polar</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">ta</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/keplerian_orbit.html#TwoDimOrb.coe2polar"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Transforms the classical orbital elements into polar coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>ta</strong> (<em>float</em><em> or </em><em>ndarray</em>) – True anomaly [rad]</p></li>
+<li><p><strong>kwargs</strong> – <dl class="simple">
+<dt>a<span class="classifier">float</span></dt><dd><p>Semi-major axis [m]</p>
+</dd>
+<dt>e<span class="classifier">float</span></dt><dd><p>Eccentricity [-]</p>
+</dd>
+<dt>h<span class="classifier">float</span></dt><dd><p>Specific angular momentum magnitude [m^2/s]</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r</strong> (<em>float or ndarray</em>) – Position in polar coordinates [m]</p></li>
+<li><p><strong>u</strong> (<em>float or ndarray</em>) – radial velocity [m/s]</p></li>
+<li><p><strong>v</strong> (<em>float or ndarray</em>) – tangential velocity [m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt>
 <em class="property">static </em><code class="sig-name descname">polar2coe</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/keplerian_orbit.html#TwoDimOrb.polar2coe"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Transforms the polar coordinates into classical orbital elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>r</strong> (<em>float</em><em> or </em><em>ndarray</em>) – Position in polar coordinates [m]</p></li>
+<li><p><strong>u</strong> (<em>float</em><em> or </em><em>ndarray</em>) – radial velocity [m/s]</p></li>
+<li><p><strong>v</strong> (<em>float</em><em> or </em><em>ndarray</em>) – tangential velocity [m/s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>) – Orbit semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Orbit eccentricity [-]</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Orbit specific angular momentum magnitude [m^2/s]</p></li>
+<li><p><strong>ta</strong> (<em>float or ndarray</em>) – True anomaly [rad]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt>
 <em class="property">static </em><code class="sig-name descname">polar2energy</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">r</em>, <em class="sig-param">u</em>, <em class="sig-param">v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/keplerian_orbit.html#TwoDimOrb.polar2energy"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Returns the energy given the polar coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>r</strong> (<em>float</em><em> or </em><em>ndarray</em>) – Position in polar coordinates [m]</p></li>
+<li><p><strong>u</strong> (<em>float</em><em> or </em><em>ndarray</em>) – radial velocity [m/s]</p></li>
+<li><p><strong>v</strong> (<em>float</em><em> or </em><em>ndarray</em>) – tangential velocity [m/s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(u**2 + v**2)*0.5 - gm/r</strong> – Specific energy of the orbit in 2BP [m^2/s^2]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt>
 <em class="property">static </em><code class="sig-name descname">propagate</code><span class="sig-paren">(</span><em class="sig-param">gm</em>, <em class="sig-param">a</em>, <em class="sig-param">e</em>, <em class="sig-param">tai</em>, <em class="sig-param">taf</em>, <em class="sig-param">nb</em>, <em class="sig-param">tp=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/keplerian_orbit.html#TwoDimOrb.propagate"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Propagates the orbit states in polar coordinates for the orbital period duration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Orbit semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Orbit eccentricity [-]</p></li>
+<li><p><strong>tai</strong> (<em>float</em>) – True anomaly initial angle [rad]</p></li>
+<li><p><strong>taf</strong> (<em>float</em>) – True anomaly final angle [rad]</p></li>
+<li><p><strong>nb</strong> (<em>int</em>) – number of point where the True Anomaly is calculated [-]</p></li>
+<li><p><strong>tp</strong> (<em>float</em>) – Time at periapsis passage [s]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time vector [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – List of the states values propagated in time [m, m/s, m/s]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -363,13 +482,13 @@ from its COE.</p>
 <dd><p>Compute the true anomaly from a given eccentric anomaly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ea</strong> (<em>float</em>) – Eccentric anomaly [rad]</p>
+<dd class="field-odd"><p><strong>ea</strong> (<em>ndarray</em><em> or </em><em>float</em>) – Eccentric anomaly [-]</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>ta</strong> – True anomaly [rad]</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
+<dd class="field-odd"><p>ndarray or float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -448,6 +567,9 @@ from its COE.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ea</strong> (<em>float</em>) – Eccentric anomaly [rad]</p></li>
 <li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – Mean motion [rad/s]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – Time [s]</p></li>
+<li><p><strong>tp</strong> (<em>float</em>) – Time at periapsis passage [s]</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -468,6 +590,9 @@ from its COE.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ea</strong> (<em>float</em>) – Eccentric anomaly [rad]</p></li>
 <li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – Mean motion [rad/s]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – Time [s]</p></li>
+<li><p><strong>tp</strong> (<em>float</em>) – Time at periapsis passage [s]</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -513,7 +638,13 @@ from its COE.</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">update_twr</code><span class="sig-paren">(</span><em class="sig-param">twr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/spacecraft.html#Spacecraft.update_twr"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Updates the boundaries value for the thrust throttle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>twr</strong> (<em>float</em>) – Thrust over initial weight ratio [-]</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -779,15 +910,37 @@ equation.</p>
 </dd></dl>
 
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<p>Defines the methods to save and load files using the pickle library</p>
 <dl class="function">
 <dt>
 <code class="sig-prename descclassname">latom.utils.pickle_utils.</code><code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/pickle_utils.html#save"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Save an object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – Object to be serialized</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Full path to file where the object is serialized</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt>
 <code class="sig-prename descclassname">latom.utils.pickle_utils.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/utils/pickle_utils.html#load"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Load an object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Full path to file where the object is serialized</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obj</strong> – Object to be serialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
 
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <p>Defines useful constants</p>
@@ -815,6 +968,7 @@ equation.</p>
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">latom.utils.primary.</code><code class="sig-name descname">Moon</code><a class="reference internal" href="../_modules/latom/utils/primary.html#Moon"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_autosummary/latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.utils.primary.Primary</span></code></a></p>
+<p>Defines the Moon</p>
 </dd></dl>
 
 </div>

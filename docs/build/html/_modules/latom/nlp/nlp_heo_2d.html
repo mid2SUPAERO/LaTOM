@@ -172,9 +172,57 @@
 
 
 <div class="viewcode-block" id="TwoDimLLO2HEONLP"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLO2HEONLP</span><span class="p">(</span><span class="n">TwoDimVarNLP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory</span>
+<span class="sd">    from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using</span>
+<span class="sd">    the OpenMDAO and dymos libraries.</span>
+
+<span class="sd">    The transfer is modeled as a single phase ascent trajectory from the departure LLO to the apoapsis of the arrival</span>
+<span class="sd">    HEO. The thrust magnitude is allowed to vary over time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Instance of `Primary` class representing the central attracting body</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        Instance of `Spacecraft` class representing the spacecraft</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        HEO periapsis radius [m]</span>
+<span class="sd">    t : float</span>
+<span class="sd">        HEO period [s]</span>
+<span class="sd">    alpha_bounds : tuple</span>
+<span class="sd">        Lower and upper bounds on thrust vector direction [rad]</span>
+<span class="sd">    t_bounds : tuple</span>
+<span class="sd">        Time of flight bounds expressed as fraction of `tof` [-]</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">    nb_seg : int</span>
+<span class="sd">        Number of segments in which each phase is discretized</span>
+<span class="sd">    order : int</span>
+<span class="sd">        Transcription order within each phase, must be odd</span>
+<span class="sd">    solver : str</span>
+<span class="sd">        NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">    ph_name : str</span>
+<span class="sd">        Name of the phase within OpenMDAO</span>
+<span class="sd">    snopt_opts : dict or ``None``, optional</span>
+<span class="sd">        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.</span>
+<span class="sd">        Default is ``None``</span>
+<span class="sd">    rec_file : str or ``None``, optional</span>
+<span class="sd">        Name of the file in which the computed solution is recorded or ``None``. Default is ``None``</span>
+<span class="sd">    check_partials : bool, optional</span>
+<span class="sd">        Check the partial derivatives computed analytically against complex step method. Default is ``False``</span>
+<span class="sd">    u_bound : str or ``None``, optional</span>
+<span class="sd">            Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or ``None``. Default is ``lower``</span>
+<span class="sd">    fix_final : bool, optional</span>
+<span class="sd">        ``True`` if the final time is fixed, ``False`` otherwise. Default is ``True``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">ph_name</span><span class="p">,</span>
                  <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes TwoDimLLO2HEONLP class. &quot;&quot;&quot;</span>
 
         <span class="n">guess</span> <span class="o">=</span> <span class="n">TwoDimLLO2HEOGuess</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">GM</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
 
@@ -183,6 +231,19 @@
                               <span class="n">u_bound</span><span class="o">=</span><span class="n">u_bound</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="n">fix_final</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TwoDimLLO2HEONLP.set_states_options"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2HEONLP.set_states_options">[docs]</a>    <span class="k">def</span> <span class="nf">set_states_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the states variables options.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        theta : float</span>
+<span class="sd">            Unit reference value for spawn angle [rad]</span>
+<span class="sd">        u_bound : str or ``None``, optional</span>
+<span class="sd">                Bounds on spacecraft radial velocity between ``lower`` and ``upper`` or ``None``. Default is ``lower``</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">set_state_options</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                                      <span class="n">ref0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">R</span><span class="p">,</span>
@@ -197,6 +258,57 @@
 
 
 <div class="viewcode-block" id="TwoDimLLO2ApoNLP"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLO2ApoNLP</span><span class="p">(</span><span class="n">TwoDimNLP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;TwoDimLLO2HEONLP transcribes a continuous-time optimal control problem for a two-dimensional transfer trajectory</span>
+<span class="sd">    from a Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using</span>
+<span class="sd">    the OpenMDAO and dymos libraries.</span>
+
+<span class="sd">    The transfer is modeled as a single phase ascent trajectory from the departure LLO to the apoapsis of the arrival</span>
+<span class="sd">    HEO. The thrust magnitude is allowed to vary over time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Instance of `Primary` class representing the central attracting body</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        Instance of `Spacecraft` class representing the spacecraft</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        LLO altitude [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        HEO periapsis radius [m]</span>
+<span class="sd">    t : float</span>
+<span class="sd">        HEO period [s]</span>
+<span class="sd">    alpha_bounds : tuple</span>
+<span class="sd">        Lower and upper bounds on thrust vector direction [rad]</span>
+<span class="sd">    t_bounds : tuple</span>
+<span class="sd">        Time of flight bounds expressed as fraction of `tof` [-]</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">    nb_seg : int</span>
+<span class="sd">        Number of segments in which each phase is discretized</span>
+<span class="sd">    order : int</span>
+<span class="sd">        Transcription order within each phase, must be odd</span>
+<span class="sd">    solver : str</span>
+<span class="sd">        NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">    ph_name : str</span>
+<span class="sd">        Name of the phase within OpenMDAO</span>
+<span class="sd">    snopt_opts : dict or ``None``, optional</span>
+<span class="sd">        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.</span>
+<span class="sd">        Default is ``None``</span>
+<span class="sd">    rec_file : str or ``None``, optional</span>
+<span class="sd">        Name of the file in which the computed solution is recorded or ``None``. Default is ``None``</span>
+<span class="sd">    check_partials : bool, optional</span>
+<span class="sd">        Check the partial derivatives computed analytically against complex step method. Default is ``False``</span>
+<span class="sd">    params : dict or ``None``, optional</span>
+<span class="sd">        Optional parameters to be passed when a continuation method is employed and the NLP guess is not defined or</span>
+<span class="sd">        ``None``. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    guess : TwoDimLLO2HEOGuess or ``None``</span>
+<span class="sd">        Initial guess or ``None`` if continuation is used</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">ph_name</span><span class="p">,</span>
                  <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -225,11 +337,37 @@
                                         <span class="n">check_partials</span><span class="o">=</span><span class="n">check_partials</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoNLP.add_timeseries_output"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.add_timeseries_output">[docs]</a>    <span class="k">def</span> <span class="nf">add_timeseries_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;eps&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Adds the semi-major axis, specific energy and specific angular momentum magnitude to the time series outputs</span>
+<span class="sd">        of the phase.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        names : iterable</span>
+<span class="sd">            List of strings corresponding to the names of the variables to be added to the outputs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">add_timeseries_output</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,))</span></div>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoNLP.set_options"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_options">[docs]</a>    <span class="k">def</span> <span class="nf">set_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">thetaf</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the states, controls and time options, add the design parameters and boundary constraints, define the</span>
+<span class="sd">        objective of the optimization.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rp : float</span>
+<span class="sd">            Unit reference value for lengths [m]</span>
+<span class="sd">        vp : float</span>
+<span class="sd">            Unit reference value for velocities [m/s]</span>
+<span class="sd">        thetaf : float</span>
+<span class="sd">            Unit reference value for spawn angle [rad]</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Guessed time of flight [s]</span>
+<span class="sd">        t_bounds : iterable or ``None``, optional</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof` [-]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># states options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">set_state_options</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ref0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="n">rp</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
@@ -261,9 +399,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoNLP.set_initial_guess"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_initial_guess">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_guess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">throttle</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the initial guess for a single solution or the first solution of a continuation procedure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        check_partials : bool, optional</span>
+<span class="sd">            Check the partial derivatives computed analytically against complex step method. Default is ``False``</span>
+<span class="sd">        fix_final : bool, optional</span>
+<span class="sd">            ``True`` if the final time is fixed, ``False`` otherwise. Default is ``False``</span>
+<span class="sd">        throttle : bool, optional</span>
+<span class="sd">            ``True`` of variable thrust, ``False`` otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">TwoDimNLP</span><span class="o">.</span><span class="n">set_initial_guess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="n">check_partials</span><span class="p">,</span> <span class="n">fix_final</span><span class="o">=</span><span class="n">fix_final</span><span class="p">,</span> <span class="n">throttle</span><span class="o">=</span><span class="n">throttle</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoNLP.set_continuation_guess"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDimLLO2ApoNLP.set_continuation_guess">[docs]</a>    <span class="k">def</span> <span class="nf">set_continuation_guess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the initial guess for the solution ``k+1`` as the optimal transfer found for the solution ``k`` during</span>
+<span class="sd">        a continuation procedure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Time of flight for the previous optimal solution [s]</span>
+<span class="sd">        states : ndarray</span>
+<span class="sd">            States on the states discretization nodes for the previous optimal solution</span>
+<span class="sd">        controls : ndarray</span>
+<span class="sd">            Controls on the controls discretization nodes for the previous optimal solution</span>
+<span class="sd">        check_partials : bool, optional</span>
+<span class="sd">            Check the partial derivatives computed analytically against complex step method. Default is ``False``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.t_initial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.t_duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tof</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">tc</span>
@@ -282,6 +448,56 @@
 
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEONLP"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP">[docs]</a><span class="k">class</span> <span class="nc">TwoDim3PhasesLLO2HEONLP</span><span class="p">(</span><span class="n">MultiPhaseNLP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;TwoDim3PhasesLLO2HEONLP transcribes an optimal control problem for a three-phases ascent trajectory from a</span>
+<span class="sd">    circular Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using</span>
+<span class="sd">    the OpenMDAO and dymos libraries.</span>
+
+<span class="sd">    The transfer is modeled with a first powered phase at maximum thrust to leave the initial LLO, and intermediate</span>
+<span class="sd">    coasting phase and a second powered phase to inject in the target HEO.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Instance of `Primary` class representing the central attracting body</span>
+<span class="sd">    sc : Spacecraft</span>
+<span class="sd">        Instance of `Spacecraft` class representing the spacecraft</span>
+<span class="sd">    alt : float</span>
+<span class="sd">        Periselene altitude at which the powered descent is initiated [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        HEO periapsis radius [m]</span>
+<span class="sd">    t : float</span>
+<span class="sd">        HEO period [s]</span>
+<span class="sd">    alpha_bounds : iterable</span>
+<span class="sd">        Lower and upper bounds on thrust vector direction [rad]</span>
+<span class="sd">    t_bounds : tuple</span>
+<span class="sd">        Time of flight bounds expressed as fraction of `tof` [-]</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">        allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">    nb_seg : int or tuple</span>
+<span class="sd">        Number of segments in which each phase is discretized</span>
+<span class="sd">    order : int or tuple</span>
+<span class="sd">        Transcription order within each phase, must be odd</span>
+<span class="sd">    solver : str</span>
+<span class="sd">        NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">    ph_name : tuple</span>
+<span class="sd">        Name of the phase within OpenMDAO</span>
+<span class="sd">    snopt_opts : dict or None, optional</span>
+<span class="sd">        SNOPT optional settings expressed as key-value pairs. Refer to the SNOPT User Guide for more details.</span>
+<span class="sd">        Default is None</span>
+<span class="sd">    rec_file : str or None, optional</span>
+<span class="sd">        Name of the file in which the computed solution is recorded or None. Default is None</span>
+<span class="sd">    check_partials : bool, optional</span>
+<span class="sd">        Check the partial derivatives computed analytically against complex step method. Default is ``False``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    guess : TwoDim3PhasesLLO2HEOGuess</span>
+<span class="sd">        Initial guess for the iterative NLP solution</span>
+<span class="sd">    tof_adim : ndarray</span>
+<span class="sd">        Time of flight in non-dimensional units [-]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">ph_name</span><span class="p">,</span>
                  <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -419,6 +635,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">check_partials</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="n">compact_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_only_incorrect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase"><a class="viewcode-back" href="../../../modules/nlp.html#latom.nlp.nlp_heo_2d.TwoDim3PhasesLLO2HEONLP.set_initial_guess_phase">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_guess_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_nodes</span><span class="p">,</span> <span class="n">control_nodes</span><span class="p">,</span> <span class="n">phase_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the initial guess for a given `Phase`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        state_nodes : ndarray</span>
+<span class="sd">            Indexes corresponding to the states discretization nodes within the specified transcription</span>
+<span class="sd">        control_nodes : ndarray</span>
+<span class="sd">            Indexes corresponding to the controls discretization nodes within the specified transcription</span>
+<span class="sd">        phase_name : str</span>
+<span class="sd">            Name of the current `Phase` object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.states:r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">state_nodes</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.states:theta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">states</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">state_nodes</span><span class="p">)</span>

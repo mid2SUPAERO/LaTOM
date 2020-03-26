@@ -170,8 +170,51 @@
 
 
 <div class="viewcode-block" id="TwoDimOrb"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb">[docs]</a><span class="k">class</span> <span class="nc">TwoDimOrb</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Defines a two-dimensional orbit from its keplerian parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gm : float</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    kwargs :</span>
+<span class="sd">        T : float</span>
+<span class="sd">            Orbital period [s]</span>
+<span class="sd">        a : float</span>
+<span class="sd">            Semi-major axis [m]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Eccentricity [-]</span>
+<span class="sd">        ra : float</span>
+<span class="sd">            Apoapsis radius [m]</span>
+<span class="sd">        rp : float</span>
+<span class="sd">            Periapsis radius [m]</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    GM : float, optional</span>
+<span class="sd">        Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">    T : float</span>
+<span class="sd">        Orbit period [s]</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Semi-major axis [m]</span>
+<span class="sd">    e : float</span>
+<span class="sd">        Eccentricity [-]</span>
+<span class="sd">    ra : float</span>
+<span class="sd">        Apoapsis radius [m]</span>
+<span class="sd">    rp : float</span>
+<span class="sd">        Periapsis radius [m]</span>
+<span class="sd">    va : float</span>
+<span class="sd">        Velocity at the apoapsis [m/s]</span>
+<span class="sd">    vp :float</span>
+<span class="sd">        Velocity at the periapsis [m/s]</span>
+<span class="sd">    h : float</span>
+<span class="sd">        Specific angular momentum magnitude [m^2/s]</span>
+<span class="sd">    energy :float</span>
+<span class="sd">        Specific energy of the orbit in 2BP [m^2/s^2]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `TwoDimOrb` class. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">GM</span> <span class="o">=</span> <span class="n">gm</span>
 
@@ -226,10 +269,36 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">gm</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="o">-</span> <span class="n">gm</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="c1"># specific energy in 2BP [m^2/s^2]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="o">-</span> <span class="n">gm</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
 
 <div class="viewcode-block" id="TwoDimOrb.coe2polar"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.coe2polar">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">coe2polar</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Transforms the classical orbital elements into polar coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        ta : float or ndarray</span>
+<span class="sd">            True anomaly [rad]</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            a : float</span>
+<span class="sd">                Semi-major axis [m]</span>
+<span class="sd">            e : float</span>
+<span class="sd">                Eccentricity [-]</span>
+<span class="sd">            h : float</span>
+<span class="sd">                Specific angular momentum magnitude [m^2/s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        r : float or ndarray</span>
+<span class="sd">            Position in polar coordinates [m]</span>
+<span class="sd">        u : float or ndarray</span>
+<span class="sd">            radial velocity [m/s]</span>
+<span class="sd">        v : float or ndarray</span>
+<span class="sd">            tangential velocity [m/s]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Exactly two kwargs between a,e,h must be provided&#39;</span><span class="p">)</span>
@@ -255,6 +324,31 @@
 
 <div class="viewcode-block" id="TwoDimOrb.polar2coe"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.polar2coe">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">polar2coe</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Transforms the polar coordinates into classical orbital elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        r : float or ndarray</span>
+<span class="sd">            Position in polar coordinates [m]</span>
+<span class="sd">        u : float or ndarray</span>
+<span class="sd">            radial velocity [m/s]</span>
+<span class="sd">        v : float or ndarray</span>
+<span class="sd">            tangential velocity [m/s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        a : float</span>
+<span class="sd">            Orbit semi-major axis [m]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Orbit eccentricity [-]</span>
+<span class="sd">        h : float</span>
+<span class="sd">            Orbit specific angular momentum magnitude [m^2/s]</span>
+<span class="sd">        ta : float or ndarray</span>
+<span class="sd">            True anomaly [rad]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">a</span> <span class="o">=</span> <span class="n">gm</span><span class="o">*</span><span class="n">r</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">gm</span> <span class="o">-</span> <span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">))</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">v</span>
@@ -265,24 +359,71 @@
 
 <div class="viewcode-block" id="TwoDimOrb.polar2energy"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.polar2energy">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">polar2energy</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the energy given the polar coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        r : float or ndarray</span>
+<span class="sd">            Position in polar coordinates [m]</span>
+<span class="sd">        u : float or ndarray</span>
+<span class="sd">            radial velocity [m/s]</span>
+<span class="sd">        v : float or ndarray</span>
+<span class="sd">            tangential velocity [m/s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        (u**2 + v**2)*0.5 - gm/r : float or ndarray</span>
+<span class="sd">            Specific energy of the orbit in 2BP [m^2/s^2]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">gm</span><span class="o">/</span><span class="n">r</span></div>
 
 <div class="viewcode-block" id="TwoDimOrb.propagate"><a class="viewcode-back" href="../../../modules/utils.html#latom.utils.keplerian_orbit.TwoDimOrb.propagate">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">tai</span><span class="p">,</span> <span class="n">taf</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">tp</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Propagates the orbit states in polar coordinates for the orbital period duration.</span>
 
-        <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">tai</span><span class="p">,</span> <span class="n">taf</span><span class="p">,</span> <span class="n">nb</span><span class="p">),</span> <span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># true anomaly [rad]</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gm : float</span>
+<span class="sd">            Central body standard gravitational parameter [m^3/s^2]</span>
+<span class="sd">        a : float</span>
+<span class="sd">            Orbit semi-major axis [m]</span>
+<span class="sd">        e : float</span>
+<span class="sd">            Orbit eccentricity [-]</span>
+<span class="sd">        tai : float</span>
+<span class="sd">            True anomaly initial angle [rad]</span>
+<span class="sd">        taf : float</span>
+<span class="sd">            True anomaly final angle [rad]</span>
+<span class="sd">        nb : int</span>
+<span class="sd">            number of point where the True Anomaly is calculated [-]</span>
+<span class="sd">        tp : float</span>
+<span class="sd">            Time at periapsis passage [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        t : ndarray</span>
+<span class="sd">            Time vector [s]</span>
+<span class="sd">        states : ndarray</span>
+<span class="sd">            List of the states values propagated in time [m, m/s, m/s]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">tai</span><span class="p">,</span> <span class="n">taf</span><span class="p">,</span> <span class="n">nb</span><span class="p">),</span> <span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> 
         <span class="n">ea</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">ta</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># eccentric anomaly [rad]</span>
         <span class="n">me</span> <span class="o">=</span> <span class="n">ea</span> <span class="o">-</span> <span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>  <span class="c1"># mean anomaly [rad]</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">me</span><span class="o">*</span><span class="n">a</span><span class="o">**</span><span class="mf">1.5</span><span class="o">/</span><span class="n">gm</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">tp</span>  <span class="c1"># time [s]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">me</span><span class="o">*</span><span class="n">a</span><span class="o">**</span><span class="mf">1.5</span><span class="o">/</span><span class="n">gm</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">tp</span>
 
-        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="o">.</span><span class="n">coe2polar</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>  <span class="c1"># states [m, m/s, m/s]</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">TwoDimOrb</span><span class="o">.</span><span class="n">coe2polar</span><span class="p">(</span><span class="n">gm</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>
 
         <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">states</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the orbit Classical Orbital Elements &quot;&quot;&quot;</span>
 
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Semimajor axis:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="s1">&#39;km&#39;</span><span class="p">),</span>
                  <span class="s1">&#39;</span><span class="si">{:&lt;25s}{:&gt;20.6f}{:&gt;5s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Eccentricity:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
@@ -558,12 +699,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        ea : float</span>
-<span class="sd">            Eccentric anomaly [rad]</span>
+<span class="sd">        ea : ndarray or float</span>
+<span class="sd">            Eccentric anomaly [-]</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        ta : float</span>
+<span class="sd">        ta : ndarray or float</span>
 <span class="sd">            True anomaly [rad]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -676,6 +817,12 @@
 <span class="sd">            Eccentric anomaly [rad]</span>
 <span class="sd">        e : float</span>
 <span class="sd">            Eccentricity [-]</span>
+<span class="sd">        n : float</span>
+<span class="sd">            Mean motion [rad/s]</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Time [s]</span>
+<span class="sd">        tp : float</span>
+<span class="sd">            Time at periapsis passage [s]</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -698,6 +845,12 @@
 <span class="sd">            Eccentric anomaly [rad]</span>
 <span class="sd">        e : float</span>
 <span class="sd">            Eccentricity [-]</span>
+<span class="sd">        n : float</span>
+<span class="sd">            Mean motion [rad/s]</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Time [s]</span>
+<span class="sd">        tp : float</span>
+<span class="sd">            Time at periapsis passage [s]</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>

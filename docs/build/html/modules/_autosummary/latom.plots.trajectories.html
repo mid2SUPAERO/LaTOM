@@ -183,16 +183,16 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.plots.trajectories.TwoDimAltProfile" title="latom.plots.trajectories.TwoDimAltProfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAltProfile</span></code></a>(r, states[, states_exp, …])</p></td>
-<td><p></p></td>
+<td><p>Plot the two-dimensional simulation’s altitude profile over spawn angle.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.plots.trajectories.TwoDimLLO2NRHO" title="latom.plots.trajectories.TwoDimLLO2NRHO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2NRHO</span></code></a>(r_moon, a_nrho, e_nrho, states)</p></td>
-<td><p></p></td>
+<td><p>Plots the two-dimensional trajectories from a Low Lunar Orbit to a Near rectilinear Halo Orbit.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.plots.trajectories.TwoDimSurface2LLO" title="latom.plots.trajectories.TwoDimSurface2LLO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimSurface2LLO</span></code></a>(r_moon, states[, kind, nb])</p></td>
-<td><p></p></td>
+<td><p>Plots the two-dimensional trajectories from the Moon surface to a Low Lunar Orbit and vice versa.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.plots.trajectories.TwoDimTrajectory" title="latom.plots.trajectories.TwoDimTrajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimTrajectory</span></code></a>(r_moon, r_llo, states[, …])</p></td>
-<td><p></p></td>
+<td><p>Plots the two-dimensional trajectories in the xy plane.</p></td>
 </tr>
 </tbody>
 </table>
@@ -200,10 +200,42 @@
 <dt id="latom.plots.trajectories.TwoDimAltProfile">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.trajectories.</code><code class="sig-name descname">TwoDimAltProfile</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">states</em>, <em class="sig-param">states_exp=None</em>, <em class="sig-param">thrust=None</em>, <em class="sig-param">threshold=1e-06</em>, <em class="sig-param">r_safe=None</em>, <em class="sig-param">labels=('powered'</em>, <em class="sig-param">'coast')</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimAltProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimAltProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plot the two-dimensional simulation’s altitude profile over spawn angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for implicit NLP solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – States time series for explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>thrust</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Thrust magnitude time series or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>threshold</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Threshold value to determine the on/off control structure or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>labels</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Labels for the different phases. Default is <cite>(‘powered’, ‘coast’)</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>R</strong> (<em>float</em>) – Equatorial radius of central attracting body [m] or [-]</p></li>
+<li><p><strong>scaler</strong> (<em>float</em>) – Value to scale the distances</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement unit for distances</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Position time series for implicit NLP solution [m] or [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle time series for implicit NLP solution [rad]</p></li>
+<li><p><strong>r_pow</strong> (<em>ndarray</em>) – Position time series for implicit NLP solution corresponding to powered phases [m] or [-]</p></li>
+<li><p><strong>theta_pow</strong> (<em>ndarray</em>) – Angle time series for implicit NLP solution corresponding to powered phases [m] or [-]</p></li>
+<li><p><strong>r_coast</strong> (<em>ndarray</em>) – Position time series for implicit NLP solution corresponding to coasting phases [m] or [-]</p></li>
+<li><p><strong>theta_coast</strong> (<em>ndarray</em>) – Angle time series for implicit NLP solution corresponding to coasting phases [m] or [-]</p></li>
+<li><p><strong>r_exp</strong> (<em>ndarray</em>) – Position time series for explicit simulation [m] or [-]</p></li>
+<li><p><strong>theta_exp</strong> (<em>ndarray</em>) – Angle time series for explicit simulation [m] or [-]</p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time series for minimum safe altitude [m] or [-] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>labels</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Labels for the different phases</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimAltProfile.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimAltProfile.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimAltProfile.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the two-dimensional simulation’s altitude profile over spawn angle.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -211,25 +243,90 @@
 <dt id="latom.plots.trajectories.TwoDimTrajectory">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.trajectories.</code><code class="sig-name descname">TwoDimTrajectory</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">r_llo</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimTrajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimTrajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Plots the two-dimensional trajectories in the xy plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_moon</strong> (<em>float</em>) – Moon radius [m] or [-]</p></li>
+<li><p><strong>r_llo</strong> (<em>float</em>) – Initial Low Lunar Orbit radius [m] o [-]</p></li>
+<li><p><strong>states</strong> (<em>dict</em>) – Dictionary that maps states values obtained from the simulation</p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Defines the kind of trajectory. It can be ‘ascent’ or ‘descent’. Default is <cite>ascent</cite></p></li>
+<li><p><strong>nb</strong> (<em>float</em><em>, </em><em>optional</em>) – Number of points in which the Moon surface and the initial orbits are discretized. Default is <code class="docutils literal notranslate"><span class="pre">2000</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>scaler</strong> (<em>float</em>) – scaler for lengths</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Unit of measurement for lengths</p></li>
+<li><p><strong>x_moon</strong> (<em>ndarray</em>) – x coordinates for the Moon surface [km] or [-]</p></li>
+<li><p><strong>y_moon</strong> (<em>ndarray</em>) – y coordinates for the Moon surface [km] or [-]</p></li>
+<li><p><strong>x_llo</strong> (<em>ndarray</em>) – x coordinates for the initial orbit [km] or [-]</p></li>
+<li><p><strong>y_llo</strong> (<em>ndarray</em>) – y coordinates for the initial orbit [km] or [-]</p></li>
+<li><p><strong>x</strong> (<em>dict</em>) – x coordinates for the ascent trajectories [km] or [-]</p></li>
+<li><p><strong>y</strong> (<em>dict</em>) – y coordinates for the ascent trajectories [km] or [-]</p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – Defines the kind of trajectory. It can be ‘ascent’ or ‘descent’</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimTrajectory.get_scalers">
 <em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimTrajectory.get_scalers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimTrajectory.get_scalers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the scaling parameter for lengths and corresponding measurement unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – Moon radius in dimensional or non-dimensional units [m] or [-]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>scaler</strong> (<em>float</em>) – Scaler value [-]</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement unit</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimTrajectory.polar2cartesian">
 <em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimTrajectory.polar2cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimTrajectory.polar2cartesian" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Transforms the polar coordinates into cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>ndarray</em>) – Position series [km] or [-]</p></li>
+<li><p><strong>scaler</strong> (<em>float</em>) – Scaler value [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – X coordinates series [km] or [-]</p></li>
+<li><p><strong>y</strong> (<em>ndarray</em>) – X coordinates series [km] or [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimTrajectory.set_axes_decorators">
 <em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimTrajectory.set_axes_decorators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimTrajectory.set_axes_decorators" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sets the plot axes decorators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – Instance of <cite>Axes</cite> class</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the plot</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement units</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimTrajectory.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimTrajectory.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimTrajectory.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plots the two-dimensional trajectories in the xy plane.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -237,25 +334,76 @@
 <dt id="latom.plots.trajectories.TwoDimSurface2LLO">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.trajectories.</code><code class="sig-name descname">TwoDimSurface2LLO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimSurface2LLO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimSurface2LLO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.plots.trajectories.TwoDimTrajectory" title="latom.plots.trajectories.TwoDimTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.plots.trajectories.TwoDimTrajectory</span></code></a></p>
+<p>Plots the two-dimensional trajectories from the Moon surface to a Low Lunar Orbit and vice versa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_moon</strong> (<em>float</em>) – Moon radius [m] or [-]</p></li>
+<li><p><strong>states</strong> (<em>dict</em>) – Dictionary that maps states values obtained from the simulation</p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Defines the kind of trajectory. It can be ‘ascent’ or ‘descent’. Default is <cite>ascent</cite></p></li>
+<li><p><strong>nb</strong> (<em>float</em><em>, </em><em>optional</em>) – Number of points in which the Moon surface and the initial orbits are discretized. Default is <code class="docutils literal notranslate"><span class="pre">2000</span></code></p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimSurface2LLO.get_scalers">
 <em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimSurface2LLO.get_scalers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the scaling parameter for lengths and corresponding measurement unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – Moon radius in dimensional or non-dimensional units [m] or [-]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>scaler</strong> (<em>float</em>) – Scaler value [-]</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement unit</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimSurface2LLO.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimSurface2LLO.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plots the two-dimensional trajectories in the xy plane.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimSurface2LLO.polar2cartesian">
 <em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimSurface2LLO.polar2cartesian" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Transforms the polar coordinates into cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>ndarray</em>) – Position series [km] or [-]</p></li>
+<li><p><strong>scaler</strong> (<em>float</em>) – Scaler value [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – X coordinates series [km] or [-]</p></li>
+<li><p><strong>y</strong> (<em>ndarray</em>) – X coordinates series [km] or [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimSurface2LLO.set_axes_decorators">
 <em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimSurface2LLO.set_axes_decorators" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sets the plot axes decorators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – Instance of <cite>Axes</cite> class</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the plot</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement units</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -263,25 +411,84 @@
 <dt id="latom.plots.trajectories.TwoDimLLO2NRHO">
 <em class="property">class </em><code class="sig-prename descclassname">latom.plots.trajectories.</code><code class="sig-name descname">TwoDimLLO2NRHO</code><span class="sig-paren">(</span><em class="sig-param">r_moon</em>, <em class="sig-param">a_nrho</em>, <em class="sig-param">e_nrho</em>, <em class="sig-param">states</em>, <em class="sig-param">kind='ascent'</em>, <em class="sig-param">nb=2000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/plots/trajectories.html#TwoDimLLO2NRHO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.plots.trajectories.TwoDimLLO2NRHO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.plots.trajectories.TwoDimTrajectory" title="latom.plots.trajectories.TwoDimTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.plots.trajectories.TwoDimTrajectory</span></code></a></p>
+<p>Plots the two-dimensional trajectories from a Low Lunar Orbit to a Near rectilinear Halo Orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_moon</strong> (<em>float</em>) – Moon radius [m] or [-]</p></li>
+<li><p><strong>a_nrho</strong> (<em>float</em>) – Semi-major axis of the NRHO [m] or [-]</p></li>
+<li><p><strong>e_nrho</strong> (<em>float</em>) – Eccentricity of the NRHO [-]</p></li>
+<li><p><strong>states</strong> (<em>dict</em>) – Dictionary that maps states values obtained from the simulation</p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Defines the kind of trajectory. It can be ‘ascent’ or ‘descent’. Default is <cite>ascent</cite></p></li>
+<li><p><strong>nb</strong> (<em>float</em><em>, </em><em>optional</em>) – Number of points in which the Moon surface and the initial orbits are discretized. Default is <code class="docutils literal notranslate"><span class="pre">2000</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>x_nrho</strong> (<em>ndarray</em>) – X coordinate series for the NRHO [km] or [-]</p></li>
+<li><p><strong>y_nrho</strong> (<em>ndarray</em>) – Y coordinate series for the NRHO [km] or [-]</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimLLO2NRHO.get_scalers">
 <em class="property">static </em><code class="sig-name descname">get_scalers</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimLLO2NRHO.get_scalers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the scaling parameter for lengths and corresponding measurement unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – Moon radius in dimensional or non-dimensional units [m] or [-]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>scaler</strong> (<em>float</em>) – Scaler value [-]</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement unit</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimLLO2NRHO.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimLLO2NRHO.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plots the two-dimensional trajectories in the xy plane.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimLLO2NRHO.polar2cartesian">
 <em class="property">static </em><code class="sig-name descname">polar2cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">scaler=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimLLO2NRHO.polar2cartesian" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Transforms the polar coordinates into cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>ndarray</em>) – Position series [km] or [-]</p></li>
+<li><p><strong>scaler</strong> (<em>float</em>) – Scaler value [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – X coordinates series [km] or [-]</p></li>
+<li><p><strong>y</strong> (<em>ndarray</em>) – X coordinates series [km] or [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.plots.trajectories.TwoDimLLO2NRHO.set_axes_decorators">
 <em class="property">static </em><code class="sig-name descname">set_axes_decorators</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">title</em>, <em class="sig-param">units</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.plots.trajectories.TwoDimLLO2NRHO.set_axes_decorators" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sets the plot axes decorators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – Instance of <cite>Axes</cite> class</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the plot</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – Measurement units</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
