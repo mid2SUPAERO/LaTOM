@@ -1,6 +1,7 @@
 """
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
+Stored data for LLO to HEO transfers obtained using a continuation method
 """
 
 import os

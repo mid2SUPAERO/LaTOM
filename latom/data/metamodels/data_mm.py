@@ -1,6 +1,7 @@
 """
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
+Stored data for OpenMDAO MetaModels
 """
 
 import os
