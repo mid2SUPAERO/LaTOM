@@ -21,8 +21,44 @@ from latom.utils.pickle_utils import save, load
 
 
 class SurrogateModel:
+    """`SurrogateModel` class sets up a surrogate model object defined in the Surrogate Modelling Toolbox (SMT) [1]_
+    package to compute and exploit data for different transfer trajectories.
+
+    The model inputs are the spacecraft specific impulse `Isp` and initial thrust/weight ratio `twr` while the model
+    output is the propellant fraction `m_prop`.
+
+    Parameters
+    ----------
+    train_method : str
+        Training method among ``IDW``, ``KPLS``, ``KPLSK``, ``KRG``, ``LS``, ``QP``, ``RBF``, ``RMTB``, ``RMTC``
+    rec_file : str or ``None``, optional
+        Name of the file in `latom.data.smt` where the surrogate model is stored or ``None`` if a new model has to
+        be built. Default is ``None``
+
+    Attributes
+    ----------
+    limits : ndarray
+        Sampling grid limits in terms of minimum and maximum `Isp` and `twr`
+    x_samp : ndarray
+        Sampling points as `Isp, twr` tuples
+    m_prop : ndarray
+        Propellant fraction on training points [-]
+    failures : ndarray
+        Matrix of boolean to verify each NLP solution has converged
+    d : dict
+        Dictionary that contain all the information to reconstruct a meta model
+    trained : IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB or RMTC
+        Surrogate model object defined by SMT
+
+    References
+    ----------
+    .. [1] M. A. Bouhlel and J. T. Hwang and N. Bartoli and R. Lafage and J. Morlier and J. R. R. A. Martins.
+    A Python surrogate modeling framework with derivatives. Advances in Engineering Software, 2019.
+
+    """
 
     def __init__(self, train_method, rec_file=None):
+        """Initializes `SurrogateModel` class. """
 
         self.limits = self.x_samp = self.m_prop = self.failures = self.d = None
         self.trained = None
@@ -33,10 +69,31 @@ class SurrogateModel:
 
     @staticmethod
     def abs_path(rec_file):
+        """Returns the absolute path of the file where the surrogate model is stored.
+
+        Parameters
+        ----------
+        rec_file : str
+            Name of the file in `latom.data.smt` where the surrogate model is stored
+
+        Returns
+        -------
+        fid : str
+            Full path where the surrogate model is stored
+
+        """
 
         return '/'.join([dirname_smt, rec_file])
 
     def load(self, rec_file):
+        """Loads stored data to instantiate a surrogate model.
+
+        Parameters
+        ----------
+        rec_file : str
+            Name of the file in `latom.data.smt` where the surrogate model is stored
+
+        """
 
         self.d = load(self.abs_path(rec_file))
         self.limits = self.d['limits']
@@ -45,11 +102,39 @@ class SurrogateModel:
         self.failures = self.d['failures']
 
     def save(self, rec_file):
+        """Saves data corresponding to a surrogate model instance.
+
+        Parameters
+        ----------
+        rec_file : str
+            Name of the file in `latom.data.smt` where the surrogate model is stored
+
+        """
 
         d = {'limits': self.limits, 'x_samp': self.x_samp, 'm_prop': self.m_prop, 'failures': self.failures}
         save(d, self.abs_path(rec_file))
 
     def compute_grid(self, isp_lim, twr_lim, nb_samp, samp_method='full', criterion='m'):
+        """Compute the sampling grid fro given `Isp` and `twr` limits and sampling scheme.
+
+        Parameters
+        ----------
+        isp_lim : iterable
+            Specific impulse lower and upper bounds [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper bounds [-]
+        nb_samp : int
+            Total number of samples. Must be a perfect square if ``full`` is chosen as `samp_method`
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``full``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``
+            Default is ``m``
+
+        """
 
         self.limits = np.vstack((np.asarray(isp_lim), np.asarray(twr_lim)))
 
@@ -66,6 +151,23 @@ class SurrogateModel:
 
     @staticmethod
     def solve(nlp, i):
+        """Solve the i-th NLP problem.
+
+        Parameters
+        ----------
+        nlp : NLP
+            NLP object
+        i : int
+            Current iteration
+
+        Returns
+        -------
+        m_prop : float
+            Propellant fraction [-]
+        f : bool
+            Failure status
+
+        """
 
         print(f"\nIteration {i}\nIsp: {nlp.sc.Isp:.6f} s\ttwr: {nlp.sc.twr:.6f}")
         f = nlp.p.run_driver()
@@ -82,6 +184,16 @@ class SurrogateModel:
         return m_prop, f
 
     def train(self, train_method, **kwargs):
+        """Trains the surrogate model with given training data.
+
+        Parameters
+        ----------
+        train_method : str
+            Training method among ``IDW``, ``KPLS``, ``KPLSK``, ``KRG``, ``LS``, ``QP``, ``RBF``, ``RMTB``, ``RMTC``
+        kwargs : dict
+            Additional input arguments for RMTB and RMTC
+
+        """
 
         if train_method == 'IDW':
             self.trained = IDW(**kwargs)
@@ -108,6 +220,21 @@ class SurrogateModel:
         self.trained.train()
 
     def evaluate(self, isp, twr):
+        """Evaluate the surrogate model in the given set of points.
+
+        Parameters
+        ----------
+        isp : float or iterable
+            Specific impulse on evaluation points [s]
+        twr : float or iterable
+            Thrust/weight ratio on evaluation points [-]
+
+        Returns
+        -------
+        m_eval : float or iterable
+            Propellant fraction on evaluation points [-]
+
+        """
 
         if isinstance(isp, float):
             isp = [isp]
@@ -120,6 +247,24 @@ class SurrogateModel:
         return m_eval
 
     def compute_matrix(self, nb_eval=None):
+        """Compute structured matrices for `Isp`, `twr` and `m_prop` to display the training data on a response surface.
+
+        Parameters
+        ----------
+        nb_eval : int or ``None``
+            Number of points included in the matrix if Latin Hypercube Sampling has been used or ``None``.
+            Default is ``None``
+
+        Returns
+        -------
+        isp : ndarray
+            Matrix of specific impulses [s]
+        twr : ndarray
+            Matrix of thrust/weight ratios [-]
+        m_mat : ndarray
+            Matrix of propellant fractions [-]
+
+        """
 
         if nb_eval is not None:  # LHS
             samp_eval = FullFactorial(xlimits=self.limits)
@@ -139,6 +284,20 @@ class SurrogateModel:
         return isp, twr, m_mat
 
     def plot(self, nb_eval=None, nb_lines=50, kind='prop'):
+        """Plot the response surface corresponding to the loaded surrogate model.
+
+        Parameters
+        ----------
+        nb_eval : int or ``None``
+            Number of points included in the matrix if Latin Hypercube Sampling has been used or ``None``.
+            Default is ``None``
+        nb_lines : int, optional
+            Number of contour lines. Default is ``50``
+        kind : str
+            ``prop`` to display the propellant fraction `m_prop`, ``final`` to display the final spacecraft mass
+            `1 - m_prop`
+
+        """
 
         isp, twr, m_mat = self.compute_matrix(nb_eval=nb_eval)
 
@@ -155,9 +314,56 @@ class SurrogateModel:
 
 
 class TwoDimAscConstSurrogate(SurrogateModel):
+    """`TwoDimAscConstSurrogate` implements `SurrogateModel` for a two-dimensional ascent trajectory at constant thrust.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='full', criterion='m', snopt_opts=None, u_bound='lower'):
+                 samp_method='lhs', criterion='m', snopt_opts=None, u_bound='lower'):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+        u_bound : str, optional
+            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
+            Default is ``lower``
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
@@ -171,9 +377,52 @@ class TwoDimAscConstSurrogate(SurrogateModel):
 
 
 class TwoDimAscVarSurrogate(SurrogateModel):
+    """`TwoDimAscVarSurrogate` implements `SurrogateModel` for a two-dimensional ascent trajectory with variable thrust.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp,
-                 samp_method='full', criterion='m', snopt_opts=None, u_bound='lower'):
+                 samp_method='lhs', criterion='m', snopt_opts=None, u_bound='lower'):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+        u_bound : str, optional
+            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
+            Default is ``lower``
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
@@ -187,9 +436,57 @@ class TwoDimAscVarSurrogate(SurrogateModel):
 
 
 class TwoDimAscVToffSurrogate(SurrogateModel):
+    """`TwoDimAscVToffSurrogate` implements `SurrogateModel` for a two-dimensional ascent trajectory with variable
+    thrust and minimum safe altitude.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
                  nb_samp, samp_method='lhs', criterion='m', snopt_opts=None, u_bound='lower'):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        alt_safe : float
+            Asymptotic minimum safe altitude [m]
+        slope : float
+            Minimum safe altitude slope close to the launch site [-]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+        u_bound : str, optional
+            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
+            Default is ``lower``
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
@@ -203,9 +500,59 @@ class TwoDimAscVToffSurrogate(SurrogateModel):
 
 
 class TwoDimDescConstSurrogate(SurrogateModel):
+    """`TwoDimDescConstSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory at constant
+    thrust.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, alt_p, theta, tof, t_bounds, method, nb_seg, order, solver, nb_samp,
                  samp_method='lhs', criterion='m', snopt_opts=None, u_bound='upper'):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        alt_p : float
+            Periapsis altitude where the final powered descent is initiated [m]
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+        u_bound : str, optional
+            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
+            Default is ``upper``
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
@@ -224,9 +571,53 @@ class TwoDimDescConstSurrogate(SurrogateModel):
 
 
 class TwoDimDescVarSurrogate(SurrogateModel):
+    """`TwoDimDescVarSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory with variable
+    thrust.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, t_bounds, method, nb_seg, order, solver, nb_samp, samp_method='lhs',
                  criterion='m', snopt_opts=None, u_bound='upper'):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+        u_bound : str, optional
+            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
+            Default is ``upper``
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
@@ -240,9 +631,57 @@ class TwoDimDescVarSurrogate(SurrogateModel):
 
 
 class TwoDimDescVLandSurrogate(SurrogateModel):
+    """`TwoDimDescVLandSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory with variable
+    thrust and constrained minimum altitude.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, alt_safe, slope, t_bounds, method, nb_seg, order, solver,
                  nb_samp, samp_method='lhs', criterion='m', snopt_opts=None, u_bound='upper'):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        alt_safe : float
+            Asymptotic minimum safe altitude [m]
+        slope : float
+            Minimum safe altitude slope close to the launch site [-]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+        u_bound : str, optional
+            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
+            Default is ``upper``
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
@@ -256,9 +695,58 @@ class TwoDimDescVLandSurrogate(SurrogateModel):
 
 
 class TwoDimDescVertSurrogate(SurrogateModel):
+    """`TwoDimDescVertSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory at constant
+    thrust with final vertical descent phase.
+
+    """
 
     def sampling(self, body, isp_lim, twr_lim, alt, alt_p, alt_switch, theta, tof, t_bounds, method, nb_seg, order,
                  solver, nb_samp, samp_method='lhs', criterion='m', snopt_opts=None):
+        """Compute a new set of training data starting from a given sampling grid.
+
+        Parameters
+        ----------
+        body : Primary
+            Central attracting body
+        isp_lim : iterable
+            Specific impulse lower and upper limits [s]
+        twr_lim : iterable
+            Thrust/weight ratio lower and upper limits [-]
+        alt : float
+            Orbit altitude [m]
+        alt_p : float
+            Periapsis altitude where the final powered descent is initiated [m]
+        alt_switch : float
+            Altitude at which the final vertical descent is triggered [m]
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
+        t_bounds : iterable
+            Time of flight lower and upper bounds expressed as fraction of `tof`
+        method : str
+            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``
+        nb_seg : int or iterable
+            Number of segments in which each phase is discretized
+        order : int or iterable
+            Transcription order within each phase, must be odd
+        solver : str
+            NLP solver, must be supported by OpenMDAO
+        nb_samp : iterable
+            Total number of sampling points
+        samp_method : str, optional
+            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.
+            Default is ``lhs``
+        criterion : str, optional
+            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,
+            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are
+            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.
+            Default is ``m``
+        snopt_opts : dict or None, optional
+            SNOPT optional settings expressed as key-value pairs. Default is None
+
+        """
 
         self.compute_grid(isp_lim, twr_lim, nb_samp, samp_method=samp_method, criterion=criterion)
 
