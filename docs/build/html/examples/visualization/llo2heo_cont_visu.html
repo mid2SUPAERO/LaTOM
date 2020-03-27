@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>LLO to Apoapsis transfer visualization &mdash; LaTOM 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="OpenMDAO MetaModel visualization" href="om_mm_visu.html" />
+    <link rel="prev" title="SMT Surrogate Model visualization" href="smt_visu.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> LaTOM
+          
+
+          
+            
+            <img src="../../_static/LaTOM_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Example scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#visualization-scripts">Visualization scripts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="two_dim_asc_reader.html">Two-dimensional Moon to LLO transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo_visu.html">Two-dimensional, three-phases LLO to HEO transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smt_visu.html">SMT Surrogate Model visualization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">LLO to Apoapsis transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="om_mm_visu.html">OpenMDAO MetaModel visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smt_old.html">SMT Surrogate Model visualization (Deprecated)</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LaTOM</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Example scripts</a> &raquo;</li>
+        
+      <li>LLO to Apoapsis transfer visualization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-visualization-llo2heo-cont-visu-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="llo-to-apoapsis-transfer-visualization">
+<span id="sphx-glr-examples-visualization-llo2heo-cont-visu-py"></span><h1>LLO to Apoapsis transfer visualization<a class="headerlink" href="#llo-to-apoapsis-transfer-visualization" title="Permalink to this headline">¶</a></h1>
+<p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">latom.utils.pickle_utils</span> <span class="kn">import</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
+<span class="kn">from</span> <span class="nn">latom.data.continuation.data_continuation</span> <span class="kn">import</span> <span class="n">dirname_continuation</span>
+
+<span class="c1"># load saved data</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;lin350.pkl&#39;</span>
+<span class="n">abspath</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">dirname_continuation</span><span class="p">,</span> <span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">])</span>
+<span class="n">tr</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+
+<span class="c1"># primary</span>
+<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
+
+<span class="c1"># departure orbit</span>
+<span class="n">r_llo</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">depOrb</span><span class="o">.</span><span class="n">rp</span><span class="o">/</span><span class="n">moon</span><span class="o">.</span><span class="n">R</span>
+
+<span class="c1"># target orbit</span>
+<span class="n">rp_heo</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">rp</span><span class="o">/</span><span class="n">moon</span><span class="o">.</span><span class="n">R</span>
+<span class="n">ra_heo</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">guess</span><span class="o">.</span><span class="n">ht</span><span class="o">.</span><span class="n">arrOrb</span><span class="o">.</span><span class="n">ra</span><span class="o">/</span><span class="n">moon</span><span class="o">.</span><span class="n">R</span>
+
+<span class="c1"># spacecraft</span>
+<span class="n">twr</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">twr</span>
+<span class="n">ve</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">w</span><span class="o">/</span><span class="n">moon</span><span class="o">.</span><span class="n">vc</span>
+
+<span class="c1"># time of flight</span>
+<span class="n">tof</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">tof</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">moon</span><span class="o">.</span><span class="n">tc</span>
+<span class="n">tof_days</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">tof</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">86400</span>
+
+<span class="c1"># number of spirals</span>
+<span class="n">dtheta</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tr</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">nb_spirals</span> <span class="o">=</span> <span class="n">dtheta</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="c1"># print</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Moon radius: 1.0</span><span class="se">\n</span><span class="s2">Gravitational parameter: 1.0&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LLO radius: </span><span class="si">{</span><span class="n">r_llo</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HEO periapsis radius: </span><span class="si">{</span><span class="n">rp_heo</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="se">\n</span><span class="s2">HEO apoapsis radius: </span><span class="si">{</span><span class="n">ra_heo</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Thrust/weight ratio: </span><span class="si">{</span><span class="n">twr</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="se">\n</span><span class="s2">Exhaust velocity: </span><span class="si">{</span><span class="n">ve</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Time of flight: </span><span class="si">{</span><span class="n">tof</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2"> or </span><span class="si">{</span><span class="n">tof_days</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2"> days&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of spirals: </span><span class="si">{</span><span class="n">nb_spirals</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Propellant fraction (excluding insertion): </span><span class="si">{</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tr</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Propellant fraction (total): </span><span class="si">{</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tr</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.16f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-visualization-llo2heo-cont-visu-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/eeab73b756a7155ef66b76ef33af0fc1/llo2heo_cont_visu.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">llo2heo_cont_visu.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/f91033aa4f136ed31fa05ec51bbc937f/llo2heo_cont_visu.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">llo2heo_cont_visu.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="om_mm_visu.html" class="btn btn-neutral float-right" title="OpenMDAO MetaModel visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="smt_visu.html" class="btn btn-neutral float-left" title="SMT Surrogate Model visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossa&#39;, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -39,7 +39,8 @@ extensions = ['sphinx.ext.autosummary',
               'sphinx_autopackagesummary',
               'sphinx_rtd_theme',
               'recommonmark',
-              'sphinx_markdown_tables'
+              'sphinx_markdown_tables',
+              'sphinx_gallery.gen_gallery'
 ]
 
 # Numpy settings
@@ -75,6 +76,12 @@ napoleon_use_admonition_for_references = False
 napoleon_use_ivar = True
 napoleon_use_param = True
 napoleon_use_rtype = True
+
+# Sphinx Gallery settings
+sphinx_gallery_conf = {
+    'examples_dirs': '../../scripts',
+    'gallery_dirs': 'examples',
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

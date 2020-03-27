@@ -19,6 +19,7 @@ Welcome to Launcher Trajectory Optimization Module (LaTOM) documentation!
    modules/surrogate
    modules/utils
    installation/installation_index
+   examples/index
 
 
 Indices and tables

@@ -193,8 +193,6 @@ class MetaModel:
             Default is ``None``
         rec_file : str, optional
             Name of the file in `latom.data.metamodels` where the meta model will be stored. Default is ``None``
-        kwargs : dict
-            Additional input arguments
 
         """
 
@@ -256,8 +254,6 @@ class MetaModel:
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            Additional input arguments
 
         Returns
         -------
@@ -387,8 +383,6 @@ class TwoDimAscVarMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            Additional input arguments
 
         Returns
         -------
@@ -577,8 +571,6 @@ class TwoDimDescVarMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            Additional input arguments
 
         Returns
         -------

@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Example scripts &mdash; LaTOM 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Two-phases LLO to Moon transfer with vertical touchdown" href="computation/two_dim_desc_vertical.html" />
+    <link rel="prev" title="Package Dependencies" href="../installation/dependencies.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> LaTOM
+          
+
+          
+            
+            <img src="../_static/LaTOM_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/analyzer.html">Analyzers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/data.html">Data Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/guess.html">Initial Guesses Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nlp.html">NLPs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/odes.html">ODEs Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/plots.html">Plots Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/reader.html">Readers Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/surrogate.html">Surrogate Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/utils.html">Utilities Subpackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/installation_index.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#computation-scripts">Computation scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="computation/two_dim_desc_vertical.html">Two-phases LLO to Moon transfer with vertical touchdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/llo2apo_continuation.html">LLO to Apoapsis with Continuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/two_dim_llo2heo.html">Two-dimensional LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/two_dim_desc.html">Two-dimensional LLO to Moon transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/smt_surf2llo.html">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computation/om_mm_surf2llo.html">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#visualization-scripts">Visualization scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualization/two_dim_asc_reader.html">Two-dimensional Moon to LLO transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/two_dim_llo2heo_visu.html">Two-dimensional, three-phases LLO to HEO transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/smt_visu.html">SMT Surrogate Model visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/llo2heo_cont_visu.html">LLO to Apoapsis transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/om_mm_visu.html">OpenMDAO MetaModel visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/smt_old.html">SMT Surrogate Model visualization (Deprecated)</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LaTOM</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Example scripts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="example-scripts">
+<span id="sphx-glr-examples"></span><h1>Example scripts<a class="headerlink" href="#example-scripts" title="Permalink to this headline">¶</a></h1>
+<p>Example scripts to understand the usage of LaTOM</p>
+<div class="sphx-glr-clear"></div></div>
+<div class="section" id="computation-scripts">
+<span id="sphx-glr-examples-computation"></span><h1>Computation scripts<a class="headerlink" href="#computation-scripts" title="Permalink to this headline">¶</a></h1>
+<p>Example scripts to compute new optimal transfers or surrogate models</p>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id1">
+<img alt="../_images/sphx_glr_two_dim_desc_vertical_thumb.png" src="../_images/sphx_glr_two_dim_desc_vertical_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/two_dim_desc_vertical.html#sphx-glr-examples-computation-two-dim-desc-vertical-py"><span class="std std-ref">Two-phases LLO to Moon transfer with vertical touchdown</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This examples computes a series of LLO to HEO transfers modeled as an initial finite burn to le..."><div class="figure align-default" id="id2">
+<img alt="../_images/sphx_glr_llo2apo_continuation_thumb.png" src="../_images/sphx_glr_llo2apo_continuation_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/llo2apo_continuation.html#sphx-glr-examples-computation-llo2apo-continuation-py"><span class="std std-ref">LLO to Apoapsis with Continuation</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id3">
+<img alt="../_images/sphx_glr_two_dim_llo2heo_thumb.png" src="../_images/sphx_glr_two_dim_llo2heo_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/two_dim_llo2heo.html#sphx-glr-examples-computation-two-dim-llo2heo-py"><span class="std std-ref">Two-dimensional LLO to HEO transfers</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id4">
+<img alt="../_images/sphx_glr_two_dim_desc_thumb.png" src="../_images/sphx_glr_two_dim_desc_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/two_dim_desc.html#sphx-glr-examples-computation-two-dim-desc-py"><span class="std std-ref">Two-dimensional LLO to Moon transfer</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id5">
+<img alt="../_images/sphx_glr_two_dim_asc_thumb.png" src="../_images/sphx_glr_two_dim_asc_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/two_dim_asc.html#sphx-glr-examples-computation-two-dim-asc-py"><span class="std std-ref">Two-dimensional Moon to LLO transfer</span></a></span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id6">
+<img alt="../_images/sphx_glr_om_mm_llo2heo_thumb.png" src="../_images/sphx_glr_om_mm_llo2heo_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/om_mm_llo2heo.html#sphx-glr-examples-computation-om-mm-llo2heo-py"><span class="std std-ref">OpenMDAO MetaModel for LLO to HEO transfers</span></a></span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id7">
+<img alt="../_images/sphx_glr_smt_surf2llo_thumb.png" src="../_images/sphx_glr_smt_surf2llo_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/smt_surf2llo.html#sphx-glr-examples-computation-smt-surf2llo-py"><span class="std std-ref">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</span></a></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id8">
+<img alt="../_images/sphx_glr_om_mm_surf2llo_thumb.png" src="../_images/sphx_glr_om_mm_surf2llo_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="computation/om_mm_surf2llo.html#sphx-glr-examples-computation-om-mm-surf2llo-py"><span class="std std-ref">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</span></a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div></div>
+<div class="section" id="visualization-scripts">
+<span id="sphx-glr-examples-visualization"></span><h1>Visualization scripts<a class="headerlink" href="#visualization-scripts" title="Permalink to this headline">¶</a></h1>
+<p>Example scripts to load and visualize stored solutions and response surfaces</p>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id9">
+<img alt="../_images/sphx_glr_two_dim_asc_reader_thumb.png" src="../_images/sphx_glr_two_dim_asc_reader_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="visualization/two_dim_asc_reader.html#sphx-glr-examples-visualization-two-dim-asc-reader-py"><span class="std std-ref">Two-dimensional Moon to LLO transfer visualization</span></a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id10">
+<img alt="../_images/sphx_glr_two_dim_llo2heo_visu_thumb.png" src="../_images/sphx_glr_two_dim_llo2heo_visu_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="visualization/two_dim_llo2heo_visu.html#sphx-glr-examples-visualization-two-dim-llo2heo-visu-py"><span class="std std-ref">Two-dimensional, three-phases LLO to HEO transfer visualization</span></a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id11">
+<img alt="../_images/sphx_glr_smt_visu_thumb.png" src="../_images/sphx_glr_smt_visu_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="visualization/smt_visu.html#sphx-glr-examples-visualization-smt-visu-py"><span class="std std-ref">SMT Surrogate Model visualization</span></a></span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id12">
+<img alt="../_images/sphx_glr_llo2heo_cont_visu_thumb.png" src="../_images/sphx_glr_llo2heo_cont_visu_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="visualization/llo2heo_cont_visu.html#sphx-glr-examples-visualization-llo2heo-cont-visu-py"><span class="std std-ref">LLO to Apoapsis transfer visualization</span></a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This examples loads an OpenMDAO MetaModel stored in latom.data.metamodels, predicts additional ..."><div class="figure align-default" id="id13">
+<img alt="../_images/sphx_glr_om_mm_visu_thumb.png" src="../_images/sphx_glr_om_mm_visu_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="visualization/om_mm_visu.html#sphx-glr-examples-visualization-om-mm-visu-py"><span class="std std-ref">OpenMDAO MetaModel visualization</span></a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI"><div class="figure align-default" id="id14">
+<img alt="../_images/sphx_glr_smt_old_thumb.png" src="../_images/sphx_glr_smt_old_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="visualization/smt_old.html#sphx-glr-examples-visualization-smt-old-py"><span class="std std-ref">SMT Surrogate Model visualization (Deprecated)</span></a></span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/5faea330401a9b18ba7385bc5e6fa0a7/examples_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">examples_python.zip</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/77856469904fdc4c1e961a81d0422503/examples_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">examples_jupyter.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="computation/two_dim_desc_vertical.html" class="btn btn-neutral float-right" title="Two-phases LLO to Moon transfer with vertical touchdown" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../installation/dependencies.html" class="btn btn-neutral float-left" title="Package Dependencies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alberto Fossa&#39;, Giuliana Elena Miceli
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

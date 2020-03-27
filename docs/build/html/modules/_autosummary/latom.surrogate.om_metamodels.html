@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="latom.surrogate.om_metamodels_llo2heo" href="latom.surrogate.om_metamodels_llo2heo.html" />
@@ -107,6 +108,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../utils.html">Utilities Subpackage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation/installation_index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Example scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html#computation-scripts">Computation scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html#visualization-scripts">Visualization scripts</a></li>
 </ul>
 
             
@@ -381,7 +385,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -406,7 +409,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -560,7 +562,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -609,7 +610,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -703,7 +703,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -852,7 +851,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -1001,7 +999,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -1050,7 +1047,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1144,7 +1140,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -1293,7 +1288,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
@@ -1443,7 +1437,6 @@ allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobat
 <li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
 </ul>
 </dd>
 </dl>
