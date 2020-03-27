@@ -329,11 +329,13 @@ class TwoDimAscConstMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            theta : float
-                Guessed spawn angle [rad]
-            tof : float
-                Guessed time of flight [s]
+
+        Other Parameters
+        ----------------
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
 
         Returns
         -------
@@ -441,11 +443,13 @@ class TwoDimAscVToffMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            alt_safe : float
-                Asymptotic minimum safe altitude [m]
-            slope : float
-                Minimum safe altitude slope close to the launch site [-]
+
+        Other Parameters
+        ----------------
+        alt_safe : float
+            Asymptotic minimum safe altitude [m]
+        slope : float
+            Minimum safe altitude slope close to the launch site [-]
 
         Returns
         -------
@@ -499,13 +503,15 @@ class TwoDimDescConstMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            alt_p : float
-                Periapsis altitude where the final powered descent is initiated [m]
-            theta : float
-                Guessed spawn angle [rad]
-            tof : float
-                Guessed time of flight [s]
+
+        Other Parameters
+        ----------------
+        alt_p : float
+            Periapsis altitude where the final powered descent is initiated [m]
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
 
         Returns
         -------
@@ -627,11 +633,13 @@ class TwoDimDescVLandMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            alt_safe : float
-                Asymptotic minimum safe altitude [m]
-            slope : float
-                Minimum safe altitude slope close to the launch site [-]
+
+        Other Parameters
+        ----------------
+        alt_safe : float
+            Asymptotic minimum safe altitude [m]
+        slope : float
+            Minimum safe altitude slope close to the launch site [-]
 
         Returns
         -------
@@ -682,17 +690,19 @@ class TwoDimDescTwoPhasesMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            alt_p : float
-                Periapsis altitude where the powered descent is initiated [m]
-            alt_switch : float
-                Altitude at which the final vertical descent is triggered [m]
-            theta : float
-                Guessed spawn angle [rad]
-            tof : float
-                Guessed time of flight [s]
-            fix : str
-                ``alt`` if the vertical phase is triggered at a fixed altitude, ``time`` for a fixed time-to-go
+
+        Other Parameters
+        ----------------
+        alt_p : float
+            Periapsis altitude where the powered descent is initiated [m]
+        alt_switch : float
+            Altitude at which the final vertical descent is triggered [m]
+        theta : float
+            Guessed spawn angle [rad]
+        tof : float
+            Guessed time of flight [s]
+        fix : str
+            ``alt`` if the vertical phase is triggered at a fixed altitude, ``time`` for a fixed time-to-go
 
         Returns
         -------

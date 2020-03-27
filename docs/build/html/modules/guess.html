@@ -509,15 +509,12 @@ surface to a circular Low Lunar Orbit.</p>
 <dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+<dd class="field-odd"><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p></li>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
 </ul>
 </dd>
 </dl>
@@ -556,15 +553,12 @@ transfer and a second powered phase at constant radius equal to the LLO one.</p>
 <dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+<dd class="field-odd"><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p></li>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
 </ul>
 </dd>
 </dl>
@@ -603,15 +597,12 @@ transfer and a second powered phase at constant radius equal to the Moon one.</p
 <dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+<dd class="field-odd"><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p></li>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
 </ul>
 </dd>
 </dl>
@@ -645,14 +636,11 @@ transfer and a second powered phase at constant radius equal to the Moon one.</p
 <code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/guess/guess_heo_2d.html#TwoDimHEOGuess.compute_trajectory"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Computes the states and controls timeseries on the provided time grid.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
-</dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p>
+<dt class="field-odd">Other Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -694,13 +682,12 @@ and an impulsive burn at the HEO apoapsis.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>throttle</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> replace the spacecraft states on the last node with the ones from <cite>ImpulsiveBurn</cite></p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+</ul>
 </dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p></li>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
 </ul>
 </dd>
 </dl>
@@ -739,14 +726,11 @@ at constant radius equal to the LLO one.</p>
 <code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/guess/guess_heo_2d.html#TwoDimHEO2LLOGuess.compute_trajectory"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Computes the states and controls timeseries on the provided time grid.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
-</dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p>
+<dt class="field-odd">Other Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -786,15 +770,12 @@ intermediate Hohmann transfer and a second powered phase at constant radius equa
 <dd><p>Computes the states and controls time series for a given time vector or number of equally space nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>t_eval<span class="classifier">ndarray</span></dt><dd><p>Time vector in which states and controls are computed [s]</p>
+<dd class="field-odd"><p><strong>fix_final</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the final angle is fixed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
-<dt>nb_nodes<span class="classifier">int</span></dt><dd><p>Number of equally space nodes in time in which states and controls are computed</p>
-</dd>
-</dl>
-</p></li>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>t_eval</strong> (<em>ndarray</em>) – Time vector in which states and controls are computed [s]</p></li>
+<li><p><strong>nb_nodes</strong> (<em>int</em>) – Number of equally space nodes in time in which states and controls are computed</p></li>
 </ul>
 </dd>
 </dl>

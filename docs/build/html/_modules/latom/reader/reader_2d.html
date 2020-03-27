@@ -171,6 +171,59 @@
 
 
 <div class="viewcode-block" id="TwoDimReader"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader_2d.TwoDimReader">[docs]</a><span class="k">class</span> <span class="nc">TwoDimReader</span><span class="p">(</span><span class="n">Reader</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimReader` class loads and displays a stored simulation corresponding to a single-phase, two-dimensional</span>
+<span class="sd">    transfer trajectory using an OpenMDAO `CaseReader` class instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kind : iterable</span>
+<span class="sd">        List of three parameters to define the characteristics of the solution to be loaded in the form</span>
+<span class="sd">        ``ascent/descent``, ``const/variable`` and ``True/False`` where the last corresponds to the presence of a path</span>
+<span class="sd">        constraint to impose a minimum safe altitude on the simulated transfer</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Central attracting body</span>
+<span class="sd">    db : str</span>
+<span class="sd">        Full path of the database where the solution is stored</span>
+<span class="sd">    case_id : str, optional</span>
+<span class="sd">        Case identifier, ``initial`` to load the first iteration, ``final`` to load the final solution.</span>
+<span class="sd">        Default is ``final``</span>
+<span class="sd">    db_exp : str or ``None``, optional</span>
+<span class="sd">        Full path of the database where the explicit simulation is stored or ``None``. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kind : iterable</span>
+<span class="sd">        List of three parameters to define the characteristics of the solution to be loaded in the form</span>
+<span class="sd">        ``ascent/descent``, ``const/variable`` and ``True/False`` where the last corresponds to the presence of a path</span>
+<span class="sd">        constraint to impose a minimum safe altitude on the simulated transfer</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Central attracting body</span>
+<span class="sd">    phase_name : str</span>
+<span class="sd">        Name of the simulated phase within the OpenMDAO `Problem` class instance</span>
+<span class="sd">    states_scalers : ndarray</span>
+<span class="sd">        Scaling parameters for distances, angles, velocities and mass</span>
+<span class="sd">    tof : float</span>
+<span class="sd">        Time of flight for the implicit solution [s]</span>
+<span class="sd">    time : ndarray</span>
+<span class="sd">        Time vector for the implicit solution [s]</span>
+<span class="sd">    states : ndarray</span>
+<span class="sd">        States time series for the implicit solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : ndarray</span>
+<span class="sd">        Controls variables time series for the implicit solution as `[thrust, alpha]`</span>
+<span class="sd">    r_safe : ndarray or ``None``</span>
+<span class="sd">        Minimum altitude constraint time series for the implicit solution [m] or ``None``</span>
+<span class="sd">    tof_exp : float or ``None``</span>
+<span class="sd">        Time of flight for the explicit simulation [s] or ``None``</span>
+<span class="sd">    time_exp : ndarray or ``None``</span>
+<span class="sd">        Time vector for the explicit simulation [s] or ``None``</span>
+<span class="sd">    states_exp : ndarray or ``None``</span>
+<span class="sd">        States time series for the explicit simulation as `[r, theta, u, v, m]` or ``None``</span>
+<span class="sd">    controls_exp : ndarray or ``None``</span>
+<span class="sd">        Controls variables time series for the explicit simulation as `[thrust, alpha]` or ``None``</span>
+<span class="sd">    r_safe_exp : ndarray or ``None``</span>
+<span class="sd">        Minimum altitude constraint time series for the explicit simulation [m] or ``None``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">case_id</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">db_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
@@ -181,9 +234,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">=</span> <span class="s1">&#39;traj.powered.timeseries&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states_scalers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">vc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">vc</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 
+        <span class="c1"># implicit NLP solution</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_safe</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">get_time_series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">case</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
 
+        <span class="c1"># explicit simulation</span>
         <span class="k">if</span> <span class="n">db_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tof_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls_exp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_safe_exp</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_time_series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">case_exp</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
@@ -191,18 +246,48 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tof_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_safe_exp</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="TwoDimReader.get_time_series"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader_2d.TwoDimReader.get_time_series">[docs]</a>    <span class="k">def</span> <span class="nf">get_time_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">case</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the time of flight, time vector and states, controls and minimum safe altitude time series for</span>
+<span class="sd">        the specified `case` and `kind` of transfer.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        case : Case</span>
+<span class="sd">            OpenMDAO `Case` object</span>
+<span class="sd">        kind : iterable</span>
+<span class="sd">            List of three parameters to define the characteristics of the solution to be loaded in the form</span>
+<span class="sd">            ``ascent/descent``, ``const/variable`` and ``True/False`` where the last corresponds to the presence of a</span>
+<span class="sd">            path constraint to impose a minimum safe altitude on the simulated transfer</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Time of flight for the given `Case` [s]</span>
+<span class="sd">        time : ndarray</span>
+<span class="sd">            Time vector for the given `Case` [s]</span>
+<span class="sd">        states : ndarray</span>
+<span class="sd">            States time series for the given `Case` as `[r, theta, u, v, m]`</span>
+<span class="sd">        controls : ndarray</span>
+<span class="sd">            Controls variables time series for the given `Case` as `[thrust, alpha]`</span>
+<span class="sd">        r_safe : ndarray or ``None``</span>
+<span class="sd">            Minimum altitude constraint time series for the given `Case` [m] or ``None``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># dimensional time vector and time of flight</span>
         <span class="n">time</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.time&#39;</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">tc</span>
         <span class="n">tof</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="c1"># non-dimensional states</span>
         <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">states_2d</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.states:&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
             <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
+        <span class="c1"># dimensional states</span>
         <span class="n">states</span> <span class="o">=</span> <span class="n">states</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">states_scalers</span>
 
+        <span class="c1"># non-dimensional controls</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.controls:alpha&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">kind</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;const&#39;</span><span class="p">:</span>
@@ -212,8 +297,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;the second element of kind must be const or variable&#39;</span><span class="p">)</span>
 
-        <span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">thrust</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="o">*</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="p">))</span>
+        <span class="c1"># dimensional controls</span>
+        <span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">thrust</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">g</span><span class="o">*</span><span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="p">))</span>
 
+        <span class="c1"># dimensional minimum safe altitude</span>
         <span class="k">if</span> <span class="n">kind</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
             <span class="n">r_safe</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span> <span class="o">+</span> <span class="s1">&#39;.r_safe&#39;</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">R</span>
         <span class="k">else</span><span class="p">:</span>
@@ -222,6 +309,7 @@
         <span class="k">return</span> <span class="n">tof</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">r_safe</span></div>
 
 <div class="viewcode-block" id="TwoDimReader.plot"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader_2d.TwoDimReader.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the optimal transfer trajectory corresponding to the loaded `Case`. &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;const&#39;</span><span class="p">:</span>
             <span class="n">threshold</span> <span class="o">=</span> <span class="kc">None</span>

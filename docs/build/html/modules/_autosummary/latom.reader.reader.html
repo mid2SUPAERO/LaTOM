@@ -194,7 +194,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.reader.reader.Reader" title="latom.reader.reader.Reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reader</span></code></a>(db[, case_id, db_exp])</p></td>
-<td><p></p></td>
+<td><p><cite>Reader</cite> class loads and displays stored simulations using an OpenMDAO <cite>CaseReader</cite> class instance.</p></td>
 </tr>
 </tbody>
 </table>
@@ -202,6 +202,26 @@
 <dt id="latom.reader.reader.Reader">
 <em class="property">class </em><code class="sig-prename descclassname">latom.reader.reader.</code><code class="sig-name descname">Reader</code><span class="sig-paren">(</span><em class="sig-param">db</em>, <em class="sig-param">case_id='final'</em>, <em class="sig-param">db_exp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/reader/reader.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.reader.reader.Reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><cite>Reader</cite> class loads and displays stored simulations using an OpenMDAO <cite>CaseReader</cite> class instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<em>str</em>) – Full path of the database where the solution is stored</p></li>
+<li><p><strong>case_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Case identifier, <code class="docutils literal notranslate"><span class="pre">initial</span></code> to load the first iteration, <code class="docutils literal notranslate"><span class="pre">final</span></code> to load the final solution.
+Default is <code class="docutils literal notranslate"><span class="pre">final</span></code></p></li>
+<li><p><strong>db_exp</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Full path of the database where the explicit simulation is stored or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>case_reader</strong> (<em>CaseReader</em>) – OpenMDAO <cite>CaseReader</cite> class instance for the implicit solution</p></li>
+<li><p><strong>case_id</strong> (<em>str</em>) – Case identifier, <code class="docutils literal notranslate"><span class="pre">initial</span></code> to load the first iteration, <code class="docutils literal notranslate"><span class="pre">final</span></code> to load the final solution.</p></li>
+<li><p><strong>case</strong> (Case or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – OpenMDAO <cite>Case</cite> class instance identified by <cite>case_id</cite> within the <cite>case_reader</cite> object</p></li>
+<li><p><strong>case_reader_exp</strong> (CaseReader or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – OpenMDAO <cite>CaseReader</cite> class instance for the explicit simulation or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>case</strong> – OpenMDAO <cite>Case</cite> class instance identified by <cite>case_id</cite> within the <cite>case_reader_exp</cite> object or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

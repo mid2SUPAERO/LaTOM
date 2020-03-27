@@ -179,32 +179,32 @@
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">ODE2dThrust</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ODE2dThrust class defines the equations of motion for a two dim. powered trajectory.</span>
+    <span class="sd">&quot;&quot;&quot;`ODE2dThrust` class defines the equations of motion for a two dim. powered trajectory.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
-<span class="sd">    time : float</span>
+<span class="sd">    time : ndarray</span>
 <span class="sd">        Represents the time variable of the system [-]</span>
-<span class="sd">    r : float</span>
+<span class="sd">    r : ndarray</span>
 <span class="sd">        Represents a position along the trajectory. The distance is measured from the center of the central body [-]</span>
-<span class="sd">    theta : float</span>
+<span class="sd">    theta : ndarray</span>
 <span class="sd">        Angle spawn from the starting point of the orbit to the final one [-]</span>
-<span class="sd">    u : float</span>
+<span class="sd">    u : ndarray</span>
 <span class="sd">        Radial velocity of a point along the trajectory [-]</span>
-<span class="sd">    v : float</span>
+<span class="sd">    v : ndarray</span>
 <span class="sd">        Tangential velocity of a point along the trajectory [-]</span>
-<span class="sd">    m : float</span>
+<span class="sd">    m : ndarray</span>
 <span class="sd">        Mass of the space vehicle that performs the trajectory [-]</span>
-<span class="sd">    alpha : float</span>
+<span class="sd">    alpha : ndarray</span>
 <span class="sd">        Angle defining the thrust direction [-]</span>
-<span class="sd">    thrust : float</span>
+<span class="sd">    thrust : ndarray</span>
 <span class="sd">        Value of the applied thrust force [-]</span>
 <span class="sd">    w : float</span>
 <span class="sd">        Value of the exhaust velocity [-]</span>
 <span class="sd">    num_nodes : int</span>
 <span class="sd">        Number of nodes where to compute the equations</span>
 <span class="sd">    GM : float</span>
-<span class="sd">        Gravitational constant [-]</span>
+<span class="sd">        Standard gravitational parameter for the central attracting body [-]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -216,7 +216,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dThrust.setup"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dThrust.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Setup of ODE2dThrust parameters. Declaration of input, output and partials variables. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Setup of `ODE2dThrust` parameters. Declaration of input, output and partials variables. &quot;&quot;&quot;</span>
 
         <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
         <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
@@ -262,7 +262,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dThrust.compute"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dThrust.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the output variables &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compute the output variables. &quot;&quot;&quot;</span>
 
         <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
 
@@ -284,7 +284,7 @@
         <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">w</span></div>
 
 <div class="viewcode-block" id="ODE2dThrust.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dThrust.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the partial derivatives variables &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compute the partial derivatives variables. &quot;&quot;&quot;</span>
 
         <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
 
@@ -320,32 +320,32 @@
 
 
 <div class="viewcode-block" id="ODE2dConstThrust"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dConstThrust">[docs]</a><span class="k">class</span> <span class="nc">ODE2dConstThrust</span><span class="p">(</span><span class="n">ODE2dThrust</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with constant thrust.</span>
+    <span class="sd">&quot;&quot;&quot;`ODE2dConstThrust` class defines the equations of motion for a two dim. powered trajectory with constant thrust.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
-<span class="sd">    time : float</span>
+<span class="sd">    time : ndarray</span>
 <span class="sd">        Represents the time variable of the system [-]</span>
-<span class="sd">    r : float</span>
+<span class="sd">    r : ndarray</span>
 <span class="sd">        Represents a position along the trajectory. The distance is measured from the center of the central body [-]</span>
-<span class="sd">    theta : float</span>
+<span class="sd">    theta : ndarray</span>
 <span class="sd">        Angle spawn from the starting point of the orbit to the final one [-]</span>
-<span class="sd">    u : float</span>
+<span class="sd">    u : ndarray</span>
 <span class="sd">        Radial velocity of a point along the trajectory [-]</span>
-<span class="sd">    v : float</span>
+<span class="sd">    v : ndarray</span>
 <span class="sd">        Tangential velocity of a point along the trajectory [-]</span>
-<span class="sd">    m : float</span>
+<span class="sd">    m : ndarray</span>
 <span class="sd">        Mass of the space vehicle that performs the trajectory [-]</span>
-<span class="sd">    alpha : float</span>
+<span class="sd">    alpha : ndarray</span>
 <span class="sd">        Angle defining the thrust direction [-]</span>
-<span class="sd">    thrust : float</span>
+<span class="sd">    thrust : ndarray</span>
 <span class="sd">        Value of the applied thrust force [-]</span>
 <span class="sd">    w : float</span>
 <span class="sd">        Value of the exhaust velocity [-]</span>
 <span class="sd">    num_nodes : int</span>
 <span class="sd">        Number of nodes where to compute the equations</span>
 <span class="sd">    GM : float</span>
-<span class="sd">        Gravitational constant [-]</span>
+<span class="sd">        Standard gravitational parameter for the central attracting body [-]</span>
 <span class="sd">    T : float</span>
 <span class="sd">       Value of the constant thrust force [-]</span>
 
@@ -358,47 +358,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dConstThrust.setup"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dConstThrust.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Setup of ODE2dConstThrust parameters. Declaration of input, output and partials variables.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Setup of ODE2dConstThrust parameters. Declaration of input, output and partials variables. &quot;&quot;&quot;</span>
 
         <span class="n">ODE2dThrust</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ODE2dVarThrust"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dVarThrust">[docs]</a><span class="k">class</span> <span class="nc">ODE2dVarThrust</span><span class="p">(</span><span class="n">ODE2dThrust</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with variable thrust.</span>
+    <span class="sd">&quot;&quot;&quot;`ODE2dVarThrust` class defines the equations of motion for a two dim. powered trajectory with variable thrust.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
-<span class="sd">    time : float</span>
+<span class="sd">    time : ndarray</span>
 <span class="sd">        Represents the time variable of the system [-]</span>
-<span class="sd">    r : float</span>
+<span class="sd">    r : ndarray</span>
 <span class="sd">        Represents a position along the trajectory. The distance is measured from the center of the central body [-]</span>
-<span class="sd">    theta : float</span>
+<span class="sd">    theta : ndarray</span>
 <span class="sd">        Angle spawn from the starting point of the orbit to the final one [-]</span>
-<span class="sd">    u : float</span>
+<span class="sd">    u : ndarray</span>
 <span class="sd">        Radial velocity of a point along the trajectory [-]</span>
-<span class="sd">    v : float</span>
+<span class="sd">    v : ndarray</span>
 <span class="sd">        Tangential velocity of a point along the trajectory [-]</span>
-<span class="sd">    m : float</span>
+<span class="sd">    m : ndarray</span>
 <span class="sd">        Mass of the space vehicle that performs the trajectory [-]</span>
-<span class="sd">    alpha : float</span>
+<span class="sd">    alpha : ndarray</span>
 <span class="sd">        Angle defining the thrust direction [-]</span>
-<span class="sd">    thrust : float</span>
+<span class="sd">    thrust : ndarray</span>
 <span class="sd">        Value of the applied thrust force [-]</span>
 <span class="sd">    w : float</span>
 <span class="sd">        Value of the exhaust velocity [-]</span>
 <span class="sd">    num_nodes : int</span>
 <span class="sd">        Number of nodes where to compute the equations</span>
 <span class="sd">    GM : float</span>
-<span class="sd">        Gravitational constant [-]</span>
+<span class="sd">        Standard gravitational parameter for the central attracting body [-]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ODE2dVarThrust.setup"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dVarThrust.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Setup of `ODE2dVarThrust` parameters. Declaration of input, output and partials variables.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Setup of `ODE2dVarThrust` parameters. Declaration of input, output and partials variables. &quot;&quot;&quot;</span>
 
         <span class="n">ODE2dThrust</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span></div></div>
+
 
 <div class="viewcode-block" id="ODE2dVertical"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dVertical">[docs]</a><span class="nd">@declare_time</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 <span class="nd">@declare_state</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;rdot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
@@ -407,26 +408,26 @@
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;thrust&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thrust&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
 <span class="nd">@declare_parameter</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">ODE2dVertical</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with variable thrust.</span>
+    <span class="sd">&quot;&quot;&quot;`ODE2dVertical` class defines the equations of motion for a two dim. powered trajectory with variable thrust.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
-<span class="sd">    time : float</span>
+<span class="sd">    time : ndarray</span>
 <span class="sd">        Represents the time variable of the system [-]</span>
-<span class="sd">    r : float</span>
+<span class="sd">    r : ndarray</span>
 <span class="sd">        Represents a position along the trajectory. The distance is measured from the center of the central body [-]</span>
-<span class="sd">    u : float</span>
+<span class="sd">    u : ndarray</span>
 <span class="sd">        Radial velocity of a point along the trajectory [-]</span>
-<span class="sd">    m : float</span>
+<span class="sd">    m : ndarray</span>
 <span class="sd">        Mass of the space vehicle that performs the trajectory [-]</span>
-<span class="sd">    thrust : float</span>
+<span class="sd">    thrust : ndarray</span>
 <span class="sd">        Value of the applied thrust force [-]</span>
 <span class="sd">    w : float</span>
 <span class="sd">        Value of the exhaust velocity [-]</span>
 <span class="sd">    num_nodes : int</span>
 <span class="sd">        Number of nodes where to compute the equations</span>
 <span class="sd">    GM : float</span>
-<span class="sd">        Gravitational constant [-]</span>
+<span class="sd">        Standard gravitational parameter for the central attracting body [-]</span>
 <span class="sd">    T : float</span>
 <span class="sd">       Value of the constant thrust force [-]</span>
 
@@ -441,7 +442,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dVertical.setup"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dVertical.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Setup of `ODE2dVertical` parameters. Declaration of input, output and partials variables.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Setup of `ODE2dVertical` parameters. Declaration of input, output and partials variables. &quot;&quot;&quot;</span>
 
         <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 
@@ -468,7 +469,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;mdot&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ODE2dVertical.compute"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dVertical.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the output variables&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compute the output variables. &quot;&quot;&quot;</span>
         <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>
@@ -482,7 +483,7 @@
         <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;mdot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">w</span></div>
 
 <div class="viewcode-block" id="ODE2dVertical.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.ODE2dVertical.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the partial derivative variables&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compute the partial derivative variables. &quot;&quot;&quot;</span>
 
         <span class="n">gm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;GM&#39;</span><span class="p">]</span>
 
@@ -500,30 +501,30 @@
 
 
 <div class="viewcode-block" id="SafeAlt"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.SafeAlt">[docs]</a><span class="k">class</span> <span class="nc">SafeAlt</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;SafeAlt class defines the curve representing geographical constraints on the central body surface</span>
+    <span class="sd">&quot;&quot;&quot;`SafeAlt` class defines the curve representing geographical constraints on the central body surface.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    num_nodes : int</span>
 <span class="sd">        Number of nodes where to compute the equations</span>
 <span class="sd">    R : float</span>
-<span class="sd">        Moon radius [m]</span>
+<span class="sd">        Moon radius [-]</span>
 <span class="sd">    alt_safe : float</span>
 <span class="sd">        Altitude of the curve representing the geographical constraint [-]</span>
 <span class="sd">    slope : float</span>
-<span class="sd">        Slope of the curves defining a geographical constraint</span>
+<span class="sd">        Slope of the curves defining a geographical constraint [-]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SafeAlt.initialize"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.SafeAlt.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Initializes the `SafeAlt` class variables &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the `SafeAlt` class variables. &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;alt_safe&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SafeAlt.setup"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.SafeAlt.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Setup of `SafeAlt` parameters. Declaration of input, output and partials variables.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Setup of `SafeAlt` parameters. Declaration of input, output and partials variables. &quot;&quot;&quot;</span>
 
         <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 
@@ -540,7 +541,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">ar</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SafeAlt.compute"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.SafeAlt.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the output variables&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compute the output variables. &quot;&quot;&quot;</span>
         <span class="n">r_moon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
         <span class="n">alt_safe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;alt_safe&#39;</span><span class="p">]</span>
         <span class="n">slope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span>
@@ -554,7 +555,7 @@
         <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;dist_safe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">r_safe</span></div>
 
 <div class="viewcode-block" id="SafeAlt.compute_partials"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.SafeAlt.compute_partials">[docs]</a>    <span class="k">def</span> <span class="nf">compute_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the partial derivative variables&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compute the partial derivative variables. &quot;&quot;&quot;</span>
         <span class="n">r_moon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
         <span class="n">alt_safe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;alt_safe&#39;</span><span class="p">]</span>
         <span class="n">slope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span>
@@ -568,14 +569,14 @@
 
 
 <div class="viewcode-block" id="Polar2COE"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.Polar2COE">[docs]</a><span class="k">class</span> <span class="nc">Polar2COE</span><span class="p">(</span><span class="n">ExplicitComponent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Polar2COE class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.</span>
+    <span class="sd">&quot;&quot;&quot;`Polar2COE` class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    num_nodes : int</span>
 <span class="sd">            Number of nodes where to compute the equations</span>
 <span class="sd">    GM : float</span>
-<span class="sd">        Gravitational constant [-]</span>
+<span class="sd">        Standard gravitational parameter for the central attracting body [-]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -596,7 +597,7 @@
 
 
 <div class="viewcode-block" id="Polar2RApo"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.Polar2RApo">[docs]</a><span class="k">class</span> <span class="nc">Polar2RApo</span><span class="p">(</span><span class="n">Polar2COE</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.</span>
+    <span class="sd">&quot;&quot;&quot;`Polar2RApo` class defines the set of equations to derive the apoapsis radius from Polar coordinates.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
@@ -662,17 +663,10 @@
 
 
 <div class="viewcode-block" id="Polar2AEH"><a class="viewcode-back" href="../../../modules/odes.html#latom.odes.odes_2d.Polar2AEH">[docs]</a><span class="k">class</span> <span class="nc">Polar2AEH</span><span class="p">(</span><span class="n">Polar2COE</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Polar2AEH class defines the set of equations to derive the a and h from Polar coordinates.</span>
+    <span class="sd">&quot;&quot;&quot;`Polar2AEH` class defines the set of equations to derive the a and h from Polar coordinates.</span>
 
 <span class="sd">    The method computes the semi-major axis a, the specific energy and the angular momentum h starting from the polar</span>
 <span class="sd">    coordinates r, u, v.</span>
-
-<span class="sd">    Other Parameters</span>
-<span class="sd">    ----------------</span>
-<span class="sd">    num_nodes : int</span>
-<span class="sd">            Number of nodes where to compute the equations</span>
-<span class="sd">    GM : float</span>
-<span class="sd">        Gravitational constant [-]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

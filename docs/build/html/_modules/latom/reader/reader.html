@@ -167,6 +167,32 @@
 
 
 <div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;`Reader` class loads and displays stored simulations using an OpenMDAO `CaseReader` class instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : str</span>
+<span class="sd">        Full path of the database where the solution is stored</span>
+<span class="sd">    case_id : str, optional</span>
+<span class="sd">        Case identifier, ``initial`` to load the first iteration, ``final`` to load the final solution.</span>
+<span class="sd">        Default is ``final``</span>
+<span class="sd">    db_exp : str or ``None``, optional</span>
+<span class="sd">        Full path of the database where the explicit simulation is stored or ``None``. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    case_reader : CaseReader</span>
+<span class="sd">        OpenMDAO `CaseReader` class instance for the implicit solution</span>
+<span class="sd">    case_id : str</span>
+<span class="sd">        Case identifier, ``initial`` to load the first iteration, ``final`` to load the final solution.</span>
+<span class="sd">    case : Case</span>
+<span class="sd">        OpenMDAO `Case` class instance identified by `case_id` within the `case_reader` object</span>
+<span class="sd">    case_reader_exp : CaseReader or ``None``</span>
+<span class="sd">        OpenMDAO `CaseReader` class instance for the explicit simulation or ``None``</span>
+<span class="sd">    case : Case or ``None``</span>
+<span class="sd">        OpenMDAO `Case` class instance identified by `case_id` within the `case_reader_exp` object or ``None``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">case_id</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">db_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init Reader class. &quot;&quot;&quot;</span>
@@ -183,7 +209,9 @@
         <span class="c1"># explicit simulation</span>
         <span class="k">if</span> <span class="n">db_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">case_reader_exp</span> <span class="o">=</span> <span class="n">CaseReader</span><span class="p">(</span><span class="n">db_exp</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">case_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">case_reader_exp</span><span class="o">.</span><span class="n">get_case</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">case_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">case_reader_exp</span><span class="o">.</span><span class="n">get_case</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">case_reader_exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">case_exp</span> <span class="o">=</span> <span class="kc">None</span></div>
 </pre></div>
 
            </div>

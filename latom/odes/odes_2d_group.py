@@ -19,42 +19,43 @@ from latom.odes.odes_2d import ODE2dConstThrust, ODE2dVarThrust, SafeAlt, Polar2
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dVToff(Group):
+    """`ODE2dVToff` class defines the equations of motion for a two dim. powered trajectory with vertical take-off.
+
+    Other Parameters
+    ----------------
+    time : ndarray
+        Represents the time variable of the system [-]
+    r : ndarray
+        Represents a position along the trajectory. The distance is measured from the center of the central body [-]
+    theta : ndarray
+        Angle spawn from the starting point of the orbit to the final one [-]
+    u : ndarray
+        Radial velocity of a point along the trajectory [-]
+    v : ndarray
+        Tangential velocity of a point along the trajectory [-]
+    m : ndarray
+        Mass of the space vehicle that performs the trajectory [-]
+    alpha : ndarray
+        Angle defining the thrust direction [-]
+    thrust : ndarray
+        Value of the applied thrust force [-]
+    w : float
+        Value of the exhaust velocity [-]
+    num_nodes : int
+        Number of nodes where to compute the equations
+    GM : float
+        Standard gravitational parameter for the central attracting body [-]
+    R : float
+        Moon radius [-]
+    alt_safe : float
+        Altitude of the curve representing the geographical constraint [-]
+    slope : float
+        Slope of the curves defining a geographical constraint [-]
+
+    """
 
     def initialize(self):
-        """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take-off.
-
-        Other Parameters
-        ----------------
-        time : float
-            Represents the time variable of the system [-]
-        r : float
-            Represents a position along the trajectory. The distance is measured from the center of the central body [-]
-        theta : float
-            Angle spawn from the starting point of the orbit to the final one [-]
-        u : float
-            Radial velocity of a point along the trajectory [-]
-        v : float
-            Tangential velocity of a point along the trajectry [-]
-        m : float
-            Mass of the space vehicle that performs the trajectory [-]
-        alpha : float
-            Angle defining the thrust direction [-]
-        thrust : float
-            Value of the applied thrust force [-]
-        w : float
-            Value of the exhaust velocity [-]
-        num_nodes : int
-            Number of nodes where to compute the equations
-        GM : float
-            Gravitational constant [-]
-        R : float
-            Moon radius [-]
-        alt_safe : float
-            Altitude of the curve representing the geographical constraint [-]
-        slope : float
-            Slope of the curves defining a geographical constraint
-
-        """
+        """Initializes the `ODE2dVToff` class variables. """
 
         self.options.declare('num_nodes', types=int)
 
@@ -90,36 +91,38 @@ class ODE2dVToff(Group):
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2Apo(Group):
-    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with insertion at apoapsis.
+    """`ODE2dLLO2Apo` class defines the equations of motion for a two dim. powered trajectory to leave the intial LLO
+    and enter a ballistic arc with apoapsis radius equal to `ra`.
 
     Other Parameters
     ----------------
-    time : float
+    time : ndarray
         Represents the time variable of the system [-]
-    r : float
+    r : ndarray
         Represents a position along the trajectory. The distance is measured from the center of the central body [-]
-    theta : float
+    theta : ndarray
         Angle spawn from the starting point of the orbit to the final one [-]
-    u : float
+    u : ndarray
         Radial velocity of a point along the trajectory [-]
-    v : float
-        Tangential velocity of a point along the trajectry [-]
-    m : float
+    v : ndarray
+        Tangential velocity of a point along the trajectory [-]
+    m : ndarray
         Mass of the space vehicle that performs the trajectory [-]
-    alpha : float
+    alpha : ndarray
         Angle defining the thrust direction [-]
-    thrust : float
+    thrust : ndarray
         Value of the applied thrust force [-]
     w : float
         Value of the exhaust velocity [-]
     num_nodes : int
         Number of nodes where to compute the equations
     GM : float
-        Gravitational constant [-]
+        Standard gravitational parameter for the central attracting body [-]
     T : float
        Value of the constant thrust force [-]
     ra : float
         Value of the apoapsis radius [-]
+
     """
 
     def initialize(self):
@@ -156,32 +159,32 @@ class ODE2dLLO2Apo(Group):
 @declare_parameter('thrust', targets=['thrust'], units='N')
 @declare_parameter('w', targets=['w'], units='m/s')
 class ODE2dLLO2HEO(Group):
-    """ODE2dThrust class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.
+    """ODE2dLLO2HEO class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.
 
     Other Parameters
     ----------------
-    time : float
+    time : ndarray
         Represents the time variable of the system [-]
-    r : float
+    r : ndarray
         Represents a position along the trajectory. The distance is measured from the center of the central body [-]
-    theta : float
+    theta : ndarray
         Angle spawn from the starting point of the orbit to the final one [-]
-    u : float
+    u : ndarray
         Radial velocity of a point along the trajectory [-]
-    v : float
-        Tangential velocity of a point along the trajectry [-]
-    m : float
+    v : ndarray
+        Tangential velocity of a point along the trajectory [-]
+    m : ndarray
         Mass of the space vehicle that performs the trajectory [-]
-    alpha : float
+    alpha : ndarray
         Angle defining the thrust direction [-]
-    thrust : float
+    thrust : ndarray
         Value of the applied thrust force [-]
     w : float
         Value of the exhaust velocity [-]
     num_nodes : int
         Number of nodes where to compute the equations
     GM : float
-        Gravitational constant [-]
+        Standard gravitational parameter for the central attracting body [-]
     T : float
        Value of the constant thrust force [-]
 

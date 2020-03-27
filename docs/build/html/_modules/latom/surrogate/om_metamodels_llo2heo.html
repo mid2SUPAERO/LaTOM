@@ -174,9 +174,55 @@
 
 
 <div class="viewcode-block" id="TwoDimLLO2ApoMetaModel"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLO2ApoMetaModel</span><span class="p">(</span><span class="n">MetaModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimLLO2ApoMetaModel` implements `MetaModel` for a two-dimensional escape burn from an LLO to an intermediate</span>
+<span class="sd">    ballistic arc to reach the specified HEO apoapsis radius.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoMetaModel.solve"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.solve">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Solve the NLP for the i-th `twr` and k-th `Isp` values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        sc : Spacecraft</span>
+<span class="sd">            Spacecraft object characterized by the i-th `twr` and k-th `Isp` values</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int</span>
+<span class="sd">            Number of segments in which the phase is discretized</span>
+<span class="sd">        order : int</span>
+<span class="sd">            Transcription order within the phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``None``</span>
+
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        rp : float</span>
+<span class="sd">            HEO periapsis radius [m]</span>
+<span class="sd">        t : float</span>
+<span class="sd">            HEO period [s]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        m_prop : float</span>
+<span class="sd">            Propellant fraction [-]</span>
+<span class="sd">        f : bool</span>
+<span class="sd">            Failure status</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">tr</span> <span class="o">=</span> <span class="n">TwoDimLLO2ApoAnalyzer</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rp&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span>
                                    <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">)</span>
@@ -191,6 +237,36 @@
 
 
 <div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel">[docs]</a><span class="k">class</span> <span class="nc">TwoDimLLO2ApoContinuationMetaModel</span><span class="p">(</span><span class="n">MetaModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimLLO2ApoContinuationMetaModel` implements `MetaModel` for a two-dimensional escape burn from an LLO to an</span>
+<span class="sd">    intermediate ballistic arc to reach the specified HEO apoapsis radius.</span>
+
+<span class="sd">    For each `Isp` value in the sampling grid, the training data are computed using a continuation method for decreasing</span>
+<span class="sd">    `twr` values.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    distributed : bool, optional</span>
+<span class="sd">        ``True`` if the component has variables that are distributed across multiple processes, ``False`` otherwise.</span>
+<span class="sd">        Default is ``False``</span>
+<span class="sd">    extrapolate : bool, optional</span>
+<span class="sd">        Sets whether extrapolation should be performed when an input is out of bounds. Default is ``False``</span>
+<span class="sd">    method : str, optional</span>
+<span class="sd">        Spline interpolation method to use for all outputs among ``cubic``, ``slinear``, ``lagrange2``, ``lagrange3``,</span>
+<span class="sd">        ``akima``, ``scipy_cubic``, ``scipy_slinear``, ``scipy_quintic``. Default is ``scipy_cubic``</span>
+<span class="sd">    training_data_gradients : bool, optional</span>
+<span class="sd">        Sets whether gradients with respect to output training data should be computed. Default is ``True``</span>
+<span class="sd">    vec_size : int, optional</span>
+<span class="sd">        Number of points to evaluate at once. Default is ``1``</span>
+<span class="sd">    rec_file : str or ``None``, optional</span>
+<span class="sd">        Name of the file in `latom.data.metamodels` where the meta model is stored or ``None`` if a new model has to</span>
+<span class="sd">        be built. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    energy : ndarray</span>
+<span class="sd">        Spacecraft specific energy at the end of the transfer on all training points [m^2/s^2]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extrapolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;scipy_cubic&#39;</span><span class="p">,</span> <span class="n">training_data_gradients</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">vec_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -201,22 +277,93 @@
                            <span class="n">training_data_gradients</span><span class="o">=</span><span class="n">training_data_gradients</span><span class="p">,</span> <span class="n">vec_size</span><span class="o">=</span><span class="n">vec_size</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel.load"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads stored data to instantiate a meta model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rec_file : str</span>
+<span class="sd">            Name of the file in `latom.data.metamodels` where the meta model is stored</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">MetaModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;energy&#39;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel.save"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves data corresponding to a meta model instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rec_file : str</span>
+<span class="sd">            Name of the file in `latom.data.metamodels` where the meta model is stored</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Isp&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">,</span> <span class="s1">&#39;twr&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">twr</span><span class="p">,</span> <span class="s1">&#39;m_prop&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_prop</span><span class="p">,</span> <span class="s1">&#39;failures&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">,</span> <span class="s1">&#39;energy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">}</span>
         <span class="n">save</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">abs_path</span><span class="p">(</span><span class="n">rec_file</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel.compute_grid"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.compute_grid">[docs]</a>    <span class="k">def</span> <span class="nf">compute_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes a regular sampling grid in the input space `twr, Isp`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Number of samples along the `twr` and `Isp` axes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">MetaModel</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_samp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">u_bound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Number of samples along the `twr` and `Isp` axes</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``None``</span>
+<span class="sd">        rec_file : str, optional</span>
+<span class="sd">            Name of the file in `latom.data.metamodels` where the meta model will be stored. Default is ``None``</span>
+
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        rp : float</span>
+<span class="sd">            HEO periapsis radius [m]</span>
+<span class="sd">        t : float</span>
+<span class="sd">            HEO period [s]</span>
+<span class="sd">        log_scale : bool</span>
+<span class="sd">            ``True`` if `twr` values are given in logarithmic scale as `log(twr)`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">twr_lim</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">)</span>
         <span class="n">twr_flip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">twr</span><span class="p">)</span>
@@ -241,18 +388,79 @@
         <span class="k">if</span> <span class="n">rec_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">rec_file</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel.plot"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="TwoDimLLO2ApoContinuationMetaModel.plot"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;prop&#39;</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the response surface corresponding to the loaded meta model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_lines : int, optional</span>
+<span class="sd">            Number of contour lines. Default is ``50``</span>
+<span class="sd">        kind : str</span>
+<span class="sd">            ``prop`` to display the propellant fraction `m_prop`, ``final`` to display the final spacecraft mass</span>
+<span class="sd">            `1 - m_prop`</span>
+<span class="sd">        log_scale : bool, optional</span>
+<span class="sd">            Set to ``True`` if the `twr` values are in logarithmic scale. Default is ``False``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">en</span> <span class="o">=</span> <span class="n">RespSurf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Isp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">twr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="s1">&#39;Specific energy [m^2/s^2]&#39;</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="n">nb_lines</span><span class="p">,</span>
                       <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">)</span>
         <span class="n">en</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">MetaModel</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="n">nb_lines</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">)</span></div></div>
+        <span class="n">MetaModel</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="n">nb_lines</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEOMetaModel"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel">[docs]</a><span class="k">class</span> <span class="nc">TwoDim3PhasesLLO2HEOMetaModel</span><span class="p">(</span><span class="n">MetaModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDim3PhasesLLO2HEOMetaModel` implements `MetaModel` for a two-dimensional transfer from an LLO to an HEO</span>
+<span class="sd">    modeled as a three-phases trajectory.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEOMetaModel.solve"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.solve">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Solve the NLP for the i-th `twr` and k-th `Isp` values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        sc : Spacecraft</span>
+<span class="sd">            Spacecraft object characterized by the i-th `twr` and k-th `Isp` values</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int</span>
+<span class="sd">            Number of segments in which the phase is discretized</span>
+<span class="sd">        order : int</span>
+<span class="sd">            Transcription order within the phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``None``</span>
+
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        rp : float</span>
+<span class="sd">            HEO periapsis radius [m]</span>
+<span class="sd">        t : float</span>
+<span class="sd">            HEO period [s]</span>
+<span class="sd">        phase_name : iterable</span>
+<span class="sd">            Names for the three phases within OpenMDAO</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        m_prop : float</span>
+<span class="sd">            Propellant fraction [-]</span>
+<span class="sd">        f : bool</span>
+<span class="sd">            Failure status</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">nlp</span> <span class="o">=</span> <span class="n">TwoDim3PhasesLLO2HEONLP</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rp&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
                                       <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;phase_name&#39;</span><span class="p">],</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">)</span>

@@ -175,11 +175,11 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance Diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<div class="graphviz"><img src="../_images/inheritance-7ac79300a75b928bc05e947c885620ef3ba2de30.png" alt="Inheritance diagram of latom.reader.reader_2d, latom.reader.reader_heo_2d" usemap="#inheritanceffe33878b9" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../_images/inheritance-085eb744ef2d183f89685b76b47c510b710cb984.png" alt="Inheritance diagram of latom.reader.reader_2d, latom.reader.reader_heo_2d" usemap="#inheritanceffe33878b9" class="inheritance graphviz" /></div>
 <map id="inheritanceffe33878b9" name="inheritanceffe33878b9">
-<area shape="rect" id="node1" href="_autosummary/latom.reader.reader.html#latom.reader.reader.Reader" target="_top" title="Reader" alt="" coords="5,31,77,56"/>
-<area shape="rect" id="node2" href="_autosummary/latom.reader.reader_heo_2d.html#latom.reader.reader_heo_2d.TwoDim3PhasesLLO2HEOReader" target="_top" title="TwoDim3PhasesLLO2HEOReader" alt="" coords="125,5,359,31"/>
-<area shape="rect" id="node3" href="_autosummary/latom.reader.reader_2d.html#latom.reader.reader_2d.TwoDimReader" target="_top" title="TwoDimReader" alt="" coords="183,55,301,80"/>
+<area shape="rect" id="node1" href="_autosummary/latom.reader.reader.html#latom.reader.reader.Reader" target="_top" title="`Reader` class loads and displays stored simulations using an OpenMDAO `CaseReader` class instance." alt="" coords="5,31,77,56"/>
+<area shape="rect" id="node2" href="_autosummary/latom.reader.reader_heo_2d.html#latom.reader.reader_heo_2d.TwoDim3PhasesLLO2HEOReader" target="_top" title="`TwoDim3PhasesLLO2HEOReader` class loads and displays a stored simulation corresponding to a three&#45;phases" alt="" coords="125,5,359,31"/>
+<area shape="rect" id="node3" href="_autosummary/latom.reader.reader_2d.html#latom.reader.reader_2d.TwoDimReader" target="_top" title="`TwoDimReader` class loads and displays a stored simulation corresponding to a single&#45;phase, two&#45;dimensional" alt="" coords="183,55,301,80"/>
 </map></div>
 <div class="section" id="modules-list">
 <h2>Modules List<a class="headerlink" href="#modules-list" title="Permalink to this headline">¶</a></h2>
@@ -208,6 +208,26 @@
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">latom.reader.reader.</code><code class="sig-name descname">Reader</code><span class="sig-paren">(</span><em class="sig-param">db</em>, <em class="sig-param">case_id='final'</em>, <em class="sig-param">db_exp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader.html#Reader"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><cite>Reader</cite> class loads and displays stored simulations using an OpenMDAO <cite>CaseReader</cite> class instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<em>str</em>) – Full path of the database where the solution is stored</p></li>
+<li><p><strong>case_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Case identifier, <code class="docutils literal notranslate"><span class="pre">initial</span></code> to load the first iteration, <code class="docutils literal notranslate"><span class="pre">final</span></code> to load the final solution.
+Default is <code class="docutils literal notranslate"><span class="pre">final</span></code></p></li>
+<li><p><strong>db_exp</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Full path of the database where the explicit simulation is stored or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>case_reader</strong> (<em>CaseReader</em>) – OpenMDAO <cite>CaseReader</cite> class instance for the implicit solution</p></li>
+<li><p><strong>case_id</strong> (<em>str</em>) – Case identifier, <code class="docutils literal notranslate"><span class="pre">initial</span></code> to load the first iteration, <code class="docutils literal notranslate"><span class="pre">final</span></code> to load the final solution.</p></li>
+<li><p><strong>case</strong> (Case or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – OpenMDAO <cite>Case</cite> class instance identified by <cite>case_id</cite> within the <cite>case_reader</cite> object</p></li>
+<li><p><strong>case_reader_exp</strong> (CaseReader or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – OpenMDAO <cite>CaseReader</cite> class instance for the explicit simulation or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>case</strong> – OpenMDAO <cite>Case</cite> class instance identified by <cite>case_id</cite> within the <cite>case_reader_exp</cite> object or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
@@ -215,15 +235,74 @@
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">latom.reader.reader_2d.</code><code class="sig-name descname">TwoDimReader</code><span class="sig-paren">(</span><em class="sig-param">kind</em>, <em class="sig-param">body</em>, <em class="sig-param">db</em>, <em class="sig-param">case_id='final'</em>, <em class="sig-param">db_exp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader_2d.html#TwoDimReader"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_autosummary/latom.reader.reader.html#latom.reader.reader.Reader" title="latom.reader.reader.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.reader.reader.Reader</span></code></a></p>
+<p><cite>TwoDimReader</cite> class loads and displays a stored simulation corresponding to a single-phase, two-dimensional
+transfer trajectory using an OpenMDAO <cite>CaseReader</cite> class instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kind</strong> (<em>iterable</em>) – List of three parameters to define the characteristics of the solution to be loaded in the form
+<code class="docutils literal notranslate"><span class="pre">ascent/descent</span></code>, <code class="docutils literal notranslate"><span class="pre">const/variable</span></code> and <code class="docutils literal notranslate"><span class="pre">True/False</span></code> where the last corresponds to the presence of a path
+constraint to impose a minimum safe altitude on the simulated transfer</p></li>
+<li><p><strong>body</strong> (<a class="reference internal" href="_autosummary/latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>db</strong> (<em>str</em>) – Full path of the database where the solution is stored</p></li>
+<li><p><strong>case_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Case identifier, <code class="docutils literal notranslate"><span class="pre">initial</span></code> to load the first iteration, <code class="docutils literal notranslate"><span class="pre">final</span></code> to load the final solution.
+Default is <code class="docutils literal notranslate"><span class="pre">final</span></code></p></li>
+<li><p><strong>db_exp</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Full path of the database where the explicit simulation is stored or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>kind</strong> (<em>iterable</em>) – List of three parameters to define the characteristics of the solution to be loaded in the form
+<code class="docutils literal notranslate"><span class="pre">ascent/descent</span></code>, <code class="docutils literal notranslate"><span class="pre">const/variable</span></code> and <code class="docutils literal notranslate"><span class="pre">True/False</span></code> where the last corresponds to the presence of a path
+constraint to impose a minimum safe altitude on the simulated transfer</p></li>
+<li><p><strong>body</strong> (<a class="reference internal" href="_autosummary/latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>phase_name</strong> (<em>str</em>) – Name of the simulated phase within the OpenMDAO <cite>Problem</cite> class instance</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Scaling parameters for distances, angles, velocities and mass</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight for the implicit solution [s]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for the implicit solution [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the implicit solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls variables time series for the implicit solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Minimum altitude constraint time series for the implicit solution [m] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>tof_exp</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time of flight for the explicit simulation [s] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>time_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time vector for the explicit simulation [s] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – States time series for the explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>controls_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Controls variables time series for the explicit simulation as <cite>[thrust, alpha]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>r_safe_exp</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Minimum altitude constraint time series for the explicit simulation [m] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt>
 <code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">case</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader_2d.html#TwoDimReader.get_time_series"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve the time of flight, time vector and states, controls and minimum safe altitude time series for
+the specified <cite>case</cite> and <cite>kind</cite> of transfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>case</strong> (<em>Case</em>) – OpenMDAO <cite>Case</cite> object</p></li>
+<li><p><strong>kind</strong> (<em>iterable</em>) – List of three parameters to define the characteristics of the solution to be loaded in the form
+<code class="docutils literal notranslate"><span class="pre">ascent/descent</span></code>, <code class="docutils literal notranslate"><span class="pre">const/variable</span></code> and <code class="docutils literal notranslate"><span class="pre">True/False</span></code> where the last corresponds to the presence of a
+path constraint to impose a minimum safe altitude on the simulated transfer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight for the given <cite>Case</cite> [s]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Time vector for the given <cite>Case</cite> [s]</p></li>
+<li><p><strong>states</strong> (<em>ndarray</em>) – States time series for the given <cite>Case</cite> as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>ndarray</em>) – Controls variables time series for the given <cite>Case</cite> as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>r_safe</strong> (ndarray or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Minimum altitude constraint time series for the given <cite>Case</cite> [m] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt>
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader_2d.html#TwoDimReader.plot"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Plot the optimal transfer trajectory corresponding to the loaded <cite>Case</cite>.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -232,15 +311,65 @@
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">latom.reader.reader_heo_2d.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEOReader</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">db</em>, <em class="sig-param">case_id='final'</em>, <em class="sig-param">db_exp=None</em>, <em class="sig-param">scaled=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader_heo_2d.html#TwoDim3PhasesLLO2HEOReader"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_autosummary/latom.reader.reader.html#latom.reader.reader.Reader" title="latom.reader.reader.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.reader.reader.Reader</span></code></a></p>
+<p><cite>TwoDim3PhasesLLO2HEOReader</cite> class loads and displays a stored simulation corresponding to a three-phases
+transfer trajectory from LLO to HEO using an OpenMDAO <cite>CaseReader</cite> class instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="_autosummary/latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>db</strong> (<em>str</em>) – Full path of the database where the solution is stored</p></li>
+<li><p><strong>case_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Case identifier, <code class="docutils literal notranslate"><span class="pre">initial</span></code> to load the first iteration, <code class="docutils literal notranslate"><span class="pre">final</span></code> to load the final solution.
+Default is <code class="docutils literal notranslate"><span class="pre">final</span></code></p></li>
+<li><p><strong>db_exp</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Full path of the database where the explicit simulation is stored or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>scaled</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">False</span></code> to retrieve the solution in dimensional units, <code class="docutils literal notranslate"><span class="pre">True</span></code> otherwise. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="_autosummary/latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>gm_res</strong> (<em>float</em>) – Central attracting body standard gravitational parameter [m^3/s^2] or [-]</p></li>
+<li><p><strong>rm_res</strong> (<em>float</em>) – Central attracting body equatorial radius [m] or [-]</p></li>
+<li><p><strong>states_scalers</strong> (<em>ndarray</em>) – Scaling parameters for distances, angles, velocities and mass</p></li>
+<li><p><strong>phase_name</strong> (<em>list</em>) – List of phases names within the OpenMDAO <cite>Problem</cite> object</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight for the implicit solution [s]</p></li>
+<li><p><strong>time</strong> (<em>list</em>) – Time vector for the implicit solution [s]</p></li>
+<li><p><strong>states</strong> (<em>list</em>) – States time series for the implicit solution as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>list</em>) – Controls variables time series for the implicit solution as <cite>[thrust, alpha]</cite></p></li>
+<li><p><strong>tof_exp</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time of flight for the explicit simulation [s] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>time_exp</strong> (list or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Time vector for the explicit simulation [s] or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>states_exp</strong> (list or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – States time series for the explicit simulation as <cite>[r, theta, u, v, m]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>controls_exp</strong> (list or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Controls variables time series for the explicit simulation as <cite>[thrust, alpha]</cite> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>coe_inj</strong> (<em>iterable</em>) – Classical orbital elements at injection as <cite>(a, e, h, ta)</cite> with <cite>a</cite> semi-major axis, <cite>e</cite> eccentricity, <cite>h</cite>
+specific angular momentum vector and <cite>ta</cite> true anomaly</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt>
 <code class="sig-name descname">get_time_series</code><span class="sig-paren">(</span><em class="sig-param">case</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader_heo_2d.html#TwoDim3PhasesLLO2HEOReader.get_time_series"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve the time of flight, time vector and states, controls and minimum safe altitude time series for
+the specified <cite>case</cite> and <cite>kind</cite> of transfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>case</strong> (<em>Case</em>) – OpenMDAO <cite>Case</cite> object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tof</strong> (<em>float</em>) – Time of flight for the given <cite>Case</cite> [s]</p></li>
+<li><p><strong>time</strong> (<em>list</em>) – Time vector for the given <cite>Case</cite> [s]</p></li>
+<li><p><strong>states</strong> (<em>list</em>) – States time series for the given <cite>Case</cite> as <cite>[r, theta, u, v, m]</cite></p></li>
+<li><p><strong>controls</strong> (<em>list</em>) – Controls variables time series for the given <cite>Case</cite> as <cite>[thrust, alpha]</cite></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt>
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/latom/reader/reader_heo_2d.html#TwoDim3PhasesLLO2HEOReader.plot"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
+<dd><p>Plot the optimal transfer trajectory corresponding to the loaded <cite>Case</cite>.</p>
+</dd></dl>
 
 </dd></dl>
 

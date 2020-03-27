@@ -181,8 +181,44 @@
 
 
 <div class="viewcode-block" id="SurrogateModel"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel">[docs]</a><span class="k">class</span> <span class="nc">SurrogateModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;`SurrogateModel` class sets up a surrogate model object defined in the Surrogate Modelling Toolbox (SMT) [2]_</span>
+<span class="sd">    package to compute and exploit data for different transfer trajectories.</span>
+
+<span class="sd">    The model inputs are the spacecraft specific impulse `Isp` and initial thrust/weight ratio `twr` while the model</span>
+<span class="sd">    output is the propellant fraction `m_prop`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    train_method : str</span>
+<span class="sd">        Training method among ``IDW``, ``KPLS``, ``KPLSK``, ``KRG``, ``LS``, ``QP``, ``RBF``, ``RMTB``, ``RMTC``</span>
+<span class="sd">    rec_file : str or ``None``, optional</span>
+<span class="sd">        Name of the file in `latom.data.smt` where the surrogate model is stored or ``None`` if a new model has to</span>
+<span class="sd">        be built. Default is ``None``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    limits : ndarray</span>
+<span class="sd">        Sampling grid limits in terms of minimum and maximum `Isp` and `twr`</span>
+<span class="sd">    x_samp : ndarray</span>
+<span class="sd">        Sampling points as `Isp, twr` tuples</span>
+<span class="sd">    m_prop : ndarray</span>
+<span class="sd">        Propellant fraction on training points [-]</span>
+<span class="sd">    failures : ndarray</span>
+<span class="sd">        Matrix of boolean to verify each NLP solution has converged</span>
+<span class="sd">    d : dict</span>
+<span class="sd">        Dictionary that contain all the information to reconstruct a meta model</span>
+<span class="sd">    trained : IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB or RMTC</span>
+<span class="sd">        Surrogate model object defined by SMT</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [2] M. A. Bouhlel and J. T. Hwang and N. Bartoli and R. Lafage and J. Morlier and J. R. R. A. Martins.</span>
+<span class="sd">        A Python surrogate modeling framework with derivatives. Advances in Engineering Software, 2019.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_method</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes `SurrogateModel` class. &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trained</span> <span class="o">=</span> <span class="kc">None</span>
@@ -193,10 +229,31 @@
 
 <div class="viewcode-block" id="SurrogateModel.abs_path"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.abs_path">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">abs_path</span><span class="p">(</span><span class="n">rec_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the absolute path of the file where the surrogate model is stored.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rec_file : str</span>
+<span class="sd">            Name of the file in `latom.data.smt` where the surrogate model is stored</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fid : str</span>
+<span class="sd">            Full path where the surrogate model is stored</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">dirname_smt</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.load"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads stored data to instantiate a surrogate model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rec_file : str</span>
+<span class="sd">            Name of the file in `latom.data.smt` where the surrogate model is stored</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abs_path</span><span class="p">(</span><span class="n">rec_file</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;limits&#39;</span><span class="p">]</span>
@@ -205,11 +262,39 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">failures</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;failures&#39;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.save"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves data corresponding to a surrogate model instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rec_file : str</span>
+<span class="sd">            Name of the file in `latom.data.smt` where the surrogate model is stored</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;limits&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">,</span> <span class="s1">&#39;x_samp&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_samp</span><span class="p">,</span> <span class="s1">&#39;m_prop&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_prop</span><span class="p">,</span> <span class="s1">&#39;failures&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span><span class="p">}</span>
         <span class="n">save</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">abs_path</span><span class="p">(</span><span class="n">rec_file</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.compute_grid"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.compute_grid">[docs]</a>    <span class="k">def</span> <span class="nf">compute_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the sampling grid fro given `Isp` and `twr` limits and sampling scheme.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper bounds [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper bounds [-]</span>
+<span class="sd">        nb_samp : int</span>
+<span class="sd">            Total number of samples. Must be a perfect square if ``full`` is chosen as `samp_method`</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``full``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``</span>
+<span class="sd">            Default is ``m``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">twr_lim</span><span class="p">)))</span>
 
@@ -226,6 +311,23 @@
 
 <div class="viewcode-block" id="SurrogateModel.solve"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.solve">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Solve the i-th NLP problem.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nlp : NLP</span>
+<span class="sd">            NLP object</span>
+<span class="sd">        i : int</span>
+<span class="sd">            Current iteration</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        m_prop : float</span>
+<span class="sd">            Propellant fraction [-]</span>
+<span class="sd">        f : bool</span>
+<span class="sd">            Failure status</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Iteration </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="se">\n</span><span class="s2">Isp: </span><span class="si">{</span><span class="n">nlp</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">Isp</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> s</span><span class="se">\t</span><span class="s2">twr: </span><span class="si">{</span><span class="n">nlp</span><span class="o">.</span><span class="n">sc</span><span class="o">.</span><span class="n">twr</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">run_driver</span><span class="p">()</span>
@@ -242,6 +344,16 @@
         <span class="k">return</span> <span class="n">m_prop</span><span class="p">,</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.train"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trains the surrogate model with given training data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        train_method : str</span>
+<span class="sd">            Training method among ``IDW``, ``KPLS``, ``KPLSK``, ``KRG``, ``LS``, ``QP``, ``RBF``, ``RMTB``, ``RMTC``</span>
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            Additional keyword arguments supported by SMT objects</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">train_method</span> <span class="o">==</span> <span class="s1">&#39;IDW&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trained</span> <span class="o">=</span> <span class="n">IDW</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -268,6 +380,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">trained</span><span class="o">.</span><span class="n">train</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.evaluate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isp</span><span class="p">,</span> <span class="n">twr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluate the surrogate model in the given set of points.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        isp : float or iterable</span>
+<span class="sd">            Specific impulse on evaluation points [s]</span>
+<span class="sd">        twr : float or iterable</span>
+<span class="sd">            Thrust/weight ratio on evaluation points [-]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        m_eval : float or iterable</span>
+<span class="sd">            Propellant fraction on evaluation points [-]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">isp</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
             <span class="n">isp</span> <span class="o">=</span> <span class="p">[</span><span class="n">isp</span><span class="p">]</span>
@@ -280,6 +407,24 @@
         <span class="k">return</span> <span class="n">m_eval</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.compute_matrix"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.compute_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">compute_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_eval</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute structured matrices for `Isp`, `twr` and `m_prop` to display the training data on a response surface.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_eval : int or ``None``</span>
+<span class="sd">            Number of points included in the matrix if Latin Hypercube Sampling has been used or ``None``.</span>
+<span class="sd">            Default is ``None``</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        isp : ndarray</span>
+<span class="sd">            Matrix of specific impulses [s]</span>
+<span class="sd">        twr : ndarray</span>
+<span class="sd">            Matrix of thrust/weight ratios [-]</span>
+<span class="sd">        m_mat : ndarray</span>
+<span class="sd">            Matrix of propellant fractions [-]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">nb_eval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># LHS</span>
             <span class="n">samp_eval</span> <span class="o">=</span> <span class="n">FullFactorial</span><span class="p">(</span><span class="n">xlimits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limits</span><span class="p">)</span>
@@ -299,6 +444,20 @@
         <span class="k">return</span> <span class="n">isp</span><span class="p">,</span> <span class="n">twr</span><span class="p">,</span> <span class="n">m_mat</span></div>
 
 <div class="viewcode-block" id="SurrogateModel.plot"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.SurrogateModel.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_eval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nb_lines</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;prop&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the response surface corresponding to the loaded surrogate model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_eval : int or ``None``</span>
+<span class="sd">            Number of points included in the matrix if Latin Hypercube Sampling has been used or ``None``.</span>
+<span class="sd">            Default is ``None``</span>
+<span class="sd">        nb_lines : int, optional</span>
+<span class="sd">            Number of contour lines. Default is ``50``</span>
+<span class="sd">        kind : str</span>
+<span class="sd">            ``prop`` to display the propellant fraction `m_prop`, ``final`` to display the final spacecraft mass</span>
+<span class="sd">            `1 - m_prop`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">isp</span><span class="p">,</span> <span class="n">twr</span><span class="p">,</span> <span class="n">m_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_matrix</span><span class="p">(</span><span class="n">nb_eval</span><span class="o">=</span><span class="n">nb_eval</span><span class="p">)</span>
 
@@ -315,9 +474,56 @@
 
 
 <div class="viewcode-block" id="TwoDimAscConstSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscConstSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimAscConstSurrogate` implements `SurrogateModel` for a two-dimensional ascent trajectory at constant thrust.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimAscConstSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
-                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        theta : float</span>
+<span class="sd">            Guessed spawn angle [rad]</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Guessed time of flight [s]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``lower``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 
@@ -331,9 +537,52 @@
 
 
 <div class="viewcode-block" id="TwoDimAscVarSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscVarSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimAscVarSurrogate` implements `SurrogateModel` for a two-dimensional ascent trajectory with variable thrust.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimAscVarSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
-                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+                 <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``lower``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 
@@ -347,9 +596,57 @@
 
 
 <div class="viewcode-block" id="TwoDimAscVToffSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimAscVToffSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimAscVToffSurrogate` implements `SurrogateModel` for a two-dimensional ascent trajectory with variable</span>
+<span class="sd">    thrust and minimum safe altitude.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimAscVToffSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_safe</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span>
                  <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        alt_safe : float</span>
+<span class="sd">            Asymptotic minimum safe altitude [m]</span>
+<span class="sd">        slope : float</span>
+<span class="sd">            Minimum safe altitude slope close to the launch site [-]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``lower``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 
@@ -363,9 +660,59 @@
 
 
 <div class="viewcode-block" id="TwoDimDescConstSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescConstSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimDescConstSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory at constant</span>
+<span class="sd">    thrust.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimDescConstSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_p</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
                  <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        alt_p : float</span>
+<span class="sd">            Periapsis altitude where the final powered descent is initiated [m]</span>
+<span class="sd">        theta : float</span>
+<span class="sd">            Guessed spawn angle [rad]</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Guessed time of flight [s]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``upper``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 
@@ -384,9 +731,53 @@
 
 
 <div class="viewcode-block" id="TwoDimDescVarSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescVarSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimDescVarSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory with variable</span>
+<span class="sd">    thrust.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimDescVarSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span>
                  <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``upper``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 
@@ -400,9 +791,57 @@
 
 
 <div class="viewcode-block" id="TwoDimDescVLandSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescVLandSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimDescVLandSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory with variable</span>
+<span class="sd">    thrust and constrained minimum altitude.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimDescVLandSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_safe</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span>
                  <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_bound</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        alt_safe : float</span>
+<span class="sd">            Asymptotic minimum safe altitude [m]</span>
+<span class="sd">        slope : float</span>
+<span class="sd">            Minimum safe altitude slope close to the launch site [-]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+<span class="sd">        u_bound : str, optional</span>
+<span class="sd">            Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.</span>
+<span class="sd">            Default is ``upper``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 
@@ -416,9 +855,58 @@
 
 
 <div class="viewcode-block" id="TwoDimDescVertSurrogate"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate">[docs]</a><span class="k">class</span> <span class="nc">TwoDimDescVertSurrogate</span><span class="p">(</span><span class="n">SurrogateModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDimDescVertSurrogate` implements `SurrogateModel` for a two-dimensional descent trajectory at constant</span>
+<span class="sd">    thrust with final vertical descent phase.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TwoDimDescVertSurrogate.sampling"><a class="viewcode-back" href="../../../modules/surrogate.html#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_p</span><span class="p">,</span> <span class="n">alt_switch</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">nb_seg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span>
                  <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="s1">&#39;lhs&#39;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a new set of training data starting from a given sampling grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body : Primary</span>
+<span class="sd">            Central attracting body</span>
+<span class="sd">        isp_lim : iterable</span>
+<span class="sd">            Specific impulse lower and upper limits [s]</span>
+<span class="sd">        twr_lim : iterable</span>
+<span class="sd">            Thrust/weight ratio lower and upper limits [-]</span>
+<span class="sd">        alt : float</span>
+<span class="sd">            Orbit altitude [m]</span>
+<span class="sd">        alt_p : float</span>
+<span class="sd">            Periapsis altitude where the final powered descent is initiated [m]</span>
+<span class="sd">        alt_switch : float</span>
+<span class="sd">            Altitude at which the final vertical descent is triggered [m]</span>
+<span class="sd">        theta : float</span>
+<span class="sd">            Guessed spawn angle [rad]</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Guessed time of flight [s]</span>
+<span class="sd">        t_bounds : iterable</span>
+<span class="sd">            Time of flight lower and upper bounds expressed as fraction of `tof`</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Transcription method used to discretize the continuous time trajectory into a finite set of nodes,</span>
+<span class="sd">            allowed ``gauss-lobatto``, ``radau-ps`` and ``runge-kutta``</span>
+<span class="sd">        nb_seg : int or iterable</span>
+<span class="sd">            Number of segments in which each phase is discretized</span>
+<span class="sd">        order : int or iterable</span>
+<span class="sd">            Transcription order within each phase, must be odd</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            NLP solver, must be supported by OpenMDAO</span>
+<span class="sd">        nb_samp : iterable</span>
+<span class="sd">            Total number of sampling points</span>
+<span class="sd">        samp_method : str, optional</span>
+<span class="sd">            Sampling scheme, ``lhs`` for Latin Hypercube Sampling or ``full`` for Full-Factorial Sampling.</span>
+<span class="sd">            Default is ``lhs``</span>
+<span class="sd">        criterion : str, optional</span>
+<span class="sd">            Criterion used to construct the LHS design among ``center``, ``maximin``, ``centermaximin``,</span>
+<span class="sd">            ``correlation``, ``c``, ``m``, ``cm``, ``corr``, ``ese``. ``c``, ``m``, ``cm`` and ``corr`` are</span>
+<span class="sd">            abbreviations of ``center``, ``maximin``, ``centermaximin`` and ``correlation``, ``respectively``.</span>
+<span class="sd">            Default is ``m``</span>
+<span class="sd">        snopt_opts : dict or None, optional</span>
+<span class="sd">            SNOPT optional settings expressed as key-value pairs. Default is None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_grid</span><span class="p">(</span><span class="n">isp_lim</span><span class="p">,</span> <span class="n">twr_lim</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">samp_method</span><span class="o">=</span><span class="n">samp_method</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">)</span>
 

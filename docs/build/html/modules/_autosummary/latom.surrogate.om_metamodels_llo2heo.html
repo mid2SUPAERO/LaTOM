@@ -194,7 +194,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MetaModel</span></code>([distributed, extrapolate, …])</p></td>
-<td><p></p></td>
+<td><p><cite>MetaModel</cite> class sets up an OpenMDAO <cite>Problem</cite> object and a <cite>MetaModelStructuredComp</cite> subsystem to compute and exploit a surrogate model for different transfer trajectories.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RespSurf</span></code>(isp, twr, param, title[, nb_lines, …])</p></td>
 <td><p>Plots the response surface resulting from the surrogate models computations.</p></td>
@@ -203,7 +203,7 @@
 <td><p>Spacecraft class defines the spacecraft characteristics.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel" title="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEOMetaModel</span></code></a>([distributed, …])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDim3PhasesLLO2HEOMetaModel</cite> implements <cite>MetaModel</cite> for a two-dimensional transfer from an LLO to an HEO modeled as a three-phases trajectory.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDim3PhasesLLO2HEONLP</span></code>(body, sc, alt, rp, …)</p></td>
 <td><p>TwoDim3PhasesLLO2HEONLP transcribes an optimal control problem for a three-phases ascent trajectory from a circular Low Lunar Orbit (LLO) to an Highly Elliptical Orbit (HEO) into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
@@ -215,10 +215,10 @@
 <td><p>TwoDimLLO2ApoContinuationAnalyzer class defines the methods to analyze the results of a two dimensional simulation from a Low Lunar Orbit to an Highly Elliptical Orbit using a continuation method over several thrust/weight ratios.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel" title="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2ApoContinuationMetaModel</span></code></a>([…])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimLLO2ApoContinuationMetaModel</cite> implements <cite>MetaModel</cite> for a two-dimensional escape burn from an LLO to an intermediate ballistic arc to reach the specified HEO apoapsis radius.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel" title="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimLLO2ApoMetaModel</span></code></a>([distributed, …])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimLLO2ApoMetaModel</cite> implements <cite>MetaModel</cite> for a two-dimensional escape burn from an LLO to an intermediate ballistic arc to reach the specified HEO apoapsis radius.</p></td>
 </tr>
 </tbody>
 </table>
@@ -226,45 +226,148 @@
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.om_metamodels_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.surrogate.om_metamodels.html#latom.surrogate.om_metamodels.MetaModel" title="latom.surrogate.om_metamodels.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.om_metamodels.MetaModel</span></code></a></p>
+<p><cite>TwoDimLLO2ApoMetaModel</cite> implements <cite>MetaModel</cite> for a two-dimensional escape burn from an LLO to an intermediate
+ballistic arc to reach the specified HEO apoapsis radius.</p>
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the NLP for the i-th <cite>twr</cite> and k-th <cite>Isp</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Spacecraft object characterized by the i-th <cite>twr</cite> and k-th <cite>Isp</cite> values</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which the phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within the phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>rp</strong> (<em>float</em>) – HEO periapsis radius [m]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – HEO period [s]</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the meta model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the meta model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Computes a regular sampling grid in the input space <cite>twr, Isp</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Number of samples along the <cite>twr</cite> and <cite>Isp</cite> axes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a meta model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded meta model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+<li><p><strong>log_scale</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <cite>twr</cite> values are in logarithmic scale. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Number of samples along the <cite>twr</cite> and <cite>Isp</cite> axes</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a meta model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoMetaModel.setup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Setup the OpenMDAO <cite>Problem</cite> object with known data for <cite>twr</cite>, <cite>Isp</cite> and <cite>m_prop</cite>.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -272,45 +375,169 @@
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.om_metamodels_llo2heo.</code><code class="sig-name descname">TwoDimLLO2ApoContinuationMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.surrogate.om_metamodels.html#latom.surrogate.om_metamodels.MetaModel" title="latom.surrogate.om_metamodels.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.om_metamodels.MetaModel</span></code></a></p>
+<p><cite>TwoDimLLO2ApoContinuationMetaModel</cite> implements <cite>MetaModel</cite> for a two-dimensional escape burn from an LLO to an
+intermediate ballistic arc to reach the specified HEO apoapsis radius.</p>
+<p>For each <cite>Isp</cite> value in the sampling grid, the training data are computed using a continuation method for decreasing
+<cite>twr</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distributed</strong> (<em>bool</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the component has variables that are distributed across multiple processes, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>extrapolate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Sets whether extrapolation should be performed when an input is out of bounds. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Spline interpolation method to use for all outputs among <code class="docutils literal notranslate"><span class="pre">cubic</span></code>, <code class="docutils literal notranslate"><span class="pre">slinear</span></code>, <code class="docutils literal notranslate"><span class="pre">lagrange2</span></code>, <code class="docutils literal notranslate"><span class="pre">lagrange3</span></code>,
+<code class="docutils literal notranslate"><span class="pre">akima</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy_cubic</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy_slinear</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy_quintic</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">scipy_cubic</span></code></p></li>
+<li><p><strong>training_data_gradients</strong> (<em>bool</em><em>, </em><em>optional</em>) – Sets whether gradients with respect to output training data should be computed. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>vec_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of points to evaluate at once. Default is <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p><strong>rec_file</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored or <code class="docutils literal notranslate"><span class="pre">None</span></code> if a new model has to
+be built. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>energy</strong> (<em>ndarray</em>) – Spacecraft specific energy at the end of the transfer on all training points [m^2/s^2]</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a meta model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a meta model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.compute_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Computes a regular sampling grid in the input space <cite>twr, Isp</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Number of samples along the <cite>twr</cite> and <cite>Isp</cite> axes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Number of samples along the <cite>twr</cite> and <cite>Isp</cite> axes</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>rp</strong> (<em>float</em>) – HEO periapsis radius [m]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – HEO period [s]</p></li>
+<li><p><strong>log_scale</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>twr</cite> values are given in logarithmic scale as <cite>log(twr)</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDimLLO2ApoContinuationMetaModel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the response surface corresponding to the loaded meta model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+<li><p><strong>log_scale</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <cite>twr</cite> values are in logarithmic scale. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the meta model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the meta model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.setup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Setup the OpenMDAO <cite>Problem</cite> object with known data for <cite>twr</cite>, <cite>Isp</cite> and <cite>m_prop</cite>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDimLLO2ApoContinuationMetaModel.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the NLP for the i-th <cite>twr</cite> and k-th <cite>Isp</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Spacecraft object characterized by the i-th <cite>twr</cite> and k-th <cite>Isp</cite> values</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -318,45 +545,149 @@
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.om_metamodels_llo2heo.</code><code class="sig-name descname">TwoDim3PhasesLLO2HEOMetaModel</code><span class="sig-paren">(</span><em class="sig-param">distributed=False</em>, <em class="sig-param">extrapolate=False</em>, <em class="sig-param">method='scipy_cubic'</em>, <em class="sig-param">training_data_gradients=True</em>, <em class="sig-param">vec_size=1</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="latom.surrogate.om_metamodels.html#latom.surrogate.om_metamodels.MetaModel" title="latom.surrogate.om_metamodels.MetaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.om_metamodels.MetaModel</span></code></a></p>
+<p><cite>TwoDim3PhasesLLO2HEOMetaModel</cite> implements <cite>MetaModel</cite> for a two-dimensional transfer from an LLO to an HEO
+modeled as a three-phases trajectory.</p>
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">sc</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/om_metamodels_llo2heo.html#TwoDim3PhasesLLO2HEOMetaModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the NLP for the i-th <cite>twr</cite> and k-th <cite>Isp</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>sc</strong> (<a class="reference internal" href="latom.utils.spacecraft.html#latom.utils.spacecraft.Spacecraft" title="latom.utils.spacecraft.Spacecraft"><em>Spacecraft</em></a>) – Spacecraft object characterized by the i-th <cite>twr</cite> and k-th <cite>Isp</cite> values</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em>) – Number of segments in which the phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Transcription order within the phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>rp</strong> (<em>float</em>) – HEO periapsis radius [m]</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – HEO period [s]</p></li>
+<li><p><strong>phase_name</strong> (<em>iterable</em>) – Names for the three phases within OpenMDAO</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the meta model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the meta model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">nb_samp</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Computes a regular sampling grid in the input space <cite>twr, Isp</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Number of samples along the <cite>twr</cite> and <cite>Isp</cite> axes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a meta model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em>, <em class="sig-param">log_scale=False</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded meta model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+<li><p><strong>log_scale</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <cite>twr</cite> values are in logarithmic scale. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound=None</em>, <em class="sig-param">rec_file=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Number of samples along the <cite>twr</cite> and <cite>Isp</cite> axes</p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>rec_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model will be stored. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional input arguments</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a meta model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.metamodels</cite> where the meta model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.om_metamodels_llo2heo.TwoDim3PhasesLLO2HEOMetaModel.setup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Setup the OpenMDAO <cite>Problem</cite> object with known data for <cite>twr</cite>, <cite>Isp</cite> and <cite>m_prop</cite>.</p>
+</dd></dl>
 
 </dd></dl>
 

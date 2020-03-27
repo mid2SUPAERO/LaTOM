@@ -370,12 +370,20 @@
 <span class="sd">        scaler : float</span>
 <span class="sd">            Scaler value [-]</span>
 
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        nb : int</span>
+<span class="sd">            Number of equally spaced points between ``0`` and ``2*pi`` in which the `x` and `y` coordinates are computed</span>
+<span class="sd">        angle : ndarray</span>
+<span class="sd">            Angles for which the `x` and `y` coordinates are computed</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        x : ndarray</span>
 <span class="sd">            X coordinates series [km] or [-]</span>
 <span class="sd">        y : ndarray</span>
 <span class="sd">            X coordinates series [km] or [-]</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="s1">&#39;nb&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>

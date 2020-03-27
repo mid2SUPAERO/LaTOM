@@ -16,17 +16,19 @@ class TwoDimOrb:
     ----------
     gm : float
         Central body standard gravitational parameter [m^3/s^2]
-    kwargs :
-        T : float
-            Orbital period [s]
-        a : float
-            Semi-major axis [m]
-        e : float
-            Eccentricity [-]
-        ra : float
-            Apoapsis radius [m]
-        rp : float
-            Periapsis radius [m]
+
+    Other Parameters
+    ----------------
+    T : float
+        Orbital period [s]
+    a : float
+        Semi-major axis [m]
+    e : float
+        Eccentricity [-]
+    ra : float
+        Apoapsis radius [m]
+    rp : float
+        Periapsis radius [m]
 
     Attributes
     ----------
@@ -121,13 +123,15 @@ class TwoDimOrb:
             Central body standard gravitational parameter [m^3/s^2]
         ta : float or ndarray
             True anomaly [rad]
-        kwargs :
-            a : float
-                Semi-major axis [m]
-            e : float
-                Eccentricity [-]
-            h : float
-                Specific angular momentum magnitude [m^2/s]
+
+        Other Parameters
+        ----------------
+        a : float
+            Semi-major axis [m]
+        e : float
+            Eccentricity [-]
+        h : float
+            Specific angular momentum magnitude [m^2/s]
 
         Returns
         -------

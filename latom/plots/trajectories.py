@@ -210,12 +210,20 @@ class TwoDimTrajectory:
         scaler : float
             Scaler value [-]
 
+        Other Parameters
+        ----------------
+        nb : int
+            Number of equally spaced points between ``0`` and ``2*pi`` in which the `x` and `y` coordinates are computed
+        angle : ndarray
+            Angles for which the `x` and `y` coordinates are computed
+
         Returns
         -------
         x : ndarray
             X coordinates series [km] or [-]
         y : ndarray
             X coordinates series [km] or [-]
+
         """
 
         if 'nb' in kwargs:

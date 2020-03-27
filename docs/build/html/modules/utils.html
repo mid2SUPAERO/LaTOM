@@ -208,25 +208,19 @@
 <p>Defines a two-dimensional orbit from its keplerian parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>T<span class="classifier">float</span></dt><dd><p>Orbital period [s]</p>
+<dd class="field-odd"><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p>
 </dd>
-<dt>a<span class="classifier">float</span></dt><dd><p>Semi-major axis [m]</p>
-</dd>
-<dt>e<span class="classifier">float</span></dt><dd><p>Eccentricity [-]</p>
-</dd>
-<dt>ra<span class="classifier">float</span></dt><dd><p>Apoapsis radius [m]</p>
-</dd>
-<dt>rp<span class="classifier">float</span></dt><dd><p>Periapsis radius [m]</p>
-</dd>
-</dl>
-</p></li>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>T</strong> (<em>float</em>) – Orbital period [s]</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>ra</strong> (<em>float</em>) – Apoapsis radius [m]</p></li>
+<li><p><strong>rp</strong> (<em>float</em>) – Periapsis radius [m]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Variables</dt>
-<dd class="field-even"><ul class="simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>GM</strong> (<em>float</em><em>, </em><em>optional</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
 <li><p><strong>T</strong> (<em>float</em>) – Orbit period [s]</p></li>
 <li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
@@ -249,19 +243,17 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gm</strong> (<em>float</em>) – Central body standard gravitational parameter [m^3/s^2]</p></li>
 <li><p><strong>ta</strong> (<em>float</em><em> or </em><em>ndarray</em>) – True anomaly [rad]</p></li>
-<li><p><strong>kwargs</strong> – <dl class="simple">
-<dt>a<span class="classifier">float</span></dt><dd><p>Semi-major axis [m]</p>
-</dd>
-<dt>e<span class="classifier">float</span></dt><dd><p>Eccentricity [-]</p>
-</dd>
-<dt>h<span class="classifier">float</span></dt><dd><p>Specific angular momentum magnitude [m^2/s]</p>
-</dd>
-</dl>
-</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>) – Semi-major axis [m]</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Eccentricity [-]</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Specific angular momentum magnitude [m^2/s]</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
 <li><p><strong>r</strong> (<em>float or ndarray</em>) – Position in polar coordinates [m]</p></li>
 <li><p><strong>u</strong> (<em>float or ndarray</em>) – radial velocity [m/s]</p></li>
 <li><p><strong>v</strong> (<em>float or ndarray</em>) – tangential velocity [m/s]</p></li>

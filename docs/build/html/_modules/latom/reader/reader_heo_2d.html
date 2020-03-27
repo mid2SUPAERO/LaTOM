@@ -172,6 +172,56 @@
 
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEOReader"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader_heo_2d.TwoDim3PhasesLLO2HEOReader">[docs]</a><span class="k">class</span> <span class="nc">TwoDim3PhasesLLO2HEOReader</span><span class="p">(</span><span class="n">Reader</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TwoDim3PhasesLLO2HEOReader` class loads and displays a stored simulation corresponding to a three-phases</span>
+<span class="sd">    transfer trajectory from LLO to HEO using an OpenMDAO `CaseReader` class instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Central attracting body</span>
+<span class="sd">    db : str</span>
+<span class="sd">        Full path of the database where the solution is stored</span>
+<span class="sd">    case_id : str, optional</span>
+<span class="sd">        Case identifier, ``initial`` to load the first iteration, ``final`` to load the final solution.</span>
+<span class="sd">        Default is ``final``</span>
+<span class="sd">    db_exp : str or ``None``, optional</span>
+<span class="sd">        Full path of the database where the explicit simulation is stored or ``None``. Default is ``None``</span>
+<span class="sd">    scaled : bool, optional</span>
+<span class="sd">        ``False`` to retrieve the solution in dimensional units, ``True`` otherwise. Default is ``False``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    body : Primary</span>
+<span class="sd">        Central attracting body</span>
+<span class="sd">    gm_res : float</span>
+<span class="sd">        Central attracting body standard gravitational parameter [m^3/s^2] or [-]</span>
+<span class="sd">    rm_res : float</span>
+<span class="sd">        Central attracting body equatorial radius [m] or [-]</span>
+<span class="sd">    states_scalers : ndarray</span>
+<span class="sd">        Scaling parameters for distances, angles, velocities and mass</span>
+<span class="sd">    phase_name : list</span>
+<span class="sd">        List of phases names within the OpenMDAO `Problem` object</span>
+<span class="sd">    tof : float</span>
+<span class="sd">        Time of flight for the implicit solution [s]</span>
+<span class="sd">    time : list</span>
+<span class="sd">        Time vector for the implicit solution [s]</span>
+<span class="sd">    states : list</span>
+<span class="sd">        States time series for the implicit solution as `[r, theta, u, v, m]`</span>
+<span class="sd">    controls : list</span>
+<span class="sd">        Controls variables time series for the implicit solution as `[thrust, alpha]`</span>
+<span class="sd">    tof_exp : float or ``None``</span>
+<span class="sd">        Time of flight for the explicit simulation [s] or ``None``</span>
+<span class="sd">    time_exp : list or ``None``</span>
+<span class="sd">        Time vector for the explicit simulation [s] or ``None``</span>
+<span class="sd">    states_exp : list or ``None``</span>
+<span class="sd">        States time series for the explicit simulation as `[r, theta, u, v, m]` or ``None``</span>
+<span class="sd">    controls_exp : list or ``None``</span>
+<span class="sd">        Controls variables time series for the explicit simulation as `[thrust, alpha]` or ``None``</span>
+<span class="sd">    coe_inj : iterable</span>
+<span class="sd">        Classical orbital elements at injection as `(a, e, h, ta)` with `a` semi-major axis, `e` eccentricity, `h`</span>
+<span class="sd">        specific angular momentum vector and `ta` true anomaly</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">case_id</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">db_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
@@ -205,25 +255,51 @@
                                            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEOReader.get_time_series"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader_heo_2d.TwoDim3PhasesLLO2HEOReader.get_time_series">[docs]</a>    <span class="k">def</span> <span class="nf">get_time_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">case</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the time of flight, time vector and states, controls and minimum safe altitude time series for</span>
+<span class="sd">        the specified `case` and `kind` of transfer.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        case : Case</span>
+<span class="sd">            OpenMDAO `Case` object</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tof : float</span>
+<span class="sd">            Time of flight for the given `Case` [s]</span>
+<span class="sd">        time : list</span>
+<span class="sd">            Time vector for the given `Case` [s]</span>
+<span class="sd">        states : list</span>
+<span class="sd">            States time series for the given `Case` as `[r, theta, u, v, m]`</span>
+<span class="sd">        controls : list</span>
+<span class="sd">            Controls variables time series for the given `Case` as `[thrust, alpha]`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># initialization</span>
         <span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">tof</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">controls</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c1"># loop over three phases</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
 
+            <span class="c1"># non-dimensional time vector</span>
             <span class="n">t</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.time&#39;</span><span class="p">)</span>
 
+            <span class="c1"># non-dimensional states</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
 
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">states_2d</span><span class="p">:</span>
                 <span class="n">sk</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.states:&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sk</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
+            <span class="c1"># non-dimensional controls</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.controls:alpha&#39;</span><span class="p">)</span>
             <span class="n">thrust</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.design_parameters:thrust&#39;</span><span class="p">)</span>
 
+            <span class="c1"># dimensional states and controls</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_scalers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">tc</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">states_scalers</span>
@@ -239,6 +315,7 @@
         <span class="k">return</span> <span class="n">tof</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">controls</span></div>
 
 <div class="viewcode-block" id="TwoDim3PhasesLLO2HEOReader.plot"><a class="viewcode-back" href="../../../modules/reader.html#latom.reader.reader_heo_2d.TwoDim3PhasesLLO2HEOReader.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the optimal transfer trajectory corresponding to the loaded `Case`. &quot;&quot;&quot;</span>
 
         <span class="n">dtheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coe_inj</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 

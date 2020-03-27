@@ -184,28 +184,28 @@
 <td><p>Class to inherit from when all output variables are explicit.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.odes.odes_2d.ODE2dConstThrust" title="latom.odes.odes_2d.ODE2dConstThrust"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dConstThrust</span></code></a>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dConstThrust</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.odes.odes_2d.ODE2dThrust" title="latom.odes.odes_2d.ODE2dThrust"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dThrust</span></code></a>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dThrust</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.odes.odes_2d.ODE2dVarThrust" title="latom.odes.odes_2d.ODE2dVarThrust"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVarThrust</span></code></a>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dVarThrust</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.odes.odes_2d.ODE2dVertical" title="latom.odes.odes_2d.ODE2dVertical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVertical</span></code></a>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dVertical</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.odes.odes_2d.Polar2AEH" title="latom.odes.odes_2d.Polar2AEH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2AEH</span></code></a>(**kwargs)</p></td>
-<td><p>Polar2AEH class defines the set of equations to derive the a and h from Polar coordinates.</p></td>
+<td><p><cite>Polar2AEH</cite> class defines the set of equations to derive the a and h from Polar coordinates.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.odes.odes_2d.Polar2COE" title="latom.odes.odes_2d.Polar2COE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2COE</span></code></a>(**kwargs)</p></td>
-<td><p>Polar2COE class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.</p></td>
+<td><p><cite>Polar2COE</cite> class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.odes.odes_2d.Polar2RApo" title="latom.odes.odes_2d.Polar2RApo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2RApo</span></code></a>(**kwargs)</p></td>
-<td><p>Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p></td>
+<td><p><cite>Polar2RApo</cite> class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.odes.odes_2d.SafeAlt" title="latom.odes.odes_2d.SafeAlt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeAlt</span></code></a>(**kwargs)</p></td>
-<td><p>SafeAlt class defines the curve representing geographical constraints on the central body surface</p></td>
+<td><p><cite>SafeAlt</cite> class defines the curve representing geographical constraints on the central body surface.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_parameter</span></code>(name[, targets, shape, …])</p></td>
 <td><p>Class Decorator used to attach ODE parameter metadata to an OpenMDAO system.</p></td>
@@ -222,21 +222,21 @@
 <dt id="latom.odes.odes_2d.ODE2dThrust">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">ODE2dThrust</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dThrust"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dThrust" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.explicitcomponent.ExplicitComponent</span></code></p>
-<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory.</p>
+<p><cite>ODE2dThrust</cite> class defines the equations of motion for a two dim. powered trajectory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -249,19 +249,19 @@
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dThrust.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dThrust.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dThrust.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup of ODE2dThrust parameters. Declaration of input, output and partials variables.</p>
+<dd><p>Setup of <cite>ODE2dThrust</cite> parameters. Declaration of input, output and partials variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dThrust.compute">
 <code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">outputs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dThrust.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dThrust.compute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the output variables</p>
+<dd><p>Compute the output variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dThrust.compute_partials">
 <code class="sig-name descname">compute_partials</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">jacobian</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dThrust.compute_partials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dThrust.compute_partials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the partial derivatives variables</p>
+<dd><p>Compute the partial derivatives variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1135,21 +1135,21 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.ODE2dConstThrust">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">ODE2dConstThrust</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dConstThrust"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dConstThrust" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.odes.odes_2d.ODE2dThrust" title="latom.odes.odes_2d.ODE2dThrust"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.odes.odes_2d.ODE2dThrust</span></code></a></p>
-<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with constant thrust.</p>
+<p><cite>ODE2dConstThrust</cite> class defines the equations of motion for a two dim. powered trajectory with constant thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 <li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [-]</p></li>
 </ul>
 </dd>
@@ -1480,7 +1480,7 @@ solution from the previous linear solve.</p></li>
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dConstThrust.compute">
 <code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">outputs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.odes.odes_2d.ODE2dConstThrust.compute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the output variables</p>
+<dd><p>Compute the output variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1508,7 +1508,7 @@ solution from the previous linear solve.</p></li>
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dConstThrust.compute_partials">
 <code class="sig-name descname">compute_partials</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">jacobian</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.odes.odes_2d.ODE2dConstThrust.compute_partials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the partial derivatives variables</p>
+<dd><p>Compute the partial derivatives variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -2049,21 +2049,21 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.ODE2dVarThrust">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">ODE2dVarThrust</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dVarThrust"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dVarThrust" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.odes.odes_2d.ODE2dThrust" title="latom.odes.odes_2d.ODE2dThrust"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.odes.odes_2d.ODE2dThrust</span></code></a></p>
-<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with variable thrust.</p>
+<p><cite>ODE2dVarThrust</cite> class defines the equations of motion for a two dim. powered trajectory with variable thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -2387,7 +2387,7 @@ solution from the previous linear solve.</p></li>
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dVarThrust.compute">
 <code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">outputs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.odes.odes_2d.ODE2dVarThrust.compute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the output variables</p>
+<dd><p>Compute the output variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -2415,7 +2415,7 @@ solution from the previous linear solve.</p></li>
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dVarThrust.compute_partials">
 <code class="sig-name descname">compute_partials</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">jacobian</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.odes.odes_2d.ODE2dVarThrust.compute_partials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the partial derivatives variables</p>
+<dd><p>Compute the partial derivatives variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -2962,18 +2962,18 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.ODE2dVertical">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">ODE2dVertical</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dVertical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dVertical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.explicitcomponent.ExplicitComponent</span></code></p>
-<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with variable thrust.</p>
+<p><cite>ODE2dVertical</cite> class defines the equations of motion for a two dim. powered trajectory with variable thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 <li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [-]</p></li>
 </ul>
 </dd>
@@ -2993,13 +2993,13 @@ if a specific coloring is passed in.</p></li>
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dVertical.compute">
 <code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">outputs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dVertical.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dVertical.compute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the output variables</p>
+<dd><p>Compute the output variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="latom.odes.odes_2d.ODE2dVertical.compute_partials">
 <code class="sig-name descname">compute_partials</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">jacobian</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#ODE2dVertical.compute_partials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.ODE2dVertical.compute_partials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the partial derivative variables</p>
+<dd><p>Compute the partial derivative variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -3873,21 +3873,21 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.SafeAlt">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">SafeAlt</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#SafeAlt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.SafeAlt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.explicitcomponent.ExplicitComponent</span></code></p>
-<p>SafeAlt class defines the curve representing geographical constraints on the central body surface</p>
+<p><cite>SafeAlt</cite> class defines the curve representing geographical constraints on the central body surface.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>R</strong> (<em>float</em>) – Moon radius [m]</p></li>
+<li><p><strong>R</strong> (<em>float</em>) – Moon radius [-]</p></li>
 <li><p><strong>alt_safe</strong> (<em>float</em>) – Altitude of the curve representing the geographical constraint [-]</p></li>
-<li><p><strong>slope</strong> (<em>float</em>) – Slope of the curves defining a geographical constraint</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the curves defining a geographical constraint [-]</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="latom.odes.odes_2d.SafeAlt.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#SafeAlt.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.SafeAlt.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes the <cite>SafeAlt</cite> class variables</p>
+<dd><p>Initializes the <cite>SafeAlt</cite> class variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -3899,13 +3899,13 @@ if a specific coloring is passed in.</p></li>
 <dl class="method">
 <dt id="latom.odes.odes_2d.SafeAlt.compute">
 <code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">outputs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#SafeAlt.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.SafeAlt.compute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the output variables</p>
+<dd><p>Compute the output variables.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="latom.odes.odes_2d.SafeAlt.compute_partials">
 <code class="sig-name descname">compute_partials</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">jacobian</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#SafeAlt.compute_partials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.SafeAlt.compute_partials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the partial derivative variables</p>
+<dd><p>Compute the partial derivative variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -4774,12 +4774,12 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.Polar2COE">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">Polar2COE</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#Polar2COE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.Polar2COE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.explicitcomponent.ExplicitComponent</span></code></p>
-<p>Polar2COE class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.</p>
+<p><cite>Polar2COE</cite> class defines the set of equations to derive the Classical Orbital Elements from Polar coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 </ul>
 </dd>
 </dl>
@@ -5692,7 +5692,7 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.Polar2RApo">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">Polar2RApo</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#Polar2RApo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.Polar2RApo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.odes.odes_2d.Polar2COE" title="latom.odes.odes_2d.Polar2COE"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.odes.odes_2d.Polar2COE</span></code></a></p>
-<p>Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p>
+<p><cite>Polar2RApo</cite> class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><p><strong>ra</strong> (<em>float</em>) – Value of the apoapsis radius [-]</p>
@@ -6588,17 +6588,9 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d.Polar2AEH">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d.</code><code class="sig-name descname">Polar2AEH</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#Polar2AEH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.Polar2AEH" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.odes.odes_2d.Polar2COE" title="latom.odes.odes_2d.Polar2COE"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.odes.odes_2d.Polar2COE</span></code></a></p>
-<p>Polar2AEH class defines the set of equations to derive the a and h from Polar coordinates.</p>
+<p><cite>Polar2AEH</cite> class defines the set of equations to derive the a and h from Polar coordinates.</p>
 <p>The method computes the semi-major axis a, the specific energy and the angular momentum h starting from the polar
 coordinates r, u, v.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Other Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
-</ul>
-</dd>
-</dl>
 <dl class="method">
 <dt id="latom.odes.odes_2d.Polar2AEH.setup">
 <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d.html#Polar2AEH.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d.Polar2AEH.setup" title="Permalink to this definition">¶</a></dt>

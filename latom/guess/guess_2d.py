@@ -586,11 +586,13 @@ class TwoDimLLOGuess(TwoDimGuess):
         ----------
         fix_final : bool, optional
             ``True`` if the final angle is fixed, ``False`` otherwise. Default is ``False``
-        kwargs :
-            t_eval : ndarray
-                Time vector in which states and controls are computed [s]
-            nb_nodes : int
-                Number of equally space nodes in time in which states and controls are computed
+
+        Other Parameters
+        ----------------
+        t_eval : ndarray
+            Time vector in which states and controls are computed [s]
+        nb_nodes : int
+            Number of equally space nodes in time in which states and controls are computed
 
         """
 

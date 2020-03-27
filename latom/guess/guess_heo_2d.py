@@ -45,13 +45,12 @@ class TwoDimHEOGuess(TwoDimGuess):
     def compute_trajectory(self, **kwargs):
         """Computes the states and controls timeseries on the provided time grid.
 
-        Parameters
-        ----------
-        kwargs :
-            t_eval : ndarray
-                Time vector in which states and controls are computed [s]
-            nb_nodes : int
-                Number of equally space nodes in time in which states and controls are computed
+        Other Parameters
+        ----------------
+        t_eval : ndarray
+            Time vector in which states and controls are computed [s]
+        nb_nodes : int
+            Number of equally space nodes in time in which states and controls are computed
 
         """
 
@@ -118,11 +117,13 @@ class TwoDimLLO2HEOGuess(TwoDimHEOGuess):
             ``True`` if the final angle is fixed, ``False`` otherwise. Default is ``True``
         throttle : bool, optional
             If ``True`` replace the spacecraft states on the last node with the ones from `ImpulsiveBurn`
-        kwargs :
-            t_eval : ndarray
-                Time vector in which states and controls are computed [s]
-            nb_nodes : int
-                Number of equally space nodes in time in which states and controls are computed
+
+        Other Parameters
+        ----------------
+        t_eval : ndarray
+            Time vector in which states and controls are computed [s]
+        nb_nodes : int
+            Number of equally space nodes in time in which states and controls are computed
 
         """
 
@@ -231,13 +232,12 @@ class TwoDimHEO2LLOGuess(TwoDimHEOGuess):
     def compute_trajectory(self, **kwargs):
         """Computes the states and controls timeseries on the provided time grid.
 
-        Parameters
-        ----------
-        kwargs :
-            t_eval : ndarray
-                Time vector in which states and controls are computed [s]
-            nb_nodes : int
-                Number of equally space nodes in time in which states and controls are computed
+        Other Parameters
+        ----------------
+        t_eval : ndarray
+            Time vector in which states and controls are computed [s]
+        nb_nodes : int
+            Number of equally space nodes in time in which states and controls are computed
 
         """
 

@@ -47,11 +47,13 @@ class TwoDimLLO2ApoMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            rp : float
-                HEO periapsis radius [m]
-            t : float
-                HEO period [s]
+
+        Other Parameters
+        ----------------
+        rp : float
+            HEO periapsis radius [m]
+        t : float
+            HEO period [s]
 
         Returns
         -------
@@ -191,13 +193,15 @@ class TwoDimLLO2ApoContinuationMetaModel(MetaModel):
             Default is ``None``
         rec_file : str, optional
             Name of the file in `latom.data.metamodels` where the meta model will be stored. Default is ``None``
-        kwargs : dict
-            rp : float
-                HEO periapsis radius [m]
-            t : float
-                HEO period [s]
-            log_scale : bool
-                ``True`` if `twr` values are given in logarithmic scale as `log(twr)`
+
+        Other Parameters
+        ----------------
+        rp : float
+            HEO periapsis radius [m]
+        t : float
+            HEO period [s]
+        log_scale : bool
+            ``True`` if `twr` values are given in logarithmic scale as `log(twr)`
 
         """
 
@@ -279,13 +283,15 @@ class TwoDim3PhasesLLO2HEOMetaModel(MetaModel):
         u_bound : str, optional
             Specify the bounds on the radial velocity along the transfer as ``lower``, ``upper`` or ``None``.
             Default is ``None``
-        kwargs : dict
-            rp : float
-                HEO periapsis radius [m]
-            t : float
-                HEO period [s]
-            phase_name : iterable
-                Names for the three phases within OpenMDAO
+
+        Other Parameters
+        ----------------
+        rp : float
+            HEO periapsis radius [m]
+        t : float
+            HEO period [s]
+        phase_name : iterable
+            Names for the three phases within OpenMDAO
 
         Returns
         -------

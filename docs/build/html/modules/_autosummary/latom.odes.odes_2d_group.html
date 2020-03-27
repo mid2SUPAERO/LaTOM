@@ -184,28 +184,28 @@
 <td><p>Class used to group systems together; instantiate or inherit.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dConstThrust</span></code>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dConstThrust</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.odes.odes_2d_group.ODE2dLLO2Apo" title="latom.odes.odes_2d_group.ODE2dLLO2Apo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2Apo</span></code></a>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dLLO2Apo</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.odes.odes_2d_group.ODE2dLLO2HEO" title="latom.odes.odes_2d_group.ODE2dLLO2HEO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dLLO2HEO</span></code></a>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p>ODE2dLLO2HEO class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.odes.odes_2d_group.ODE2dVToff" title="latom.odes.odes_2d_group.ODE2dVToff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVToff</span></code></a>(**kwargs)</p></td>
-<td><p></p></td>
+<td><p><cite>ODE2dVToff</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ODE2dVarThrust</span></code>(**kwargs)</p></td>
-<td><p>ODE2dThrust class defines the equations of motion for a two dim.</p></td>
+<td><p><cite>ODE2dVarThrust</cite> class defines the equations of motion for a two dim.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2AEH</span></code>(**kwargs)</p></td>
-<td><p>Polar2AEH class defines the set of equations to derive the a and h from Polar coordinates.</p></td>
+<td><p><cite>Polar2AEH</cite> class defines the set of equations to derive the a and h from Polar coordinates.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polar2RApo</span></code>(**kwargs)</p></td>
-<td><p>Polar2RApo class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p></td>
+<td><p><cite>Polar2RApo</cite> class defines the set of equations to derive the apoapsis radius from Polar coordinates.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeAlt</span></code>(**kwargs)</p></td>
-<td><p>SafeAlt class defines the curve representing geographical constraints on the central body surface</p></td>
+<td><p><cite>SafeAlt</cite> class defines the curve representing geographical constraints on the central body surface.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">declare_parameter</span></code>(name[, targets, shape, …])</p></td>
 <td><p>Class Decorator used to attach ODE parameter metadata to an OpenMDAO system.</p></td>
@@ -222,30 +222,31 @@
 <dt id="latom.odes.odes_2d_group.ODE2dVToff">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d_group.</code><code class="sig-name descname">ODE2dVToff</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d_group.html#ODE2dVToff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d_group.ODE2dVToff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.group.Group</span></code></p>
-<dl class="method">
-<dt id="latom.odes.odes_2d_group.ODE2dVToff.initialize">
-<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d_group.html#ODE2dVToff.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d_group.ODE2dVToff.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with vertical take-off.</p>
+<p><cite>ODE2dVToff</cite> class defines the equations of motion for a two dim. powered trajectory with vertical take-off.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectry [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 <li><p><strong>R</strong> (<em>float</em>) – Moon radius [-]</p></li>
 <li><p><strong>alt_safe</strong> (<em>float</em>) – Altitude of the curve representing the geographical constraint [-]</p></li>
-<li><p><strong>slope</strong> (<em>float</em>) – Slope of the curves defining a geographical constraint</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Slope of the curves defining a geographical constraint [-]</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="method">
+<dt id="latom.odes.odes_2d_group.ODE2dVToff.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d_group.html#ODE2dVToff.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d_group.ODE2dVToff.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the <cite>ODE2dVToff</cite> class variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1067,21 +1068,22 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d_group.ODE2dLLO2Apo">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d_group.</code><code class="sig-name descname">ODE2dLLO2Apo</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d_group.html#ODE2dLLO2Apo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d_group.ODE2dLLO2Apo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.group.Group</span></code></p>
-<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory with insertion at apoapsis.</p>
+<p><cite>ODE2dLLO2Apo</cite> class defines the equations of motion for a two dim. powered trajectory to leave the intial LLO
+and enter a ballistic arc with apoapsis radius equal to <cite>ra</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectry [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 <li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [-]</p></li>
 <li><p><strong>ra</strong> (<em>float</em>) – Value of the apoapsis radius [-]</p></li>
 </ul>
@@ -1912,21 +1914,21 @@ if a specific coloring is passed in.</p></li>
 <dt id="latom.odes.odes_2d_group.ODE2dLLO2HEO">
 <em class="property">class </em><code class="sig-prename descclassname">latom.odes.odes_2d_group.</code><code class="sig-name descname">ODE2dLLO2HEO</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/odes/odes_2d_group.html#ODE2dLLO2HEO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.odes.odes_2d_group.ODE2dLLO2HEO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openmdao.core.group.Group</span></code></p>
-<p>ODE2dThrust class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.</p>
+<p>ODE2dLLO2HEO class defines the equations of motion for a two dim. powered trajectory from LLO to HEO.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Represents the time variable of the system [-]</p></li>
-<li><p><strong>r</strong> (<em>float</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
-<li><p><strong>u</strong> (<em>float</em>) – Radial velocity of a point along the trajectory [-]</p></li>
-<li><p><strong>v</strong> (<em>float</em>) – Tangential velocity of a point along the trajectry [-]</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Angle defining the thrust direction [-]</p></li>
-<li><p><strong>thrust</strong> (<em>float</em>) – Value of the applied thrust force [-]</p></li>
+<li><p><strong>time</strong> (<em>ndarray</em>) – Represents the time variable of the system [-]</p></li>
+<li><p><strong>r</strong> (<em>ndarray</em>) – Represents a position along the trajectory. The distance is measured from the center of the central body [-]</p></li>
+<li><p><strong>theta</strong> (<em>ndarray</em>) – Angle spawn from the starting point of the orbit to the final one [-]</p></li>
+<li><p><strong>u</strong> (<em>ndarray</em>) – Radial velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Tangential velocity of a point along the trajectory [-]</p></li>
+<li><p><strong>m</strong> (<em>ndarray</em>) – Mass of the space vehicle that performs the trajectory [-]</p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em>) – Angle defining the thrust direction [-]</p></li>
+<li><p><strong>thrust</strong> (<em>ndarray</em>) – Value of the applied thrust force [-]</p></li>
 <li><p><strong>w</strong> (<em>float</em>) – Value of the exhaust velocity [-]</p></li>
 <li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes where to compute the equations</p></li>
-<li><p><strong>GM</strong> (<em>float</em>) – Gravitational constant [-]</p></li>
+<li><p><strong>GM</strong> (<em>float</em>) – Standard gravitational parameter for the central attracting body [-]</p></li>
 <li><p><strong>T</strong> (<em>float</em>) – Value of the constant thrust force [-]</p></li>
 </ul>
 </dd>

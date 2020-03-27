@@ -21,7 +21,7 @@ from latom.utils.pickle_utils import save, load
 
 
 class SurrogateModel:
-    """`SurrogateModel` class sets up a surrogate model object defined in the Surrogate Modelling Toolbox (SMT) [1]_
+    """`SurrogateModel` class sets up a surrogate model object defined in the Surrogate Modelling Toolbox (SMT) [2]_
     package to compute and exploit data for different transfer trajectories.
 
     The model inputs are the spacecraft specific impulse `Isp` and initial thrust/weight ratio `twr` while the model
@@ -52,8 +52,8 @@ class SurrogateModel:
 
     References
     ----------
-    .. [1] M. A. Bouhlel and J. T. Hwang and N. Bartoli and R. Lafage and J. Morlier and J. R. R. A. Martins.
-    A Python surrogate modeling framework with derivatives. Advances in Engineering Software, 2019.
+    .. [2] M. A. Bouhlel and J. T. Hwang and N. Bartoli and R. Lafage and J. Morlier and J. R. R. A. Martins.
+        A Python surrogate modeling framework with derivatives. Advances in Engineering Software, 2019.
 
     """
 
@@ -191,7 +191,7 @@ class SurrogateModel:
         train_method : str
             Training method among ``IDW``, ``KPLS``, ``KPLSK``, ``KRG``, ``LS``, ``QP``, ``RBF``, ``RMTB``, ``RMTC``
         kwargs : dict
-            Additional input arguments for RMTB and RMTC
+            Additional keyword arguments supported by SMT objects
 
         """
 

@@ -251,31 +251,31 @@
 <td><p>Spacecraft class defines the spacecraft characteristics.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurrogateModel</span></code></a>(train_method[, rec_file])</p></td>
-<td><p></p></td>
+<td><p><cite>SurrogateModel</cite> class sets up a surrogate model object defined in the Surrogate Modelling Toolbox (SMT) <a class="footnote-reference brackets" href="#id3" id="id1">2</a> package to compute and exploit data for different transfer trajectories.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstNLP</span></code>(body, sc, alt, theta, …)</p></td>
 <td><p>TwoDimAscConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate" title="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscConstSurrogate</span></code></a>(train_method[, rec_file])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimAscConstSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional ascent trajectory at constant thrust.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffNLP</span></code>(body, sc, alt, alt_safe, …)</p></td>
 <td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate" title="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVToffSurrogate</span></code></a>(train_method[, rec_file])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimAscVToffSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional ascent trajectory with variable thrust and minimum safe altitude.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarNLP</span></code>(body, sc, alt, alpha_bounds, …)</p></td>
 <td><p>TwoDimAscVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate" title="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimAscVarSurrogate</span></code></a>(train_method[, rec_file])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimAscVarSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional ascent trajectory with variable thrust.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstNLP</span></code>(body, sc, alt, vp, theta, …)</p></td>
 <td><p>TwoDimDescConstNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate" title="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescConstSurrogate</span></code></a>(train_method[, …])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimDescConstSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory at constant thrust.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescTwoPhasesNLP</span></code>(body, sc, alt, …[, …])</p></td>
 <td><p>TwoDimDescTwoPhasesNLP transcribes a continuous-time optimal control problem for a two-dimensional descent trajectory into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
@@ -284,16 +284,16 @@
 <td><p>TwoDimAscVToffNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate" title="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVLandSurrogate</span></code></a>(train_method[, …])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimDescVLandSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory with variable thrust and constrained minimum altitude.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarNLP</span></code>(body, sc, alt, …[, …])</p></td>
 <td><p>TwoDimDescVarNLP class transcribes a two-dimensional, continuous-time optimal control problem in trajectory optimization into a Non Linear Programming Problem (NLP) using the OpenMDAO and dymos libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate" title="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVarSurrogate</span></code></a>(train_method[, rec_file])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimDescVarSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory with variable thrust.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate" title="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimDescVertSurrogate</span></code></a>(train_method[, rec_file])</p></td>
-<td><p></p></td>
+<td><p><cite>TwoDimDescVertSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory at constant thrust with final vertical descent phase.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoDimOrb</span></code>(gm, **kwargs)</p></td>
 <td><p>Defines a two-dimensional orbit from its keplerian parameters.</p></td>
@@ -304,50 +304,187 @@
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">SurrogateModel</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><cite>SurrogateModel</cite> class sets up a surrogate model object defined in the Surrogate Modelling Toolbox (SMT) <a class="footnote-reference brackets" href="#id3" id="id2">2</a>
+package to compute and exploit data for different transfer trajectories.</p>
+<p>The model inputs are the spacecraft specific impulse <cite>Isp</cite> and initial thrust/weight ratio <cite>twr</cite> while the model
+output is the propellant fraction <cite>m_prop</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>rec_file</strong> (str or <code class="docutils literal notranslate"><span class="pre">None</span></code>, optional) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored or <code class="docutils literal notranslate"><span class="pre">None</span></code> if a new model has to
+be built. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>limits</strong> (<em>ndarray</em>) – Sampling grid limits in terms of minimum and maximum <cite>Isp</cite> and <cite>twr</cite></p></li>
+<li><p><strong>x_samp</strong> (<em>ndarray</em>) – Sampling points as <cite>Isp, twr</cite> tuples</p></li>
+<li><p><strong>m_prop</strong> (<em>ndarray</em>) – Propellant fraction on training points [-]</p></li>
+<li><p><strong>failures</strong> (<em>ndarray</em>) – Matrix of boolean to verify each NLP solution has converged</p></li>
+<li><p><strong>d</strong> (<em>dict</em>) – Dictionary that contain all the information to reconstruct a meta model</p></li>
+<li><p><strong>trained</strong> (<em>IDW</em><em>, </em><em>KPLS</em><em>, </em><em>KPLSK</em><em>, </em><em>KRG</em><em>, </em><em>LS</em><em>, </em><em>QP</em><em>, </em><em>RBF</em><em>, </em><em>RMTB</em><em> or </em><em>RMTC</em>) – Surrogate model object defined by SMT</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets">2</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
+<dd><p>M. A. Bouhlel and J. T. Hwang and N. Bartoli and R. Lafage and J. Morlier and J. R. R. A. Martins.
+A Python surrogate modeling framework with derivatives. Advances in Engineering Software, 2019.</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.abs_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.compute_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.compute_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.SurrogateModel.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#SurrogateModel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.SurrogateModel.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -355,55 +492,192 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimAscConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscConstSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimAscConstSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional ascent trajectory at constant thrust.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.sampling">
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscConstSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -411,55 +685,190 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimAscVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscVarSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimAscVarSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional ascent trajectory with variable thrust.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.sampling">
-<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVarSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -467,55 +876,193 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimAscVToffSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscVToffSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimAscVToffSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional ascent trajectory with variable
+thrust and minimum safe altitude.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='lower'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimAscVToffSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Asymptotic minimum safe altitude [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Minimum safe altitude slope close to the launch site [-]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimAscVToffSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -523,55 +1070,194 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimDescConstSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescConstSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimDescConstSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory at constant
+thrust.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescConstSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_p</strong> (<em>float</em>) – Periapsis altitude where the final powered descent is initiated [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescConstSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -579,55 +1265,191 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimDescVarSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescVarSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimDescVarSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory with variable
+thrust.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescVarSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVarSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -635,55 +1457,193 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimDescVLandSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescVLandSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimDescVLandSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory with variable
+thrust and constrained minimum altitude.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_safe</em>, <em class="sig-param">slope</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em>, <em class="sig-param">u_bound='upper'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescVLandSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_safe</strong> (<em>float</em>) – Asymptotic minimum safe altitude [m]</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Minimum safe altitude slope close to the launch site [-]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+<li><p><strong>u_bound</strong> (<em>str</em><em>, </em><em>optional</em>) – Specify the bounds on the radial velocity along the transfer as <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVLandSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -691,55 +1651,193 @@
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate">
 <em class="property">class </em><code class="sig-prename descclassname">latom.surrogate.smt_surrogates.</code><code class="sig-name descname">TwoDimDescVertSurrogate</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">rec_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescVertSurrogate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#latom.surrogate.smt_surrogates.SurrogateModel" title="latom.surrogate.smt_surrogates.SurrogateModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">latom.surrogate.smt_surrogates.SurrogateModel</span></code></a></p>
+<p><cite>TwoDimDescVertSurrogate</cite> implements <cite>SurrogateModel</cite> for a two-dimensional descent trajectory at constant
+thrust with final vertical descent phase.</p>
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.sampling">
 <code class="sig-name descname">sampling</code><span class="sig-paren">(</span><em class="sig-param">body</em>, <em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">alt</em>, <em class="sig-param">alt_p</em>, <em class="sig-param">alt_switch</em>, <em class="sig-param">theta</em>, <em class="sig-param">tof</em>, <em class="sig-param">t_bounds</em>, <em class="sig-param">method</em>, <em class="sig-param">nb_seg</em>, <em class="sig-param">order</em>, <em class="sig-param">solver</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='lhs'</em>, <em class="sig-param">criterion='m'</em>, <em class="sig-param">snopt_opts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latom/surrogate/smt_surrogates.html#TwoDimDescVertSurrogate.sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.sampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute a new set of training data starting from a given sampling grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<a class="reference internal" href="latom.utils.primary.html#latom.utils.primary.Primary" title="latom.utils.primary.Primary"><em>Primary</em></a>) – Central attracting body</p></li>
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper limits [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper limits [-]</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Orbit altitude [m]</p></li>
+<li><p><strong>alt_p</strong> (<em>float</em>) – Periapsis altitude where the final powered descent is initiated [m]</p></li>
+<li><p><strong>alt_switch</strong> (<em>float</em>) – Altitude at which the final vertical descent is triggered [m]</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Guessed spawn angle [rad]</p></li>
+<li><p><strong>tof</strong> (<em>float</em>) – Guessed time of flight [s]</p></li>
+<li><p><strong>t_bounds</strong> (<em>iterable</em>) – Time of flight lower and upper bounds expressed as fraction of <cite>tof</cite></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Transcription method used to discretize the continuous time trajectory into a finite set of nodes,
+allowed <code class="docutils literal notranslate"><span class="pre">gauss-lobatto</span></code>, <code class="docutils literal notranslate"><span class="pre">radau-ps</span></code> and <code class="docutils literal notranslate"><span class="pre">runge-kutta</span></code></p></li>
+<li><p><strong>nb_seg</strong> (<em>int</em><em> or </em><em>iterable</em>) – Number of segments in which each phase is discretized</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>iterable</em>) – Transcription order within each phase, must be odd</p></li>
+<li><p><strong>solver</strong> (<em>str</em>) – NLP solver, must be supported by OpenMDAO</p></li>
+<li><p><strong>nb_samp</strong> (<em>iterable</em>) – Total number of sampling points</p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">lhs</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p><strong>snopt_opts</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – SNOPT optional settings expressed as key-value pairs. Default is None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.abs_path">
 <em class="property">static </em><code class="sig-name descname">abs_path</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.abs_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the absolute path of the file where the surrogate model is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fid</strong> – Full path where the surrogate model is stored</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.compute_grid">
 <code class="sig-name descname">compute_grid</code><span class="sig-paren">(</span><em class="sig-param">isp_lim</em>, <em class="sig-param">twr_lim</em>, <em class="sig-param">nb_samp</em>, <em class="sig-param">samp_method='full'</em>, <em class="sig-param">criterion='m'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.compute_grid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the sampling grid fro given <cite>Isp</cite> and <cite>twr</cite> limits and sampling scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp_lim</strong> (<em>iterable</em>) – Specific impulse lower and upper bounds [s]</p></li>
+<li><p><strong>twr_lim</strong> (<em>iterable</em>) – Thrust/weight ratio lower and upper bounds [-]</p></li>
+<li><p><strong>nb_samp</strong> (<em>int</em>) – Total number of samples. Must be a perfect square if <code class="docutils literal notranslate"><span class="pre">full</span></code> is chosen as <cite>samp_method</cite></p></li>
+<li><p><strong>samp_method</strong> (<em>str</em><em>, </em><em>optional</em>) – Sampling scheme, <code class="docutils literal notranslate"><span class="pre">lhs</span></code> for Latin Hypercube Sampling or <code class="docutils literal notranslate"><span class="pre">full</span></code> for Full-Factorial Sampling.
+Default is <code class="docutils literal notranslate"><span class="pre">full</span></code></p></li>
+<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion used to construct the LHS design among <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">ese</span></code>. <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">cm</span></code> and <code class="docutils literal notranslate"><span class="pre">corr</span></code> are
+abbreviations of <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">maximin</span></code>, <code class="docutils literal notranslate"><span class="pre">centermaximin</span></code> and <code class="docutils literal notranslate"><span class="pre">correlation</span></code>, <code class="docutils literal notranslate"><span class="pre">respectively</span></code>
+Default is <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.compute_matrix">
 <code class="sig-name descname">compute_matrix</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.compute_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute structured matrices for <cite>Isp</cite>, <cite>twr</cite> and <cite>m_prop</cite> to display the training data on a response surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>isp</strong> (<em>ndarray</em>) – Matrix of specific impulses [s]</p></li>
+<li><p><strong>twr</strong> (<em>ndarray</em>) – Matrix of thrust/weight ratios [-]</p></li>
+<li><p><strong>m_mat</strong> (<em>ndarray</em>) – Matrix of propellant fractions [-]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.evaluate">
 <code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">isp</em>, <em class="sig-param">twr</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the surrogate model in the given set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isp</strong> (<em>float</em><em> or </em><em>iterable</em>) – Specific impulse on evaluation points [s]</p></li>
+<li><p><strong>twr</strong> (<em>float</em><em> or </em><em>iterable</em>) – Thrust/weight ratio on evaluation points [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>m_eval</strong> – Propellant fraction on evaluation points [-]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or iterable</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads stored data to instantiate a surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.plot">
 <code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">nb_eval=None</em>, <em class="sig-param">nb_lines=50</em>, <em class="sig-param">kind='prop'</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plot the response surface corresponding to the loaded surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_eval</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Number of points included in the matrix if Latin Hypercube Sampling has been used or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>nb_lines</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of contour lines. Default is <code class="docutils literal notranslate"><span class="pre">50</span></code></p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">prop</span></code> to display the propellant fraction <cite>m_prop</cite>, <code class="docutils literal notranslate"><span class="pre">final</span></code> to display the final spacecraft mass
+<cite>1 - m_prop</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">rec_file</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves data corresponding to a surrogate model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rec_file</strong> (<em>str</em>) – Name of the file in <cite>latom.data.smt</cite> where the surrogate model is stored</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.solve">
 <em class="property">static </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">nlp</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Solve the i-th NLP problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nlp</strong> (<a class="reference internal" href="latom.nlp.nlp.html#latom.nlp.nlp.NLP" title="latom.nlp.nlp.NLP"><em>NLP</em></a>) – NLP object</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Current iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>m_prop</strong> (<em>float</em>) – Propellant fraction [-]</p></li>
+<li><p><strong>f</strong> (<em>bool</em>) – Failure status</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_method</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#latom.surrogate.smt_surrogates.TwoDimDescVertSurrogate.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Trains the surrogate model with given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_method</strong> (<em>str</em>) – Training method among <code class="docutils literal notranslate"><span class="pre">IDW</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLS</span></code>, <code class="docutils literal notranslate"><span class="pre">KPLSK</span></code>, <code class="docutils literal notranslate"><span class="pre">KRG</span></code>, <code class="docutils literal notranslate"><span class="pre">LS</span></code>, <code class="docutils literal notranslate"><span class="pre">QP</span></code>, <code class="docutils literal notranslate"><span class="pre">RBF</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTB</span></code>, <code class="docutils literal notranslate"><span class="pre">RMTC</span></code></p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments supported by SMT objects</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
