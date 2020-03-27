@@ -4,11 +4,10 @@
 
 .. _sphx_glr_examples:
 
-Example scripts
-===============
+Examples scripts
+================
 
 Example scripts to understand the usage of LaTOM
-
 
 .. raw:: html
 

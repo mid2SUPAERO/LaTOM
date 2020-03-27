@@ -81,6 +81,7 @@ napoleon_use_rtype = True
 sphinx_gallery_conf = {
     'examples_dirs': '../../scripts',
     'gallery_dirs': 'examples',
+    'default_thumb_file': 'source/LaTOM_logo.png',
 }
 
 # Add any paths that contain templates here, relative to this directory.
