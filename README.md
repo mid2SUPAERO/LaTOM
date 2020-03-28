@@ -18,8 +18,8 @@ setup the OpenMDAO/dymos environment
 
 ## Documentation
 
-Refer to [https://mid2supaero.github.io/LaTOM/](https://mid2supaero.github.io/LaTOM/)
-for the package documentation
+* [Package documentation](https://mid2supaero.github.io/LaTOM/)
+* [Example scripts](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html)
 
 ## Contents
 
@@ -52,16 +52,18 @@ There are two ways for running a simulation and display the results:
 
 * perform a new optimization to obtain your own solution starting from custom
 values for the different trajectory parameters. Multiple examples are included
-in *scripts/computation* and can be consulted [here](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html#computation-scripts)
+in [*scripts/computation*](scripts/computation) and can be consulted
+[here](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html#computation-scripts)
 
-* load a structure stored in one of the four *data* subdirectories that contain
-the results already obtained for an optimal transfer trajectory and simply
-display those results. Multiple examples are included in *scripts/visualization*
-and can be consulted [here](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html#visualization-scripts)
+* load a structure stored in one of the four [*data*](latom/data) subdirectories
+that contain the results already obtained for an optimal transfer trajectory
+and simply display those results. Multiple examples are included in
+[*scripts/visualization*](scripts/visualization) and can be consulted
+[here](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html#visualization-scripts)
 
 In either case do the following:
 
-1. open one of the scripts in the *scripts* subdirectories
+1. open one of the scripts in the [*scripts*](scripts) subdirectories
 2. read the list that describes the different possibilities and choose the
 appropriate settings
 3. optionally define your own parameters to perform a new optimization
