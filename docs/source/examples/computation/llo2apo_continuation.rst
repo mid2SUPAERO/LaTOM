@@ -12,7 +12,7 @@ LLO to Apoapsis with Continuation
 
 This examples computes a series of LLO to HEO transfers modeled as an initial finite burn to leave the LLO, a ballistic
 arc and a final impulsive burn to inject at the apoapsis of the target HEO.
-Subsequent solutions are obtained using a continuation method for decreasing thrust/weight ratios
+Subsequent solutions are obtained using a continuation method for decreasing thrust/weight ratios.
 
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
@@ -27,8 +27,7 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
     from latom.analyzer.analyzer_heo_2d import TwoDimLLO2ApoContinuationAnalyzer
     from latom.data.continuation.data_continuation import dirname_continuation
 
-    # file ID
-    fid = 'tests/lin350.pkl'
+    rec_file = 'example.pkl'  # file ID in latom.data.continuation where the data are serialized or None
 
     # trajectory
     moon = Moon()
@@ -37,15 +36,21 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
     heo_period = 6.5655 * 86400  # target HEO period [s]
 
     # spacecraft
-    isp = 350.  # specific impulse [s]
-    twr_list = np.arange(0.2, 0.049, -0.005)  # range of thrust/weight ratios in absolute/logarithmic scale [-]
-    twr0 = twr_list[0]  # maximum thrust/weight ratio in absolute value [-]
-    log_scale = False
-    sc = Spacecraft(isp, twr0, g=moon.g)
+    isp = 400.  # specific impulse [s]
+    log_scale = False  # twr_list in logarithmic scale or not
+    twr_list = np.arange(1.0, 0.09, -0.1)  # range of thrust/weight ratios in absolute/logarithmic scale [-]
+
+    # maximum thrust/weight ratio in absolute value [-]
+    if log_scale:
+        twr0 = np.exp(twr_list[0])
+    else:
+        twr0 = twr_list[0]
+
+    sc = Spacecraft(isp, twr0, g=moon.g)  # Spacecraft object
 
     # NLP
     method = 'gauss-lobatto'
-    segments = 400
+    segments = 200
     order = 3
     solver = 'IPOPT'
     snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
@@ -65,15 +70,13 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
         if exp_sim:  # explicit simulation from last NLP solution
             tr.nlp.exp_sim()
 
-    # retrieve solutions
-    tr.get_solutions(explicit=exp_sim, scaled=False)
+    tr.get_solutions(explicit=exp_sim, scaled=False)  # retrieve solutions
+    print(tr)  # print summary
 
-    print(tr)
+    if rec_file is not None:  # save data in latom.data.continuation using the provided file ID
+        tr.save('/'.join([dirname_continuation, rec_file]))
 
-    if fid is not None:
-        tr.save('/'.join([dirname_continuation, fid]))
-
-    tr.plot()
+    tr.plot()  # plot the results
 
 
 .. rst-class:: sphx-glr-timing

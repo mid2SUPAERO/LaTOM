@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Two-dimensional Moon to LLO transfer visualization" href="../visualization/two_dim_asc_reader.html" />
+    <link rel="next" title="Two-dimensional, three-phases LLO to HEO transfer visualization" href="../visualization/two_dim_llo2heo_visu.html" />
     <link rel="prev" title="SMT Surrogate Model for Moon to LLO and LLO to Moon transfers" href="smt_surf2llo.html" /> 
 </head>
 
@@ -102,10 +102,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc_vertical.html">Two-phases LLO to Moon transfer with vertical touchdown</a></li>
 <li class="toctree-l2"><a class="reference internal" href="llo2apo_continuation.html">LLO to Apoapsis with Continuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo.html">Two-dimensional LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc.html">Two-dimensional LLO to Moon transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt_surf2llo.html">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</a></li>
 </ul>
@@ -181,6 +181,8 @@
 </div>
 <div class="sphx-glr-example-title section" id="openmdao-metamodel-for-moon-to-llo-and-llo-to-moon-transfers">
 <span id="sphx-glr-examples-computation-om-mm-surf2llo-py"></span><h1>OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers<a class="headerlink" href="#openmdao-metamodel-for-moon-to-llo-and-llo-to-moon-transfers" title="Permalink to this headline">¶</a></h1>
+<p>This example computes the sampling grid and training points to assemble an OpenMDAO MetaModel for a Moon to LLO or LLO
+to Moon transfer with constant or variable thrust and optional minimum safe altitude.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">latom.surrogate.om_metamodels</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
@@ -192,11 +194,12 @@
 <span class="n">training_data_gradients</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># compute gradients wrt output training data</span>
 <span class="n">vec_size</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># number of points to evaluate at once</span>
 <span class="n">nb_samp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># number of samples on which the actual solution is computed</span>
-<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;test.pkl&#39;</span>  <span class="c1"># name of the file on which the solution is serialized</span>
+<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;example.pkl&#39;</span>  <span class="c1"># name of the file in latom.data.metamodels in which the solution is serialized</span>
 
+<span class="c1"># transfer type among the followings:</span>
 <span class="c1"># ac: ascent constant, av: ascent variable, as: ascent vertical takeoff</span>
-<span class="c1"># dc: descent constant, dv: descent variable, ds: descent vertical landing, dtp: two-phases descent vertical landing</span>
-<span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;dtp&#39;</span>
+<span class="c1"># dc: descent constant, dv: descent variable, ds: descent vertical landing, d2p: two-phases descent vertical landing</span>
+<span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;ac&#39;</span>
 
 <span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>  <span class="c1"># central attracting body</span>
 
@@ -252,13 +255,13 @@
                                  <span class="n">training_data_gradients</span><span class="o">=</span><span class="n">training_data_gradients</span><span class="p">,</span> <span class="n">vec_size</span><span class="o">=</span><span class="n">vec_size</span><span class="p">)</span>
     <span class="n">a</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="n">moon</span><span class="p">,</span> <span class="n">twr</span><span class="p">,</span> <span class="n">isp</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span>
                <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">,</span> <span class="n">alt_safe</span><span class="o">=</span><span class="n">alt_safe</span><span class="p">,</span> <span class="n">slope</span><span class="o">=-</span><span class="n">slope</span><span class="p">)</span>
-<span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;dtp&#39;</span><span class="p">:</span>
+<span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;d2p&#39;</span><span class="p">:</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">TwoDimDescTwoPhasesMetaModel</span><span class="p">(</span><span class="n">distributed</span><span class="o">=</span><span class="n">distributed</span><span class="p">,</span> <span class="n">extrapolate</span><span class="o">=</span><span class="n">extrapolate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">interp_method</span><span class="p">,</span>
                                      <span class="n">training_data_gradients</span><span class="o">=</span><span class="n">training_data_gradients</span><span class="p">,</span> <span class="n">vec_size</span><span class="o">=</span><span class="n">vec_size</span><span class="p">)</span>
     <span class="n">a</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="n">moon</span><span class="p">,</span> <span class="n">twr</span><span class="p">,</span> <span class="n">isp</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span> <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span>
                <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">,</span> <span class="n">alt_p</span><span class="o">=</span><span class="n">alt_p</span><span class="p">,</span> <span class="n">alt_switch</span><span class="o">=</span><span class="n">alt_safe</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="n">tof</span><span class="p">,</span> <span class="n">fix</span><span class="o">=</span><span class="n">fix</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;kind must be one between ac, av, as or dc, dv, ds, dtp&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;kind must be one between ac, av, as or dc, dv, ds, d2p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -281,7 +284,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../visualization/two_dim_asc_reader.html" class="btn btn-neutral float-right" title="Two-dimensional Moon to LLO transfer visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../visualization/two_dim_llo2heo_visu.html" class="btn btn-neutral float-right" title="Two-dimensional, three-phases LLO to HEO transfer visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="smt_surf2llo.html" class="btn btn-neutral float-left" title="SMT Surrogate Model for Moon to LLO and LLO to Moon transfers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

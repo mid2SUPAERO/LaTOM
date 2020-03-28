@@ -102,10 +102,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Two-phases LLO to Moon transfer with vertical touchdown</a></li>
 <li class="toctree-l2"><a class="reference internal" href="llo2apo_continuation.html">LLO to Apoapsis with Continuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo.html">Two-dimensional LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc.html">Two-dimensional LLO to Moon transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt_surf2llo.html">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="om_mm_surf2llo.html">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</a></li>
 </ul>
@@ -181,6 +181,13 @@
 </div>
 <div class="sphx-glr-example-title section" id="two-phases-llo-to-moon-transfer-with-vertical-touchdown">
 <span id="sphx-glr-examples-computation-two-dim-desc-vertical-py"></span><h1>Two-phases LLO to Moon transfer with vertical touchdown<a class="headerlink" href="#two-phases-llo-to-moon-transfer-with-vertical-touchdown" title="Permalink to this headline">¶</a></h1>
+<p>This example computes a two-dimensional descent trajectory from a specified LLO to the Moon surface at constant thrust.
+The transfer is divided into four phases for which only the last two are transcribed into an NLP and optimized.
+The aforementioned phases are the followings:
+1. Impulsive burn to leave the initial LLO and enter in an Hohmann transfer with known periapsis radius
+2. Hohmann transfer until the aforementioned periapsis
+3. Attitude-free powered phase at constant thrust from the aforementioned periapsis to a fixed altitude or time-to-go
+4. Vertical powered descent at constant thrust from a fixed altitude or time-to-go until the final touchdown</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -189,13 +196,16 @@
 <span class="kn">from</span> <span class="nn">latom.analyzer.analyzer_2d</span> <span class="kn">import</span> <span class="n">TwoDimDescTwoPhasesAnalyzer</span>
 
 <span class="c1"># trajectory</span>
-<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
+<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>  <span class="c1"># central attracting body</span>
 <span class="n">alt</span> <span class="o">=</span> <span class="mf">100e3</span>  <span class="c1"># initial orbit altitude [m]</span>
 <span class="n">alt_p</span> <span class="o">=</span> <span class="mf">15e3</span>  <span class="c1"># periselene altitude [m]</span>
 <span class="n">alt_switch</span> <span class="o">=</span> <span class="mf">4e3</span>  <span class="c1"># switch altitude [m]</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># guessed spawn angle [rad]</span>
 <span class="n">tof</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># guessed time of flight [s]</span>
 <span class="n">t_bounds</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>  <span class="c1"># time of flight bounds [-]</span>
+
+<span class="c1"># condition to trigger the final vertical descent, &#39;alt&#39; for fixed altitude equal to &#39;alt_switch&#39; or &#39;time&#39; for</span>
+<span class="c1"># fixed time-to-go equal to the second component of &#39;tof&#39;</span>
 <span class="n">fix</span> <span class="o">=</span> <span class="s1">&#39;alt&#39;</span>
 
 <span class="c1"># spacecraft</span>
@@ -215,22 +225,26 @@
 <span class="n">exp_sim</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># perform explicit simulation</span>
 <span class="n">rec</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># record the solution</span>
 
+<span class="k">if</span> <span class="n">rec</span><span class="p">:</span>  <span class="c1"># files IDs in the current working directory where the solutions are serialized if &#39;rec&#39; is set to &#39;True&#39;</span>
+    <span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;example.sql&#39;</span>  <span class="c1"># implicit NLP solution</span>
+    <span class="n">rec_file_exp</span> <span class="o">=</span> <span class="s1">&#39;example_exp.sql&#39;</span>  <span class="c1"># explicit simulation</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># no recording if &#39;rec&#39; is set to &#39;False&#39;</span>
+    <span class="n">rec_file</span> <span class="o">=</span> <span class="n">rec_file_exp</span> <span class="o">=</span> <span class="kc">None</span>
+
 <span class="c1"># init analyzer</span>
 <span class="n">tr</span> <span class="o">=</span> <span class="n">TwoDimDescTwoPhasesAnalyzer</span><span class="p">(</span><span class="n">moon</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">alt_p</span><span class="p">,</span> <span class="n">alt_switch</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span>
-                                 <span class="n">solver</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="n">check_partials</span><span class="p">,</span> <span class="n">fix</span><span class="o">=</span><span class="n">fix</span><span class="p">)</span>
+                                 <span class="n">solver</span><span class="p">,</span> <span class="n">check_partials</span><span class="o">=</span><span class="n">check_partials</span><span class="p">,</span> <span class="n">fix</span><span class="o">=</span><span class="n">fix</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">run_driver</span><span class="p">:</span>
 
-    <span class="n">tr</span><span class="o">.</span><span class="n">run_driver</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">run_driver</span><span class="p">()</span>  <span class="c1"># solve the NLP</span>
 
-    <span class="k">if</span> <span class="n">exp_sim</span><span class="p">:</span>
-        <span class="n">tr</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">exp_sim</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exp_sim</span><span class="p">:</span>  <span class="c1"># explicit simulation with Scipy solve_ivp method</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">exp_sim</span><span class="p">(</span><span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file_exp</span><span class="p">)</span>
 
-<span class="n">tr</span><span class="o">.</span><span class="n">get_solutions</span><span class="p">(</span><span class="n">explicit</span><span class="o">=</span><span class="n">exp_sim</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
-
-<span class="n">tr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">get_solutions</span><span class="p">(</span><span class="n">explicit</span><span class="o">=</span><span class="n">exp_sim</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># retrieve solutions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>  <span class="c1"># print summary</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># plot</span>
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>

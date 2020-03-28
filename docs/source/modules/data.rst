@@ -17,7 +17,7 @@ Documentation
 .. automodule:: latom.data.continuation.data_continuation
   :noindex:
 
-.. automodule:: latom.data.llo2heo3phases.data_llo2heo3ph
+.. automodule:: latom.data.transfers.data_transfers
   :noindex:
 
 .. automodule:: latom.data.metamodels.data_mm

@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="SMT Surrogate Model for Moon to LLO and LLO to Moon transfers" href="smt_surf2llo.html" />
-    <link rel="prev" title="Two-dimensional Moon to LLO transfer" href="two_dim_asc.html" /> 
+    <link rel="next" title="Two-dimensional Moon to LLO transfer" href="two_dim_asc.html" />
+    <link rel="prev" title="LLO to Apoapsis with Continuation" href="llo2apo_continuation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -102,10 +102,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc_vertical.html">Two-phases LLO to Moon transfer with vertical touchdown</a></li>
 <li class="toctree-l2"><a class="reference internal" href="llo2apo_continuation.html">LLO to Apoapsis with Continuation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo.html">Two-dimensional LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc.html">Two-dimensional LLO to Moon transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt_surf2llo.html">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="om_mm_surf2llo.html">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</a></li>
 </ul>
@@ -181,6 +181,11 @@
 </div>
 <div class="sphx-glr-example-title section" id="openmdao-metamodel-for-llo-to-heo-transfers">
 <span id="sphx-glr-examples-computation-om-mm-llo2heo-py"></span><h1>OpenMDAO MetaModel for LLO to HEO transfers<a class="headerlink" href="#openmdao-metamodel-for-llo-to-heo-transfers" title="Permalink to this headline">¶</a></h1>
+<p>This example computes the sampling grid and training points to assemble an OpenMDAO MetaModel for an LLO to HEO transfer
+modeled as a finite departure burn to leave the initial LLO, a ballistic arc and a final impulsive burn to inject at the
+apoapsis of the target HEO.
+For each specific impulse value included in the grid, a continuation method can be employed to obtain all corresponding
+solutions for decreasing thrust/weight ratio values.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">latom.utils.pickle_utils</span> <span class="kn">import</span> <span class="n">save</span>
 <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
@@ -195,8 +200,8 @@
 <span class="n">training_data_gradients</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># compute gradients wrt output training data</span>
 <span class="n">vec_size</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># number of points to evaluate at once</span>
 <span class="n">nb_samp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># number of samples on which the actual solution is computed as (twr, Isp)</span>
-<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;llo2apo_mm_log.pkl&#39;</span>  <span class="c1"># name of the file on which the solution is serialized</span>
-<span class="n">rec_file_obj</span> <span class="o">=</span> <span class="s1">&#39;llo2apo_mm_log_all.pkl&#39;</span>  <span class="c1"># name of the file on which the object is serialized</span>
+<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;example.pkl&#39;</span>  <span class="c1"># name of the file in latom.data.metamodels in which the solution is serialized</span>
+<span class="n">rec_file_obj</span> <span class="o">=</span> <span class="s1">&#39;example.pkl&#39;</span>  <span class="c1"># name of the file in the working directory in which the object is serialized</span>
 
 <span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>  <span class="c1"># central attracting body</span>
 
@@ -228,7 +233,7 @@
     <span class="n">mm</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="n">moon</span><span class="p">,</span> <span class="n">twr</span><span class="p">,</span> <span class="n">isp</span><span class="p">,</span> <span class="n">llo_alt</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">transcription_method</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nb_samp</span><span class="p">,</span>
                 <span class="n">snopt_opts</span><span class="o">=</span><span class="n">snopt_opts</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">heo_period</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span><span class="n">heo_rp</span><span class="p">)</span>
 
-<span class="c1"># mm.plot()</span>
+<span class="n">mm</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">save</span><span class="p">(</span><span class="n">mm</span><span class="p">,</span> <span class="n">rec_file_obj</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -252,10 +257,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="smt_surf2llo.html" class="btn btn-neutral float-right" title="SMT Surrogate Model for Moon to LLO and LLO to Moon transfers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="two_dim_asc.html" class="btn btn-neutral float-right" title="Two-dimensional Moon to LLO transfer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="two_dim_asc.html" class="btn btn-neutral float-left" title="Two-dimensional Moon to LLO transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="llo2apo_continuation.html" class="btn btn-neutral float-left" title="LLO to Apoapsis with Continuation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

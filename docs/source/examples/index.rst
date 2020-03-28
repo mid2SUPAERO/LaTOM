@@ -26,7 +26,7 @@ Example scripts to compute new optimal transfers or surrogate models
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example computes a two-dimensional descent trajectory from a specified LLO to the Moon sur...">
 
 .. only:: html
 
@@ -66,67 +66,7 @@ Example scripts to compute new optimal transfers or surrogate models
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
-
-.. only:: html
-
- .. figure:: /examples/computation/images/thumb/sphx_glr_two_dim_llo2heo_thumb.png
-
-     :ref:`sphx_glr_examples_computation_two_dim_llo2heo.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/computation/two_dim_llo2heo
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
-
-.. only:: html
-
- .. figure:: /examples/computation/images/thumb/sphx_glr_two_dim_desc_thumb.png
-
-     :ref:`sphx_glr_examples_computation_two_dim_desc.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/computation/two_dim_desc
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
-
-.. only:: html
-
- .. figure:: /examples/computation/images/thumb/sphx_glr_two_dim_asc_thumb.png
-
-     :ref:`sphx_glr_examples_computation_two_dim_asc.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/computation/two_dim_asc
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example computes the sampling grid and training points to assemble an OpenMDAO MetaModel f...">
 
 .. only:: html
 
@@ -146,7 +86,67 @@ Example scripts to compute new optimal transfers or surrogate models
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example computes a two-dimensional ascent trajectory from the Moon surface to a specified ...">
+
+.. only:: html
+
+ .. figure:: /examples/computation/images/thumb/sphx_glr_two_dim_asc_thumb.png
+
+     :ref:`sphx_glr_examples_computation_two_dim_asc.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/computation/two_dim_asc
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example computes a two-dimensional LLO to HEO transfer trajectory using one of the followi...">
+
+.. only:: html
+
+ .. figure:: /examples/computation/images/thumb/sphx_glr_two_dim_llo2heo_thumb.png
+
+     :ref:`sphx_glr_examples_computation_two_dim_llo2heo.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/computation/two_dim_llo2heo
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This examples computes a two-dimensional descent trajectory from a specified LLO the Moon surfa...">
+
+.. only:: html
+
+ .. figure:: /examples/computation/images/thumb/sphx_glr_two_dim_desc_thumb.png
+
+     :ref:`sphx_glr_examples_computation_two_dim_desc.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/computation/two_dim_desc
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example computes the sampling grid and training points to assemble and train an SMT Surrog...">
 
 .. only:: html
 
@@ -166,7 +166,7 @@ Example scripts to compute new optimal transfers or surrogate models
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example computes the sampling grid and training points to assemble an OpenMDAO MetaModel f...">
 
 .. only:: html
 
@@ -200,27 +200,7 @@ Example scripts to load and visualize stored solutions and response surfaces
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
-
-.. only:: html
-
- .. figure:: /examples/visualization/images/thumb/sphx_glr_two_dim_asc_reader_thumb.png
-
-     :ref:`sphx_glr_examples_visualization_two_dim_asc_reader.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/visualization/two_dim_asc_reader
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example loads and display an optimal transfer trajectory from LLO to HEO composed by three...">
 
 .. only:: html
 
@@ -240,7 +220,27 @@ Example scripts to load and visualize stored solutions and response surfaces
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example loads and display an optimal ascent or descent trajectory from the Moon surface to...">
+
+.. only:: html
+
+ .. figure:: /examples/visualization/images/thumb/sphx_glr_two_dim_visu_thumb.png
+
+     :ref:`sphx_glr_examples_visualization_two_dim_visu.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/visualization/two_dim_visu
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example loads an SMT SurrogateModel stored in latom.data.smt, predicts additional outputs ...">
 
 .. only:: html
 
@@ -260,27 +260,7 @@ Example scripts to load and visualize stored solutions and response surfaces
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
-
-.. only:: html
-
- .. figure:: /examples/visualization/images/thumb/sphx_glr_llo2heo_cont_visu_thumb.png
-
-     :ref:`sphx_glr_examples_visualization_llo2heo_cont_visu.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/visualization/llo2heo_cont_visu
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This examples loads an OpenMDAO MetaModel stored in latom.data.metamodels, predicts additional ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example loads an OpenMDAO MetaModel stored in latom.data.metamodels, predicts additional o...">
 
 .. only:: html
 
@@ -300,13 +280,13 @@ Example scripts to load and visualize stored solutions and response surfaces
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="@authors: Alberto FOSSA&#x27; Giuliana Elena MICELI">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example loads and displays a series of LLO to Apoapsis transfers obtained using a continua...">
 
 .. only:: html
 
- .. figure:: /examples/visualization/images/thumb/sphx_glr_smt_old_thumb.png
+ .. figure:: /examples/visualization/images/thumb/sphx_glr_llo2heo_cont_visu_thumb.png
 
-     :ref:`sphx_glr_examples_visualization_smt_old.py`
+     :ref:`sphx_glr_examples_visualization_llo2heo_cont_visu.py`
 
 .. raw:: html
 
@@ -316,7 +296,7 @@ Example scripts to load and visualize stored solutions and response surfaces
 .. toctree::
    :hidden:
 
-   /examples/visualization/smt_old
+   /examples/visualization/llo2heo_cont_visu
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

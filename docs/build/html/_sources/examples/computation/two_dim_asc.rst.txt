@@ -10,6 +10,9 @@
 Two-dimensional Moon to LLO transfer
 ====================================
 
+This example computes a two-dimensional ascent trajectory from the Moon surface to a specified LLO with constant or
+variable thrust and optional minimum safe altitude.
+
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
 
@@ -22,10 +25,9 @@ Two-dimensional Moon to LLO transfer
     from latom.utils.spacecraft import Spacecraft
     from latom.analyzer.analyzer_2d import TwoDimAscConstAnalyzer, TwoDimAscVarAnalyzer, TwoDimAscVToffAnalyzer
 
-
     # trajectory
     thrust = 's'  # 'c' for constant, 'v' for variable and 's' for variable with minimum safe altitude
-    moon = Moon()
+    moon = Moon()  # central attracting body
     alt = 100e3  # final orbit altitude [m]
     theta = np.pi/2  # guessed spawn angle [rad]
     tof = 2000  # guessed time of flight [s]
@@ -36,7 +38,6 @@ Two-dimensional Moon to LLO transfer
     # spacecraft
     isp = 450.  # specific impulse [s]
     twr = 2.1  # initial thrust/weight ratio [-]
-
     sc = Spacecraft(isp, twr, g=moon.g)
 
     # NLP
@@ -44,21 +45,20 @@ Two-dimensional Moon to LLO transfer
     segments = 200
     order = 3
     solver = 'SNOPT'
-    snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
-                  'Minor feasibility tolerance': 1e-8}
+    snopt_opts = {'Major feasibility tolerance': 1e-12, 'Major optimality tolerance': 1e-12,
+                  'Minor feasibility tolerance': 1e-12}
 
     # additional settings
     u_bound = 'lower'  # lower bound on radial velocity
     check_partials = False  # check partial derivatives
     run_driver = True  # solve the NLP
     exp_sim = run_driver  # perform explicit simulation
-    rec = True  # record the solution
+    rec = False  # record the solution
 
-    # record databases
-    if rec:
-        rec_file = '/home/alberto/Downloads/rec.sql'
-        rec_file_exp = '/home/alberto/Downloads/rec_exp.sql'
-    else:
+    if rec:  # files IDs in the current working directory where the solutions are serialized if 'rec' is set to 'True'
+        rec_file = 'example_imp.sql'  # implicit NLP solution
+        rec_file_exp = 'example_exp.sql'  # explicit simulation
+    else:  # no recording if 'rec' is set to 'False'
         rec_file = rec_file_exp = None
 
     # init analyzer
@@ -76,16 +76,14 @@ Two-dimensional Moon to LLO transfer
 
     if run_driver:
 
-        f = tr.run_driver()
+        f = tr.run_driver()  # solve the NLP
 
-        if exp_sim:
+        if exp_sim:  # explicit simulation with Scipy solve_ivp method
             tr.nlp.exp_sim(rec_file=rec_file_exp)
 
-    tr.get_solutions(explicit=exp_sim, scaled=False)
-
-    print(tr)
-
-    tr.plot()
+    tr.get_solutions(explicit=exp_sim, scaled=False)  # retrieve solutions
+    print(tr)  # print summary
+    tr.plot()  # plot
 
 
 .. rst-class:: sphx-glr-timing

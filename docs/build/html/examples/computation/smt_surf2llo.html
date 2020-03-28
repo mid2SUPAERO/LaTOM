@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers" href="om_mm_surf2llo.html" />
-    <link rel="prev" title="OpenMDAO MetaModel for LLO to HEO transfers" href="om_mm_llo2heo.html" /> 
+    <link rel="prev" title="Two-dimensional LLO to Moon transfer" href="two_dim_desc.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -102,10 +102,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc_vertical.html">Two-phases LLO to Moon transfer with vertical touchdown</a></li>
 <li class="toctree-l2"><a class="reference internal" href="llo2apo_continuation.html">LLO to Apoapsis with Continuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo.html">Two-dimensional LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc.html">Two-dimensional LLO to Moon transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="om_mm_surf2llo.html">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</a></li>
 </ul>
@@ -181,6 +181,8 @@
 </div>
 <div class="sphx-glr-example-title section" id="smt-surrogate-model-for-moon-to-llo-and-llo-to-moon-transfers">
 <span id="sphx-glr-examples-computation-smt-surf2llo-py"></span><h1>SMT Surrogate Model for Moon to LLO and LLO to Moon transfers<a class="headerlink" href="#smt-surrogate-model-for-moon-to-llo-and-llo-to-moon-transfers" title="Permalink to this headline">¶</a></h1>
+<p>This example computes the sampling grid and training points to assemble and train an SMT Surrogate Model for a Moon to
+LLO or LLO to Moon transfer with constant or variable thrust and optional minimum safe altitude.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -188,11 +190,23 @@
     <span class="n">TwoDimDescVertSurrogate</span><span class="p">,</span> <span class="n">TwoDimDescConstSurrogate</span><span class="p">,</span> <span class="n">TwoDimDescVarSurrogate</span><span class="p">,</span> <span class="n">TwoDimDescVLandSurrogate</span>
 <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
 
-<span class="n">fid</span> <span class="o">=</span> <span class="s1">&#39;test_smt.pkl&#39;</span>
+<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;example.pkl&#39;</span>  <span class="c1"># name of the file in latom.data.smt in which the solution is serialized</span>
+
+<span class="c1"># transfer type among the followings:</span>
+<span class="c1"># ac: ascent constant, av: ascent variable, as: ascent vertical takeoff</span>
+<span class="c1"># dc: descent constant, dv: descent variable, ds: descent vertical landing, d2p: two-phases descent vertical landing</span>
+<span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;ac&#39;</span>
+
+<span class="c1"># SurrogateModel settings</span>
+<span class="n">samp_method</span> <span class="o">=</span> <span class="s1">&#39;lhs&#39;</span>  <span class="c1"># sampling scheme, &#39;lhs&#39; for Latin Hypercube or &#39;full&#39; for Full-Factorial</span>
+<span class="n">nb_samp</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># total number of samples, must be a perfect square if &#39;full&#39; is chosen as sampling scheme</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span>  <span class="c1"># sampling criterion (Latin Hypercube only)</span>
+<span class="n">train_method</span> <span class="o">=</span> <span class="s1">&#39;KRG&#39;</span>  <span class="c1"># surrogate modeling method among IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC</span>
+<span class="n">nb_eval</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># number of points to plot the response surface, must be a perfect square (Latin Hypercube only)</span>
+
+<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>  <span class="c1"># central attracting body</span>
 
 <span class="c1"># trajectory</span>
-<span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;ac&#39;</span>
-<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
 <span class="n">alt</span> <span class="o">=</span> <span class="mf">100e3</span>  <span class="c1"># final orbit altitude [m]</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># guessed spawn angle [rad]</span>
 <span class="n">tof</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># guessed time of flight [s]</span>
@@ -213,15 +227,6 @@
 <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;SNOPT&#39;</span>
 <span class="n">snopt_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Major feasibility tolerance&#39;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="s1">&#39;Major optimality tolerance&#39;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">,</span>
               <span class="s1">&#39;Minor feasibility tolerance&#39;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">}</span>
-
-<span class="c1"># sampling scheme</span>
-<span class="n">samp_method</span> <span class="o">=</span> <span class="s1">&#39;lhs&#39;</span>
-<span class="n">nb_samp</span> <span class="o">=</span> <span class="mi">10</span>
-
-<span class="c1"># surrogate model (accepted methods are IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC)</span>
-<span class="n">criterion</span> <span class="o">=</span> <span class="s1">&#39;m&#39;</span>
-<span class="n">train_method</span> <span class="o">=</span> <span class="s1">&#39;KRG&#39;</span>
-<span class="n">nb_eval</span> <span class="o">=</span> <span class="mi">100</span>
 
 <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;ac&#39;</span><span class="p">:</span>
     <span class="n">sm</span> <span class="o">=</span> <span class="n">TwoDimAscConstSurrogate</span><span class="p">(</span><span class="n">train_method</span><span class="p">)</span>
@@ -254,7 +259,7 @@
 <span class="k">else</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;kind must be ac, av, as or d2p, dc, dv, ds&#39;</span><span class="p">)</span>
 
-<span class="n">sm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">rec_file</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">samp_method</span> <span class="o">==</span> <span class="s1">&#39;lhs&#39;</span><span class="p">:</span>
     <span class="n">sm</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_method</span><span class="p">)</span>
@@ -286,7 +291,7 @@
         <a href="om_mm_surf2llo.html" class="btn btn-neutral float-right" title="OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="om_mm_llo2heo.html" class="btn btn-neutral float-left" title="OpenMDAO MetaModel for LLO to HEO transfers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="two_dim_desc.html" class="btn btn-neutral float-left" title="Two-dimensional LLO to Moon transfer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

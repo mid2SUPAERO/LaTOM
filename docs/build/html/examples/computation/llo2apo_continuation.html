@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Two-dimensional LLO to HEO transfers" href="two_dim_llo2heo.html" />
+    <link rel="next" title="OpenMDAO MetaModel for LLO to HEO transfers" href="om_mm_llo2heo.html" />
     <link rel="prev" title="Two-phases LLO to Moon transfer with vertical touchdown" href="two_dim_desc_vertical.html" /> 
 </head>
 
@@ -102,10 +102,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc_vertical.html">Two-phases LLO to Moon transfer with vertical touchdown</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">LLO to Apoapsis with Continuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo.html">Two-dimensional LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_desc.html">Two-dimensional LLO to Moon transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc.html">Two-dimensional Moon to LLO transfer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="om_mm_llo2heo.html">OpenMDAO MetaModel for LLO to HEO transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt_surf2llo.html">SMT Surrogate Model for Moon to LLO and LLO to Moon transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="om_mm_surf2llo.html">OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers</a></li>
 </ul>
@@ -183,7 +183,7 @@
 <span id="sphx-glr-examples-computation-llo2apo-continuation-py"></span><h1>LLO to Apoapsis with Continuation<a class="headerlink" href="#llo-to-apoapsis-with-continuation" title="Permalink to this headline">¶</a></h1>
 <p>This examples computes a series of LLO to HEO transfers modeled as an initial finite burn to leave the LLO, a ballistic
 arc and a final impulsive burn to inject at the apoapsis of the target HEO.
-Subsequent solutions are obtained using a continuation method for decreasing thrust/weight ratios</p>
+Subsequent solutions are obtained using a continuation method for decreasing thrust/weight ratios.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -192,8 +192,7 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
 <span class="kn">from</span> <span class="nn">latom.analyzer.analyzer_heo_2d</span> <span class="kn">import</span> <span class="n">TwoDimLLO2ApoContinuationAnalyzer</span>
 <span class="kn">from</span> <span class="nn">latom.data.continuation.data_continuation</span> <span class="kn">import</span> <span class="n">dirname_continuation</span>
 
-<span class="c1"># file ID</span>
-<span class="n">fid</span> <span class="o">=</span> <span class="s1">&#39;tests/lin350.pkl&#39;</span>
+<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;example.pkl&#39;</span>  <span class="c1"># file ID in latom.data.continuation where the data are serialized or None</span>
 
 <span class="c1"># trajectory</span>
 <span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
@@ -202,15 +201,21 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
 <span class="n">heo_period</span> <span class="o">=</span> <span class="mf">6.5655</span> <span class="o">*</span> <span class="mi">86400</span>  <span class="c1"># target HEO period [s]</span>
 
 <span class="c1"># spacecraft</span>
-<span class="n">isp</span> <span class="o">=</span> <span class="mf">350.</span>  <span class="c1"># specific impulse [s]</span>
-<span class="n">twr_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.049</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005</span><span class="p">)</span>  <span class="c1"># range of thrust/weight ratios in absolute/logarithmic scale [-]</span>
-<span class="n">twr0</span> <span class="o">=</span> <span class="n">twr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># maximum thrust/weight ratio in absolute value [-]</span>
-<span class="n">log_scale</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="n">isp</span><span class="p">,</span> <span class="n">twr0</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">moon</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="mf">400.</span>  <span class="c1"># specific impulse [s]</span>
+<span class="n">log_scale</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># twr_list in logarithmic scale or not</span>
+<span class="n">twr_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># range of thrust/weight ratios in absolute/logarithmic scale [-]</span>
+
+<span class="c1"># maximum thrust/weight ratio in absolute value [-]</span>
+<span class="k">if</span> <span class="n">log_scale</span><span class="p">:</span>
+    <span class="n">twr0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">twr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">twr0</span> <span class="o">=</span> <span class="n">twr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">sc</span> <span class="o">=</span> <span class="n">Spacecraft</span><span class="p">(</span><span class="n">isp</span><span class="p">,</span> <span class="n">twr0</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">moon</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>  <span class="c1"># Spacecraft object</span>
 
 <span class="c1"># NLP</span>
 <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;gauss-lobatto&#39;</span>
-<span class="n">segments</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;IPOPT&#39;</span>
 <span class="n">snopt_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Major feasibility tolerance&#39;</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">,</span> <span class="s1">&#39;Major optimality tolerance&#39;</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">,</span>
@@ -230,15 +235,13 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
     <span class="k">if</span> <span class="n">exp_sim</span><span class="p">:</span>  <span class="c1"># explicit simulation from last NLP solution</span>
         <span class="n">tr</span><span class="o">.</span><span class="n">nlp</span><span class="o">.</span><span class="n">exp_sim</span><span class="p">()</span>
 
-<span class="c1"># retrieve solutions</span>
-<span class="n">tr</span><span class="o">.</span><span class="n">get_solutions</span><span class="p">(</span><span class="n">explicit</span><span class="o">=</span><span class="n">exp_sim</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">get_solutions</span><span class="p">(</span><span class="n">explicit</span><span class="o">=</span><span class="n">exp_sim</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># retrieve solutions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>  <span class="c1"># print summary</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">rec_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># save data in latom.data.continuation using the provided file ID</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">dirname_continuation</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">]))</span>
 
-<span class="k">if</span> <span class="n">fid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">tr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">dirname_continuation</span><span class="p">,</span> <span class="n">fid</span><span class="p">]))</span>
-
-<span class="n">tr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># plot the results</span>
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -261,7 +264,7 @@ Subsequent solutions are obtained using a continuation method for decreasing thr
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="two_dim_llo2heo.html" class="btn btn-neutral float-right" title="Two-dimensional LLO to HEO transfers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="om_mm_llo2heo.html" class="btn btn-neutral float-right" title="OpenMDAO MetaModel for LLO to HEO transfers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="two_dim_desc_vertical.html" class="btn btn-neutral float-left" title="Two-phases LLO to Moon transfer with vertical touchdown" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

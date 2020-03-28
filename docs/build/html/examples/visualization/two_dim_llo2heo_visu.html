@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="SMT Surrogate Model visualization" href="smt_visu.html" />
-    <link rel="prev" title="Two-dimensional Moon to LLO transfer visualization" href="two_dim_asc_reader.html" /> 
+    <link rel="next" title="Two-dimensional Moon to LLO transfer visualization" href="two_dim_visu.html" />
+    <link rel="prev" title="OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers" href="../computation/om_mm_surf2llo.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,12 +101,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Examples scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#visualization-scripts">Visualization scripts</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc_reader.html">Two-dimensional Moon to LLO transfer visualization</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Two-dimensional, three-phases LLO to HEO transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_visu.html">Two-dimensional Moon to LLO transfer visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt_visu.html">SMT Surrogate Model visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="llo2heo_cont_visu.html">LLO to Apoapsis transfer visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="om_mm_visu.html">OpenMDAO MetaModel visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smt_old.html">SMT Surrogate Model visualization (Deprecated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="llo2heo_cont_visu.html">LLO to Apoapsis transfer visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -179,18 +178,18 @@
 </div>
 <div class="sphx-glr-example-title section" id="two-dimensional-three-phases-llo-to-heo-transfer-visualization">
 <span id="sphx-glr-examples-visualization-two-dim-llo2heo-visu-py"></span><h1>Two-dimensional, three-phases LLO to HEO transfer visualization<a class="headerlink" href="#two-dimensional-three-phases-llo-to-heo-transfer-visualization" title="Permalink to this headline">¶</a></h1>
+<p>This example loads and display an optimal transfer trajectory from LLO to HEO composed by three subsequent phases.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">latom.reader.reader_heo_2d</span> <span class="kn">import</span> <span class="n">TwoDim3PhasesLLO2HEOReader</span>
 <span class="kn">from</span> <span class="nn">latom.utils.primary</span> <span class="kn">import</span> <span class="n">Moon</span>
-<span class="kn">from</span> <span class="nn">latom.data.llo2heo3phases.data_llo2heo3ph</span> <span class="kn">import</span> <span class="n">dirname_llo2heo3ph</span>
+<span class="kn">from</span> <span class="nn">latom.data.transfers.data_transfers</span> <span class="kn">import</span> <span class="n">dirname_tr</span>
 
-<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>
+<span class="n">fid</span> <span class="o">=</span> <span class="s1">&#39;llo2heo_ipopt1200.sql&#39;</span>  <span class="c1"># file ID</span>
+<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">dirname_tr</span><span class="p">,</span> <span class="n">fid</span><span class="p">])</span>  <span class="c1"># absolute path to file ID</span>
 
-<span class="n">db</span> <span class="o">=</span> <span class="n">dirname_llo2heo3ph</span> <span class="o">+</span> <span class="s1">&#39;/llo2heo_ipopt1200.pkl&#39;</span>
-
-<span class="n">cr</span> <span class="o">=</span> <span class="n">TwoDim3PhasesLLO2HEOReader</span><span class="p">(</span><span class="n">moon</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">db_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-
-<span class="n">cr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">moon</span> <span class="o">=</span> <span class="n">Moon</span><span class="p">()</span>  <span class="c1"># central attracting body</span>
+<span class="n">cr</span> <span class="o">=</span> <span class="n">TwoDim3PhasesLLO2HEOReader</span><span class="p">(</span><span class="n">moon</span><span class="p">,</span> <span class="n">rec_file</span><span class="p">,</span> <span class="n">db_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># load stored data</span>
+<span class="n">cr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># display solution</span>
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -213,10 +212,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="smt_visu.html" class="btn btn-neutral float-right" title="SMT Surrogate Model visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="two_dim_visu.html" class="btn btn-neutral float-right" title="Two-dimensional Moon to LLO transfer visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="two_dim_asc_reader.html" class="btn btn-neutral float-left" title="Two-dimensional Moon to LLO transfer visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../computation/om_mm_surf2llo.html" class="btn btn-neutral float-left" title="OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -2,6 +2,9 @@
 OpenMDAO MetaModel for Moon to LLO and LLO to Moon transfers
 ============================================================
 
+This example computes the sampling grid and training points to assemble an OpenMDAO MetaModel for a Moon to LLO or LLO
+to Moon transfer with constant or variable thrust and optional minimum safe altitude.
+
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
 """
@@ -17,11 +20,12 @@ interp_method = 'slinear'  # interpolation method
 training_data_gradients = True  # compute gradients wrt output training data
 vec_size = 1  # number of points to evaluate at once
 nb_samp = (2, 2)  # number of samples on which the actual solution is computed
-rec_file = 'test.pkl'  # name of the file on which the solution is serialized
+rec_file = 'example.pkl'  # name of the file in latom.data.metamodels in which the solution is serialized
 
+# transfer type among the followings:
 # ac: ascent constant, av: ascent variable, as: ascent vertical takeoff
-# dc: descent constant, dv: descent variable, ds: descent vertical landing, dtp: two-phases descent vertical landing
-kind = 'dtp'
+# dc: descent constant, dv: descent variable, ds: descent vertical landing, d2p: two-phases descent vertical landing
+kind = 'ac'
 
 moon = Moon()  # central attracting body
 
@@ -77,11 +81,11 @@ elif kind == 'ds':
                                  training_data_gradients=training_data_gradients, vec_size=vec_size)
     a.sampling(moon, twr, isp, alt, t_bounds, method, segments, order, solver, nb_samp, snopt_opts=snopt_opts,
                rec_file=rec_file, alt_safe=alt_safe, slope=-slope)
-elif kind == 'dtp':
+elif kind == 'd2p':
     a = TwoDimDescTwoPhasesMetaModel(distributed=distributed, extrapolate=extrapolate, method=interp_method,
                                      training_data_gradients=training_data_gradients, vec_size=vec_size)
     a.sampling(moon, twr, isp, alt, t_bounds, method, segments, order, solver, nb_samp, snopt_opts=snopt_opts,
                rec_file=rec_file, alt_p=alt_p, alt_switch=alt_safe, theta=theta, tof=tof, fix=fix)
 else:
-    raise ValueError('kind must be one between ac, av, as or dc, dv, ds, dtp')
+    raise ValueError('kind must be one between ac, av, as or dc, dv, ds, d2p')
 

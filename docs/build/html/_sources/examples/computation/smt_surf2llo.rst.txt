@@ -10,6 +10,9 @@
 SMT Surrogate Model for Moon to LLO and LLO to Moon transfers
 =============================================================
 
+This example computes the sampling grid and training points to assemble and train an SMT Surrogate Model for a Moon to
+LLO or LLO to Moon transfer with constant or variable thrust and optional minimum safe altitude.
+
 @authors: Alberto FOSSA' Giuliana Elena MICELI
 
 
@@ -22,12 +25,23 @@ SMT Surrogate Model for Moon to LLO and LLO to Moon transfers
         TwoDimDescVertSurrogate, TwoDimDescConstSurrogate, TwoDimDescVarSurrogate, TwoDimDescVLandSurrogate
     from latom.utils.primary import Moon
 
+    rec_file = 'example.pkl'  # name of the file in latom.data.smt in which the solution is serialized
 
-    fid = 'test_smt.pkl'
+    # transfer type among the followings:
+    # ac: ascent constant, av: ascent variable, as: ascent vertical takeoff
+    # dc: descent constant, dv: descent variable, ds: descent vertical landing, d2p: two-phases descent vertical landing
+    kind = 'ac'
+
+    # SurrogateModel settings
+    samp_method = 'lhs'  # sampling scheme, 'lhs' for Latin Hypercube or 'full' for Full-Factorial
+    nb_samp = 10  # total number of samples, must be a perfect square if 'full' is chosen as sampling scheme
+    criterion = 'm'  # sampling criterion (Latin Hypercube only)
+    train_method = 'KRG'  # surrogate modeling method among IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC
+    nb_eval = 100  # number of points to plot the response surface, must be a perfect square (Latin Hypercube only)
+
+    moon = Moon()  # central attracting body
 
     # trajectory
-    kind = 'ac'
-    moon = Moon()
     alt = 100e3  # final orbit altitude [m]
     theta = np.pi / 2  # guessed spawn angle [rad]
     tof = 1000  # guessed time of flight [s]
@@ -48,15 +62,6 @@ SMT Surrogate Model for Moon to LLO and LLO to Moon transfers
     solver = 'SNOPT'
     snopt_opts = {'Major feasibility tolerance': 1e-8, 'Major optimality tolerance': 1e-8,
                   'Minor feasibility tolerance': 1e-8}
-
-    # sampling scheme
-    samp_method = 'lhs'
-    nb_samp = 10
-
-    # surrogate model (accepted methods are IDW, KPLS, KPLSK, KRG, LS, QP, RBF, RMTB, RMTC)
-    criterion = 'm'
-    train_method = 'KRG'
-    nb_eval = 100
 
     if kind == 'ac':
         sm = TwoDimAscConstSurrogate(train_method)
@@ -89,7 +94,7 @@ SMT Surrogate Model for Moon to LLO and LLO to Moon transfers
     else:
         raise ValueError('kind must be ac, av, as or d2p, dc, dv, ds')
 
-    sm.save(fid)
+    sm.save(rec_file)
 
     if samp_method == 'lhs':
         sm.train(train_method)

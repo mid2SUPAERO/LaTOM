@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="SMT Surrogate Model visualization (Deprecated)" href="smt_old.html" />
-    <link rel="prev" title="LLO to Apoapsis transfer visualization" href="llo2heo_cont_visu.html" /> 
+    <link rel="next" title="LLO to Apoapsis transfer visualization" href="llo2heo_cont_visu.html" />
+    <link rel="prev" title="SMT Surrogate Model visualization" href="smt_visu.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,12 +101,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Examples scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html#computation-scripts">Computation scripts</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html#visualization-scripts">Visualization scripts</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="two_dim_asc_reader.html">Two-dimensional Moon to LLO transfer visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="two_dim_llo2heo_visu.html">Two-dimensional, three-phases LLO to HEO transfer visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="two_dim_visu.html">Two-dimensional Moon to LLO transfer visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt_visu.html">SMT Surrogate Model visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="llo2heo_cont_visu.html">LLO to Apoapsis transfer visualization</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">OpenMDAO MetaModel visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smt_old.html">SMT Surrogate Model visualization (Deprecated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="llo2heo_cont_visu.html">LLO to Apoapsis transfer visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +178,7 @@
 </div>
 <div class="sphx-glr-example-title section" id="openmdao-metamodel-visualization">
 <span id="sphx-glr-examples-visualization-om-mm-visu-py"></span><h1>OpenMDAO MetaModel visualization<a class="headerlink" href="#openmdao-metamodel-visualization" title="Permalink to this headline">¶</a></h1>
-<p>This examples loads an OpenMDAO MetaModel stored in <cite>latom.data.metamodels</cite>, predicts additional outputs interpolating
+<p>This example loads an OpenMDAO MetaModel stored in <cite>latom.data.metamodels</cite>, predicts additional outputs interpolating
 existing data and plots the corresponding response surface.</p>
 <p>&#64;authors: Alberto FOSSA’ Giuliana Elena MICELI</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -191,26 +190,30 @@ existing data and plots the corresponding response surface.</p>
 <span class="n">extrapolate</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># extrapolation for out-of-bounds inputs</span>
 
 <span class="c1"># interpolation method among slinear, lagrange2, lagrange3, cubic, akima, scipy_cubic, scipy_slinear, scipy_quintic</span>
-<span class="n">interp_method</span> <span class="o">=</span> <span class="s1">&#39;scipy_quintic&#39;</span>
+<span class="n">interp_method</span> <span class="o">=</span> <span class="s1">&#39;slinear&#39;</span>
+
+<span class="c1"># evaluation points</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># Isp values for evaluation [s]</span>
+<span class="n">twr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># twr values for evaluation [-]</span>
 
 <span class="n">training_data_gradients</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># compute gradients wrt output training data</span>
-<span class="n">vec_size</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># number of points to evaluate at once</span>
-<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;llo2apo_mm.pkl&#39;</span>  <span class="c1"># name of the file on which the solution is serialized</span>
-<span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;prop&#39;</span>  <span class="c1"># quantity to display, prop for propellant fraction or final for final/initial mass ratio</span>
+<span class="n">vec_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">isp</span><span class="p">)</span>  <span class="c1"># number of points to evaluate at once</span>
+<span class="n">rec_file</span> <span class="o">=</span> <span class="s1">&#39;asc_const_mm.pkl&#39;</span>  <span class="c1"># name of the file in latom.data.metamodels in which the solution is serialized</span>
+<span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;prop&#39;</span>  <span class="c1"># quantity to display, &#39;prop&#39; for propellant fraction or &#39;final&#39; for final/initial mass ratio</span>
 
 <span class="c1"># initialize MetaModel</span>
 <span class="n">mm</span> <span class="o">=</span> <span class="n">MetaModel</span><span class="p">(</span><span class="n">distributed</span><span class="o">=</span><span class="n">distributed</span><span class="p">,</span> <span class="n">extrapolate</span><span class="o">=</span><span class="n">extrapolate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">interp_method</span><span class="p">,</span>
                <span class="n">training_data_gradients</span><span class="o">=</span><span class="n">training_data_gradients</span><span class="p">,</span> <span class="n">vec_size</span><span class="o">=</span><span class="n">vec_size</span><span class="p">,</span> <span class="n">rec_file</span><span class="o">=</span><span class="n">rec_file</span><span class="p">)</span>
 
 <span class="c1"># predict additional outputs</span>
-<span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;twr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># twr values for prediction [-]</span>
-<span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;Isp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">390.</span>  <span class="c1"># Isp values for prediction [s]</span>
+<span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;twr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">twr</span>
+<span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;Isp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">isp</span>
+<span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">run_model</span><span class="p">()</span>  <span class="c1"># run the model to interpolate stored data</span>
 <span class="n">m_prop</span> <span class="o">=</span> <span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;mm.m_prop&#39;</span><span class="p">]</span>  <span class="c1"># predicted propellant fraction [-]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Predicted propellant fraction: &#39;</span><span class="p">,</span> <span class="n">m_prop</span><span class="p">)</span>
 
 <span class="c1"># plot response surface</span>
-<span class="n">mm</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">run_model</span><span class="p">()</span>
 <span class="n">mm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nb_lines</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -234,10 +237,10 @@ existing data and plots the corresponding response surface.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="smt_old.html" class="btn btn-neutral float-right" title="SMT Surrogate Model visualization (Deprecated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="llo2heo_cont_visu.html" class="btn btn-neutral float-right" title="LLO to Apoapsis transfer visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="llo2heo_cont_visu.html" class="btn btn-neutral float-left" title="LLO to Apoapsis transfer visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="smt_visu.html" class="btn btn-neutral float-left" title="SMT Surrogate Model visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

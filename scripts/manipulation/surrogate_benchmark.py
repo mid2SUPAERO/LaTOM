@@ -1,5 +1,5 @@
 """
-@authors: Alberto FOSSA' Giuliana Elena MICELI
+@authors: Alberto FOSSA'
 
 """
 

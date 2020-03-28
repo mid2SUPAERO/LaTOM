@@ -720,8 +720,8 @@ class TwoDimDescVertSurrogate(SurrogateModel):
             Altitude at which the final vertical descent is triggered [m]
         theta : float
             Guessed spawn angle [rad]
-        tof : float
-            Guessed time of flight [s]
+        tof : iterable
+            Guessed time of flight for the two phases [s]
         t_bounds : iterable
             Time of flight lower and upper bounds expressed as fraction of `tof`
         method : str
