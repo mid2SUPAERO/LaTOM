@@ -2,7 +2,8 @@
 
 @author Alberto FOSSA'
 
-This is an exhaustive list of all Python packages to be explicitly installed in your environment with the corresponding sources.
+This is an exhaustive list of all Python packages to be explicitly installed in
+your environment with the corresponding sources.
 
 ## Conda packages
 
@@ -28,6 +29,7 @@ This is an exhaustive list of all Python packages to be explicitly installed in 
 
 * sphinx-autopackagesummary
 * sphinx-markdown-tables
+* sphinx-gallery
 
 ## GitHub repositories
 

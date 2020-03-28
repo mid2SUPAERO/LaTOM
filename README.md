@@ -46,21 +46,22 @@ The optimization can be performed in the following cases:
   intermediate coasting arc
   - single phase escape burn with constant thrust
 
-## Run a simulation
+## Run a simulation and display the results
 
 There are two ways for running a simulation and display the results:
 
 * perform a new optimization to obtain your own solution starting from custom
-values for the different trajectory parameters (multiple examples are already
-included)
+values for the different trajectory parameters. Multiple examples are included
+in *scripts/computation* and can be consulted [here](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html#computation-scripts)
 
-* load a structure stored in one of the three *data* directories that contains
+* load a structure stored in one of the four *data* subdirectories that contain
 the results already obtained for an optimal transfer trajectory and simply
-display those results
+display those results. Multiple examples are included in *scripts/visualization*
+and can be consulted [here](https://mid2supaero.github.io/LaTOM/build/html/examples/index.html#visualization-scripts)
 
 In either case do the following:
 
-1. open one of the scripts in the *scripts* subdirectory
+1. open one of the scripts in the *scripts* subdirectories
 2. read the list that describes the different possibilities and choose the
 appropriate settings
 3. optionally define your own parameters to perform a new optimization
@@ -90,3 +91,7 @@ Wächter, Andreas, and Lorenz T. Biegler. ‘On the Implementation of an
 Interior-Point Filter Line-Search Algorithm for Large-Scale Nonlinear
 Programming’. Mathematical Programming, vol. 106, no. 1, Mar. 2006, pp. 25–57.
 doi:10.1007/s10107-004-0559-y.
+
+M. A. Bouhlel and J. T. Hwang and N. Bartoli and R. Lafage and J. Morlier and
+J. R. R. A. Martins. A Python surrogate modeling framework with derivatives.
+Advances in Engineering Software, 2019

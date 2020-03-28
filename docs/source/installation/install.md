@@ -33,6 +33,7 @@ The package is successfully installed.
 
 * sphinx 2.4.3 +
 * sphinx-autopackagesummary 1.2 +
+* sphinx-gallery 0.5.0 +
 * sphinx-markdown-tables 0.0.9 +
 * sphinx_rtd_theme 0.4.3 +
 * graphviz 2.40.1 +
@@ -44,7 +45,7 @@ Install the additional dependencies listed above:
 
 ```
 (myenv) conda install sphinx sphinx_rtd_theme graphviz recommonmark
-(myenv) pip install sphinx-autopackagesummary -markdown-tables
+(myenv) pip install sphinx-autopackagesummary sphinx-markdown-tables sphinx-galley
 ```
 
 Enter the ```/docs``` folder and issue the following commands:
