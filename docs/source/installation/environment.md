@@ -8,19 +8,20 @@ This *step-by-step* guide will help you to setup an [Anaconda][anaconda] environ
 
 #### Python packages
 
-* Python 3.7.3 +
-* numpy 1.16.4 +
-* scipy 1.2.1 +
-* matplotlib 3.1.0 +
-* swig 3.0.12 +
-* openmdao 2.9.0 +
-* **dymos 0.13.0 (do not install the latest release)**
-* pyoptsparse (SNOPT optional)
-* pyipopt
+* Python 3.7.10
+* numpy 1.19.2
+* scipy 1.6.2
+* matplotlib 3.3.4
+* swig 4.0.2
+* sqlitedict 1.7.0
+* openmdao 2.9.0
+* dymos 0.13.0
+* pyoptsparse (SNOPT optional) 1.2.0
+* pyipopt 0.8
 
 #### Additional software
 
-* [IPOPT][ipopt] (Interior Point Optimizer) 3.12 +
+* [IPOPT][ipopt] (Interior Point Optimizer) 3.12
 
 #### Optional licensed software
 
@@ -299,9 +300,10 @@ As in the previous case, these packages have to be downloaded and installed usin
 (myenv) $ pip install git+https://github.com/OpenMDAO/dymos.git
 ```
 
-This will install the latest release of both packages. To obtain a specific version of dymos, in this case `v0.13.0`, after installing OpenMDAO issue the commands below:
+This will install the latest release of both packages. To obtain the required version for both packages, in this case `2.9.0` and `0.13.0`, issue the commands below:
 
 ```
+(myenv) $ pip install openmdao==2.9
 (myenv) $ git clone https://github.com/OpenMDAO/dymos.git --branch v0.13.0
 (myenv) $ cd dymos
 (myenv) $ python setup.py install
@@ -460,7 +462,7 @@ This will install the package under `~/.local/lib/python3.7/site-packages/pyipop
 To obtain the source code, open a terminal window and activate your environment, than clone the source code from its [official GitHub repository][pyoptsparse_repo]:
 
 ```
-(myenv) $ git clone https://github.com/mdolab/pyoptsparse.git
+(myenv) $ git clone https://github.com/mdolab/pyoptsparse.git --branch v1.2
 ```
 
 If you have purchased a license for SNOPT and obtained the source code copy all the `.f` files except `snopth.f` into the folder `pyoptsparse/pySNOPT/source`. If not, simply move to the next installation instructions.
